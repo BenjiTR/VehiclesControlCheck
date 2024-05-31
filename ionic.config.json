@@ -1,0 +1,7 @@
+{
+  "name": "VehiclesControlCheck",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
