@@ -50,3 +50,22 @@
 body, ion-app {
   font-family: var(--ion-font-family);
 }
+
+//COLORES
+.pastel{
+  --background: rgba(246, 244, 233, 1);
+  background: rgba(246, 244, 233, 1);
+}
+.green{
+  background: rgba(99, 201, 181, 1);
+}
+
+//ROUND
+.round-corner-up{
+  border-top-right-radius: 7rem;
+}
+.rounded-inputs{
+background-color: #f6f3ea;
+border-top-right-radius: 30px;
+border-bottom-right-radius: 30px;
+}
