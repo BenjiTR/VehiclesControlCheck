@@ -35,3 +35,18 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
+
+
+//FUENTE PERSONALIZADA
+@font-face {
+  font-family: 'Kanit';
+  src: url('./assets/fonts/Kanit/Kanit-Light.ttf');
+}
+
+:root {
+  --ion-font-family: 'Kanit', sans-serif;
+}
+
+body, ion-app {
+  font-family: var(--ion-font-family);
+}
