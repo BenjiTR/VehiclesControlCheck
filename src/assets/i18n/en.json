@@ -29,12 +29,12 @@
     "return": "Return"
   },
   "error": {
-    "email_no_registered": "The email is not registered",
-    "email_no_valid": "Invalid email, please enter a correct address",
+    "invalid_credencial": "Invalid credentials",
+    "email_no_valid": "Invalid email, please enter a correct email address",
     "no_network": "No network, please check your connection and try again",
-    "password_should_be_6": "The password must be at least 6 characters",
-    "email_is_in_use": "The email is already registered",
-    "wrong_password": "Incorrect password",
+    "password_should_be_6": "Password should be at least 6 characters",
+    "email_is_in_use": "Email is already registered",
+    "wrong_password": "Wrong password",
     "email_format_incorrect": "Incorrect email format",
     "auth/network-request-failed": "Unable to verify credentials, please check your connection."
   },

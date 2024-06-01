@@ -29,13 +29,13 @@
     "return": "Retour"
   },
   "error": {
-    "email_no_registered": "L'email n'est pas enregistré",
-    "email_no_valid": "Email non valide, veuillez entrer une adresse correcte",
+    "invalid_credencial": "Identifiants invalides",
+    "email_no_valid": "Email invalide, veuillez saisir une adresse e-mail correcte",
     "no_network": "Pas de réseau, veuillez vérifier votre connexion et réessayer",
-    "password_should_be_6": "Le mot de passe doit contenir au moins 6 caractères",
-    "email_is_in_use": "L'email est déjà enregistré",
-    "wrong_password": "Mot de passe incorrect",
-    "email_format_incorrect": "Format de l'email incorrect",
+    "password_should_be_6": "Le mot de passe doit comporter au moins 6 caractères",
+    "email_is_in_use": "L'e-mail est déjà enregistré",
+    "wrong_password": "Mauvais mot de passe",
+    "email_format_incorrect": "Format d'email incorrect",
     "auth/network-request-failed": "Impossible de vérifier les identifiants, veuillez vérifier votre connexion."
   },
   "alert": {

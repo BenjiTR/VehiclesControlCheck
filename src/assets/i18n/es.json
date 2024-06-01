@@ -29,7 +29,7 @@
     "return":"Volver"
   },
   "error":{
-      "email_no_registered":"El email no está registrado",
+      "invalid_credencial":"Credenciales inválidas",
       "email_no_valid":"Correo no valido, por favor escriba una dirección correcta",
       "no_network":"Sin red, por favor revise su conexión e intente de nuevo",
       "password_should_be_6":"La contraseña debe tener al menos 6 caracteres",

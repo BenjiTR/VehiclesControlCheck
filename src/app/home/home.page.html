@@ -53,7 +53,8 @@
         <p class="mp-clear" [ngClass]="{'error': !Error}" color="danger">{{Error}}</p>
       </ion-col>
     </ion-row>
-    <ion-row class="w-100">
+
+    <ion-row class="w-100 ion-margin-top">
       <ion-col class="ion-text-center" size="12">
         <ion-button [disabled]="sendValidation()" (click)="loginWithEmail()" size="large" translate="home.login"></ion-button>
       </ion-col>
@@ -89,3 +90,11 @@
     </ion-col>
   </ion-row>
 </ion-footer>
+
+<ion-content class="loading-content" *ngIf="isLoading" >
+  <ion-row class="ion-align-items-center ion-text-center height-100">
+    <ion-col>
+      <span class="loader"></span>
+    </ion-col>
+  </ion-row>
+</ion-content>

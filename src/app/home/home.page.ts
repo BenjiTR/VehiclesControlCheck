@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { AuthService } from './../services/auth.service';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonRow, IonCol, IonImg, IonItem, IonInput, IonIcon, IonFooter, IonButton, IonCheckbox, IonLabel } from '@ionic/angular/standalone';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslationConfigService } from '../services/translation.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { AlertService } from '../services/alert.service';
 
 @Component({
   selector: 'app-home',
@@ -14,6 +16,8 @@ import { RouterModule } from '@angular/router';
   imports: [RouterModule, CommonModule, FormsModule, IonLabel, IonCheckbox, IonButton, IonFooter, IonIcon, IonInput, IonItem, IonImg, IonCol, IonRow, IonHeader, IonToolbar, IonTitle, IonContent, TranslateModule],
 })
 export class HomePage implements OnInit{
+
+
 
   public showPassword: boolean = false;
   public email:string = "";
@@ -25,12 +29,16 @@ export class HomePage implements OnInit{
   constructor(
     private translate: TranslateService,
     private _translation:TranslationConfigService,
+    private _authService:AuthService,
+    private _alert:AlertService,
+
   ) {}
 
   ngOnInit(): void {
-    this.translate.setDefaultLang(this._translation.getLanguage()) ;
-
+    this.translate.setDefaultLang(this._translation.getLanguage());
+    this.tryRememberSession();
   }
+
 
   //CAMBIAR LENGUAJE
   changeLanguage(language:string){
@@ -43,12 +51,107 @@ export class HomePage implements OnInit{
     this.showPassword = !this.showPassword;
   }
 
+  //VALIDACIÓN DEL BOTÓN
+  sendValidation(){
+    if(!this.email || !this.password){
+      return true
+    }else{
+      return false
+    }
+  }
 
-  sendValidation(){}
+  //LOGIN CON EMAIL
+  async loginWithEmail(){
 
-  loginWithEmail(){}
+    this.isLoading=true;
+    this.Error="";
 
-  restorePassword(){}
+    if(this.rememberSession){
+      localStorage.setItem('vehiclesUser', this.email);
+      localStorage.setItem('vehiclesPassword',this.password);
+    }else{
+      localStorage.setItem('vehiclesUser', '');
+      localStorage.setItem('vehiclesPassword','');
+    }
+
+
+    this._authService.loginWithEmailAndPaswword(this.email, this.password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        console.log(user)
+        // ...
+        alert(user.displayName)
+
+        if(!user.emailVerified){
+          //preguntamos y reenviamos el correo
+          this.emailIsNotVerified()
+        }else{
+          //Hacer el login
+        }
+      })
+      .catch(async (error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode)
+        console.log(errorMessage)
+
+        if(errorCode === "auth/invalid-email"){
+          this.Error = this.translate.instant('error.email_format_incorrect')
+        }else if(errorCode === "auth/wrong-password"){
+          this.Error = this.translate.instant('error.wrong_password')
+        }else if(errorCode === "auth/invalid-credential"){
+          this.Error = this.translate.instant('error.invalid_credencial')
+        }else if(errorCode === "auth/too-many-requests"){
+          const changepsw = await this._alert.twoOptionsAlert(this.translate.instant('alert.temporarily_disabled'),this.translate.instant('alert.temporarily_disabled_text'), this.translate.instant('alert.restore_password'),this.translate.instant('alert.cancel'))
+          if(changepsw){
+            this.restorePassword()
+          }
+        }else if(errorCode === "Firebase: Error (auth/network-request-failed)."){
+          this.Error = this.translate.instant('error.auth/network-request-failed')
+        }else{
+          this.Error = errorCode;
+        }
+
+      });
+    this.isLoading=false;
+  }
+
+  //RECORDAR INICIO DE SESIÓN
+  tryRememberSession(){
+    const remMail = localStorage.getItem('vehiclesUser');
+    const remPassword = localStorage.getItem('vehiclesPassword');
+    if(remMail && remPassword){
+      this.rememberSession= true;
+      this.email = remMail;
+      this.password = remPassword;
+    }
+    this.isLoading=false;
+  }
+
+  emailIsNotVerified(){
+
+  }
+
+
+
+  //RESTAURAR PASSWORD
+  async restorePassword(){
+    if(!this.email){
+      this._alert.createAlert(this.translate.instant('alert.write_a_correct_email'),this.translate.instant('alert.write_a_correct_email_text'));
+    }else{
+    this.isLoading=true
+    await this._authService.sendRestorePasswordEmail(this.email)
+      .then(()=>{
+        this._alert.createAlert(this.translate.instant('alert.email_send'),this.translate.instant('alert.restored_email_sended'));
+        this.isLoading=false;
+      })
+      .catch((err)=>{
+        console.log(err);
+        this.isLoading=false;
+      })
+    }
+  }
 
   signInWithGoogle(){}
 
