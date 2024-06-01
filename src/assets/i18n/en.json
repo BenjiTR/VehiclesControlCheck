@@ -1,4 +1,33 @@
 {
+  "privacy": {
+    "header": "Privacy Policy",
+    "introduction": "At Vehicles Control Check, we are committed to protecting your privacy. This privacy policy explains how we collect, use, and protect your personal information when you use our mobile application.",
+    "information_collection_header": "Information We Collect",
+    "information_collection": "We do not collect any personal information through our mobile application, except during the authentication process via Firebase for Google and Facebook login. This process is managed by Firebase, and we do not store any personal data on our servers.",
+    "information_use_header": "Use of Information",
+    "information_use": "The information collected during the authentication process is used solely to enable you to access the application. We do not share, sell, or use your personal information for any other purpose.",
+    "information_security_header": "Information Security",
+    "information_security": "We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. Data authentication and storage are managed by Firebase, which complies with industry security standards.",
+    "your_rights_header": "Your Rights",
+    "your_rights": "You may request access, correction, or deletion of your personal information at any time. To exercise these rights, please contact us via the contact information provided in the application.",
+    "policy_updates_header": "Policy Updates",
+    "policy_updates": "We may update this privacy policy from time to time. We will notify you of any changes by posting the new policy in the application. We recommend that you review this policy periodically to stay informed about how we protect your information.",
+    "return": "Return"
+  },
+  "userterms": {
+    "header": "Terms of Use",
+    "presentation": "Vehicles Control Check - Terms of Use",
+    "introduction": "Welcome to Vehicles Control Check. By using this application, you agree to comply with the following terms of use:",
+    "term1title": "Use of the Application:",
+    "term1text": "This application is designed to help users keep track of maintenance, breakdowns, and other events related to their vehicles. We do not store any personal data on our servers, except for the authentication process via Firebase.",
+    "term2title": "Authentication:",
+    "term2text": "User authentication is performed via Firebase, allowing access with Google and Facebook. We do not collect or store personal data.",
+    "term3title": "User Content:",
+    "term3text": "All information recorded in the application is stored locally on the user's device. It is the user's responsibility to keep this information secure and to make backups if necessary.",
+    "term4title": "Limitation of Liability:",
+    "term4text": "Vehicles Control Check is not liable for any damage or loss of data resulting from the use of the application.",
+    "return": "Return"
+  },
   "error": {
     "email_no_registered": "The email is not registered",
     "email_no_valid": "Invalid email, please enter a correct address",

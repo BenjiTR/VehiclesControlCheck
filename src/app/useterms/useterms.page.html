@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-toolbar class="green">
+    <ion-title translate="userterms.header"></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding pastel">
+
+  <strong><h2 translate="userterms.presentation"></h2></strong>
+    <p translate="userterms.introduction"></p>
+    <ol>
+      <li><strong>{{"userterms.term1title"|translate}}</strong>{{"userterms.term1text"|translate}}</li>
+      <li><strong>{{"userterms.term2title"|translate}}</strong>{{"userterms.term2text"|translate}}</li>
+      <li><strong>{{"userterms.term3title"|translate}}</strong>{{"userterms.term3text"|translate}}</li>
+      <li><strong>{{"userterms.term4title"|translate}}</strong>{{"userterms.term4text"|translate}}</li>
+    </ol>
+
+</ion-content>
+
+<ion-footer class="pastel">
+  <ion-button expand="block" [routerLink]="['/home']">{{"userterms.return"|translate}}</ion-button>
+</ion-footer>

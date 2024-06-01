@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar class="green">
+    <ion-title>{{ 'privacy.header' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding pastel">
+  <h3><strong>{{ 'privacy.header' | translate }}</strong></h3>
+  <p>{{ 'privacy.introduction' | translate }}</p>
+  <h3><strong>{{ 'privacy.information_collection_header' | translate }}</strong></h3>
+  <p>{{ 'privacy.information_collection' | translate }}</p>
+  <h3><strong>{{ 'privacy.information_use_header' | translate }}</strong></h3>
+  <p>{{ 'privacy.information_use' | translate }}</p>
+  <h3><strong>{{ 'privacy.information_security_header' | translate }}</strong></h3>
+  <p>{{ 'privacy.information_security' | translate }}</p>
+  <h3><strong>{{ 'privacy.your_rights_header' | translate }}</strong></h3>
+  <p>{{ 'privacy.your_rights' | translate }}</p>
+  <h3><strong>{{ 'privacy.policy_updates_header' | translate }}</strong></h3>
+  <p>{{ 'privacy.policy_updates' | translate }}</p>
+</ion-content>
+
+<ion-footer class="pastel">
+  <ion-button expand="block" [routerLink]="['/home']">{{ 'privacy.return' | translate }}</ion-button>
+</ion-footer>

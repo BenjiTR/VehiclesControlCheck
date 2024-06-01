@@ -1,4 +1,33 @@
 {
+  "privacy": {
+    "header": "Politique de confidentialité",
+    "introduction": "Chez Vehicles Control Check, nous nous engageons à protéger votre vie privée. Cette politique de confidentialité explique comment nous collectons, utilisons et protégeons vos informations personnelles lorsque vous utilisez notre application mobile.",
+    "information_collection_header": "Informations que nous collectons",
+    "information_collection": "Nous ne collectons aucune information personnelle via notre application mobile, sauf lors du processus d'authentification via Firebase pour la connexion Google et Facebook. Ce processus est géré par Firebase, et nous ne stockons aucune donnée personnelle sur nos serveurs.",
+    "information_use_header": "Utilisation des informations",
+    "information_use": "Les informations collectées lors du processus d'authentification sont utilisées uniquement pour vous permettre d'accéder à l'application. Nous ne partageons, ne vendons ni n'utilisons vos informations personnelles à aucune autre fin.",
+    "information_security_header": "Sécurité des informations",
+    "information_security": "Nous mettons en place des mesures de sécurité appropriées pour protéger vos informations personnelles contre tout accès non autorisé, toute altération, divulgation ou destruction. L'authentification et le stockage des données sont gérés par Firebase, qui est conforme aux normes de sécurité de l'industrie.",
+    "your_rights_header": "Vos droits",
+    "your_rights": "Vous pouvez demander l'accès, la correction ou la suppression de vos informations personnelles à tout moment. Pour exercer ces droits, veuillez nous contacter via les coordonnées fournies dans l'application.",
+    "policy_updates_header": "Mises à jour de cette politique",
+    "policy_updates": "Nous pouvons mettre à jour cette politique de confidentialité de temps à autre. Nous vous informerons de tout changement en publiant la nouvelle politique dans l'application. Nous vous recommandons de consulter périodiquement cette politique pour vous tenir informé de la manière dont nous protégeons vos informations.",
+    "return": "Retour"
+  },
+  "userterms": {
+    "header": "Conditions d'utilisation",
+    "presentation": "Vehicles Control Check - Conditions d'utilisation",
+    "introduction": "Bienvenue sur Vehicles Control Check. En utilisant cette application, vous acceptez de respecter les conditions d'utilisation suivantes :",
+    "term1title": "Utilisation de l'application :",
+    "term1text": "Cette application est conçue pour aider les utilisateurs à suivre les entretiens, les pannes et autres événements liés à leurs véhicules. Nous ne stockons aucune donnée personnelle sur nos serveurs, sauf pour le processus d'authentification via Firebase.",
+    "term2title": "Authentification :",
+    "term2text": "L'authentification des utilisateurs est effectuée via Firebase, permettant l'accès avec Google et Facebook. Nous ne collectons ni ne stockons de données personnelles.",
+    "term3title": "Contenu de l'utilisateur :",
+    "term3text": "Toutes les informations enregistrées dans l'application sont stockées localement sur l'appareil de l'utilisateur. Il incombe à l'utilisateur de sécuriser ces informations et de les sauvegarder si nécessaire.",
+    "term4title": "Limitation de responsabilité :",
+    "term4text": "Vehicles Control Check n'est pas responsable des dommages ou pertes de données résultant de l'utilisation de l'application.",
+    "return": "Retour"
+  },
   "error": {
     "email_no_registered": "L'email n'est pas enregistré",
     "email_no_valid": "Email non valide, veuillez entrer une adresse correcte",
