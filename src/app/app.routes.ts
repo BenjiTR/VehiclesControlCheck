@@ -18,4 +18,8 @@ export const routes: Routes = [
     path: 'useterms',
     loadComponent: () => import('./useterms/useterms.page').then( m => m.UsetermsPage)
   },
+  {
+    path: 'newuser',
+    loadComponent: () => import('./pages/newuser/newuser.page').then( m => m.NewuserPage)
+  },
 ];

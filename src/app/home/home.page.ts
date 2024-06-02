@@ -1,5 +1,5 @@
 import { AuthService } from './../services/auth.service';
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonRow, IonCol, IonImg, IonItem, IonInput, IonIcon, IonFooter, IonButton, IonCheckbox, IonLabel } from '@ionic/angular/standalone';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslationConfigService } from '../services/translation.service';
@@ -65,54 +65,34 @@ export class HomePage implements OnInit{
 
     this.isLoading=true;
     this.Error="";
-
-    if(this.rememberSession){
-      localStorage.setItem('vehiclesUser', this.email);
-      localStorage.setItem('vehiclesPassword',this.password);
-    }else{
-      localStorage.setItem('vehiclesUser', '');
-      localStorage.setItem('vehiclesPassword','');
-    }
-
-
+    this.handlerRememberSession()
     this._authService.loginWithEmailAndPaswword(this.email, this.password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         // Signed in
         const user = userCredential.user;
         console.log(user)
         // ...
-        alert(user.displayName)
-
         if(!user.emailVerified){
           //preguntamos y reenviamos el correo
-          this.emailIsNotVerified()
+          const verify = await this._alert.twoOptionsAlert(this.translate.instant('alert.email_no_verified'),this.translate.instant('alert.email_no_verified_text'),this.translate.instant('alert.resend'),this.translate.instant('alert.cancel'))
+          if(verify){
+            this._authService.sendEmailVerificacion()
+            .then(()=>{
+              this._alert.createAlert(this.translate.instant('alert.email_resend'),this.translate.instant('alert.email_no_verified_text'));
+            })
+            .catch((err)=>{
+              this.handleErrors(err.code);
+            })
+          }
+        this.isLoading = false;
         }else{
           //Hacer el login
+          alert(user.displayName)
+          this.loginExecute(user);
         }
       })
       .catch(async (error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode)
-        console.log(errorMessage)
-
-        if(errorCode === "auth/invalid-email"){
-          this.Error = this.translate.instant('error.email_format_incorrect')
-        }else if(errorCode === "auth/wrong-password"){
-          this.Error = this.translate.instant('error.wrong_password')
-        }else if(errorCode === "auth/invalid-credential"){
-          this.Error = this.translate.instant('error.invalid_credencial')
-        }else if(errorCode === "auth/too-many-requests"){
-          const changepsw = await this._alert.twoOptionsAlert(this.translate.instant('alert.temporarily_disabled'),this.translate.instant('alert.temporarily_disabled_text'), this.translate.instant('alert.restore_password'),this.translate.instant('alert.cancel'))
-          if(changepsw){
-            this.restorePassword()
-          }
-        }else if(errorCode === "Firebase: Error (auth/network-request-failed)."){
-          this.Error = this.translate.instant('error.auth/network-request-failed')
-        }else{
-          this.Error = errorCode;
-        }
-
+        this.handleErrors(error.code);
       });
     this.isLoading=false;
   }
@@ -128,11 +108,6 @@ export class HomePage implements OnInit{
     }
     this.isLoading=false;
   }
-
-  emailIsNotVerified(){
-
-  }
-
 
 
   //RESTAURAR PASSWORD
@@ -153,6 +128,44 @@ export class HomePage implements OnInit{
     }
   }
 
+  //MANEJO DE RECORDAR LA SESIÓN
+  handlerRememberSession(){
+    if(this.rememberSession){
+      localStorage.setItem('vehiclesUser', this.email);
+      localStorage.setItem('vehiclesPassword',this.password);
+    }else{
+      localStorage.setItem('vehiclesUser', '');
+      localStorage.setItem('vehiclesPassword','');
+    }
+  }
+
+  //MANEJO DE ERRORES
+  async handleErrors(errorCode:string){
+    console.log("Error: ", errorCode);
+    if(errorCode === "auth/invalid-email"){
+      this.Error = this.translate.instant('error.email_format_incorrect')
+    }else if(errorCode === "auth/wrong-password"){
+      this.Error = this.translate.instant('error.wrong_password')
+    }else if(errorCode === "auth/invalid-credential"){
+      this.Error = this.translate.instant('error.invalid_credencial')
+    }else if(errorCode === "auth/too-many-requests"){
+      //ERROR QUE DA OPCIÓN A RESTAURAR CONTRASEÑA
+      const changepsw = await this._alert.twoOptionsAlert(this.translate.instant('alert.temporarily_disabled'),this.translate.instant('alert.temporarily_disabled_text'), this.translate.instant('alert.restore_password'),this.translate.instant('alert.cancel'))
+      if(changepsw){
+        this.restorePassword()
+      }
+    }else if(errorCode === "Firebase: Error (auth/network-request-failed)."){
+      this.Error = this.translate.instant('error.auth/network-request-failed')
+    }else{
+      this.Error = errorCode;
+    }
+  }
+
   signInWithGoogle(){}
+
+  //CONFIRMAR LOGIN
+  loginExecute(user:any){
+    console.log("usuario = ", user);
+  }
 
 }
