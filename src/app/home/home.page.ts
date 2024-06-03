@@ -60,7 +60,7 @@ export class HomePage implements OnInit{
     }
   }
 
-  //LOGIN CON EMAIL
+  //AUTENTICACIÓN CON EMAIL
   async loginWithEmail(){
 
     this.isLoading=true;
@@ -86,15 +86,24 @@ export class HomePage implements OnInit{
           }
         this.isLoading = false;
         }else{
-          //Hacer el login
-          alert(user.displayName)
-          this.loginExecute(user);
+          this.loginExecute(user)
         }
       })
       .catch(async (error) => {
         this.handleErrors(error.code);
       });
     this.isLoading=false;
+  }
+
+  //AUTENTICACIÓN CON GOOGLE
+  async signInWithGoogle(){
+    this._authService.loginWithGoogle()
+    .then((user)=>{
+      this.loginExecute(user, "google")
+    })
+    .catch((error)=>{
+      this.handleErrors(error.code);
+    })
   }
 
   //RECORDAR INICIO DE SESIÓN
@@ -108,7 +117,6 @@ export class HomePage implements OnInit{
     }
     this.isLoading=false;
   }
-
 
   //RESTAURAR PASSWORD
   async restorePassword(){
@@ -161,11 +169,14 @@ export class HomePage implements OnInit{
     }
   }
 
-  signInWithGoogle(){}
-
-  //CONFIRMAR LOGIN
-  loginExecute(user:any){
+  //CONFIRMAR Y EJECUTAR LOGIN
+  loginExecute(user:any, method?:string){
     console.log("usuario = ", user);
+    if(method && method === "google"){
+      alert(user.name)
+    }else{
+      alert(user.displayName)
+    }
   }
 
 }
