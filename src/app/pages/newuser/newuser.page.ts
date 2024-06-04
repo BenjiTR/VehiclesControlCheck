@@ -86,6 +86,7 @@ export class NewuserPage implements OnInit {
           })
           .catch((error) => {
             console.log("error al actualizar nombre", error)
+            this.handleErrors(error.code)
           })
       })
       .catch((error) => {

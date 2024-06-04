@@ -134,6 +134,7 @@ export class HomePage implements OnInit{
       })
       .catch((err)=>{
         console.log(err);
+        this.handleErrors(err.code)
         this.isLoading=false;
       })
     }
