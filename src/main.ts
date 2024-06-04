@@ -29,7 +29,7 @@ bootstrapApplication(AppComponent, {
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideIonicAngular(),
     provideRouter(routes),
-    importProvidersFrom(IonicModule.forRoot({innerHTMLTemplatesEnabled: true})), 
+    importProvidersFrom(IonicModule.forRoot({innerHTMLTemplatesEnabled: true})),
     provideIonicAngular(),
     provideRouter(routes),
     importProvidersFrom(  HttpClientModule,
@@ -59,7 +59,6 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
 
 // Initialize Firebase Authentication and get a reference to the service
 const auth = getAuth(app);

@@ -1,4 +1,4 @@
-import { signInWithCredential, GoogleAuthProvider, getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, sendEmailVerification, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { signOut, onAuthStateChanged, getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, sendEmailVerification, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { Injectable } from "@angular/core";
 import { TranslationConfigService } from '../services/translation.service';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
@@ -13,6 +13,7 @@ import { Platform } from "@ionic/angular";
 export class AuthService{
 
     public auth:any = getAuth();
+    public isActive:Boolean = false;
 
   constructor(
     private _translation: TranslationConfigService,
@@ -20,13 +21,14 @@ export class AuthService{
   ){
     this.auth.languageCode = this._translation.getLanguage();
     this.initializeApp();
+    console.log(this.isActive)
+
   }
 
 
   initializeApp() {
     this.platform.ready().then(() => {
       GoogleAuth.initialize({ grantOfflineAccess: true })
-
     });
   }
 
@@ -61,6 +63,32 @@ createuserWithEmailAndPassword(email:string, password:string){
 //CAMBIAR NOMBRE DE USUARIO
 updateNameProfile(userName:string){
   return updateProfile(this.auth.currentUser, {displayName: userName})
+}
+
+//OBSERVABLE DEL ESTADO DE USUARIO.
+userState(){
+  onAuthStateChanged(this.auth, (user) => {
+    if (user) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/auth.user
+      const uid = user.uid;
+      this.isActive = true
+      console.log(this.isActive)
+      console.log(user)
+
+      // ...
+    } else {
+      this.isActive = false;
+      console.log(this.isActive);
+      // User is signed out
+      // ...
+    }
+  });
+}
+
+//CIERRE DE SESIÓN
+signOut(){
+  return signOut(this.auth)
 }
 
 

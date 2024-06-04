@@ -131,7 +131,15 @@
   },
   "dashboard": {
     "user_data": "User data",
-    "exit": "Log out"
+    "exit": "Log out",
+    "adjust_notifications": "Notification Settings",
+    "adjust_backup": "Backup Settings",
+    "faqs": "FAQs",
+    "point_out_problem": "Report a Problem",
+    "like_share": "Like it? Share it!",
+    "user_terms": "Terms of Use",
+    "privacity": "Privacy",
+    "export_data": "Export Data"
   },
   "userpage": {
     "user_dates": "User data",

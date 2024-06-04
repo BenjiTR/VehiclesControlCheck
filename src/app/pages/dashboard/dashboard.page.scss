@@ -1,0 +1,20 @@
+.zoom-2{
+  zoom: 2;
+}
+.pastel-to-blue{
+  --background: rgb(246,243,234);
+  --background: linear-gradient(180deg, rgba(246,243,234,1) 0%,rgba(246,243,234,1) 25%, #8bd3db 25%, #8bd3db 100%);
+}
+.flex{
+  display: flex;
+}
+.pastel-to-blue{
+  --background: rgb(246,243,234);
+  --background: linear-gradient(180deg, rgba(246,243,234,1) 0%,rgba(246,243,234,1) 25%, #8bd3db 25%, #8bd3db 100%);
+}
+.blue{
+  background: #8bd3db;
+}
+.mt-3{
+  margin-top: 3rem;
+}

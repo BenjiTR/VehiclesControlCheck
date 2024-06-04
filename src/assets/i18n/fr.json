@@ -131,7 +131,15 @@
   },
   "dashboard": {
     "user_data": "Données de l'utilisateur",
-    "exit": "Se déconnecter"
+    "exit": "Se déconnecter",
+    "adjust_notifications": "Paramètres de notification",
+    "adjust_backup": "Paramètres de sauvegarde",
+    "faqs": "FAQ",
+    "point_out_problem": "Signaler un problème",
+    "like_share": "Aimez-vous ? Partagez !",
+    "user_terms": "Conditions d'utilisation",
+    "privacity": "Confidentialité",
+    "export_data": "Exporter les données"
   },
   "userpage": {
     "user_dates": "Données de l'utilisateur",

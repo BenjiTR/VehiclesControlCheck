@@ -132,7 +132,15 @@
   },
   "dashboard":{
       "user_data":"Datos de usuario",
-      "exit":"Salir"
+      "exit":"Salir",
+      "adjust_notifications":"Ajustes de notificaciones",
+      "adjust_backup":"Ajustes de backup",
+      "faqs":"FAQ's",
+      "point_out_problem":"Señalar un problema",
+      "like_share":"Te gusta? Comparte!",
+      "user_terms":"Terminos de uso",
+      "privacity":"Privacidad",
+      "export_data":"Exportar datos"
   },
   "userpage":{
       "user_dates":"Datos de usuario",

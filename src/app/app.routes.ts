@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { canActivate } from './services/auth.guard';
 
 export const routes: Routes = [
   {
@@ -21,5 +22,13 @@ export const routes: Routes = [
   {
     path: 'newuser',
     loadComponent: () => import('./pages/newuser/newuser.page').then( m => m.NewuserPage)
+  },
+  {
+    path: 'dashboard',
+    loadComponent: () => import('./pages/dashboard/dashboard.page').then( m => m.DashboardPage)
+  },
+  {
+    path: 'userdataview',
+    loadComponent: () => import('./pages/userdataview/userdataview.page').then( m => m.UserdataviewPage)
   },
 ];

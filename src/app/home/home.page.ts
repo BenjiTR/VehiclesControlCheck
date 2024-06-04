@@ -5,8 +5,10 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslationConfigService } from '../services/translation.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AlertService } from '../services/alert.service';
+import { User } from '../models/user.model';
+import { sessionService } from '../services/session.seervice';
 
 @Component({
   selector: 'app-home',
@@ -31,7 +33,8 @@ export class HomePage implements OnInit{
     private _translation:TranslationConfigService,
     private _authService:AuthService,
     private _alert:AlertService,
-
+    private _session:sessionService,
+    private router:Router
   ) {}
 
   ngOnInit(): void {
@@ -171,12 +174,32 @@ export class HomePage implements OnInit{
 
   //CONFIRMAR Y EJECUTAR LOGIN
   loginExecute(user:any, method?:string){
-    console.log("usuario = ", user);
+    this._authService.userState();
     if(method && method === "google"){
-      alert(user.name)
+      const currentUser:User = new User();
+      currentUser.userName = user.givenName;
+      currentUser.userPhoto = user.imageUrl;
+      currentUser.userId = user.id;
+      currentUser.userMethod = "google";
+      currentUser.userEmail = user.email;
+      this._session.currentUser = currentUser
     }else{
-      alert(user.displayName)
+      const currentUser:User = new User();
+      currentUser.userName = user.displayName;
+      currentUser.userPhoto = this.searchUserPhoto();
+      currentUser.userId = user.uid;
+      currentUser.userMethod = "email";
+      currentUser.userEmail = user.email;
+      this._session.currentUser = currentUser
     }
+    this.router.navigate(["\dashboard"])
   }
+
+
+  searchUserPhoto():string {
+    return "../../assets/img/user_avatar.png";
+  }
+
+
 
 }

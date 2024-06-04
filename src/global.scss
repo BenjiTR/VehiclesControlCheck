@@ -60,6 +60,11 @@ body, ion-app {
   background: rgba(99, 201, 181, 1);
   --background: rgba(99, 201, 181, 1);
 }
+.pastel-to-green{
+  background: linear-gradient(to bottom, #f6f3ea 0%, #f6f3ea 50%, #8fd6c5 50%, #63c9b5 100%);
+  --background: linear-gradient(to bottom, #f6f3ea 0%, #f6f3ea 50%, #8fd6c5 50%, #63c9b5 100%);
+  }
+
 
 //ROUND
 .round-corner-up{

@@ -3,6 +3,7 @@ import { AlertController } from "@ionic/angular";
 import { TranslateService } from "@ngx-translate/core";
 import { firstValueFrom } from "rxjs";
 
+
 @Injectable({
     providedIn:'root',
 })
