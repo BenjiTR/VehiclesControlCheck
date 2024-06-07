@@ -17,6 +17,8 @@ import { TranslationConfigService } from '../../services/translation.service';
 })
 export class DashboardPage implements OnInit {
 
+  public isLoading:Boolean=true;
+
   constructor(
     private menuCtrl: MenuController,
     private _authService: AuthService,
@@ -27,6 +29,7 @@ export class DashboardPage implements OnInit {
 
   ngOnInit() {
     this.translate.setDefaultLang(this._translation.getLanguage());
+    this.isLoading=false;
   }
 
   cerrarMenu() {
