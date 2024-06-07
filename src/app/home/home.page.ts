@@ -10,6 +10,9 @@ import { AlertService } from '../services/alert.service';
 import { User } from '../models/user.model';
 import { SessionService } from '../services/session.seervice';
 import { UserTestService } from '../services/user-test.service';
+import { AdmobService } from '../services/admob.service';
+
+
 
 @Component({
   selector: 'app-home',
@@ -36,10 +39,16 @@ export class HomePage implements OnInit{
     private _alert:AlertService,
     private _session:SessionService,
     private router:Router,
-    private _userTestService:UserTestService
+    private _userTestService:UserTestService,
+
+    private _admobService:AdmobService
   ) {}
 
   ngOnInit(): void {
+    this._admobService.initialize();
+    this._admobService.showConsent();
+    this._admobService.showBanner();
+    this._admobService.hideBanner();
     this.translate.setDefaultLang(this._translation.getLanguage());
     this.tryRememberSession();
   }

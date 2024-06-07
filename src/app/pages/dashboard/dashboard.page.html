@@ -1,4 +1,4 @@
-<ion-menu side="end" contentId="main-content">
+<ion-menu side="end" contentId="main-content" (ionWillClose)="cerrarMenu()">
 
   <ion-header>
     <ion-toolbar class="pastel">
@@ -38,16 +38,33 @@
         </ion-col>
       </ion-row>
       <ion-buttons slot="end">
-        <ion-menu-button class="zoom-2"></ion-menu-button>
+        <ion-menu-button (click)="HideBanner()" class="zoom-2"></ion-menu-button>
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
 
 
 
-<ion-content>
+<ion-content class="pastel-to-green">
+  <app-userdataview></app-userdataview>
 
-      <app-userdataview></app-userdataview>
+  <ion-row class="green round-corner-up ion-padding-top">
+    <ion-col size="12">
+      <h1 class="no-vehicles-text" translate="mainpage.main_text"></h1>
+    </ion-col>
+    <ion-col size="12" class="ion-justify-content-center flex">
+        <ion-img class="arrow"
+        src="../../../assets/img/Logo Flecha Carretera 1.png"
+        alt="street arrow"
+      ></ion-img>
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col class="ion-text-center" size="12">
+        <ion-icon class="orange-icon" src="../../../assets/icons/add-circle-outline.svg"></ion-icon>
+    </ion-col>
+  </ion-row>
 
 </ion-content>
 

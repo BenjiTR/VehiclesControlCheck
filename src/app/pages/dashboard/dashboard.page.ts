@@ -7,6 +7,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslationConfigService } from '../../services/translation.service';
+import { AdmobService } from 'src/app/services/admob.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -24,30 +25,40 @@ export class DashboardPage implements OnInit {
     private _authService: AuthService,
     private router:Router,
     private translate:TranslateService,
-    private _translation:TranslationConfigService
+    private _translation:TranslationConfigService,
+    private _admobService:AdmobService
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.translate.setDefaultLang(this._translation.getLanguage());
+    this._admobService.resumeBanner();
     this.isLoading=false;
   }
 
   cerrarMenu() {
     this.menuCtrl.close();
+    this._admobService.resumeBanner();
+  }
+
+  HideBanner(){
+    this._admobService.hideBanner();
   }
 
   async endSession(){
+    this.isLoading=true;
+    await this.menuCtrl.close();
     await this._authService.signOut()
     .then(() => {
       // Sign-out successful.
       this._authService.isActive = false;
       this._authService.isInTest = false;
+      this._admobService.hideBanner();
       this.router.navigate(['/home']);
+      this.isLoading=false;
     }).catch((error) => {
       // An error happened.
       alert(error);
     });
   }
-
 
 }
