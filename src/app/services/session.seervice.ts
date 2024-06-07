@@ -6,7 +6,7 @@ import { User } from '../models/user.model';
 })
 
 
-export class sessionService{
+export class SessionService{
 
   public currentUser:User = new User;
 

@@ -87,7 +87,8 @@
     "dont_have_user?": "Don't have a user?",
     "sign_up": "Sign up",
     "privacity": "Privacy",
-    "terms_of_use": "Terms of use"
+    "terms_of_use": "Terms of use",
+    "user_test": "Test user"
   },
   "newuser": {
     "email": "Email",
@@ -131,7 +132,7 @@
   },
   "dashboard": {
     "user_data": "User data",
-    "exit": "Log out",
+    "close_session": "Log out",
     "adjust_notifications": "Notification Settings",
     "adjust_backup": "Backup Settings",
     "faqs": "FAQs",

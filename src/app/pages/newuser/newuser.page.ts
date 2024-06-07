@@ -7,7 +7,7 @@ import { TranslationConfigService } from '../../services/translation.service';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { AlertService } from 'src/app/services/alert.service';
-import { sessionService } from 'src/app/services/session.seervice';
+import { SessionService } from 'src/app/services/session.seervice';
 import { User } from 'src/app/models/user.model';
 
 @Component({
@@ -34,7 +34,7 @@ export class NewuserPage implements OnInit {
     private _authService: AuthService,
     private _alert: AlertService,
     private router: Router,
-    private _session:sessionService
+    private _session:SessionService
   ) { }
 
   ngOnInit(): void {
@@ -74,10 +74,10 @@ export class NewuserPage implements OnInit {
         const user = userCredential.user;
         await this._authService.updateNameProfile(this.userName)
           .then(async (message) => {
-            console.log("message actualizar nombre = ", message)
+            //console.log("message actualizar nombre = ", message)
             await this._authService.sendEmailVerificacion()
               .then((message) => {
-                console.log("message al enviar correo de confirmación", message)
+                //console.log("message al enviar correo de confirmación", message)
                 this._alert.createAlert(this.translate.instant('alert.user_created_success'), (this.translate.instant('alert.user_created_success_text')));
                 this.Error = "";
                 this.isLoading = false;
@@ -85,7 +85,7 @@ export class NewuserPage implements OnInit {
               })
           })
           .catch((error) => {
-            console.log("error al actualizar nombre", error)
+            //console.log("error al actualizar nombre", error)
             this.handleErrors(error.code)
           })
       })
@@ -96,7 +96,7 @@ export class NewuserPage implements OnInit {
 
   //GESTIÓN DE ERRORES
   handleErrors(error: string) {
-    console.log(error)
+    //console.log(error)
     // ..
     this.isLoading = false;
     if (error === "auth/invalid-email") {
@@ -105,14 +105,14 @@ export class NewuserPage implements OnInit {
       this.Error = this.translate.instant('error.no_network');
     } else if (error === "auth/weak-password") {
       this.Error = this.translate.instant('error.password_should_be_6')
-      console.log(this.Error)
+      //console.log(this.Error)
 
     } else if (error === "auth/email-already-in-use") {
       this.Error = this.translate.instant('error.email_is_in_use')
     } else {
       this.Error = error;
     }
-    console.log(this.Error)
+    //console.log(this.Error)
   }
 
 

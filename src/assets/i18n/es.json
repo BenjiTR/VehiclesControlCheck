@@ -88,7 +88,8 @@
       "dont_have_user?":"¿No tienes usuario?",
       "sign_up":"Registrate",
       "privacity":"Privacidad",
-      "terms_of_use":"Terminos de uso"
+      "terms_of_use":"Terminos de uso",
+      "user_test":"Usuario de prueba"
   },
   "newuser":{
       "email":"Correo electrónico",
@@ -132,7 +133,7 @@
   },
   "dashboard":{
       "user_data":"Datos de usuario",
-      "exit":"Salir",
+      "close_session":"Cerrrar sesión",
       "adjust_notifications":"Ajustes de notificaciones",
       "adjust_backup":"Ajustes de backup",
       "faqs":"FAQ's",

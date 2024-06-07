@@ -31,7 +31,7 @@ export class TranslationConfigService {
     getLanguage() {
         const availableLanguages = this.translate.getLangs();
         const deviceLanguage = this.getDeviceLanguage();
-      console.log(this.language)
+      //console.log(this.language)
         if(this.language && availableLanguages.includes(this.language) ){
             return this.language
         }else{

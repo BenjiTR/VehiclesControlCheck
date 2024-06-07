@@ -8,7 +8,8 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { AlertService } from '../services/alert.service';
 import { User } from '../models/user.model';
-import { sessionService } from '../services/session.seervice';
+import { SessionService } from '../services/session.seervice';
+import { UserTestService } from '../services/user-test.service';
 
 @Component({
   selector: 'app-home',
@@ -29,12 +30,13 @@ export class HomePage implements OnInit{
   public rememberSession:boolean =false;
 
   constructor(
-    private translate: TranslateService,
+    private translate:TranslateService,
     private _translation:TranslationConfigService,
     private _authService:AuthService,
     private _alert:AlertService,
-    private _session:sessionService,
-    private router:Router
+    private _session:SessionService,
+    private router:Router,
+    private _userTestService:UserTestService
   ) {}
 
   ngOnInit(): void {
@@ -63,6 +65,12 @@ export class HomePage implements OnInit{
     }
   }
 
+  //TEST USER
+  loginWithTest(){
+    const user = this._userTestService.userCredential;
+    this.loginExecute(user, "test");
+  }
+
   //AUTENTICACIÓN CON EMAIL
   async loginWithEmail(){
 
@@ -73,7 +81,7 @@ export class HomePage implements OnInit{
       .then(async (userCredential) => {
         // Signed in
         const user = userCredential.user;
-        console.log(user)
+        //console.log(user)
         // ...
         if(!user.emailVerified){
           //preguntamos y reenviamos el correo
@@ -100,6 +108,7 @@ export class HomePage implements OnInit{
 
   //AUTENTICACIÓN CON GOOGLE
   async signInWithGoogle(){
+    this.isLoading=true;
     this._authService.loginWithGoogle()
     .then((user)=>{
       this.loginExecute(user, "google")
@@ -133,7 +142,7 @@ export class HomePage implements OnInit{
         this.isLoading=false;
       })
       .catch((err)=>{
-        console.log(err);
+        //console.log(err);
         this.handleErrors(err.code)
         this.isLoading=false;
       })
@@ -153,7 +162,7 @@ export class HomePage implements OnInit{
 
   //MANEJO DE ERRORES
   async handleErrors(errorCode:string){
-    console.log("Error: ", errorCode);
+    //console.log("Error: ", errorCode);
     if(errorCode === "auth/invalid-email"){
       this.Error = this.translate.instant('error.email_format_incorrect')
     }else if(errorCode === "auth/wrong-password"){
@@ -175,7 +184,6 @@ export class HomePage implements OnInit{
 
   //CONFIRMAR Y EJECUTAR LOGIN
   loginExecute(user:any, method?:string){
-    this._authService.userState();
     if(method && method === "google"){
       const currentUser:User = new User();
       currentUser.userName = user.givenName;
@@ -184,7 +192,20 @@ export class HomePage implements OnInit{
       currentUser.userMethod = "google";
       currentUser.userEmail = user.email;
       this._session.currentUser = currentUser
+      this._authService.isActive=true;
+    }else if(method && method === "test"){
+      const currentUser:User = new User();
+      currentUser.userName = user.givenName;
+      currentUser.userPhoto = user.imageUrl;
+      currentUser.userId = user.id;
+      currentUser.userMethod = "google";
+      currentUser.userEmail = user.email;
+      this._session.currentUser = currentUser
+      this._authService.isInTest = true;
     }else{
+      //observable del estado de autenticación
+      this._authService.userState();
+
       const currentUser:User = new User();
       currentUser.userName = user.displayName;
       currentUser.userPhoto = this.searchUserPhoto();
@@ -194,6 +215,7 @@ export class HomePage implements OnInit{
       this._session.currentUser = currentUser
     }
     this.router.navigate(["\dashboard"])
+    this.isLoading=false;
   }
 
 

@@ -87,7 +87,8 @@
     "dont_have_user?": "Vous n'avez pas de compte?",
     "sign_up": "S'inscrire",
     "privacity": "Confidentialité",
-    "terms_of_use": "Conditions d'utilisation"
+    "terms_of_use": "Conditions d'utilisation",
+    "user_test": "Utilisateur de test"
   },
   "newuser": {
     "email": "Email",
@@ -131,7 +132,7 @@
   },
   "dashboard": {
     "user_data": "Données de l'utilisateur",
-    "exit": "Se déconnecter",
+    "close_session": "Se déconnecter",
     "adjust_notifications": "Paramètres de notification",
     "adjust_backup": "Paramètres de sauvegarde",
     "faqs": "FAQ",

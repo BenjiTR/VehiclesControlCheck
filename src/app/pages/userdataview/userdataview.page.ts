@@ -5,7 +5,7 @@ import { IonHeader, IonToolbar, IonTitle, IonContent, IonRow, IonCol, IonImg, Io
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslationConfigService } from '../../services/translation.service';
 import { RouterModule, Router } from '@angular/router';
-import { sessionService } from 'src/app/services/session.seervice';
+import { SessionService } from 'src/app/services/session.seervice';
 import { User } from 'src/app/models/user.model';
 
 @Component({
@@ -23,7 +23,7 @@ export class UserdataviewPage implements OnInit {
     private translate: TranslateService,
     private _translation: TranslationConfigService,
     private router: Router,
-    private _session:sessionService
+    private _session:SessionService
   ) { }
 
   ngOnInit() {

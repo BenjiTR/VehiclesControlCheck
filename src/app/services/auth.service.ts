@@ -14,14 +14,14 @@ export class AuthService{
 
     public auth:any = getAuth();
     public isActive:Boolean = false;
-
+    public isInTest:Boolean = false;
   constructor(
     private _translation: TranslationConfigService,
     private platform:Platform
   ){
     this.auth.languageCode = this._translation.getLanguage();
     this.initializeApp();
-    console.log(this.isActive)
+    //console.log(this.isActive)
 
   }
 
@@ -51,7 +51,7 @@ sendRestorePasswordEmail(email:string){
 
 //ENVIAR EMAIL DE VERIFICACIÓN
 sendEmailVerificacion(){
-  console.log("user", this.auth.currentUser)
+  //console.log("user", this.auth.currentUser)
   return sendEmailVerification(this.auth.currentUser);
 }
 
@@ -71,7 +71,9 @@ userState(){
     if (user) {
       // User is signed in, see docs for a list of available properties
       // https://firebase.google.com/docs/reference/js/auth.user
-      const uid = user.uid;
+
+        const uid = user!.uid;
+
       this.isActive = true
       console.log(this.isActive)
       console.log(user)
