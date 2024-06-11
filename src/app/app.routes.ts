@@ -30,6 +30,12 @@ export const routes: Routes = [
   },
   {
     path: 'userdataview',
-    loadComponent: () => import('./pages/userdataview/userdataview.page').then( m => m.UserdataviewPage)
+    loadComponent: () => import('./pages/userdataview/userdataview.page').then( m => m.UserdataviewPage),
+    canActivate: [canActivate]
+  },
+  {
+    path: 'userdata',
+    loadComponent: () => import('./pages/userdata/userdata.page').then( m => m.UserdataPage),
+    canActivate: [canActivate]
   },
 ];

@@ -10,7 +10,8 @@ export class UserTestService {
     "email": "virtualBenji@virtual.com",
     "givenName": "Virtual Benji",
     "id": "00000000000000000001",
-    "imageUrl": "https://lh3.googleusercontent.com/a/ACg8ocKccliM8oeIVCgQxe-PzT1gBy0iD-M5uXzBZEbwNy9O7mBEml2M=s96-c",
+    //"imageUrl": "https://lh3.googleusercontent.com/a/ACg8ocKccliM8oeIVCgQxe-PzT1gBy0iD-M5uXzBZEbwNy9O7mBEml2M=s96-c",
+    "imageUrl": "",
     "name": "Virtual Benji",
     "authentication": {
         "accessToken": "ya29.a0AXooCgsbAJ18BqrX4ptJDkZE82NEFxVOtUOkLme_Hj-6oaga71w14oomfg_fmC3dMHSIpe-f6qt3V6FMULIP_bp8U9xRPHbQ27gC_e8j2s9OqKNdmSxz_3L4QoKSNcQseewNShqKXh96VFtFtraFADm6Y_W1tdAebPYOaCgYKAfcSARISFQHGX2MiGwB4WQgw4JJBxCl0iMH55w0171",

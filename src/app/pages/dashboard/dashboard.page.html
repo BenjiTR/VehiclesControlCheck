@@ -9,7 +9,7 @@
   <ion-content class="pastel-to-blue">
     <ion-row class="ion-margin-top mt-3 blue round-corner-up">
       <ion-col class="ion-margin-top" size="12">
-        <h3 class="ion-margin-top" (click)="cerrarMenu()" [routerLink]="['/dashboard']" class="flex ion-align-items-center"><ion-icon class="ion-margin-end" size="large" src="../../../assets/icons/person-outline.svg"></ion-icon>{{'dashboard.user_data'|translate}}</h3>
+        <h3 class="ion-margin-top" (click)="cerrarMenu()" [routerLink]="['/userdata']" class="flex ion-align-items-center"><ion-icon class="ion-margin-end" size="large" src="../../../assets/icons/person-outline.svg"></ion-icon>{{'dashboard.user_data'|translate}}</h3>
         <h3 class="ion-margin-top" (click)="cerrarMenu()" [routerLink]="['/#']" class="flex ion-align-items-center"><ion-icon class="ion-margin-end" size="large" src="../../../assets/icons/cog-outline.svg"></ion-icon>{{'dashboard.adjust_notifications'|translate}}</h3>
         <h3 class="ion-margin-top" (click)="cerrarMenu()" [routerLink]="['/#']" class="flex ion-align-items-center"><ion-icon class="ion-margin-end" size="large" src="../../../assets/icons/cloud-upload-outline.svg"></ion-icon>{{'dashboard.adjust_backup'|translate}}</h3>
         <h3 class="ion-margin-top" (click)="cerrarMenu()" [routerLink]="['/#']" class="flex ion-align-items-center"><ion-icon class="ion-margin-end" size="large" src="../../../assets/icons/help-outline.svg"></ion-icon>{{'dashboard.faqs'|translate}}</h3>
@@ -21,7 +21,7 @@
         <h3 class="ion-margin-top" (click)="endSession()" class="flex ion-align-items-center"><ion-icon class="ion-margin-end" size="large" src="../../../assets/icons/exit-outline.svg"></ion-icon>{{'dashboard.close_session'|translate}}</h3>
       </ion-col>
     </ion-row>
-    <ion-row class="bottom">
+    <ion-row class="ion-margin-top">
       <ion-col class="ion-text-center" size="12">
           <ion-icon (click)="cerrarMenu()" class="orange-icon" src="../../../assets/icons/arrow-forward-circle-outline.svg"></ion-icon>
       </ion-col>
@@ -45,12 +45,12 @@
 
 
 
-<ion-content class="pastel-to-green">
+<ion-content class="pastel-to-green" [ngStyle]="{'--padding-bottom.px':calculatePadding()}">
   <app-userdataview></app-userdataview>
 
   <ion-row class="green round-corner-up ion-padding-top">
     <ion-col size="12">
-      <h1 class="no-vehicles-text" translate="mainpage.main_text"></h1>
+      <h1 class="no-vehicles-text ion-margin-end" translate="mainpage.main_text"></h1>
     </ion-col>
     <ion-col size="12" class="ion-justify-content-center flex">
         <ion-img class="arrow"

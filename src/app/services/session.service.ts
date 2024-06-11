@@ -13,4 +13,8 @@ export class SessionService{
   constructor(){}
 
 
+  searchUserPhoto():string {
+    return "../../assets/img/user_avatar.png";
+  }
+
 }

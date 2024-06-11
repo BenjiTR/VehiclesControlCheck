@@ -5,7 +5,7 @@ import { IonHeader, IonToolbar, IonTitle, IonContent, IonRow, IonCol, IonImg, Io
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslationConfigService } from '../../services/translation.service';
 import { RouterModule, Router } from '@angular/router';
-import { SessionService } from 'src/app/services/session.seervice';
+import { SessionService } from 'src/app/services/session.service';
 import { User } from 'src/app/models/user.model';
 
 @Component({

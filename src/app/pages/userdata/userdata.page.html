@@ -1,0 +1,49 @@
+<ion-content class="pastel-to-brown-to-green" [ngStyle]="{'--padding-bottom.px':calculatePadding()}">
+
+  <ion-row class="gray blue-green rounded-4">
+
+        <ion-col size="12" class="ion-text-center"><h2 translate="userpage.user_dates"></h2></ion-col>
+
+        <ion-col class="avatar" size="12">
+          <ion-avatar (click)="changeUserImage()" class="avatar zoom-2">
+            <img src="{{user.userPhoto ? user.userPhoto : '../../../../../assets/img/user_avatar.png'}}" />
+          </ion-avatar>
+        </ion-col>
+        <ion-col *ngIf="user.userMethod === 'email'" class="ion-no-padding ion-no-margin ion-text-center" size="12" (click)="changeUserImage()"><p translate="userpage.change"></p></ion-col>
+
+        <ion-col class="ion-padding-start ion-padding-end ion-margin-top" size="12">
+          <ion-item class="rounded-inputs">
+            <ion-input [readonly]="!isEditing" [(ngModel)]="user.userName" type="text" placeholder="{{'userpage.user_name'|translate}}"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col class="ion-padding-start ion-padding-end" size="12">
+          <ion-item class="rounded-inputs">
+            <ion-input disabled [(ngModel)]="user.userEmail" type="text" placeholder="{{'userpage.email'|translate}}"></ion-input>
+          </ion-item>
+        </ion-col>
+
+        <ion-col class="ion-text-center ion-margin-top"><ion-button class="change-button" (click)="changePassword()" translate="userpage.change_password"></ion-button></ion-col>
+
+        <ion-col *ngIf="!isEditing && user.userMethod === 'email'" size="12" class="ion-text-center ion-margin-top"><ion-icon (click)="isEditingToogle()" size="large" src="../../../assets/icons/pencil-outline.svg"></ion-icon></ion-col>
+        <ion-col  *ngIf="isEditing" class="ion-margin-top ion-text-center" size="6">
+          <ion-icon color="danger"  (click)="cancelEditting()" size="large" src="../../../assets/icons/trash-outline.svg"></ion-icon>
+        </ion-col>
+        <ion-col  *ngIf="isEditing" class="ion-margin-top ion-text-center" size="6">
+          <ion-icon color="primary" (click)="saveNewData()" size="large" src="../../../assets/icons/trash-outline.svg"></ion-icon>
+        </ion-col>
+
+        <ion-col size="12" *ngIf="user.userMethod !== 'email'"><p class="ion-text-justify" translate="userpage.is_not_posibble_to_change_text"></p></ion-col>
+
+  </ion-row>
+
+<ion-row>
+  <ion-col class="ion-text-center"><ion-button color="warning" fill="solid" class="change-button" translate="userpage.delete_user"></ion-button></ion-col>
+</ion-row>
+<ion-row class="ion-margin-top">
+  <ion-col class="ion-text-center" size="12">
+    <ion-icon [routerLink]="['/dashboard']" class="orange-icon" src="../../../assets/icons/return-up-back-outline.svg"></ion-icon>
+  </ion-col>
+</ion-row>
+
+</ion-content>
+

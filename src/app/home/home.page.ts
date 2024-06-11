@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { AlertService } from '../services/alert.service';
 import { User } from '../models/user.model';
-import { SessionService } from '../services/session.seervice';
+import { SessionService } from '../services/session.service';
 import { UserTestService } from '../services/user-test.service';
 import { AdmobService } from '../services/admob.service';
 
@@ -217,20 +217,18 @@ export class HomePage implements OnInit{
 
       const currentUser:User = new User();
       currentUser.userName = user.displayName;
-      currentUser.userPhoto = this.searchUserPhoto();
+      currentUser.userPhoto = this._session.searchUserPhoto();
       currentUser.userId = user.uid;
       currentUser.userMethod = "email";
       currentUser.userEmail = user.email;
       this._session.currentUser = currentUser
+
     }
     this.router.navigate(["\dashboard"])
     this.isLoading=false;
   }
 
 
-  searchUserPhoto():string {
-    return "../../assets/img/user_avatar.png";
-  }
 
 
 
