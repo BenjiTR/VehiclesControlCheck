@@ -10,6 +10,7 @@ export class UserTestService {
     "email": "virtualBenji@virtual.com",
     "givenName": "Virtual Benji",
     "id": "00000000000000000001",
+    //Junto con la imagen, cambiar el tipo de autenticación a google o email
     //"imageUrl": "https://lh3.googleusercontent.com/a/ACg8ocKccliM8oeIVCgQxe-PzT1gBy0iD-M5uXzBZEbwNy9O7mBEml2M=s96-c",
     "imageUrl": "",
     "name": "Virtual Benji",

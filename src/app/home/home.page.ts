@@ -207,22 +207,22 @@ export class HomePage implements OnInit{
       currentUser.userName = user.givenName;
       currentUser.userPhoto = user.imageUrl;
       currentUser.userId = user.id;
-      currentUser.userMethod = "google";
+      currentUser.userMethod = "email";
       currentUser.userEmail = user.email;
       this._session.currentUser = currentUser
       this._authService.isInTest = true;
+      currentUser.userPhoto = this._session.searchUserPhoto();
     }else{
       //observable del estado de autenticación
       this._authService.userState();
 
       const currentUser:User = new User();
       currentUser.userName = user.displayName;
-      currentUser.userPhoto = this._session.searchUserPhoto();
       currentUser.userId = user.uid;
       currentUser.userMethod = "email";
       currentUser.userEmail = user.email;
       this._session.currentUser = currentUser
-
+      currentUser.userPhoto = this._session.searchUserPhoto();
     }
     this.router.navigate(["\dashboard"])
     this.isLoading=false;

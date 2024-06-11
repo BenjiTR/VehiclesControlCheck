@@ -7,7 +7,7 @@ import { TranslationConfigService } from '../../services/translation.service';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { AlertService } from 'src/app/services/alert.service';
-import { SessionService } from 'src/app/services/session.seervice';
+import { SessionService } from 'src/app/services/session.service';
 import { User } from 'src/app/models/user.model';
 
 @Component({

@@ -14,7 +14,11 @@ export class SessionService{
 
 
   searchUserPhoto():string {
-    return "../../assets/img/user_avatar.png";
+    if(this.currentUser.userMethod === "email"){
+      return "../../assets/img/user_avatar.png";
+    }else{
+      return "../../assets/img/user_avatar.png";
+    }
   }
 
 }
