@@ -192,7 +192,7 @@ export class HomePage implements OnInit{
   }
 
   //CONFIRMAR Y EJECUTAR LOGIN
-  loginExecute(user:any, method?:string){
+  async loginExecute(user:any, method?:string){
     if(method && method === "google"){
       const currentUser:User = new User();
       currentUser.userName = user.givenName;
@@ -209,9 +209,9 @@ export class HomePage implements OnInit{
       currentUser.userId = user.id;
       currentUser.userMethod = "email";
       currentUser.userEmail = user.email;
-      this._session.currentUser = currentUser
       this._authService.isInTest = true;
-      currentUser.userPhoto = this._session.searchUserPhoto();
+      currentUser.userPhoto = await this._session.searchUserPhoto(currentUser.userMethod, currentUser.userId);
+      this._session.currentUser = currentUser
     }else{
       //observable del estado de autenticación
       this._authService.userState();
@@ -221,8 +221,9 @@ export class HomePage implements OnInit{
       currentUser.userId = user.uid;
       currentUser.userMethod = "email";
       currentUser.userEmail = user.email;
+      currentUser.userPhoto = await this._session.searchUserPhoto(currentUser.userMethod, currentUser.userId);
       this._session.currentUser = currentUser
-      currentUser.userPhoto = this._session.searchUserPhoto();
+
     }
     this.router.navigate(["\dashboard"])
     this.isLoading=false;

@@ -75,13 +75,13 @@ userState(){
         const uid = user!.uid;
 
       this.isActive = true
-      console.log(this.isActive)
-      console.log(user)
+      // console.log(this.isActive)
+      // console.log(user)
 
       // ...
     } else {
       this.isActive = false;
-      console.log(this.isActive);
+      // console.log(this.isActive);
       // User is signed out
       // ...
     }

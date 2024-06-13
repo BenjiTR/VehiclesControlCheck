@@ -10,9 +10,6 @@ export class AdmobService {
 
   async initialize(): Promise<void> {
     await AdMob.initialize();
-
-    console.log("inicio 1")
-
     // const [trackingInfo, consentInfo] = await Promise.all([
     //   AdMob.trackingAuthorizationStatus(),
     //   AdMob.requestConsentInfo(),
@@ -30,7 +27,6 @@ export class AdmobService {
   }
 
   async showConsent() {
-    console.log("inicio 2")
 
     const consentInfo = await AdMob.requestConsentInfo();
 
@@ -41,8 +37,7 @@ export class AdmobService {
   }
 
   async showBanner(): Promise<void> {
-    console.log("inicio 3")
-
+  
     AdMob.addListener(BannerAdPluginEvents.Loaded, () => {
       // Subscribe Banner Event Listener
       return;

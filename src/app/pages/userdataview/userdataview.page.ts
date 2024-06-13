@@ -29,6 +29,10 @@ export class UserdataviewPage implements OnInit {
   ngOnInit() {
     this.translate.setDefaultLang(this._translation.getLanguage());
     this.user = this._session.currentUser;
+    // console.log(this.user)
+  }
+  ionViewWillEnter(){
+    this.user = this._session.currentUser;
   }
 
 }
