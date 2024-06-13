@@ -9,17 +9,21 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslationConfigService } from '../../services/translation.service';
 import { AdmobService } from 'src/app/services/admob.service';
 import { PaddingService } from 'src/app/services/padding.service';
+import { MainAnimation, RoadAnimation, SecondaryAnimation } from 'src/app/services/animation.service';
+
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
   styleUrls: ['./dashboard.page.scss'],
   standalone: true,
-  imports: [UserdataviewPage, IonInput, IonItem, IonLabel, TranslateModule, RouterModule, IonMenu, IonIcon, IonButtons, IonMenuButton, IonButton, IonImg, IonGrid, IonCol ,IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonRow, IonGrid]
+  imports: [UserdataviewPage, IonInput, IonItem, IonLabel, TranslateModule, RouterModule, IonMenu, IonIcon, IonButtons, IonMenuButton, IonButton, IonImg, IonGrid, IonCol ,IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonRow, IonGrid],
+  animations: [ MainAnimation, RoadAnimation, SecondaryAnimation ]
 })
 export class DashboardPage implements OnInit {
 
   public isLoading:Boolean=true;
+  public creatingElement:Boolean=false;
 
   constructor(
     private menuCtrl: MenuController,
@@ -65,6 +69,10 @@ export class DashboardPage implements OnInit {
 
   calculatePadding(){
     return this._paddingService.calculatePadding();
+  }
+
+  createElement(){
+    this.creatingElement = !this.creatingElement;
   }
 
 }

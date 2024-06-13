@@ -132,6 +132,9 @@ border-bottom-right-radius: 30px;
 .height-100{
   height: 100%;
 }
+.height-22{
+  height: 25rem;
+}
 
 
 .zoom-2{
@@ -179,3 +182,18 @@ border-bottom-right-radius: 30px;
   align-content: center;
 }
 
+.button-create{
+  height: 5rem;
+  width: 80%;
+  color: black;
+}
+
+.color1{
+  --background: #2f939e;
+}
+.color2{
+  --background: #01b8cd;
+}
+.color3{
+  --background: #27e7fc;
+}

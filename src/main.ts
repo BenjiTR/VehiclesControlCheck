@@ -19,7 +19,8 @@ import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 
-
+//ANIMACIONES
+import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-browser/animations';
 
 
 if (environment.production) {
@@ -28,6 +29,8 @@ if (environment.production) {
 
 bootstrapApplication(AppComponent, {
   providers: [
+    provideAnimations(),
+    BrowserAnimationsModule,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideIonicAngular(),
     provideRouter(routes),
