@@ -20,5 +20,5 @@
 </ion-content>
 
 <ion-footer class="pastel">
-  <ion-button expand="block" [routerLink]="['/home']">{{ 'privacy.return' | translate }}</ion-button>
+  <ion-button expand="block" (click)="goback()">{{ 'privacy.return' | translate }}</ion-button>
 </ion-footer>
