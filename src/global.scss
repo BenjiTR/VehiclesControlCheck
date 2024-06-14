@@ -75,6 +75,34 @@ body, ion-app {
   --background: rgb(246,243,234);
   --background: linear-gradient(180deg, rgba(246,243,234,1) 0%,rgba(246,243,234,1) 0%, #f5eabe 60%, #f5eabe 60%, #f5eabe 100%);
 }
+.brown{
+  background:#f5eabe;
+  --background:#f5eabe;
+}
+.ion-color-green {
+  --ion-color-base: #63c9b5;
+}
+
+.ion-color-darkblue {
+  --ion-color-base: #2f939e;
+}
+.ion-color-mediumblue {
+  --ion-color-base: #01b8cd;
+}
+.ion-color-ligthblue {
+  --ion-color-base: #27e7fc;
+}
+
+.zoom09{
+  zoom: 0.9;
+}
+.zoom08{
+zoom: 0.8;
+}
+
+.gray{
+  background: #a2c3c7;
+}
 
 //ROUND
 .round-corner-up{
@@ -135,10 +163,11 @@ border-bottom-right-radius: 30px;
 .height-22{
   height: 25rem;
 }
-
-
 .zoom-2{
   zoom: 2;
+}
+.zoom-4{
+  zoom: 4;
 }
 .pastel-to-blue{
   --background: rgb(246,243,234);
@@ -196,4 +225,12 @@ border-bottom-right-radius: 30px;
 }
 .color3{
   --background: #27e7fc;
+}
+.main-accordion{
+  border-radius: 5px;
+  zoom: 1.1;
+}
+.label-text-wrapper.sc-ion-input-md{
+  margin-top: -0.6rem;
+  color: #2f939e
 }

@@ -7,7 +7,7 @@ import { Storage } from '@ionic/storage-angular';
 export class StorageService {
 
   private _storage: Storage | null = null;
-  
+
 
   constructor(
     private storage: Storage
@@ -28,4 +28,7 @@ export class StorageService {
   public getStorageItem(key: string){
     return this._storage?.get(key)
   }
+
+  
+
 }
