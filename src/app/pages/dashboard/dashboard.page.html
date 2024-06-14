@@ -72,7 +72,7 @@
         <ion-col>
           <ion-accordion-group class="ion-margin-top">
 
-            <ion-accordion *ngFor="let vehicle of vehiclesArray" class="ion-margin-top main-accordion" [disabled]="editingThisVehicle(vehicle.brandOrModel)" value="{{vehicle.brandOrModel}}">
+            <ion-accordion *ngFor="let vehicle of vehiclesArray" class="ion-margin-top main-accordion" value="{{vehicle.brandOrModel}}">
               <ion-item slot="header" class="green">
                 <ion-icon *ngIf="vehicle.typeOfVehicle === '2W'" slot="start" src="../../../assets/icons/bicycle-outline.svg"></ion-icon>
                 <ion-icon *ngIf="vehicle.typeOfVehicle === '4W'" slot="start" src="../../../assets/icons/car-sport-outline.svg"></ion-icon>
@@ -156,15 +156,10 @@
                         <ion-col *ngIf="!editingVehicle" (click)="deleteVehicle(vehicle)" class="ion-margin-top ion-margin-bottom ion-text-center" size="6">
                           <ion-icon color="danger" size="large" src="../../../assets/icons/trash-outline.svg"></ion-icon>
                         </ion-col>
-                        <ion-col *ngIf="!editingVehicle" (click)="vehicleEditToogle(vehicle)"  class="ion-margin-top ion-margin-bottom ion-text-center" size="6">
+                        <ion-col *ngIf="!editingVehicle" (click)="editVehicle(vehicle)"  class="ion-margin-top ion-margin-bottom ion-text-center" size="6">
                           <ion-icon  size="large" src="../../../assets/icons/pencil-outline.svg"></ion-icon>
                         </ion-col>
-                        <ion-col *ngIf="editingVehicle" (click)="vehicleEditToogle()"  class="ion-margin-top ion-margin-bottom ion-text-center" size="6">
-                          <ion-icon color="danger" size="large" src="../../../assets/icons/arrow-back-outline.svg"></ion-icon>
-                        </ion-col>
-                        <ion-col *ngIf="editingVehicle" (click)="sendVehicleEdited(vehicle)"  class="ion-margin-top ion-margin-bottom ion-text-center" size="6">
-                          <ion-icon color="mediumblue" size="large" src="../../../assets/icons/checkmark-outline.svg"></ion-icon>
-                        </ion-col>
+
 
                       </ion-row>
                     </div>

@@ -17,6 +17,7 @@ import { User } from 'src/app/models/user.model';
 import { Event } from 'src/app/models/event.model';
 import { SessionService } from 'src/app/services/session.service';
 import { UserTestService } from 'src/app/services/user-test.service';
+import { AlertService } from 'src/app/services/alert.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -44,14 +45,13 @@ export class DashboardPage implements OnInit {
     private _translation:TranslationConfigService,
     private _admobService:AdmobService,
     private _paddingService:PaddingService,
-    private _storage:StorageService,
     private _session:SessionService,
-    private _test:UserTestService
+    private _alert:AlertService,
+    private _storage:StorageService
   ) { }
 
   async ngOnInit() {
-    await this.loadVehicles();
-    await this.loadEvents();
+    this.vehiclesArray = await this._session.loadVehicles();
     this.translate.setDefaultLang(this._translation.getLanguage());
     this._admobService.resumeBanner();
     this.isLoading=false;
@@ -95,50 +95,20 @@ export class DashboardPage implements OnInit {
     this.creatingElement = !this.creatingElement;
   }
 
-  async loadVehicles(): Promise<Vehicle[]>{
-    const temporalVehiclesArray = await this._storage.getStorageItem(storageConstants.USER_VEHICLES+this.user.userId)
-    if(this._authService.isInTest){
-      this.vehiclesArray = this._test.vehicles;
-      this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.user.userId, this.vehiclesArray);
-      return this.vehiclesArray;
-    }else if(!temporalVehiclesArray){
-      this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.user.userId, this.vehiclesArray)
-      return this.vehiclesArray;
-    }else{
-      this.vehiclesArray = {...temporalVehiclesArray};
-      return this.vehiclesArray;
-    }
-    console.log(this.vehiclesArray)
+
+
+  editVehicle(vehicle:Vehicle){
+    return vehicle;
   }
 
-  async loadEvents(): Promise<Event[]>{
-    const temporaleventArray = await this._storage.getStorageItem(storageConstants.USER_EVENTS+this.user.userId)
-    if(!temporaleventArray){
-      this._storage.setStorageItem(storageConstants.USER_EVENTS+this.user.userId, this.eventArray)
-      return this.eventArray;
-    }else{
-      this.eventArray = {...temporaleventArray};
-      return this.eventArray;
+  async deleteVehicle(vehicle:Vehicle){
+    const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.are_you_sure?'),this.translate.instant('alert.vehicle_permanently_erased'),this.translate.instant('alert.erase'),this.translate.instant('alert.cancel'))
+    if(sure){
+      const index = this.vehiclesArray.indexOf(vehicle);
+      this.vehiclesArray.splice(index,1)
+      this._session.vehiclesArray = this.vehiclesArray;
+      this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.user.userId,this.vehiclesArray);
     }
   }
 
-  editingThisVehicle(brandOrModel:string){
-    return this.editingVehicle && this.currentVehicle !== brandOrModel;
-  }
-  deleteVehicle(vehicle:Vehicle){
-    console.log(vehicle);
-  }
-
-  vehicleEditToogle(vehicle?:Vehicle){
-    if(vehicle){
-      this.currentVehicle = vehicle.brandOrModel;
-    }else{
-      this.currentVehicle = "";
-    }
-    this.editingVehicle = !this.editingVehicle;
-  }
-
-  sendVehicleEdited(vehicle:Vehicle){
-    console.log(vehicle);
-  }
 }

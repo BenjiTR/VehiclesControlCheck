@@ -38,4 +38,8 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/userdata/userdata.page').then( m => m.UserdataPage),
     canActivate: [canActivate]
   },
+  {
+    path: 'vehicle',
+    loadComponent: () => import('./pages/vehicle/vehicle.page').then( m => m.VehiclePage)
+  },
 ];
