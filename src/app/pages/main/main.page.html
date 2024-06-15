@@ -109,7 +109,7 @@
                         <ion-col (click)="deleteVehicle(vehicle)" class="ion-margin-top ion-margin-bottom ion-text-center" size="6">
                           <ion-icon color="danger" size="large" src="../../../assets/icons/trash-outline.svg"></ion-icon>
                         </ion-col>
-                        <ion-col (click)="editVehicle(vehicle)"  class="ion-margin-top ion-margin-bottom ion-text-center" size="6">
+                        <ion-col [routerLink]="['/dashboard/vehicle']" [queryParams]="{vehicleToEditId:vehicle.id}" class="ion-margin-top ion-margin-bottom ion-text-center" size="6">
                           <ion-icon  size="large" src="../../../assets/icons/pencil-outline.svg"></ion-icon>
                         </ion-col>
 

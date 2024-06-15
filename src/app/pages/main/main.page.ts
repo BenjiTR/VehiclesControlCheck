@@ -69,10 +69,6 @@ export class MainPage implements OnInit {
     this.creatingElement = !this.creatingElement;
   }
 
-  editVehicle(vehicle:Vehicle){
-    return vehicle;
-  }
-
   async deleteVehicle(vehicle:Vehicle){
     const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.are_you_sure?'),this.translate.instant('alert.vehicle_permanently_erased'),this.translate.instant('alert.erase'),this.translate.instant('alert.cancel'))
     if(sure){

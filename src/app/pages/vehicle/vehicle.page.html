@@ -1,7 +1,6 @@
 <ion-content class="brown">
 
   <!-- CREAR VEHÍCULO / DATOS -->
-
   <ion-row class="gray ion-margin rounded">
         <ion-col *ngIf="typeOfVehicle === '4W'" [@secondary] class="ion-padding-start" size="3">
           <ion-icon class="zoom-4 ion-align-items-center" src="../../../assets/icons/car-sport-outline.svg"></ion-icon>
@@ -10,16 +9,16 @@
           <ion-icon class="zoom-4 ion-align-items-center" src="../../../assets/icons/bicycle-outline.svg"></ion-icon>
         </ion-col>
         <ion-col class="ion-align-items-center" size="9">
-          <h2 translate="newvehicle.create_a_vehicle"></h2>
+          <h2 *ngIf="!vehicleToEditId" translate="newvehicle.create_a_vehicle"></h2>
+          <h2 *ngIf="vehicleToEditId" translate="newvehicle.edit_vehicle"></h2>
         </ion-col>
-        <ion-col size="3"></ion-col>
 
         <ion-col class="ion-padding-end" size="12">
           <ion-segment [(ngModel)]="typeOfVehicle" value="custom">
-            <ion-segment-button value="2W">
+            <ion-segment-button class="ion-align-items-center" value="2W">
               <ion-label>{{'newvehicle.two_wheels'|translate}}</ion-label>
             </ion-segment-button>
-            <ion-segment-button value="4W">
+            <ion-segment-button class="ion-align-items-center" value="4W">
               <ion-label>{{'newvehicle.four_wheels'|translate}}</ion-label>
             </ion-segment-button>
           </ion-segment>
@@ -77,10 +76,10 @@
         </ion-col>
 
         <ion-col (click)="cancelCreateVehicle()" class="ion-margin-top ion-margin-bottom ion-text-center" size="6">
-          <ion-icon color="danger" size="large" src="../../../assets/icons/trash-outline.svg"></ion-icon>
+          <ion-icon color="danger" size="large" src="../../../assets/icons/arrow-back-outline.svg"></ion-icon>
         </ion-col>
         <ion-col (click)="createVehicle()" class="ion-margin-top ion-margin-bottom ion-text-center" size="6">
-          <ion-icon class="success-color" size="large" src="../../../assets/icons/open-outline.svg"></ion-icon>
+          <ion-icon class="success-color" size="large" src="../../../assets/icons/checkmark-outline.svg"></ion-icon>
         </ion-col>
 
   </ion-row>

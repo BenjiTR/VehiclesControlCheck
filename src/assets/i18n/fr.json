@@ -130,7 +130,8 @@
     "insurance_company": "Compagnie d'assurance",
     "insurance_policy": "Police d'assurance",
     "insurance_renewal_date": "Date de renouvellement de l'assurance",
-    "roadside_assistance_number": "Numéro d'assistance routière"
+    "roadside_assistance_number": "Numéro d'assistance routière",
+    "edit_vehicle": "Modifier le véhicule"
   },
   "dashboard": {
     "user_data": "Données de l'utilisateur",
