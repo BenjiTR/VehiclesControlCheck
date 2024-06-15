@@ -25,11 +25,11 @@ export class SessionService{
   ){}
 
 
-  async searchUserPhoto(method:string, id:string):Promise<string> {
+  async searchphoto(method:string, id:string):Promise<string> {
     if(method === "email"){
-      const userPhoto = await this._storageService.getStorageItem(storageConstants.USER_PHOTO+id);
-      if(userPhoto){
-        return imageConstants.base64Prefix+userPhoto;
+      const photo = await this._storageService.getStorageItem(storageConstants.USER_PHOTO+id);
+      if(photo){
+        return imageConstants.base64Prefix+photo;
       }else{
         return "../../assets/img/user_avatar.png";
       }
@@ -39,20 +39,17 @@ export class SessionService{
   }
 
   async loadVehicles(): Promise<Vehicle[]>{
-    const temporalVehiclesArray = await this._storage.getStorageItem(storageConstants.USER_VEHICLES+this.currentUser.userId)
+    const temporalVehiclesArray = await this._storage.getStorageItem(storageConstants.USER_VEHICLES+this.currentUser.id)
     if(this._authService.isInTest){
       this.vehiclesArray = this._test.vehicles;
-      this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.currentUser.userId, this.vehiclesArray);
-      const copy = this.vehiclesArray.map(obj=>({...obj}));
-      return copy;
+      this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.currentUser.id, this.vehiclesArray);
+      return this.vehiclesArray;
     }else if(!temporalVehiclesArray){
-      this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.currentUser.userId, this.vehiclesArray)
-      const copy = this.vehiclesArray.map(obj=>({...obj}));
-      return copy;
+      this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.currentUser.id, this.vehiclesArray)
+      return this.vehiclesArray;
     }else{
-      this.vehiclesArray = {...temporalVehiclesArray};
-      const copy = this.vehiclesArray.map(obj=>({...obj}));
-      return copy;
+      this.vehiclesArray = temporalVehiclesArray;
+      return this.vehiclesArray;
     }
   }
 

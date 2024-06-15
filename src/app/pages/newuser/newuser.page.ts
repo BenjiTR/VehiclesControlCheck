@@ -9,6 +9,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { AlertService } from 'src/app/services/alert.service';
 import { SessionService } from 'src/app/services/session.service';
 import { User } from 'src/app/models/user.model';
+import { DashboardPage } from '../dashboard/dashboard.page';
 
 @Component({
   selector: 'app-newuser',
@@ -25,8 +26,7 @@ export class NewuserPage implements OnInit {
   public Error: string = "";
   public password: string = "";
   public repeatPassword: string = "";
-  public isLoading: boolean = true;
-  public userName: string = "";
+  public name: string = "";
 
   constructor(
     private translate: TranslateService,
@@ -34,12 +34,14 @@ export class NewuserPage implements OnInit {
     private _authService: AuthService,
     private _alert: AlertService,
     private router: Router,
-    private _session:SessionService
+    private _session:SessionService,
+    private dashboard:DashboardPage
   ) { }
 
   ngOnInit(): void {
+    this.dashboard.isLoading = true;
     this.translate.setDefaultLang(this._translation.getLanguage());
-    this.isLoading = false;
+    this.dashboard.isLoading = false;
   }
 
   //MOSTRAR U OCULTAR PASSWORD
@@ -67,12 +69,12 @@ export class NewuserPage implements OnInit {
   //REGISTRO NUEVO USUARIO
   async registerNewUser() {
 
-    this.isLoading = true;
+    this.dashboard.isLoading = true;
     await this._authService.createuserWithEmailAndPassword(this.email, this.password)
       .then(async (userCredential) => {
         // Signed in
         const user = userCredential.user;
-        await this._authService.updateNameProfile(this.userName)
+        await this._authService.updateNameProfile(this.name)
           .then(async (message) => {
             //console.log("message actualizar nombre = ", message)
             await this._authService.sendEmailVerificacion()
@@ -80,7 +82,7 @@ export class NewuserPage implements OnInit {
                 //console.log("message al enviar correo de confirmación", message)
                 this._alert.createAlert(this.translate.instant('alert.user_created_success'), (this.translate.instant('alert.user_created_success_text')));
                 this.Error = "";
-                this.isLoading = false;
+                this.dashboard.isLoading = false;
                 this.router.navigate(['/home'])
               })
           })
@@ -98,7 +100,7 @@ export class NewuserPage implements OnInit {
   handleErrors(error: string) {
     //console.log(error)
     // ..
-    this.isLoading = false;
+    this.dashboard.isLoading = false;
     if (error === "auth/invalid-email") {
       this.Error = this.translate.instant('error.email_no_valid');
     } else if (error === "auth/network-request-failed") {
@@ -133,11 +135,11 @@ export class NewuserPage implements OnInit {
     this._authService.userState();
     if(method && method === "google"){
       const currentUser:User = new User();
-      currentUser.userName = user.givenName;
-      currentUser.userPhoto = user.imageUrl;
-      currentUser.userId = user.id;
-      currentUser.userMethod = "google";
-      currentUser.userEmail = user.email;
+      currentUser.name = user.givenName;
+      currentUser.photo = user.imageUrl;
+      currentUser.id = user.id;
+      currentUser.method = "google";
+      currentUser.email = user.email;
       this._session.currentUser = currentUser
     }
     this.router.navigate(["\dashboard"])

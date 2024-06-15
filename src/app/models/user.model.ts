@@ -1,7 +1,7 @@
 export class User{
-  userName:string="";
-  userPhoto:string = "";
-  userId:string = "";
-  userEmail:string = "";
-  userMethod:string = "";
+  name:string="";
+  photo:string = "";
+  id:string = "";
+  email:string = "";
+  method:string = "";
 }

@@ -16,7 +16,7 @@
           <ion-row>
             <ion-col class="ion-margin-start" size="10">
               <ion-item class="rounded-inputs">
-                <ion-input [(ngModel)]="userName" type="text" placeholder="{{'newuser.user_name'|translate}}"></ion-input>
+                <ion-input [(ngModel)]="name" type="text" placeholder="{{'newuser.user_name'|translate}}"></ion-input>
               </ion-item>
             </ion-col>
             <ion-col class="ion-margin-start" size="10">
@@ -55,7 +55,7 @@
             <ion-col size="12">
               <ion-img (click)="signInWithGoogle()" src="../../assets/img/btn_google_signin_light_normal_web@2x.png"></ion-img>
             </ion-col>
-           
+
             <ion-col size="12" class="ion-text-center">
               <p translate="newuser.do_you_have_account?"><a class="color-purpure no-text-decoration ion-margin-start" [routerLink]="'/home'" translate="newuser.init_session"></a></p>
             </ion-col>
@@ -65,12 +65,5 @@
     </ion-row>
 </ion-content>
 
-<ion-content class="loading-content" *ngIf="isLoading" >
-  <ion-row class="ion-align-items-center ion-text-center height-100">
-    <ion-col>
-      <span class="loader"></span>
-    </ion-col>
-  </ion-row>
-</ion-content>
 
 

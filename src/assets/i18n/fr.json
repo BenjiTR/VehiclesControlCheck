@@ -75,7 +75,9 @@
     "please_write_more_information_text": "Vous devez indiquer au moins le véhicule, la date et le type d'événement",
     "event_permanently_erased": "L'événement sera définitivement supprimé",
     "event_erased": "Événement supprimé",
-    "event_erased_text": "L'événement a été supprimé avec succès"
+    "event_erased_text": "L'événement a été supprimé avec succès",
+    "enter_name_or_model":"Entrez le nom ou le modèle",
+    "enter_name_or_model_text":"Vous devez entrer au moins le nom ou le modèle du véhicule pour pouvoir l'enregistrer"
   },
   "home": {
     "init_session": "Connexion",

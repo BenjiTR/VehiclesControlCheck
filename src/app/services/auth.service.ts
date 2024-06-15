@@ -61,8 +61,8 @@ createuserWithEmailAndPassword(email:string, password:string){
 }
 
 //CAMBIAR NOMBRE DE USUARIO
-updateNameProfile(userName:string){
-  return updateProfile(this.auth.currentUser, {displayName: userName})
+updateNameProfile(name:string){
+  return updateProfile(this.auth.currentUser, {displayName: name})
 }
 
 //OBSERVABLE DEL ESTADO DE USUARIO.

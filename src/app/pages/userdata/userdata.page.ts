@@ -67,11 +67,11 @@ export class UserdataPage implements OnInit {
 
   async saveNewData(){
     this.isLoading = true;
-    if(!this._authService.isInTest && this.user.userMethod === "email"){
-      await this._authService.updateNameProfile(this.user.userName)
+    if(!this._authService.isInTest && this.user.method === "email"){
+      await this._authService.updateNameProfile(this.user.name)
       .then((msg)=>{
         console.log(msg);
-        this._session.currentUser.userName = this.user.userName;
+        this._session.currentUser.name = this.user.name;
         this.isEditing=false;
         this.isLoading = false;
       })
@@ -79,14 +79,14 @@ export class UserdataPage implements OnInit {
         console.log(err);
       })
     }
-    this._session.currentUser.userName = this.user.userName;
+    this._session.currentUser.name = this.user.name;
     this.isEditing=false;
     this.isLoading = false;
   }
 
   async changePassword(){
     this.isLoading=true;
-    await this._authService.sendRestorePasswordEmail(this.user.userEmail)
+    await this._authService.sendRestorePasswordEmail(this.user.email)
     .then(()=>{
       this._alert.createAlert(this.translate.instant('alert.email_send'),this.translate.instant('alert.restored_email_sended'));
       this.isLoading=false;
@@ -103,9 +103,9 @@ export class UserdataPage implements OnInit {
     const photo = await this._camera.takePhoto();
     if(photo){
       console.log(photo)
-      this._session.currentUser.userPhoto = imageConstants.base64Prefix + photo;
-      this.user.userPhoto = imageConstants.base64Prefix + photo;
-      this._storage.setStorageItem(storageConstants.USER_PHOTO+this.user.userId, photo);
+      this._session.currentUser.photo = imageConstants.base64Prefix + photo;
+      this.user.photo = imageConstants.base64Prefix + photo;
+      this._storage.setStorageItem(storageConstants.USER_PHOTO+this.user.id, photo);
     }
   }
 

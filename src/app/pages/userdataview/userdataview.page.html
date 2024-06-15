@@ -1,6 +1,6 @@
 <ion-content class="pastel-to-brown">
   <ion-avatar class="avatar">
-    <img src="{{user.userPhoto ? user.userPhoto : '../../../../../assets/img/user_avatar.png'}}" />
+    <img src="{{user.photo ? user.photo : '../../../../../assets/img/user_avatar.png'}}" />
   </ion-avatar>
 
   <ion-row class="ion-margin-start">
@@ -11,7 +11,7 @@
     </ion-col>
     <ion-col class="ion-margin-top" size="12">
       <ion-label>
-        <h1>{{ user.userName ? user.userName : ('mainpage.user_name' | translate) }}</h1>
+        <h1>{{ user.name ? user.name : ('mainpage.user_name' | translate) }}</h1>
       </ion-label>
     </ion-col>
   </ion-row>

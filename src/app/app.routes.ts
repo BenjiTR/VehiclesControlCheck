@@ -26,7 +26,27 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     loadComponent: () => import('./pages/dashboard/dashboard.page').then( m => m.DashboardPage),
-    canActivate: [canActivate]
+    canActivate: [canActivate],
+    children:[
+      {
+        path:'',
+        redirectTo:'main',
+        pathMatch:'full'
+      },
+      {
+        path: 'main',
+        loadComponent: () => import('./pages/main/main.page').then( m => m.MainPage)
+      },
+      {
+        path: 'vehicle',
+        loadComponent: () => import('./pages/vehicle/vehicle.page').then( m => m.VehiclePage)
+      },
+      {
+        path: '**',
+        redirectTo: 'home',
+        pathMatch: 'full',
+      },
+    ]
   },
   {
     path: 'userdataview',
@@ -38,8 +58,6 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/userdata/userdata.page').then( m => m.UserdataPage),
     canActivate: [canActivate]
   },
-  {
-    path: 'vehicle',
-    loadComponent: () => import('./pages/vehicle/vehicle.page').then( m => m.VehiclePage)
-  },
+
+
 ];

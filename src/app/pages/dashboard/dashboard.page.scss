@@ -1,0 +1,5 @@
+ion-router-outlet {
+  flex: 1; /* Ocupa el resto del espacio disponible */
+  display: flex;
+  flex-direction: column;
+}

@@ -1,13 +1,88 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>vehicle</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="brown">
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">vehicle</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <!-- CREAR VEHÍCULO / DATOS -->
+
+  <ion-row class="gray ion-margin rounded">
+        <ion-col *ngIf="typeOfVehicle === '4W'" [@secondary] class="ion-padding-start" size="3">
+          <ion-icon class="zoom-4 ion-align-items-center" src="../../../assets/icons/car-sport-outline.svg"></ion-icon>
+        </ion-col>
+        <ion-col *ngIf="typeOfVehicle === '2W'" [@secondary] class="ion-padding-start" size="3">
+          <ion-icon class="zoom-4 ion-align-items-center" src="../../../assets/icons/bicycle-outline.svg"></ion-icon>
+        </ion-col>
+        <ion-col class="ion-align-items-center" size="9">
+          <h2 translate="newvehicle.create_a_vehicle"></h2>
+        </ion-col>
+        <ion-col size="3"></ion-col>
+
+        <ion-col class="ion-padding-end" size="12">
+          <ion-segment [(ngModel)]="typeOfVehicle" value="custom">
+            <ion-segment-button value="2W">
+              <ion-label>{{'newvehicle.two_wheels'|translate}}</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="4W">
+              <ion-label>{{'newvehicle.four_wheels'|translate}}</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+        </ion-col>
+
+        <ion-col class="ion-padding-start ion-padding-end ion-margin-top" size="12">
+          <ion-item class="rounded-inputs">
+            <ion-input  type="text" [(ngModel)]="brandOrModel" label="{{'newvehicle.brand_or_model'|translate}}" label-placement="floating"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col class="ion-padding-start ion-padding-end" size="12">
+          <ion-item class="rounded-inputs">
+            <ion-input  type="text" [(ngModel)]="carRegistration" label="{{'newvehicle.car_registration'|translate}}" label-placement="floating"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col class="ion-padding-start ion-padding-end" size="12">
+          <ion-item class="rounded-inputs">
+            <ion-input  type="date" [(ngModel)]="dateOfBuy" label="{{'newvehicle.date_of_buy'|translate}}" label-placement="floating"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col class="ion-padding-start ion-padding-end" size="12">
+          <ion-item class="rounded-inputs">
+            <ion-input type="text" [(ngModel)]="kmOfBuy" label="{{ 'newvehicle.km_of_buy' | translate }}" label-placement="floating"></ion-input>
+          </ion-item>
+        </ion-col>
+
+        <ion-col class="ion-padding-start ion-padding-end" size="12">
+          <ion-item class="rounded-inputs">
+            <ion-input type="text" [(ngModel)]="typeOfFuel" label="{{ 'newvehicle.type_of_fuel' | translate }}" label-placement="floating"></ion-input>
+          </ion-item>
+        </ion-col>
+
+        <ion-col class="ion-padding-start ion-padding-end" size="12">
+          <ion-item class="rounded-inputs">
+            <ion-input type="text" [(ngModel)]="insuranceCompany" label="{{ 'newvehicle.insurance_company' | translate }}" label-placement="floating"></ion-input>
+          </ion-item>
+        </ion-col>
+
+        <ion-col class="ion-padding-start ion-padding-end" size="12">
+          <ion-item class="rounded-inputs">
+            <ion-input type="text" [(ngModel)]="insurancePolicy" label="{{ 'newvehicle.insurance_policy' | translate }}" label-placement="floating"></ion-input>
+          </ion-item>
+        </ion-col>
+
+        <ion-col class="ion-padding-start ion-padding-end" size="12">
+          <ion-item class="rounded-inputs">
+            <ion-input type="text" [(ngModel)]="insuranceRenewalDate" label="{{ 'newvehicle.insurance_renewal_date' | translate }}" label-placement="floating"></ion-input>
+          </ion-item>
+        </ion-col>
+
+        <ion-col class="ion-padding-start ion-padding-end" size="12">
+          <ion-item class="rounded-inputs">
+            <ion-input type="text" [(ngModel)]="roadsideAssistanceNumber" label="{{ 'newvehicle.roadside_assistance_number' | translate }}" label-placement="floating"></ion-input>
+          </ion-item>
+        </ion-col>
+
+        <ion-col (click)="cancelCreateVehicle()" class="ion-margin-top ion-margin-bottom ion-text-center" size="6">
+          <ion-icon color="danger" size="large" src="../../../assets/icons/trash-outline.svg"></ion-icon>
+        </ion-col>
+        <ion-col (click)="createVehicle()" class="ion-margin-top ion-margin-bottom ion-text-center" size="6">
+          <ion-icon class="success-color" size="large" src="../../../assets/icons/open-outline.svg"></ion-icon>
+        </ion-col>
+
+  </ion-row>
+
 </ion-content>

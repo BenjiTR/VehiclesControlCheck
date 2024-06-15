@@ -1,0 +1,170 @@
+  <!-- CONTENT 1 - NO VEHICLES -->
+  <ion-content *ngIf="!creatingElement && vehiclesArray.length < 1" [@main] class="pastel-to-green" [ngStyle]="{'--padding-bottom.px':calculatePadding()}">
+    <ion-row class="green round-corner-up ion-padding-top height-22">
+      <ion-col size="12">
+        <h1 class="no-vehicles-text ion-margin-end" translate="mainpage.main_text"></h1>
+      </ion-col>
+      <ion-col size="12" class="ion-justify-content-center flex">
+          <ion-img class="arrow"
+          src="../../../assets/img/Logo Flecha Carretera 1.png"
+          alt="street arrow"
+        ></ion-img>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-text-center" size="12">
+          <ion-icon (click)="createElement()" class="orange-icon" src="../../../assets/icons/add-circle-outline.svg"></ion-icon>
+      </ion-col>
+    </ion-row>
+  </ion-content>
+
+    <!-- CONTENT 1 - VEHICLES -->
+    <ion-content *ngIf="!creatingElement && vehiclesArray.length > 0" [@main] class="brown" [ngStyle]="{'--padding-bottom.px':calculatePadding()}">
+
+      <ion-row *ngIf="vehiclesArray.length>0">
+        <ion-col class="ion-margin-top">
+          <ion-accordion-group class="ion-margin-top">
+
+            <ion-accordion *ngFor="let vehicle of vehiclesArray" class="ion-margin-top main-accordion" value="{{vehicle.brandOrModel}}">
+              <ion-item slot="header" class="green">
+                <ion-icon *ngIf="vehicle.typeOfVehicle === '2W'" slot="start" src="../../../assets/icons/bicycle-outline.svg"></ion-icon>
+                <ion-icon *ngIf="vehicle.typeOfVehicle === '4W'" slot="start" src="../../../assets/icons/car-sport-outline.svg"></ion-icon>
+                <ion-label>{{vehicle.brandOrModel}}</ion-label>
+              </ion-item>
+              <div slot="content">
+                <!--DATOS DEL VEHÍCULO-->
+                <ion-accordion-group class="zoom09">
+                  <ion-accordion [disabled]="false" value="vehicleData">
+                    <ion-item slot="header" color="darkblue">
+                      <ion-icon class="ion-margin-end" src="../../../assets/icons/clipboard-outline.svg"></ion-icon><ion-label>{{'mainpage.data_of_vehicle'|translate}}</ion-label>
+                    </ion-item>
+                    <div slot="content">
+
+                      <ion-row class="gray">
+
+                        <ion-col *ngIf="vehicle.typeOfVehicle === '4W'" class="ion-padding-start" size="3">
+                          <ion-icon class="zoom-4 ion-align-items-center" src="../../../assets/icons/car-sport-outline.svg"></ion-icon>
+                        </ion-col>
+                        <ion-col *ngIf="vehicle.typeOfVehicle === '2W'" class="ion-padding-start" size="3">
+                          <ion-icon class="zoom-4 ion-align-items-center" src="../../../assets/icons/bicycle-outline.svg"></ion-icon>
+                        </ion-col>
+                        <ion-col class="ion-align-items-center" size="9">
+                          <h2>{{vehicle.brandOrModel}}</h2>
+                        </ion-col>
+                        <ion-col size="3"></ion-col>
+
+
+
+                        <ion-col class="ion-padding-start ion-padding-end ion-margin-top" size="12">
+                          <ion-item class="rounded-inputs">
+                            <ion-input label="{{'newvehicle.brand_or_model'|translate}}" label-placement="floating"[readonly]="true" [(ngModel)]="vehicle.brandOrModel" type="text"></ion-input>
+                          </ion-item>
+                        </ion-col>
+                        <ion-col class="ion-padding-start ion-padding-end" size="12">
+                          <ion-item class="rounded-inputs">
+                            <ion-input label="{{'newvehicle.car_registration'|translate}}" label-placement="floating"[readonly]="true" [(ngModel)]="vehicle.carRegistration"  type="text"></ion-input>
+                          </ion-item>
+                        </ion-col>
+                        <ion-col class="ion-padding-start ion-padding-end" size="12">
+                          <ion-item class="rounded-inputs">
+                            <ion-input label="{{'newvehicle.date_of_buy'|translate}}" label-placement="floating"[readonly]="true" [(ngModel)]="vehicle.dateOfBuy"  type="date"></ion-input>
+                          </ion-item>
+                        </ion-col>
+                        <ion-col class="ion-padding-start ion-padding-end" size="12">
+                          <ion-item class="rounded-inputs">
+                            <ion-input label="{{ 'newvehicle.km_of_buy' | translate }}" label-placement="floating"[readonly]="true" [(ngModel)]="vehicle.kmOfBuy" type="text"></ion-input>
+                          </ion-item>
+                        </ion-col>
+
+                        <ion-col class="ion-padding-start ion-padding-end" size="12">
+                          <ion-item class="rounded-inputs">
+                            <ion-input label="{{ 'newvehicle.type_of_fuel' | translate }}" label-placement="floating"[readonly]="true" [(ngModel)]="vehicle.typeOfFuel" type="text"></ion-input>
+                          </ion-item>
+                        </ion-col>
+
+                        <ion-col class="ion-padding-start ion-padding-end" size="12">
+                          <ion-item class="rounded-inputs">
+                            <ion-input label="{{ 'newvehicle.insurance_company' | translate }}" label-placement="floating"[readonly]="true" [(ngModel)]="vehicle.insuranceCompany" type="text"></ion-input>
+                          </ion-item>
+                        </ion-col>
+
+                        <ion-col class="ion-padding-start ion-padding-end" size="12">
+                          <ion-item class="rounded-inputs">
+                            <ion-input label="{{ 'newvehicle.insurance_policy' | translate }}" label-placement="floating" [readonly]="true" [(ngModel)]="vehicle.insurancePolicy" type="text"></ion-input>
+                          </ion-item>
+                        </ion-col>
+
+                        <ion-col class="ion-padding-start ion-padding-end" size="12">
+                          <ion-item class="rounded-inputs">
+                            <ion-input label="{{ 'newvehicle.insurance_renewal_date' | translate }}" label-placement="floating" [readonly]="true" [(ngModel)]="vehicle.insuranceRenewalDate" type="text"></ion-input>
+                          </ion-item>
+                        </ion-col>
+
+                        <ion-col class="ion-padding-start ion-padding-end" size="12">
+                          <ion-item class="rounded-inputs">
+                            <ion-input label="{{ 'newvehicle.roadside_assistance_number' | translate }}" label-placement="floating" [readonly]="true" [(ngModel)]="vehicle.roadsideAssistanceNumber" type="text"></ion-input>
+                          </ion-item>
+                        </ion-col>
+
+                        <ion-col (click)="deleteVehicle(vehicle)" class="ion-margin-top ion-margin-bottom ion-text-center" size="6">
+                          <ion-icon color="danger" size="large" src="../../../assets/icons/trash-outline.svg"></ion-icon>
+                        </ion-col>
+                        <ion-col (click)="editVehicle(vehicle)"  class="ion-margin-top ion-margin-bottom ion-text-center" size="6">
+                          <ion-icon  size="large" src="../../../assets/icons/pencil-outline.svg"></ion-icon>
+                        </ion-col>
+
+
+                      </ion-row>
+                    </div>
+                  </ion-accordion>
+                </ion-accordion-group>
+                <!--EVENTOS-->
+                <!--RECORDATORIOS-->
+
+
+              </div>
+            </ion-accordion>
+          </ion-accordion-group>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="ion-margin-top ion-text-center" size="12">
+            <ion-icon (click)="createElement()" class="orange-icon" src="../../../assets/icons/add-circle-outline.svg"></ion-icon>
+        </ion-col>
+      </ion-row>
+    </ion-content>
+
+
+
+   <!-- CONTENT 2 -->
+  <ion-content *ngIf="creatingElement" [@main] class="brown" [ngStyle]="{'--padding-bottom.px':calculatePadding()}">
+
+
+    <ion-row>
+      <ion-col class="ion-text-center ion-margin-top ion-padding-top" size="12">
+        <ion-button [routerLink]="['/dashboard/vehicle']" class="button-create color1" size="large">
+          <ion-icon class="zoom-2" slot="start" src="../../../assets/icons/car-sport-outline.svg"></ion-icon>
+          {{'mainpage.vehicle'|translate}}
+        </ion-button>
+      </ion-col>
+      <ion-col class="ion-text-center" size="12">
+        <ion-button class="button-create color2" size="large">
+          <ion-icon class="zoom-2" slot="start" src="../../../assets/icons/create-outline.svg"></ion-icon>
+          {{'mainpage.event'|translate}}
+        </ion-button>
+      </ion-col>
+      <ion-col class="ion-text-center" size="12">
+        <ion-button class="button-create color3" size="large">
+          <ion-icon class="zoom-2" slot="start" src="../../../assets/icons/calendar-outline.svg"></ion-icon>
+          {{'mainpage.recordatory'|translate}}
+        </ion-button>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col class="ion-margin-top ion-text-center" size="12">
+          <ion-icon (click)="createElement()" class="orange-icon" src="../../../assets/icons/return-up-back-outline.svg"></ion-icon>
+      </ion-col>
+    </ion-row>
+
+  </ion-content>

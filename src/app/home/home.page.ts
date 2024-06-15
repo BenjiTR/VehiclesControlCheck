@@ -195,33 +195,33 @@ export class HomePage implements OnInit{
   async loginExecute(user:any, method?:string){
     if(method && method === "google"){
       const currentUser:User = new User();
-      currentUser.userName = user.givenName;
-      currentUser.userPhoto = user.imageUrl;
-      currentUser.userId = user.id;
-      currentUser.userMethod = "google";
-      currentUser.userEmail = user.email;
+      currentUser.name = user.givenName;
+      currentUser.photo = user.imageUrl;
+      currentUser.id = user.id;
+      currentUser.method = "google";
+      currentUser.email = user.email;
       this._session.currentUser = currentUser
       this._authService.isActive=true;
     }else if(method && method === "test"){
       const currentUser:User = new User();
-      currentUser.userName = user.givenName;
-      currentUser.userPhoto = user.imageUrl;
-      currentUser.userId = user.id;
-      currentUser.userMethod = "email";
-      currentUser.userEmail = user.email;
+      currentUser.name = user.givenName;
+      currentUser.photo = user.imageUrl;
+      currentUser.id = user.id;
+      currentUser.method = "email";
+      currentUser.email = user.email;
       this._authService.isInTest = true;
-      currentUser.userPhoto = await this._session.searchUserPhoto(currentUser.userMethod, currentUser.userId);
+      currentUser.photo = await this._session.searchphoto(currentUser.method, currentUser.id);
       this._session.currentUser = currentUser
     }else{
       //observable del estado de autenticación
       this._authService.userState();
 
       const currentUser:User = new User();
-      currentUser.userName = user.displayName;
-      currentUser.userId = user.uid;
-      currentUser.userMethod = "email";
-      currentUser.userEmail = user.email;
-      currentUser.userPhoto = await this._session.searchUserPhoto(currentUser.userMethod, currentUser.userId);
+      currentUser.name = user.displayName;
+      currentUser.id = user.uid;
+      currentUser.method = "email";
+      currentUser.email = user.email;
+      currentUser.photo = await this._session.searchphoto(currentUser.method, currentUser.id);
       this._session.currentUser = currentUser
 
     }

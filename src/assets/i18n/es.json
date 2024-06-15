@@ -75,8 +75,9 @@
       "please_write_more_information_text":"Debe indicar al menos el vehículo, la fecha y el tipo de evento",
       "event_permanently_erased":"El evento se borrará definitivamente",
       "event_erased":"Evento borrado",
-      "event_erased_text":"El evento se ha borrado con éxito"
-
+      "event_erased_text":"El evento se ha borrado con éxito",
+      "enter_name_or_model":"Introduzca nombre o modelo",
+      "enter_name_or_model_text":"Debe introducir al menos el nombre o modelo del vehículo para poder guardarlo"
   },
   "home":{
       "init_session":"Inicio de sesión",

@@ -75,7 +75,9 @@
     "please_write_more_information_text": "You must indicate at least the vehicle, date, and type of event",
     "event_permanently_erased": "The event will be permanently deleted",
     "event_erased": "Event deleted",
-    "event_erased_text": "The event has been successfully deleted"
+    "event_erased_text": "The event has been successfully deleted",
+    "enter_name_or_model":"Enter name or model",
+    "enter_name_or_model_text":"You must enter at least the name or model of the vehicle to be able to save it"
   },
   "home": {
     "init_session": "Log in",
@@ -100,12 +102,12 @@
     "init_session": "Log in",
     "privacity": "Privacy",
     "terms_of_use": "Terms of use",
-    "user_name": "Username"
+    "user_name": "name"
   },
   "mainpage": {
     "hello!": "Hello!",
     "user_data": "User data",
-    "user_name": "Username",
+    "user_name": "name",
     "main_text": "You don't have a registered vehicle yet. Create the first one!",
     "vehicle": "Vehicle",
     "event": "Event",
@@ -145,7 +147,7 @@
   "userpage": {
     "user_dates": "User data",
     "change": "Change",
-    "user_name": "Username",
+    "user_name": "name",
     "email": "Email",
     "change_password": "Change password",
     "delete_user": "Delete account",
