@@ -6,6 +6,7 @@ import { imageConstants } from '../const/img';
 import { UserTestService } from './user-test.service';
 import { AuthService } from './auth.service';
 import { Vehicle } from '../models/vehicles.model';
+import { Event } from '../models/event.model'
 @Injectable({
   providedIn:'root',
 })
@@ -54,7 +55,18 @@ export class SessionService{
   }
 
   async loadEvents(): Promise<Event[]>{
-  return this.eventsArray;
+    const temporalEventsArray = await this._storage.getStorageItem(storageConstants.USER_EVENTS+this.currentUser.id)
+    if(this._authService.isInTest){
+      this.eventsArray = this._test.events;
+      this._storage.setStorageItem(storageConstants.USER_EVENTS+this.currentUser.id, this.eventsArray);
+      return this.eventsArray;
+    }else if(!temporalEventsArray){
+      this._storage.setStorageItem(storageConstants.USER_EVENTS+this.currentUser.id, this.eventsArray);
+      return this.eventsArray;
+    }else{
+      this.eventsArray = temporalEventsArray;
+      return this.eventsArray;
+    }
   }
 
 }

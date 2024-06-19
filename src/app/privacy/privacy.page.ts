@@ -5,6 +5,7 @@ import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonButtons, Ion
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslationConfigService } from '../services/translation.service';
+import { AdmobService } from '../services/admob.service';
 
 @Component({
   selector: 'app-privacy',
@@ -21,7 +22,8 @@ export class PrivacyPage implements OnInit {
     private translate: TranslateService,
     private _translation:TranslationConfigService,
     private activatedroute:ActivatedRoute,
-    private router:Router
+    private router:Router,
+    private _admob:AdmobService
   ) {}
 
   ngOnInit(): void {
@@ -30,6 +32,11 @@ export class PrivacyPage implements OnInit {
 
   ionViewWillEnter() {
     this.goBack = this.activatedroute.snapshot.queryParams['goBack'];
+    this._admob.hideBanner;
+  }
+
+  ionViewWillLeave(){
+    this._admob.resumeBanner;
   }
 
 

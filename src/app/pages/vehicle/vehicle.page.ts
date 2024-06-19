@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonLabel, IonButton, IonCheckbox, IonCol, IonFooter, IonIcon, IonImg, IonInput, IonItem, IonRow, IonAvatar, IonSegmentButton, IonSegment } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonLabel, IonButton, IonCheckbox, IonCol, IonFooter, IonIcon, IonImg, IonInput, IonItem, IonRow, IonAvatar, IonSegmentButton, IonSegment, NavController } from '@ionic/angular/standalone';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { User } from 'src/app/models/user.model';
@@ -14,7 +14,6 @@ import { SessionService } from 'src/app/services/session.service';
 import { StorageService } from 'src/app/services/storage.service';
 import { storageConstants } from 'src/app/const/storage';
 import { AlertService } from 'src/app/services/alert.service';
-import { PaddingService } from 'src/app/services/padding.service';
 import { AdmobService } from 'src/app/services/admob.service';
 
 @Component({
@@ -30,10 +29,10 @@ export class VehiclePage implements OnInit {
   public name:string = "";
   public photoURL:string="";
   public creatingVehicle:boolean=false;
-  public typeOfVehicle:string="";
+  public typeOfVehicle:string="2W";
   public brandOrModel: string = "";
   public carRegistration: string = "";
-  public dateOfBuy: Date = new Date;
+  public dateOfBuy: string="";
   public kmOfBuy: string = "";
   public typeOfFuel: string = "";
   public insuranceCompany: string = "";
@@ -55,7 +54,9 @@ export class VehiclePage implements OnInit {
     private _storage:StorageService,
     private _alert:AlertService,
     private _admob:AdmobService,
-    private activatedroute:ActivatedRoute
+    private activatedroute:ActivatedRoute,
+    private _admobService:AdmobService,
+    private navCtr:NavController
   ) {
     this.user = this._session.currentUser;
   }
@@ -65,7 +66,6 @@ export class VehiclePage implements OnInit {
   }
 
   ionViewWillEnter() {
-    this._admob.hideBanner();
     this.vehiclesArray = this._session.vehiclesArray;
     this.vehicleToEditId = this.activatedroute.snapshot.queryParams['vehicleToEditId'];
     if(this.vehicleToEditId){
@@ -94,9 +94,12 @@ export class VehiclePage implements OnInit {
     this.roadsideAssistanceNumber = this.vehicleToEdit.roadsideAssistanceNumber
   }
 
-  cancelCreateVehicle(){
-    this._admob.resumeBanner();
-    this.router.navigate(['/dashboard']);
+  async cancelCreateVehicle(){
+    const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.are_you_sure?'),this.translate.instant('alert.changes_will_not_be_saved'),this.translate.instant('alert.accept'),this.translate.instant('alert.cancel'))
+    if(sure){
+      this.dashboard.isLoading=true;
+      this.navCtr.navigateRoot('/dashboard')
+    }
   }
 
   async createVehicle(){
@@ -109,6 +112,7 @@ export class VehiclePage implements OnInit {
 
   async editVehicle(){
     if(this.brandOrModel){
+      this.dashboard.isLoading=true;
       const index = this.vehiclesArray.findIndex(vehicle => vehicle.id === this.vehicleToEditId);
       if(index !== -1){
         const newvehicle = await this.generateVehicle();
@@ -123,7 +127,6 @@ export class VehiclePage implements OnInit {
   async createNew(){
     if(this.brandOrModel){
       this.dashboard.isLoading=true;
-      this.vehiclesArray = this._session.vehiclesArray;
       const newvehicle = await this.generateVehicle();
       this.vehiclesArray.push(newvehicle)
       this.saveAndExit();
@@ -133,7 +136,13 @@ export class VehiclePage implements OnInit {
   }
 
   async generateVehicle(){
-    let hash = await this._hash.generateVehiclePhrase();
+    let hash;
+    if(this.vehicleToEditId){
+      hash = this.vehicleToEditId;
+    }else{
+      hash = await this._hash.generateVehiclePhrase();
+
+    }
     const newvehicle:Vehicle = {
       typeOfVehicle:this.typeOfVehicle ,
       brandOrModel: this.brandOrModel ,
@@ -151,12 +160,11 @@ export class VehiclePage implements OnInit {
     return newvehicle;
   }
 
-  saveAndExit(){
+  async saveAndExit(){
+    await this._admobService.showinterstitial();
     this._session.vehiclesArray = this.vehiclesArray;
     this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.user.id,this.vehiclesArray);
-    this._admob.resumeBanner();
-    this.router.navigate(['/dashboard/main']);
-    this.dashboard.isLoading=false;
+    this.navCtr.navigateRoot('/dashboard')
   }
 
 }

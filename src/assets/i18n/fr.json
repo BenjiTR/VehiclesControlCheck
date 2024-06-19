@@ -77,7 +77,10 @@
     "event_erased": "Événement supprimé",
     "event_erased_text": "L'événement a été supprimé avec succès",
     "enter_name_or_model":"Entrez le nom ou le modèle",
-    "enter_name_or_model_text":"Vous devez entrer au moins le nom ou le modèle du véhicule pour pouvoir l'enregistrer"
+    "enter_name_or_model_text":"Vous devez entrer au moins le nom ou le modèle du véhicule pour pouvoir l'enregistrer",
+    "enter_type": "Entrez un type",
+    "enter_type_text": "Vous devez entrer au moins le type d'événement pour pouvoir le sauvegarder",
+    "changes_will_not_be_saved":"les modifications ne seront pas enregistrées"
   },
   "home": {
     "init_session": "Connexion",
@@ -165,5 +168,13 @@
     "images": "Images",
     "add": "Ajouter",
     "vehicle": "Véhicule"
+  },
+  "eventypes": {
+    "flat_tire": "Crevaison",
+    "repair": "Réparation",
+    "inspection": "Inspection",
+    "refueling": "Ravitaillement",
+    "maintenance": "Entretien",
+    "accident": "Accident"
   }
 }

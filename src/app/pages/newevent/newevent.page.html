@@ -1,0 +1,71 @@
+
+<ion-content class="brown">
+  <!-- CREAR EVENTO / DATOS -->
+
+  <ion-row class="gray ion-margin rounded">
+        <ion-col class="ion-align-items-center ion-text-center" size="12">
+          <h2 *ngIf="!eventToEditId" translate="event.create_event"></h2>
+          <h2 *ngIf="eventToEditId" translate="event.edit_event"></h2>
+
+        </ion-col>
+        <ion-col size="3"></ion-col>
+
+        <ion-col class="ion-padding-start ion-padding-end" size="12">
+          <ion-item class="rounded-inputs">
+              <ion-select [(ngModel)]="vehicleId" label="{{'event.vehicle'|translate}}" label-placement="floating">
+                <ion-select-option *ngFor="let vehicle of vehiclesArray" [value]="vehicle.id">{{vehicle.brandOrModel}}</ion-select-option>
+              </ion-select>
+          </ion-item>
+        </ion-col>
+        <ion-col class="ion-padding-start ion-padding-end ion-margin-top" size="12">
+          <ion-item class="rounded-inputs">
+            <ion-input [(ngModel)]="date" type="date" label="{{'event.date'|translate}}" label-placement="floating"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col class="ion-padding-start ion-padding-end" size="12">
+          <ion-item class="rounded-inputs">
+              <ion-select [(ngModel)]="type" label="{{'event.type'|translate}}" label-placement="floating">
+                <ion-select-option *ngFor="let type of eventTypes" [value]="type.name">{{type.string}}</ion-select-option>
+              </ion-select>
+          </ion-item>
+        </ion-col>
+        <ion-col class="ion-padding-start ion-padding-end" size="12">
+          <ion-item class="rounded-inputs">
+            <ion-input [(ngModel)]="km" type="text" label="{{'event.km'|translate}}" label-placement="floating"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col class="ion-padding-start ion-padding-end" size="12">
+          <ion-item class="rounded-inputs">
+            <ion-input [(ngModel)]="cost" type="text" label="{{'event.cost' | translate}}" label-placement="floating"></ion-input>
+          </ion-item>
+        </ion-col>
+
+        <ion-col class="ion-padding-start ion-padding-end" size="12">
+          <ion-item class="rounded-inputs">
+            <ion-input [(ngModel)]="info" type="text" label="{{'event.aditional_info' | translate}}" label-placement="floating"></ion-input>
+          </ion-item>
+        </ion-col>
+
+        <ion-col class="ion-padding-start ion-text-center ion-padding-end" size="12">
+          <h2 translate="event.images"></h2>
+        </ion-col>
+
+        <ion-col size="12" *ngFor="let image of images">
+          <ion-icon color="danger" (click)="deleteImg(image)" class="zoom-2" src="../../../assets/icons/close-outline.svg"></ion-icon>
+            <ion-img (click)="openModal(image)" src="{{image}}"></ion-img>
+          </ion-col>
+
+        <ion-col class="ion-padding-start ion-text-center ion-padding-end" size="12">
+          <ion-button (click)="addImage()" translate="event.add"></ion-button>
+        </ion-col>
+
+        <ion-col class="ion-margin-top ion-margin-bottom ion-text-center" size="6">
+          <ion-icon (click)="cancelCreateEvent()" color="danger" size="large" src="../../../assets/icons/arrow-back-outline.svg"></ion-icon>
+        </ion-col>
+        <ion-col class="ion-margin-top ion-margin-bottom ion-text-center" size="6">
+          <ion-icon (click)="createEvent()" class="success-color" size="large" src="../../../assets/icons/checkmark-outline.svg"></ion-icon>
+        </ion-col>
+
+  </ion-row>
+
+</ion-content>

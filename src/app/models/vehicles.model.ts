@@ -2,7 +2,7 @@ export class Vehicle{
   typeOfVehicle:string="";
   brandOrModel: string="";
   carRegistration: string="";
-  dateOfBuy: Date= new Date;
+  dateOfBuy: string="";
   kmOfBuy: string="";
   typeOfFuel: string="";
   insuranceCompany: string="";

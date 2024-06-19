@@ -77,7 +77,10 @@
       "event_erased":"Evento borrado",
       "event_erased_text":"El evento se ha borrado con éxito",
       "enter_name_or_model":"Introduzca nombre o modelo",
-      "enter_name_or_model_text":"Debe introducir al menos el nombre o modelo del vehículo para poder guardarlo"
+      "enter_name_or_model_text":"Debe introducir al menos el nombre o modelo del vehículo para poder guardarlo",
+      "enter_type":"Introduzca un tipo",
+      "enter_type_text":"Debe introducir al menos el tipo de evento para poder guardarlo",
+      "changes_will_not_be_saved":"los cambios no se guardarán"
   },
   "home":{
       "init_session":"Inicio de sesión",
@@ -165,5 +168,13 @@
     "images":"Imágenes",
     "add":"Añadir",
     "vehicle":"Vehiculo"
+  },
+  "eventypes": {
+    "flat_tire": "Pinchazo",
+    "repair": "Reparación",
+    "inspection": "Inspección",
+    "refueling": "Repostaje",
+    "maintenance": "Mantenimiento",
+    "accident": "Accidente"
   }
 }

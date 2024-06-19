@@ -77,7 +77,10 @@
     "event_erased": "Event deleted",
     "event_erased_text": "The event has been successfully deleted",
     "enter_name_or_model":"Enter name or model",
-    "enter_name_or_model_text":"You must enter at least the name or model of the vehicle to be able to save it"
+    "enter_name_or_model_text":"You must enter at least the name or model of the vehicle to be able to save it",
+    "enter_type": "Enter a type",
+    "enter_type_text": "You must enter at least the event type to be able to save it",
+    "changes_will_not_be_saved":"changes will not be saved"
   },
   "home": {
     "init_session": "Log in",
@@ -165,6 +168,16 @@
     "images": "Images",
     "add": "Add",
     "vehicle": "Vehicle"
+  },
+  "eventypes": {
+    "flat_tire": "Flat tire",
+    "repair": "Repair",
+    "inspection": "Inspection",
+    "refueling": "Refueling",
+    "maintenance": "Maintenance",
+    "accident": "Accident"
   }
+
+
 }
 

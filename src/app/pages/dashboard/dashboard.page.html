@@ -15,15 +15,15 @@
         <h3 class="ion-margin-top" (click)="cerrarMenu()" [routerLink]="['/#']" class="flex ion-align-items-center"><ion-icon class="ion-margin-end" size="large" src="../../../assets/icons/help-outline.svg"></ion-icon>{{'dashboard.faqs'|translate}}</h3>
         <h3 class="ion-margin-top" (click)="cerrarMenu()" [routerLink]="['/#']" class="flex ion-align-items-center"><ion-icon class="ion-margin-end" size="large" src="../../../assets/icons/alert-outline.svg"></ion-icon>{{'dashboard.point_out_problem'|translate}}</h3>
         <h3 class="ion-margin-top" (click)="cerrarMenu()" [routerLink]="['/#']" class="flex ion-align-items-center"><ion-icon class="ion-margin-end" size="large" src="../../../assets/icons/share-social-outline.svg"></ion-icon>{{'dashboard.like_share'|translate}}</h3>
-        <h3 class="ion-margin-top" (click)="cerrarMenu()" [routerLink]="['/useterms']" [queryParams]="{ goBack: 'dashboard' }" class="flex ion-align-items-center"><ion-icon class="ion-margin-end" size="large" src="../../../assets/icons/information-circle-outline.svg"></ion-icon>{{'dashboard.user_terms'|translate}}</h3>
-        <h3 class="ion-margin-top" (click)="cerrarMenu()" [routerLink]="['/privacy']" [queryParams]="{ goBack: 'dashboard' }" class="flex ion-align-items-center"><ion-icon class="ion-margin-end" size="large" src="../../../assets/icons/key-outline.svg"></ion-icon>{{'dashboard.privacity'|translate}}</h3>
+        <h3 class="ion-margin-top" (click)="goUseTerms()" class="flex ion-align-items-center"><ion-icon class="ion-margin-end" size="large" src="../../../assets/icons/information-circle-outline.svg"></ion-icon>{{'dashboard.user_terms'|translate}}</h3>
+        <h3 class="ion-margin-top" (click)="goPrivacy()" class="flex ion-align-items-center"><ion-icon class="ion-margin-end" size="large" src="../../../assets/icons/key-outline.svg"></ion-icon>{{'dashboard.privacity'|translate}}</h3>
         <h3 class="ion-margin-top" (click)="cerrarMenu()" [routerLink]="['/#']" class="flex ion-align-items-center"><ion-icon class="ion-margin-end" size="large" src="../../../assets/icons/analytics-outline.svg"></ion-icon>{{'dashboard.export_data'|translate}}</h3>
         <h3 class="ion-margin-top" (click)="endSession()" class="flex ion-align-items-center"><ion-icon class="ion-margin-end" size="large" src="../../../assets/icons/exit-outline.svg"></ion-icon>{{'dashboard.close_session'|translate}}</h3>
       </ion-col>
     </ion-row>
     <ion-row class="ion-margin-top">
       <ion-col class="ion-text-center" size="12">
-          <ion-icon (click)="cerrarMenu()" class="orange-icon" src="../../../assets/icons/arrow-forward-circle-outline.svg"></ion-icon>
+          <ion-icon (click)="cerrarMenu()" class="orange-icon" src="../../../assets/icons/arrow-back-circle-outline.svg"></ion-icon>
       </ion-col>
     </ion-row>
   </ion-content>

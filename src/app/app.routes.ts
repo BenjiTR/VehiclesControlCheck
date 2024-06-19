@@ -42,7 +42,16 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/vehicle/vehicle.page').then( m => m.VehiclePage)
       },
       {
+        path: 'newevent',
+        loadComponent: () => import('./pages/newevent/newevent.page').then( m => m.NeweventPage)
+      },
+      {
         path: '**',
+        redirectTo: 'home',
+        pathMatch: 'full',
+      },
+      {
+        path: '',
         redirectTo: 'home',
         pathMatch: 'full',
       },
@@ -57,6 +66,10 @@ export const routes: Routes = [
     path: 'userdata',
     loadComponent: () => import('./pages/userdata/userdata.page').then( m => m.UserdataPage),
     canActivate: [canActivate]
+  },
+  {
+    path: 'imgmodal',
+    loadComponent: () => import('./pages/imgmodal/imgmodal.page').then( m => m.ImgmodalPage)
   },
 
 

@@ -102,6 +102,7 @@ zoom: 0.8;
 
 .gray{
   background: #a2c3c7;
+  --background: #a2c3c7;
 }
 
 //ROUND
@@ -239,4 +240,14 @@ border-bottom-right-radius: 30px;
 }
 .success-color{
   color: green;
+}
+.zoom09{
+  zoom: 0.9;
+}
+.zoom08{
+zoom: 0.8;
+}
+.orange{
+  --background: #ffcc7f;
+  background: #ffcc7f9b;
 }

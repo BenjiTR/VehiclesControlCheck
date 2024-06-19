@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { AdMob, AdMobBannerSize, AdmobConsentStatus, BannerAdOptions, BannerAdPluginEvents, BannerAdPosition, BannerAdSize } from "@capacitor-community/admob";
+import { AdOptions, AdLoadInfo, InterstitialAdPluginEvents } from '@capacitor-community/admob';
 
 @Injectable
 ({
@@ -7,6 +8,8 @@ import { AdMob, AdMobBannerSize, AdmobConsentStatus, BannerAdOptions, BannerAdPl
 })
 
 export class AdmobService {
+
+  public showing:number = 0;
 
   async initialize(): Promise<void> {
     await AdMob.initialize();
@@ -36,8 +39,10 @@ export class AdmobService {
     return;
   }
 
+
+//BANNER
   async showBanner(): Promise<void> {
-  
+
     AdMob.addListener(BannerAdPluginEvents.Loaded, () => {
       // Subscribe Banner Event Listener
       return;
@@ -48,8 +53,7 @@ export class AdmobService {
     });
 
     const options: BannerAdOptions = {
-      //adId: 'ca-app-pub-7109225930546474~5137885146',
-      adId: 'ca-app-pub-3940256099942544/9214589741',
+      adId: 'ca-app-pub-7109225930546474~5137885146',
       adSize: BannerAdSize.ADAPTIVE_BANNER,
       position: BannerAdPosition.BOTTOM_CENTER,
       margin:0,
@@ -70,5 +74,23 @@ export class AdmobService {
   async removeBanner():Promise<void> {
     AdMob.removeBanner();
   }
+//INTERSTICIAL
+async showinterstitial(): Promise<void> {
+  if(this.showing == 0){
+    AdMob.addListener(InterstitialAdPluginEvents.Loaded, (info: AdLoadInfo) => {
+      // Subscribe prepared interstitial
+    });
+
+    const options: AdOptions = {
+      adId: 'ca-app-pub-7109225930546474~5137885146',
+      isTesting: true
+      // npa: true
+    };
+    await AdMob.prepareInterstitial(options);
+    await AdMob.showInterstitial();
+    this.showing = 1;
+  }
+}
+
 
 }

@@ -1,0 +1,12 @@
+<ion-content [fullscreen]="true" class="background">
+  <div (click)="closeModal()" class="overlay"></div>
+  <ion-grid class="ion-align-items-center center">
+    <ion-row>
+      <ion-col size="12">
+        <div class="ion-img-zoomable" (click)="openImage()">
+          <ion-img [src]="img"></ion-img>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

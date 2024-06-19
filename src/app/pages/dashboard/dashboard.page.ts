@@ -1,8 +1,8 @@
 import { UserdataviewPage } from './../userdataview/userdataview.page';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonAccordionGroup, IonContent, IonHeader, IonTitle, IonToolbar, IonCol, IonRow, IonGrid, IonImg, IonButton, IonButtons, IonMenuButton, IonIcon, IonMenu, MenuController, IonLabel, IonItem, IonInput, IonAccordion, IonRouterOutlet } from '@ionic/angular/standalone';
+import { IonAccordionGroup, IonContent, IonHeader, IonTitle, IonToolbar, IonCol, IonRow, IonGrid, IonImg, IonButton, IonButtons, IonMenuButton, IonIcon, IonMenu, MenuController, IonLabel, IonItem, IonInput, IonAccordion, IonRouterOutlet, NavController, IonNavLink } from '@ionic/angular/standalone';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -17,10 +17,10 @@ import { MainAnimation, RoadAnimation, SecondaryAnimation } from 'src/app/servic
   templateUrl: './dashboard.page.html',
   styleUrls: ['./dashboard.page.scss'],
   standalone: true,
-  imports: [IonRouterOutlet, IonAccordionGroup, IonAccordion, UserdataviewPage, IonInput, IonItem, IonLabel, TranslateModule, RouterModule, IonMenu, IonIcon, IonButtons, IonMenuButton, IonButton, IonImg, IonGrid, IonCol ,IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonRow, IonGrid],
+  imports: [IonNavLink, IonRouterOutlet, IonAccordionGroup, IonAccordion, UserdataviewPage, IonInput, IonItem, IonLabel, TranslateModule, RouterModule, IonMenu, IonIcon, IonButtons, IonMenuButton, IonButton, IonImg, IonGrid, IonCol ,IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonRow, IonGrid],
   animations: [ MainAnimation, RoadAnimation, SecondaryAnimation ]
 })
-export class DashboardPage implements OnInit {
+export class DashboardPage implements OnInit, OnDestroy {
 
   public isLoading:Boolean=true;
 
@@ -32,6 +32,7 @@ export class DashboardPage implements OnInit {
     private _translation:TranslationConfigService,
     private _admobService:AdmobService,
     private _paddingService:PaddingService,
+    private navCtr:NavController
   ) { }
 
   async ngOnInit() {
@@ -40,9 +41,25 @@ export class DashboardPage implements OnInit {
     this.isLoading=false;
   }
 
+
+  ngOnDestroy(){
+    console.log("fuera");
+    this._admobService.hideBanner();
+  }
+
   cerrarMenu() {
     this.menuCtrl.close();
     this._admobService.resumeBanner();
+  }
+
+  goUseTerms(){
+    this.navCtr.navigateRoot('/useterms',{queryParams: { goBack: 'dashboard' }});
+    this.menuCtrl.close();
+  }
+
+  goPrivacy(){
+    this.navCtr.navigateRoot('/useterms',{queryParams: { goBack: 'dashboard' }});
+    this.menuCtrl.close();
   }
 
   HideBanner(){
@@ -66,6 +83,8 @@ export class DashboardPage implements OnInit {
     });
   }
 
-
+  calculatePadding(){
+    return this._paddingService.calculatePadding();
+  }
 
 }

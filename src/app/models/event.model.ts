@@ -1,7 +1,7 @@
 export class Event {
   id:string = "";
-  vehicleBrandOrModel = "";
-  date:Date = new Date();
+  vehicleId = "";
+  date:string="";
   type:string="";
   km:string="";
   cost:number=0;
