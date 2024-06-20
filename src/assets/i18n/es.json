@@ -176,5 +176,9 @@
     "refueling": "Repostaje",
     "maintenance": "Mantenimiento",
     "accident": "Accidente"
+  },
+  "notifications": {
+    "reminders":"Recordatorios",
+    "not_allowed_text":"Las notificaciones no han sido permitidas de forma expresa por el usuario, deben permitirse desde los ajustes"
   }
 }

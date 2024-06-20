@@ -38,12 +38,11 @@ export class DashboardPage implements OnInit, OnDestroy {
   async ngOnInit() {
     this.translate.setDefaultLang(this._translation.getLanguage());
     this._admobService.resumeBanner();
-    this.isLoading=false;
+    this.isLoading=true;
   }
 
 
   ngOnDestroy(){
-    console.log("fuera");
     this._admobService.hideBanner();
   }
 

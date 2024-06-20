@@ -61,7 +61,6 @@ export class MainPage implements OnInit {
   }
 
   async ngOnInit() {
-    console.log("enter")
     this.dashboard.isLoading=true;
     this.user = this._session.currentUser;
     this.translate.setDefaultLang(this._translation.getLanguage());

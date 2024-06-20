@@ -176,6 +176,10 @@
     "refueling": "Refueling",
     "maintenance": "Maintenance",
     "accident": "Accident"
+  },
+  "notifications": {
+    "reminders":"Reminders",
+    "not_allowed_text":"Notifications have not been explicitly allowed by the user, they must be enabled from the settings"
   }
 
 

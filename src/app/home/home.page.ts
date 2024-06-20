@@ -13,7 +13,6 @@ import { UserTestService } from '../services/user-test.service';
 import { AdmobService } from '../services/admob.service';
 
 
-
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -40,17 +39,18 @@ export class HomePage implements OnInit{
     private _session:SessionService,
     private router:Router,
     private _userTestService:UserTestService,
-
-    private _admobService:AdmobService
+    private _admobService:AdmobService,
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit(){
+    this.isLoading=true;
     this._admobService.initialize();
     this._admobService.showConsent();
     this._admobService.showBanner();
     this._admobService.hideBanner();
     this.translate.setDefaultLang(this._translation.getLanguage());
     this.tryRememberSession();
+    this.isLoading=false;
   }
 
 
@@ -222,15 +222,11 @@ export class HomePage implements OnInit{
       currentUser.method = "email";
       currentUser.email = user.email;
       currentUser.photo = await this._session.searchphoto(currentUser.method, currentUser.id);
-      this._session.currentUser = currentUser
-
+      this._session.currentUser = currentUser;
+      this._session.getReminderNotifications();
     }
     this.router.navigate(["\dashboard"])
     this.isLoading=false;
   }
-
-
-
-
 
 }

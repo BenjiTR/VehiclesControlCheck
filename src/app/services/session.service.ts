@@ -17,13 +17,15 @@ export class SessionService{
   public currentUser:User = new User;
   public vehiclesArray:Vehicle[] = [];
   public eventsArray:Event[] = [];
+  public remindNotitications:boolean = false;
 
   constructor(
     private _storageService: StorageService,
     private _storage:StorageService,
     private _test:UserTestService,
     private _authService:AuthService
-  ){}
+  ){
+  }
 
 
   async searchphoto(method:string, id:string):Promise<string> {
@@ -69,4 +71,11 @@ export class SessionService{
     }
   }
 
+  async setReminderNotifications(reminder:boolean){
+    console.log("llega")
+    this.remindNotitications = await this._storage.setStorageItem(storageConstants.USER_REMINDER+this.currentUser.id,reminder);
+  }
+  async getReminderNotifications(){
+    this.remindNotitications = await this._storage.getStorageItem(storageConstants.USER_REMINDER+this.currentUser.id) || false;
+  }
 }

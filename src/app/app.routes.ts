@@ -46,6 +46,10 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/newevent/newevent.page').then( m => m.NeweventPage)
       },
       {
+        path: 'notifications',
+        loadComponent: () => import('./pages/notifications/notifications.page').then( m => m.NotificationsPage)
+      },
+      {
         path: '**',
         redirectTo: 'home',
         pathMatch: 'full',
@@ -69,7 +73,8 @@ export const routes: Routes = [
   },
   {
     path: 'imgmodal',
-    loadComponent: () => import('./pages/imgmodal/imgmodal.page').then( m => m.ImgmodalPage)
+    loadComponent: () => import('./pages/imgmodal/imgmodal.page').then( m => m.ImgmodalPage),
+    canActivate: [canActivate]
   },
 
 

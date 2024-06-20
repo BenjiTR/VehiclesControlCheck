@@ -176,5 +176,9 @@
     "refueling": "Ravitaillement",
     "maintenance": "Entretien",
     "accident": "Accident"
+  },
+  "notifications": {
+    "reminders":"Rappels",
+    "not_allowed_text":"Les notifications n'ont pas été expressément autorisées par l'utilisateur, elles doivent être activées depuis le paramètres"
   }
 }
