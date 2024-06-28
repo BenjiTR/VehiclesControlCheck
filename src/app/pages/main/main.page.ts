@@ -66,6 +66,7 @@ export class MainPage implements OnInit {
     this.translate.setDefaultLang(this._translation.getLanguage());
     this.vehiclesArray = await this._session.loadVehicles();
     this.eventsArray = await this._session.loadEvents();
+    this._session.getReminderNotifications();
     this._admob.resumeBanner();
     this.dashboard.isLoading=false;
   }

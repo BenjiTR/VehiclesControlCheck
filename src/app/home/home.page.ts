@@ -11,6 +11,7 @@ import { User } from '../models/user.model';
 import { SessionService } from '../services/session.service';
 import { UserTestService } from '../services/user-test.service';
 import { AdmobService } from '../services/admob.service';
+import { NotificationsService } from '../services/notifications.service';
 
 
 @Component({
@@ -40,6 +41,7 @@ export class HomePage implements OnInit{
     private router:Router,
     private _userTestService:UserTestService,
     private _admobService:AdmobService,
+    private _notification:NotificationsService
   ) {}
 
   async ngOnInit(){
@@ -48,6 +50,7 @@ export class HomePage implements OnInit{
     this._admobService.showConsent();
     this._admobService.showBanner();
     this._admobService.hideBanner();
+    this.checkNotifications()
     this.translate.setDefaultLang(this._translation.getLanguage());
     this.tryRememberSession();
     this.isLoading=false;
@@ -228,5 +231,16 @@ export class HomePage implements OnInit{
     this.router.navigate(["\dashboard"])
     this.isLoading=false;
   }
+
+  async checkNotifications():Promise<void>{
+    const res = await this._notification.checkPermissions();
+    if(res.display==="granted"){
+      console.log("Permiso para mostrar notificaciones concedido");
+    }else{
+      await this._notification.requestPermissions();
+    }
+    return;
+  }
+
 
 }

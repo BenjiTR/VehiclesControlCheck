@@ -72,10 +72,10 @@ export class SessionService{
   }
 
   async setReminderNotifications(reminder:boolean){
-    console.log("llega")
     this.remindNotitications = await this._storage.setStorageItem(storageConstants.USER_REMINDER+this.currentUser.id,reminder);
   }
   async getReminderNotifications(){
     this.remindNotitications = await this._storage.getStorageItem(storageConstants.USER_REMINDER+this.currentUser.id) || false;
+    console.log("Norificaciones seleccionadas: ", this.remindNotitications);
   }
 }

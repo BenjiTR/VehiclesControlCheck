@@ -45,14 +45,10 @@ export class NotificationsPage{
 
   isAllowedAndActivated(resp:string){
     const remindNotifications = this._session.remindNotitications;
-    if(!remindNotifications){
-      this.isAllowed=false;
+    if (resp === "granted" && remindNotifications){
+      this.isAllowed = true;
     }else{
-      if (resp === "granted"){
-        this.isAllowed = true;
-      }else{
-        this.isAllowed=false;
-      }
+      this.isAllowed=false;
     }
   }
 
