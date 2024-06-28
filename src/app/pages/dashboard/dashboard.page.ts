@@ -10,6 +10,7 @@ import { TranslationConfigService } from '../../services/translation.service';
 import { AdmobService } from 'src/app/services/admob.service';
 import { PaddingService } from 'src/app/services/padding.service';
 import { MainAnimation, RoadAnimation, SecondaryAnimation } from 'src/app/services/animation.service';
+import { SessionService } from 'src/app/services/session.service';
 
 
 @Component({
@@ -32,7 +33,8 @@ export class DashboardPage implements OnInit, OnDestroy {
     private _translation:TranslationConfigService,
     private _admobService:AdmobService,
     private _paddingService:PaddingService,
-    private navCtr:NavController
+    private navCtr:NavController,
+    private _session:SessionService
   ) { }
 
   async ngOnInit() {
@@ -69,12 +71,13 @@ export class DashboardPage implements OnInit, OnDestroy {
     this.isLoading=true;
     await this.menuCtrl.close();
     await this._authService.signOut()
-    .then(() => {
+    .then(async () => {
       // Sign-out successful.
       this._authService.isActive = false;
       this._authService.isInTest = false;
-      this._admobService.hideBanner();
-      this.router.navigate(['/home']);
+      await this._admobService.removeBanner();
+      this._session.deleteTemporalData();
+      this.navCtr.navigateRoot(['/home']);
       this.isLoading=false;
     }).catch((error) => {
       // An error happened.

@@ -17,6 +17,7 @@ export class SessionService{
   public currentUser:User = new User;
   public vehiclesArray:Vehicle[] = [];
   public eventsArray:Event[] = [];
+  //public remindersArray:Reminder[] = [];
   public remindNotitications:boolean = false;
 
   constructor(
@@ -78,4 +79,12 @@ export class SessionService{
     this.remindNotitications = await this._storage.getStorageItem(storageConstants.USER_REMINDER+this.currentUser.id) || false;
     console.log("Norificaciones seleccionadas: ", this.remindNotitications);
   }
+
+  deleteTemporalData(){
+    this.vehiclesArray = [];
+    this.eventsArray = [];
+    //this.reminderArray = [];
+    this.remindNotitications = false;
+  }
+
 }
