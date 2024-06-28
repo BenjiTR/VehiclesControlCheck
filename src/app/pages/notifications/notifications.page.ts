@@ -47,22 +47,27 @@ export class NotificationsPage{
     const remindNotifications = this._session.remindNotitications;
     if (resp === "granted" && remindNotifications){
       this.isAllowed = true;
+      this._notifications.createChannel();
     }else{
-      this.isAllowed=false;
+      this.isAllowed = false;
+      this._notifications.deleteChannel();
     }
   }
 
   async togglePermissions(){
     if(this.isAllowed){
       this.isAllowed = false;
+      this._notifications.deleteChannel();
       this._session.setReminderNotifications(false)
     }else{
       const resp = await this._notifications.requestPermissions();
       if(resp.display==="granted"){
         this.isAllowed = true;
+        this._notifications.createChannel();
         this._session.setReminderNotifications(true)
       }else{
         this.isAllowed = false;
+        this._notifications.deleteChannel();
         this._session.setReminderNotifications(false);
         this.errorText = await this.translate.instant("notifications.not_allowed_text");
       }

@@ -1,6 +1,6 @@
 import { AuthService } from './../services/auth.service';
-import { Component, OnInit } from '@angular/core';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonRow, IonCol, IonImg, IonItem, IonInput, IonIcon, IonFooter, IonButton, IonCheckbox, IonLabel } from '@ionic/angular/standalone';
+import { Component, OnInit, getPlatform } from '@angular/core';
+import { IonHeader, IonToolbar, IonTitle, IonContent, IonRow, IonCol, IonImg, IonItem, IonInput, IonIcon, IonFooter, IonButton, IonCheckbox, IonLabel, Platform } from '@ionic/angular/standalone';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslationConfigService } from '../services/translation.service';
 import { FormsModule } from '@angular/forms';
@@ -41,18 +41,19 @@ export class HomePage implements OnInit{
     private router:Router,
     private _userTestService:UserTestService,
     private _admobService:AdmobService,
-    private _notification:NotificationsService
+    private _notification:NotificationsService,
+    private _platform:Platform
   ) {}
 
   async ngOnInit(){
     this.isLoading=true;
-    this._admobService.initialize();
+    await this._admobService.initialize();
     this._admobService.showConsent();
-    this._admobService.showBanner();
-    this._admobService.hideBanner();
-    this.checkNotifications()
-    this.translate.setDefaultLang(this._translation.getLanguage());
-    this.tryRememberSession();
+    await this._admobService.showBanner();
+    await this._admobService.hideBanner();
+    await this.checkNotifications()
+    await this.translate.setDefaultLang(this._translation.getLanguage());
+    await this.tryRememberSession();
     this.isLoading=false;
   }
 
@@ -79,13 +80,13 @@ export class HomePage implements OnInit{
 
   //TEST USER
   loginWithTest(){
+    this.isLoading=true;
     const user = this._userTestService.userCredential;
     this.loginExecute(user, "test");
   }
 
   //AUTENTICACIÓN CON EMAIL
   async loginWithEmail(){
-
     this.isLoading=true;
     this.Error="";
     this.handlerRememberSession()
@@ -114,8 +115,8 @@ export class HomePage implements OnInit{
       })
       .catch(async (error) => {
         this.handleErrors(error.code);
+        this.isLoading=false;
       });
-    this.isLoading=false;
   }
 
   //AUTENTICACIÓN CON GOOGLE
@@ -127,19 +128,20 @@ export class HomePage implements OnInit{
     })
     .catch((error)=>{
       this.handleErrors(error.code);
+      this.isLoading=false;
     })
   }
 
   //RECORDAR INICIO DE SESIÓN
-  tryRememberSession(){
-    const remMail = localStorage.getItem('vehiclesUser');
-    const remPassword = localStorage.getItem('vehiclesPassword');
+  async tryRememberSession():Promise<void>{
+    const remMail = await localStorage.getItem('vehiclesUser');
+    const remPassword = await localStorage.getItem('vehiclesPassword');
     if(remMail && remPassword){
       this.rememberSession= true;
       this.email = remMail;
       this.password = remPassword;
     }
-    this.isLoading=false;
+    return;
   }
 
   //RESTAURAR PASSWORD
@@ -229,17 +231,21 @@ export class HomePage implements OnInit{
       this._session.getReminderNotifications();
     }
     this.router.navigate(["\dashboard"])
-    this.isLoading=false;
   }
 
   async checkNotifications():Promise<void>{
-    const res = await this._notification.checkPermissions();
-    if(res.display==="granted"){
-      console.log("Permiso para mostrar notificaciones concedido");
+    if(this._platform.is("android")){
+      const res = await this._notification.checkPermissions();
+      if(res.display==="granted"){
+        console.log("Permiso para mostrar notificaciones concedido");
+        return;
+      }else{
+        await this._notification.requestPermissions();
+        return;
+      }
     }else{
-      await this._notification.requestPermissions();
+      return;
     }
-    return;
   }
 
 
