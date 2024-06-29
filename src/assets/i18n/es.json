@@ -117,9 +117,9 @@
       "recordatory":"Recordatorio",
       "data_of_vehicle":"Datos del vehículo",
       "events":"Eventos",
-      "recordatories":"Recordatorios",
+      "reminders":"Recordatorios",
       "no_events":"No hay eventos",
-      "no_recordatories":"No hay recordatorios"
+      "no_reminders":"No hay recordatorios"
   },
   "newvehicle":{
       "create_a_vehicle":"Crear un vehículo",
@@ -180,5 +180,9 @@
   "notifications": {
     "reminders":"Recordatorios",
     "not_allowed_text":"Las notificaciones no han sido permitidas de forma expresa por el usuario, deben permitirse desde los ajustes"
+  },
+  "reminder": {
+    "text":"Texto",
+    "title":"Título"
   }
 }

@@ -117,9 +117,9 @@
     "recordatory": "Reminder",
     "data_of_vehicle": "Vehicle data",
     "events": "Events",
-    "recordatories": "Reminders",
+    "reminders": "Reminders",
     "no_events": "No events",
-    "no_recordatories": "No reminders"
+    "no_reminders": "No reminders"
   },
   "newvehicle": {
     "create_a_vehicle": "Create a vehicle",
@@ -180,7 +180,11 @@
   "notifications": {
     "reminders":"Reminders",
     "not_allowed_text":"Notifications have not been explicitly allowed by the user, they must be enabled from the settings"
-  }
+  },
+  "reminder": {
+  "text": "Text",
+  "title": "Title"
+}
 
 
 }

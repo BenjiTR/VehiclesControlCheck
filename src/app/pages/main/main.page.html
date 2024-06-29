@@ -217,7 +217,7 @@
 
                             <ion-col class="ion-padding-start ion-padding-end" size="12">
                               <ion-item>
-                                <ion-datetime [value]="getDate(reminder.schedule!.at!)" [preferWheel]="true" ></ion-datetime>
+                                <ion-datetime [readonly]="true" [value]="getDate(reminder.schedule!.at!)" [preferWheel]="true" ></ion-datetime>
                               </ion-item>
                             </ion-col>
 
@@ -229,7 +229,7 @@
 
                             <ion-col class="ion-padding-start ion-padding-end" size="12">
                               <ion-item class="rounded-inputs">
-                                <ion-input label="{{'reminder.text' | translate}}" label-placement="floating" [readonly]="true" [(ngModel)]="reminder.body" type="text"></ion-input>
+                                <ion-textarea label="{{'reminder.text' | translate}}" label-placement="floating" [readonly]="true" [(ngModel)]="reminder.body" type="text"></ion-textarea>
                               </ion-item>
                             </ion-col>
 
