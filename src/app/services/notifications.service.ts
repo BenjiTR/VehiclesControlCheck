@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { registerPlugin } from '@capacitor/core';
-import type { LocalNotificationsPlugin, PermissionStatus } from '@capacitor/local-notifications';
+import type { LocalNotificationSchema, LocalNotificationsPlugin, PendingResult, PermissionStatus } from '@capacitor/local-notifications';
 const LocalNotifications = registerPlugin<LocalNotificationsPlugin>('LocalNotifications');
 
 @Injectable({
@@ -40,6 +40,16 @@ export class NotificationsService {
     const channels = await LocalNotifications.listChannels();
     console.log("Lista de canales: ", channels)
   }
+
+  //NOTIFICACIONES
+  async getPending():Promise<PendingResult>{
+    return await LocalNotifications.getPending();
+  }
+
+  async createNotification(notificationsArray:LocalNotificationSchema[]){
+    return await LocalNotifications.schedule({notifications:notificationsArray})
+  }
+
 
 
 

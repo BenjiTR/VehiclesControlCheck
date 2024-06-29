@@ -235,8 +235,7 @@ export class HomePage implements OnInit{
   }
 
   async checkNotifications():Promise<void>{
-    //if(this._platform.is("ios")){
-    if(this._platform.is("android")){
+    if(this._platform.is("ios")){
       const res = await this._notification.checkPermissions();
       if(res.display==="granted"){
         console.log("Permiso para mostrar notificaciones concedido");

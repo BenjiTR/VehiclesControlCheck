@@ -7,6 +7,9 @@ import { UserTestService } from './user-test.service';
 import { AuthService } from './auth.service';
 import { Vehicle } from '../models/vehicles.model';
 import { Event } from '../models/event.model'
+import { NotificationsService } from './notifications.service';
+import { LocalNotificationSchema } from '@capacitor/local-notifications';
+import { Platform } from '@ionic/angular';
 @Injectable({
   providedIn:'root',
 })
@@ -17,14 +20,16 @@ export class SessionService{
   public currentUser:User = new User;
   public vehiclesArray:Vehicle[] = [];
   public eventsArray:Event[] = [];
-  //public remindersArray:Reminder[] = [];
+  public remindersArray:LocalNotificationSchema[] = [];
   public remindNotitications:boolean = false;
 
   constructor(
     private _storageService: StorageService,
     private _storage:StorageService,
     private _test:UserTestService,
-    private _authService:AuthService
+    private _authService:AuthService,
+    private _notification:NotificationsService,
+    private _platform:Platform
   ){
   }
 
@@ -72,6 +77,29 @@ export class SessionService{
     }
   }
 
+  async loadReminders(): Promise<LocalNotificationSchema[]>{
+    if(this._platform.is("ios")){
+        if(this._authService.isInTest){
+          const firstArray = await this._test.createTestreminders([]);
+          console.log("primer array: ", firstArray);
+          await this._notification.createNotification(firstArray);
+          const finalArray = await this._notification.getPending();
+          this.remindersArray = finalArray.notifications;
+          console.log("Array Final: ", this.remindersArray)
+          return this.remindersArray;
+        }else{
+          const temporalArray = await this._notification.getPending()
+          this.remindersArray = temporalArray.notifications;
+          return this.remindersArray;
+        }
+    }else{
+      this.remindersArray = await this._test.createTestreminders(this.remindersArray);
+      return this.remindersArray;
+    }
+
+
+  }
+
   async setReminderNotifications(reminder:boolean){
     this.remindNotitications = await this._storage.setStorageItem(storageConstants.USER_REMINDER+this.currentUser.id,reminder);
   }
@@ -83,7 +111,7 @@ export class SessionService{
   deleteTemporalData(){
     this.vehiclesArray = [];
     this.eventsArray = [];
-    //this.reminderArray = [];
+    this.remindersArray = [];
     this.remindNotitications = false;
   }
 
