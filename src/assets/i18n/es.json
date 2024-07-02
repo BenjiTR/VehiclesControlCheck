@@ -80,7 +80,11 @@
       "enter_name_or_model_text":"Debe introducir al menos el nombre o modelo del vehículo para poder guardarlo",
       "enter_type":"Introduzca un tipo",
       "enter_type_text":"Debe introducir al menos el tipo de evento para poder guardarlo",
-      "changes_will_not_be_saved":"los cambios no se guardarán"
+      "changes_will_not_be_saved":"los cambios no se guardarán",
+      "enter_title":"Introduzca un título",
+      "enter_title_text":"Por favor, debe introducir un título para continuar",
+      "enter_date":"Introduzca una fecha",
+      "enter_date_text":"Por favor, debe introducir una fecha para continuar."
   },
   "home":{
       "init_session":"Inicio de sesión",

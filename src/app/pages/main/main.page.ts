@@ -44,9 +44,6 @@ export class MainPage implements OnInit {
   public remindersArray:LocalNotificationSchema[] = [];
 
   constructor(
-    private menuCtrl: MenuController,
-    private _authService: AuthService,
-    private router:Router,
     private translate:TranslateService,
     private _translation:TranslationConfigService,
     private _paddingService:PaddingService,
@@ -70,8 +67,8 @@ export class MainPage implements OnInit {
     this.vehiclesArray = await this._session.loadVehicles();
     this.eventsArray = await this._session.loadEvents();
     this.remindersArray = await this._session.loadReminders();
-    this._session.getReminderNotifications();
-    this._admob.resumeBanner();
+    await this._session.getReminderNotifications();
+    await this._admob.resumeBanner();
     this.dashboard.isLoading=false;
   }
 
@@ -168,16 +165,29 @@ export class MainPage implements OnInit {
   //FECHA
   getDate(string: Date):string{
     const date = new Date(string)
-    return date.toISOString().slice(0, -1);
+    const timezoneOffset = date.getTimezoneOffset() * 60000; // Offset en milisegundos
+    const localISOTime = new Date(date.getTime() - timezoneOffset).toISOString().slice(0, -1);
+    return localISOTime;
   }
 
   //RECORDATORIOS
-  deleteReminder(reminder:LocalNotificationSchema){
 
+  createReminder(){
+    this.navCtr.navigateRoot('/dashboard/reminder');
+  }
+
+  async deleteReminder(reminder:LocalNotificationSchema){
+    const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.are_you_sure?'),this.translate.instant('alert.event_permanently_erased'),this.translate.instant('alert.erase'),this.translate.instant('alert.cancel'))
+    if(sure){
+      await this._notification.deleteNotification(reminder);
+      const array = await this._notification.getPending();
+      this.remindersArray = await array.notifications;
+      console.log(this.remindersArray);
+    }
   }
 
   editReminder(id:number){
-
+    this.navCtr.navigateRoot('/dashboard/reminder',{queryParams: { reminderToEditId: id}});
   }
 
 }

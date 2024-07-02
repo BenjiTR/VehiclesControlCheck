@@ -80,7 +80,11 @@
     "enter_name_or_model_text":"Vous devez entrer au moins le nom ou le modèle du véhicule pour pouvoir l'enregistrer",
     "enter_type": "Entrez un type",
     "enter_type_text": "Vous devez entrer au moins le type d'événement pour pouvoir le sauvegarder",
-    "changes_will_not_be_saved":"les modifications ne seront pas enregistrées"
+    "changes_will_not_be_saved":"les modifications ne seront pas enregistrées",
+    "enter_title": "Entrez un titre",
+    "enter_title_text": "Veuillez entrer un titre pour continuer",
+    "enter_date": "Entrez une date",
+    "enter_date_text": "Veuillez entrer une date pour continuer"
   },
   "home": {
     "init_session": "Connexion",

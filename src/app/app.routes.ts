@@ -50,6 +50,10 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/notifications/notifications.page').then( m => m.NotificationsPage)
       },
       {
+        path: 'reminder',
+        loadComponent: () => import('./pages/reminder/reminder.page').then( m => m.ReminderPage)
+      },
+      {
         path: '**',
         redirectTo: 'home',
         pathMatch: 'full',

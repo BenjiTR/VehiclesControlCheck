@@ -78,20 +78,10 @@ export class SessionService{
   }
 
   async loadReminders(): Promise<LocalNotificationSchema[]>{
-    if(this._platform.is("ios")){
-        if(this._authService.isInTest){
-          const firstArray = await this._test.createTestreminders([]);
-          console.log("primer array: ", firstArray);
-          await this._notification.createNotification(firstArray);
-          const finalArray = await this._notification.getPending();
-          this.remindersArray = finalArray.notifications;
-          console.log("Array Final: ", this.remindersArray)
-          return this.remindersArray;
-        }else{
-          const temporalArray = await this._notification.getPending()
-          this.remindersArray = temporalArray.notifications;
-          return this.remindersArray;
-        }
+    if(this._platform.is("android")){
+      const temporalArray = await this._notification.getPending()
+      this.remindersArray = temporalArray.notifications;
+      return this.remindersArray;
     }else{
       this.remindersArray = await this._test.createTestreminders(this.remindersArray);
       return this.remindersArray;
@@ -105,7 +95,6 @@ export class SessionService{
   }
   async getReminderNotifications(){
     this.remindNotitications = await this._storage.getStorageItem(storageConstants.USER_REMINDER+this.currentUser.id) || false;
-    console.log("Norificaciones seleccionadas: ", this.remindNotitications);
   }
 
   deleteTemporalData(){

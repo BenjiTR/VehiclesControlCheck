@@ -80,7 +80,11 @@
     "enter_name_or_model_text":"You must enter at least the name or model of the vehicle to be able to save it",
     "enter_type": "Enter a type",
     "enter_type_text": "You must enter at least the event type to be able to save it",
-    "changes_will_not_be_saved":"changes will not be saved"
+    "changes_will_not_be_saved":"changes will not be saved",
+    "enter_title": "Enter a title",
+    "enter_title_text": "Please enter a title to continue",
+    "enter_date": "Enter a date",
+    "enter_date_text": "Please enter a date to continue"
   },
   "home": {
     "init_session": "Log in",

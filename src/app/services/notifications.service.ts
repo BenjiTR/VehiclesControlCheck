@@ -29,16 +29,12 @@ export class NotificationsService {
       lightColor: '#ff0606',
       vibration: true
     })
-    console.log("Canal creado");
     const channels = await LocalNotifications.listChannels();
-    console.log("Lista de canales: ", channels)
   }
 
   async deleteChannel(){
     await LocalNotifications.deleteChannel({id:'VCC'})
-    console.log("Canal destruido");
     const channels = await LocalNotifications.listChannels();
-    console.log("Lista de canales: ", channels)
   }
 
   //NOTIFICACIONES
@@ -50,6 +46,9 @@ export class NotificationsService {
     return await LocalNotifications.schedule({notifications:notificationsArray})
   }
 
+  async deleteNotification(notification:LocalNotificationSchema){
+    return await LocalNotifications.cancel({notifications:[{id:notification.id}]})
+  }
 
 
 

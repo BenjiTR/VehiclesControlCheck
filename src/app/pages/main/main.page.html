@@ -211,13 +211,13 @@
                       <ng-container *ngFor="let reminder of remindersArray">
                         <ion-accordion *ngIf="reminder.extra.vehicleId === vehicle.id" class="zoom08" value="{{reminder.id}}">
                           <ion-item slot="header" class="orange">
-                            <ion-label><b>{{reminder.schedule?.at| date:'dd-MM-yyyy'}} - {{reminder.title}}</b></ion-label>
+                            <ion-label><b>{{reminder.schedule?.at| date:'dd-MM-yyyy'}} - {{reminder.extra.titleWithoutCar}}</b></ion-label>
                           </ion-item>
                           <div slot="content" class="gray">
 
                             <ion-col class="ion-padding-start ion-padding-end" size="12">
                               <ion-item>
-                                <ion-datetime [readonly]="true" [value]="getDate(reminder.schedule!.at!)" [preferWheel]="true" ></ion-datetime>
+                                <ion-datetime [readonly]="true" [value]="getDate(reminder.schedule!.at!)" [preferWheel]="true"></ion-datetime>
                               </ion-item>
                             </ion-col>
 
@@ -229,7 +229,7 @@
 
                             <ion-col class="ion-padding-start ion-padding-end" size="12">
                               <ion-item class="rounded-inputs">
-                                <ion-textarea label="{{'reminder.text' | translate}}" label-placement="floating" [readonly]="true" [(ngModel)]="reminder.body" type="text"></ion-textarea>
+                                <ion-textarea auto-grow="true" label="{{'reminder.text' | translate}}" label-placement="floating" [readonly]="true" [(ngModel)]="reminder.body" type="text"></ion-textarea>
                               </ion-item>
                             </ion-col>
 
@@ -271,19 +271,19 @@
 
     <ion-row>
       <ion-col class="ion-text-center ion-margin-top ion-padding-top" size="12">
-        <ion-button (click)="createVehicle()" [routerLink]="['/dashboard/vehicle']" class="button-create color1" size="large">
+        <ion-button (click)="createVehicle()" class="button-create color1" size="large">
           <ion-icon class="zoom-2" slot="start" src="../../../assets/icons/car-sport-outline.svg"></ion-icon>
           {{'mainpage.vehicle'|translate}}
         </ion-button>
       </ion-col>
       <ion-col class="ion-text-center" size="12">
-        <ion-button (click)="createEvent()" [routerLink]="['/dashboard/newevent']" class="button-create color2" size="large">
+        <ion-button (click)="createEvent()"  class="button-create color2" size="large">
           <ion-icon class="zoom-2" slot="start" src="../../../assets/icons/create-outline.svg"></ion-icon>
           {{'mainpage.event'|translate}}
         </ion-button>
       </ion-col>
       <ion-col class="ion-text-center" size="12">
-        <ion-button class="button-create color3" size="large">
+        <ion-button (click)="createReminder()" class="button-create color3" size="large">
           <ion-icon class="zoom-2" slot="start" src="../../../assets/icons/calendar-outline.svg"></ion-icon>
           {{'mainpage.recordatory'|translate}}
         </ion-button>
