@@ -54,6 +54,10 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/reminder/reminder.page').then( m => m.ReminderPage)
       },
       {
+        path: 'backup',
+        loadComponent: () => import('./pages/backup/backup.page').then( m => m.BackupPage)
+      },
+      {
         path: '**',
         redirectTo: 'home',
         pathMatch: 'full',

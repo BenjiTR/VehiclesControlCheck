@@ -12,6 +12,7 @@ import { SessionService } from '../services/session.service';
 import { UserTestService } from '../services/user-test.service';
 import { AdmobService } from '../services/admob.service';
 import { NotificationsService } from '../services/notifications.service';
+import { FileSystemService } from '../services/filesystem.service';
 
 
 @Component({
@@ -38,12 +39,12 @@ export class HomePage implements OnInit{
     private _authService:AuthService,
     private _alert:AlertService,
     private _session:SessionService,
-    private router:Router,
     private _userTestService:UserTestService,
     private _admobService:AdmobService,
     private _notification:NotificationsService,
     private _platform:Platform,
-    private navCtr:NavController
+    private navCtr:NavController,
+    private _file:FileSystemService
   ) {}
 
   async ngOnInit(){
@@ -54,7 +55,8 @@ export class HomePage implements OnInit{
     this._admobService.showConsent();
     await this._admobService.showBanner();
     await this._admobService.hideBanner();
-    await this.checkNotifications()
+    await this.checkNotifications();
+    await this._file.checkPermission();
     this.isLoading=false;
   }
 
@@ -206,6 +208,7 @@ export class HomePage implements OnInit{
       currentUser.id = user.id;
       currentUser.method = "google";
       currentUser.email = user.email;
+      currentUser.token = user.authentication.accessToken;
       this._session.currentUser = currentUser
       this._authService.isActive=true;
     }else if(method && method === "test"){

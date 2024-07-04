@@ -93,8 +93,9 @@ export class SessionService{
   async setReminderNotifications(reminder:boolean){
     this.remindNotitications = await this._storage.setStorageItem(storageConstants.USER_REMINDER+this.currentUser.id,reminder);
   }
-  async getReminderNotifications(){
+  async getReminderNotifications():Promise<boolean>{
     this.remindNotitications = await this._storage.getStorageItem(storageConstants.USER_REMINDER+this.currentUser.id) || false;
+    return this.remindNotitications;
   }
 
   deleteTemporalData(){

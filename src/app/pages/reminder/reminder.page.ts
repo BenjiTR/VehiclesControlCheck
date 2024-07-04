@@ -13,6 +13,7 @@ import { AlertService } from 'src/app/services/alert.service';
 import { Vehicle } from 'src/app/models/vehicles.model';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { User } from 'src/app/models/user.model';
+import { DateService } from 'src/app/services/date.service';
 
 @Component({
   selector: 'app-reminder',
@@ -47,7 +48,8 @@ export class ReminderPage{
     private _alert:AlertService,
     private navCtr:NavController,
     private _admobService:AdmobService,
-    private _notifications:NotificationsService
+    private _notifications:NotificationsService,
+    private _date:DateService
   ) {
     this.reminderToEditId = this.activatedroute.snapshot.queryParams['reminderToEditId'];
     if(this.reminderToEditId){
@@ -78,11 +80,7 @@ export class ReminderPage{
   }
 
   getDate(): string {
-    const date = new Date(this.dateOfEvent);
-    // Ajustar a la zona horaria local
-    const timezoneOffset = date.getTimezoneOffset() * 60000; // Offset en milisegundos
-    const localISOTime = new Date(date.getTime() - timezoneOffset).toISOString().slice(0, -1);
-    return localISOTime;
+    return this._date.getIsoDate(this.dateOfEvent);
   }
 
   updateDate(event:any){

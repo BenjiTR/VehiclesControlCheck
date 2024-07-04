@@ -22,6 +22,7 @@ import { ImgmodalPage } from '../imgmodal/imgmodal.page';
 import { AdmobService } from 'src/app/services/admob.service';
 import { LocalNotificationSchema } from '@capacitor/local-notifications';
 import { NotificationsService } from 'src/app/services/notifications.service';
+import { DateService } from 'src/app/services/date.service';
 
 @Component({
   selector: 'app-main',
@@ -55,7 +56,8 @@ export class MainPage implements OnInit {
     private modalController: ModalController,
     private _admob:AdmobService,
     private navCtr:NavController,
-    private _notification:NotificationsService
+    private _notification:NotificationsService,
+    private _date:DateService
   ) {
     this.eventTypes = etypes.getEventTypes();
   }
@@ -164,10 +166,7 @@ export class MainPage implements OnInit {
 
   //FECHA
   getDate(string: Date):string{
-    const date = new Date(string)
-    const timezoneOffset = date.getTimezoneOffset() * 60000; // Offset en milisegundos
-    const localISOTime = new Date(date.getTime() - timezoneOffset).toISOString().slice(0, -1);
-    return localISOTime;
+    return this._date.getIsoDate(string);
   }
 
   //RECORDATORIOS

@@ -11,7 +11,6 @@ import { PaddingService } from 'src/app/services/padding.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { AlertService } from 'src/app/services/alert.service';
 import { CameraServices } from 'src/app/services/camera.service';
-import { FileSystemService } from 'src/app/services/filesystem.service';
 import { imageConstants } from 'src/app/const/img';
 import { StorageService } from 'src/app/services/storage.service';
 import { storageConstants } from 'src/app/const/storage';
