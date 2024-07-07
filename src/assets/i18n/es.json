@@ -36,7 +36,8 @@
       "email_is_in_use":"El correo ya está registrado",
       "wrong_password":"Contraseña incorrecta",
       "email_format_incorrect":"Formato de correo incorrecto",
-      "auth/network-request-failed":"No es posible comprobar las credenciales, revise su conexión."
+      "auth/network-request-failed":"No es posible comprobar las credenciales, revise su conexión.",
+      "no_network_to_backup":"No dispone de conexión, se omitirán las copias de seguridad automáticas solo durante esta sesión."
   },
   "alert":{
       "accept":"Aceptar",
@@ -143,7 +144,7 @@
   "dashboard":{
       "user_data":"Datos de usuario",
       "close_session":"Cerrrar sesión",
-      "adjust_notifications":"Ajustes de notificaciones",
+      "adjust":"Ajustes",
       "adjust_backup":"Ajustes de backup",
       "faqs":"FAQ's",
       "point_out_problem":"Señalar un problema",
@@ -183,10 +184,36 @@
   },
   "notifications": {
     "reminders":"Recordatorios",
-    "not_allowed_text":"Las notificaciones no han sido permitidas de forma expresa por el usuario, deben permitirse desde los ajustes"
+    "not_allowed_text":"Las notificaciones no han sido permitidas de forma expresa por el usuario, deben permitirse desde los ajustes",
+    "auto_backup":"Auto Backup",
+    "backup":"Copia de seguridad",
+    "notificate":"Notificar",
+    "auto_text":"Se actualizará la copia de seguridad con cada cambio realizado en la aplicación",
+    "no_auto_text":"La copia de seguridad deberá actualizarse manualmente desde el menú de Backup",
+    "auto":"Automático",
+    "manual":"Manual"
   },
   "reminder": {
     "text":"Texto",
-    "title":"Título"
+    "title":"Título",
+    "time":"Hora"
+  },
+  "backup":{
+    "backup_adjust":"Ajustes de Backup",
+    "account_connected":"Cuenta conectada",
+    "account_no_connected":"Cuenta no conectada",
+    "connect":"Conectar",
+    "synchronizing":"Sincronizando",
+    "backup_no_found":"Backup no encontrado",
+    "generate_backup":"Generar backup",
+    "download_and_restore":"Descargar y restaurar",
+    "information":"Información",
+    "information_text":"Para restaurar en su dispositivo una copia de seguridad, pulse el botón 'Descargar y restaurar'",
+    "unconnect_account":"Desconectar cuenta",
+    "update_backup":"Actualizar Backup"
+  },
+  "exportfile":{
+    "export_data":"Exportar datos",
+    "export_text":"Pulse el icono para exportar el archivo"
   }
 }

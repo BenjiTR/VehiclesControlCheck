@@ -5,7 +5,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslationConfigService } from '../services/translation.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { AlertService } from '../services/alert.service';
 import { User } from '../models/user.model';
 import { SessionService } from '../services/session.service';
@@ -13,6 +13,9 @@ import { UserTestService } from '../services/user-test.service';
 import { AdmobService } from '../services/admob.service';
 import { NotificationsService } from '../services/notifications.service';
 import { FileSystemService } from '../services/filesystem.service';
+import { StorageService } from '../services/storage.service';
+import { Network } from '@capacitor/network';
+
 
 
 @Component({
@@ -44,7 +47,8 @@ export class HomePage implements OnInit{
     private _notification:NotificationsService,
     private _platform:Platform,
     private navCtr:NavController,
-    private _file:FileSystemService
+    private _file:FileSystemService,
+    private _storage:StorageService
   ) {}
 
   async ngOnInit(){
@@ -124,15 +128,33 @@ export class HomePage implements OnInit{
 
   //AUTENTICACIÓN CON GOOGLE
   async signInWithGoogle(){
-    this.isLoading=true;
-    this._authService.loginWithGoogle()
-    .then((user)=>{
-      this.loginExecute(user, "google")
-    })
-    .catch((error)=>{
-      this.handleErrors(error.code);
-      this.isLoading=false;
-    })
+    if((await Network.getStatus()).connected === true){
+      this.isLoading=true;
+      //Primero prueba a refrescar
+      await this._authService.refreshGoogle()
+      .then(async (authentication)=>{
+        const user:any = await this._authService.fetchUserInfo(authentication.accessToken)
+        if(user){
+          console.log(user)
+          //Como la información en si no trae el toquen, lo insertamos para poder ejecutar bien el proceso de login y guardar los datos
+          this.loginExecute(user, "googlerefresh", authentication.accessToken)
+        }
+      })
+      .catch((err)=>{
+          //Si no hace el login normal
+          this._authService.loginWithGoogle()
+          .then((user)=>{
+            console.log(user)
+            this.loginExecute(user, "google")
+          })
+          .catch((error)=>{
+            this.handleErrors(error.code);
+            this.isLoading=false;
+          })
+      })
+    }else{
+      this._alert.createAlert(this.translate.instant("error.no_network"),"");
+    }
   }
 
   //RECORDAR INICIO DE SESIÓN
@@ -192,7 +214,7 @@ export class HomePage implements OnInit{
       if(changepsw){
         this.restorePassword()
       }
-    }else if(errorCode === "Firebase: Error (auth/network-request-failed)."){
+    }else if(errorCode === "auth/network-request-failed"){
       this.Error = this.translate.instant('error.auth/network-request-failed')
     }else{
       this.Error = errorCode;
@@ -200,8 +222,18 @@ export class HomePage implements OnInit{
   }
 
   //CONFIRMAR Y EJECUTAR LOGIN
-  async loginExecute(user:any, method?:string){
-    if(method && method === "google"){
+  async loginExecute(user:any, method?:string, token?:string){
+    if(method && method === "googlerefresh"){
+      const currentUser:User = new User();
+      currentUser.name = user.given_name;
+      currentUser.photo = user.picture;
+      currentUser.id = user.sub;
+      currentUser.method = "google";
+      currentUser.email = user.email;
+      currentUser.token = token!;
+      this._session.currentUser = currentUser;
+      this._authService.isActive=true;
+    }else if(method && method === "google"){
       const currentUser:User = new User();
       currentUser.name = user.givenName;
       currentUser.photo = user.imageUrl;
@@ -209,7 +241,7 @@ export class HomePage implements OnInit{
       currentUser.method = "google";
       currentUser.email = user.email;
       currentUser.token = user.authentication.accessToken;
-      this._session.currentUser = currentUser
+      this._session.currentUser = currentUser;
       this._authService.isActive=true;
     }else if(method && method === "test"){
       const currentUser:User = new User();
@@ -232,7 +264,6 @@ export class HomePage implements OnInit{
       currentUser.email = user.email;
       currentUser.photo = await this._session.searchphoto(currentUser.method, currentUser.id);
       this._session.currentUser = currentUser;
-      this._session.getReminderNotifications();
     }
     this.navCtr.navigateRoot(["\dashboard"]);
   }

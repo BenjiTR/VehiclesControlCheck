@@ -19,12 +19,14 @@ import { User } from 'src/app/models/user.model';
 import { Vehicle } from 'src/app/models/vehicles.model';
 import { ImgmodalPage } from '../imgmodal/imgmodal.page';
 import { CameraServices } from 'src/app/services/camera.service';
+import { BackupPage } from '../backup/backup.page';
 
 @Component({
   selector: 'app-newevent',
   templateUrl: './newevent.page.html',
   styleUrls: ['./newevent.page.scss'],
   standalone: true,
+  providers:[BackupPage],
   imports: [IonImg, IonInput, TranslateModule, IonSelect, IonSelectOption, IonButton, IonIcon, IonItem, IonAvatar, IonLabel, IonRow, IonCol, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
 })
 export class NeweventPage {
@@ -58,7 +60,8 @@ export class NeweventPage {
     private modalController: ModalController,
     private _camera:CameraServices,
     private _admobService:AdmobService,
-    private navCtr:NavController
+    private navCtr:NavController,
+    private backup:BackupPage
   ) {
     this.eventTypes = etypes.getEventTypes();
     this.user = this._session.currentUser;
@@ -104,6 +107,7 @@ export class NeweventPage {
   }
 
   async createEvent(){
+    this.dashboard.isLoading=true;
     if(this.eventToEditId){
       this.editEvent()
     }else{
@@ -150,9 +154,12 @@ export class NeweventPage {
   }
 
   async saveAndExit(){
-    await this._admobService.showinterstitial();
+    this._admobService.showinterstitial();
     this._session.eventsArray = this.eventsArray;
-    this._storage.setStorageItem(storageConstants.USER_EVENTS+this.user.id,this.eventsArray);
+    await this._storage.setStorageItem(storageConstants.USER_EVENTS+this.user.id,this.eventsArray);
+    if(this._session.currentUser.backupId && this._session.autoBackup){
+      await this.backup.updateData();
+    }
     this.navCtr.navigateRoot('/dashboard')
   }
 

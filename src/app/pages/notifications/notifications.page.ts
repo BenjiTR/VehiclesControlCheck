@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonToggle, IonContent, IonHeader, IonTitle, IonToolbar, IonCol, IonRow, IonLabel, IonIcon } from '@ionic/angular/standalone';
+import { IonToggle, IonContent, IonHeader, IonTitle, IonToolbar, IonCol, IonRow, IonLabel, IonIcon, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonSegment, IonSegmentButton, IonRadio } from '@ionic/angular/standalone';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslationConfigService } from 'src/app/services/translation.service';
 import { NotificationsService } from 'src/app/services/notifications.service';
@@ -13,12 +13,13 @@ import { RouterModule } from '@angular/router';
   templateUrl: './notifications.page.html',
   styleUrls: ['./notifications.page.scss'],
   standalone: true,
-  imports: [RouterModule, IonIcon, FormsModule, IonLabel, IonCol, IonRow, IonToggle, TranslateModule, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [IonRadio, IonSegmentButton, IonSegment, IonCardContent, IonCardSubtitle, IonCardTitle, IonCardHeader, IonCard, RouterModule, IonIcon, FormsModule, IonLabel, IonCol, IonRow, IonToggle, TranslateModule, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
 })
 export class NotificationsPage{
 
   public isAllowed:boolean = false;
-  public errorText:string = "prueba"
+  public errorText:string = "prueba";
+  public autoBk:boolean = false;
 
   constructor(
     private translate:TranslateService,
@@ -28,6 +29,8 @@ export class NotificationsPage{
   ) { }
 
   async ionViewWillEnter() {
+    this.autoBk = this._session.autoBackup;
+    console.log(this.autoBk);
     this.errorText = "";
     this.translate.setDefaultLang(this._translation.getLanguage());
     await this.checkPermissions();
@@ -72,6 +75,16 @@ export class NotificationsPage{
         this.errorText = await this.translate.instant("notifications.not_allowed_text");
       }
     }
+  }
+
+  onAutoBkChange(value: any) {
+    console.log(value.detail.value)
+    if(value.detail.value === "true"){
+      this.autoBk = true;
+    }else{
+      this.autoBk = false;
+    }
+    this._session.setAutoBackup(this.autoBk);
   }
 
 

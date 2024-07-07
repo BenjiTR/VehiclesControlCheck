@@ -1,7 +1,8 @@
 export enum storageConstants {
-  USER_PHOTO = 'cvc-pho-',
-  USER_VEHICLES = 'cvc-veh-',
-  USER_EVENTS = 'cvc-evn-',
-  USER_REMINDER = 'cvc-rem-'
-
+  USER_PHOTO = 'vcc-pho-',
+  USER_VEHICLES = 'vcc-veh-',
+  USER_EVENTS = 'vcc-evn-',
+  USER_REMINDER = 'vcc-rem-',
+  USER_AUTH = 'vcc-auth-',
+  USER_AUTBK = 'vcc-autbk-'
 }

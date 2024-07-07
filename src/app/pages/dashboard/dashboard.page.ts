@@ -59,7 +59,7 @@ export class DashboardPage implements OnInit, OnDestroy {
   }
 
   goPrivacy(){
-    this.navCtr.navigateRoot('/useterms',{queryParams: { goBack: 'dashboard' }});
+    this.navCtr.navigateRoot('/privacy',{queryParams: { goBack: 'dashboard' }});
     this.menuCtrl.close();
   }
 
@@ -70,6 +70,31 @@ export class DashboardPage implements OnInit, OnDestroy {
   async endSession(){
     this.isLoading=true;
     await this.menuCtrl.close();
+    if(this._session.currentUser.method === "google"){
+      this.closeSessionByGoogle();
+    }else{
+      this.closeSessionByMail();
+    }
+  }
+
+  async closeSessionByGoogle(){
+    console.log("goolg")
+    await this._authService.signOutGoogle()
+    .then(async () => {
+      // Sign-out successful.
+      this._authService.isActive = false;
+      this._authService.isInTest = false;
+      await this._admobService.removeBanner();
+      this._session.deleteTemporalData();
+      this.navCtr.navigateRoot(['/home']);
+      this.isLoading=false;
+    }).catch((error) => {
+      // An error happened.
+      alert(error);
+    });
+  }
+
+  async closeSessionByMail(){
     await this._authService.signOut()
     .then(async () => {
       // Sign-out successful.

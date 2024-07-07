@@ -187,6 +187,7 @@
   },
   "reminder": {
   "text": "Texte",
-  "title": "Titre"
-}
+  "title": "Titre",
+  "time":"heure"
+  }
 }

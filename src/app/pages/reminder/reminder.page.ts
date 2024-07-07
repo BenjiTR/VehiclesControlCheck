@@ -14,13 +14,14 @@ import { Vehicle } from 'src/app/models/vehicles.model';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { User } from 'src/app/models/user.model';
 import { DateService } from 'src/app/services/date.service';
+import { BackupPage } from '../backup/backup.page';
 
 @Component({
   selector: 'app-reminder',
   templateUrl: './reminder.page.html',
   styleUrls: ['./reminder.page.scss'],
   standalone: true,
-  providers: [DashboardPage],
+  providers: [DashboardPage, BackupPage],
   imports: [IonSelect, IonSelectOption, IonInput, IonTextarea, TranslateModule, IonDatetime, IonLabel, IonItem, IonImg, IonButton, IonIcon, IonCol, IonRow, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
 })
 export class ReminderPage{
@@ -49,7 +50,8 @@ export class ReminderPage{
     private navCtr:NavController,
     private _admobService:AdmobService,
     private _notifications:NotificationsService,
-    private _date:DateService
+    private _date:DateService,
+    private backup:BackupPage
   ) {
     this.reminderToEditId = this.activatedroute.snapshot.queryParams['reminderToEditId'];
     if(this.reminderToEditId){
@@ -103,6 +105,7 @@ export class ReminderPage{
   }
 
   async createEvent(){
+    this.dashboard.isLoading=true;
     if(this.reminderToEditId){
       this.editReminder();
     }else{
@@ -161,8 +164,11 @@ export class ReminderPage{
   }
 
   async saveAndExit(){
-    await this._admobService.showinterstitial();
     this._session.remindersArray = this.remindersArray
+    this._admobService.showinterstitial();
+    if(this._session.currentUser.backupId && this._session.autoBackup){
+      await this.backup.updateData();
+    }
     this.navCtr.navigateRoot('/dashboard');
   }
 

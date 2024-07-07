@@ -22,6 +22,7 @@ export class SessionService{
   public eventsArray:Event[] = [];
   public remindersArray:LocalNotificationSchema[] = [];
   public remindNotitications:boolean = false;
+  public autoBackup:boolean = false;
 
   constructor(
     private _storageService: StorageService,
@@ -49,7 +50,7 @@ export class SessionService{
 
   async loadVehicles(): Promise<Vehicle[]>{
     const temporalVehiclesArray = await this._storage.getStorageItem(storageConstants.USER_VEHICLES+this.currentUser.id)
-    if(this._authService.isInTest){
+    if(this._authService.isInTest == false){
       this.vehiclesArray = this._test.vehicles;
       this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.currentUser.id, this.vehiclesArray);
       return this.vehiclesArray;
@@ -64,7 +65,7 @@ export class SessionService{
 
   async loadEvents(): Promise<Event[]>{
     const temporalEventsArray = await this._storage.getStorageItem(storageConstants.USER_EVENTS+this.currentUser.id)
-    if(this._authService.isInTest){
+    if(this._authService.isInTest == false){
       this.eventsArray = this._test.events;
       this._storage.setStorageItem(storageConstants.USER_EVENTS+this.currentUser.id, this.eventsArray);
       return this.eventsArray;
@@ -83,7 +84,7 @@ export class SessionService{
       this.remindersArray = temporalArray.notifications;
       return this.remindersArray;
     }else{
-      this.remindersArray = await this._test.createTestreminders(this.remindersArray);
+      //this.remindersArray = await this._test.createTestreminders(this.remindersArray);
       return this.remindersArray;
     }
 
@@ -98,11 +99,34 @@ export class SessionService{
     return this.remindNotitications;
   }
 
+  async setAutoBackup(option:boolean){
+    this.autoBackup = await this._storage.setStorageItem(storageConstants.USER_AUTBK+this.currentUser.id,option);
+  }
+  async getAutoBackup():Promise<boolean>{
+    this.autoBackup = await this._storage.getStorageItem(storageConstants.USER_AUTBK+this.currentUser.id) || false;
+    return this.autoBackup;
+  }
+
   deleteTemporalData(){
     this.vehiclesArray = [];
     this.eventsArray = [];
     this.remindersArray = [];
     this.remindNotitications = false;
   }
+
+  setGoogleToken(token:string){
+    this.currentUser.token = token;
+    this._storageService.setStorageItem(storageConstants.USER_AUTH+this.currentUser.id,token)
+  }
+  async getToken():Promise<string>{
+    const token = await this._storageService.getStorageItem(storageConstants.USER_AUTH+this.currentUser.id);
+    if(token){
+      this.currentUser.token = token;
+      return token;
+    }else{
+      return "";
+    }
+  }
+
 
 }

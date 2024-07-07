@@ -41,7 +41,32 @@ loginWithEmailAndPaswword(email:string, password:string){
 //LOGIN CON GOOGLE
 async loginWithGoogle(){
   return GoogleAuth.signIn();
+}
 
+async refreshGoogle(){
+  return GoogleAuth.refresh();
+}
+
+async fetchUserInfo(accessToken: string) {
+  const userInfoEndpoint = 'https://www.googleapis.com/oauth2/v3/userinfo';
+
+  try {
+    const response = await fetch(userInfoEndpoint, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Error fetching user info');
+    }
+
+    const userInfo = await response.json();
+    return userInfo;
+  } catch (error) {
+    console.error('Error fetching user info:', error);
+    throw error;
+  }
 }
 
 //RESTAURAR EL PASSWORD
@@ -92,6 +117,12 @@ userState(){
 signOut(){
   return signOut(this.auth)
 }
+
+//CIERRE DE SESIÓN GOOGLE
+signOutGoogle(){
+  return GoogleAuth.signOut();
+}
+
 
 
 

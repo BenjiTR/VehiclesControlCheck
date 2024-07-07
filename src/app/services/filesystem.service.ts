@@ -42,6 +42,7 @@ export class FileSystemService{
       reminders: await this._session.loadReminders(),
       remindersOptions: await this._session.getReminderNotifications()
     }
+    console.log(backup ,JSON.stringify(backup))
     return JSON.stringify(backup);
   }
 

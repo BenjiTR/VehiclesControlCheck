@@ -7,8 +7,8 @@ const config: CapacitorConfig = {
   webDir: 'www',
   plugins: {
     GoogleAuth: {
-      scopes: ['profile', 'email'],
-      serverClientId: '329432960985-0f0oj2qbh3gp0mbgr0k32hmi0b6gbi06.apps.googleusercontent.com.apps.googleusercontent.com',
+      scopes: ['profile', 'email', 'https://www.googleapis.com/auth/drive.file'],
+      serverClientId: '329432960985-0f0oj2qbh3gp0mbgr0k32hmi0b6gbi06.apps.googleusercontent.com',
       forceCodeForRefreshToken: true,
     },
     LocalNotifications: {

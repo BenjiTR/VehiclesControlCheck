@@ -1,30 +1,59 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>backup</ion-title>
+  <ion-toolbar class="ion-text-center green">
+    <ion-title>{{"backup.backup_adjust"|translate}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">backup</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="brown" [fullscreen]="true">
 
+  <ion-row class="ion-margin-top">
+    <ion-col class="ion-text-center" size="12">
+      <ion-icon class="z-6" src="../../../assets/icons/drive.svg"></ion-icon>
+      <h1 *ngIf="connected" class="color-green" translate="backup.account_connected"></h1>
+      <h1 *ngIf="!connected" class="color-red"  translate="backup.account_no_connected"></h1>
+    </ion-col>
+    <ion-col size="12">
+      <ion-button (click)="connectAccount()" *ngIf="!connected" expand="block" color="green" shape="round" translate="backup.connect"></ion-button>
+    </ion-col>
+    <ion-col class="ion-text-center" size="12">
+      <ion-icon *ngIf="connected && !haveFile" class="c-off" src="../../../assets/icons/cloud-offline-outline.svg"></ion-icon>
+      <ion-icon *ngIf="connected && haveFile" class="c-on" src="../../../assets/icons/cloud-upload-outline.svg"></ion-icon>
+      <h1 *ngIf="connected && haveFile" class="color-green" translate="backup.synchronizing"></h1>
+      <h1 *ngIf="connected && !haveFile" class="color-red" translate="backup.backup_no_found"></h1>
+    </ion-col>
+  </ion-row>
   <ion-row>
     <ion-col size="12">
-      <ion-button (click)="setBackup()" expand="block" fill="clear" shape="round">set</ion-button>
+      <ion-button *ngIf="connected && !haveFile" (click)="uploadFile()" expand="block" color="green" shape="round" translate="backup.generate_backup"></ion-button>
     </ion-col>
     <ion-col size="12">
-      <ion-button (click)="getBackup()" expand="block" fill="clear" shape="round">get</ion-button>
+      <ion-button *ngIf="connected && haveFile" (click)="updateData()" expand="block" color="green" shape="round" translate="backup.update_backup"></ion-button>
     </ion-col>
-
     <ion-col size="12">
-      <ion-button (click)="uploadFile()" expand="block" fill="clear" shape="round">get</ion-button>
+      <ion-button *ngIf="connected && haveFile" (click)="readFileFromDrive()" expand="block" color="warning" shape="round" translate="backup.download_and_restore"></ion-button>
     </ion-col>
-
+    <ion-col size="12">
+      <ion-button *ngIf="connected && haveFile" (click)="unconnectAccount()" expand="block" color="danger" shape="round" translate="backup.unconnect_account"></ion-button>
+    </ion-col>
   </ion-row>
 
+ <ion-row>
+  <ion-col size="12">
+    <ion-card class="orange">
+      <ion-card-header>
+        <ion-card-subtitle class="subtitle"><ion-icon class="larger" src="../../../assets/icons/information-circle-outline.svg"></ion-icon>{{"backup.information"|translate}}</ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content class="ion-text-justify" translate="backup.information_text"> </ion-card-content>
+    </ion-card>
+  </ion-col>
+ </ion-row>
+
+ <ion-row class="ion-margin-top">
+  <ion-col class="ion-text-center" size="12">
+    <ion-icon [routerLink]="['/dashboard']" class="orange-icon" src="../../../assets/icons/return-up-back-outline.svg"></ion-icon>
+  </ion-col>
+</ion-row>
 
 
 </ion-content>

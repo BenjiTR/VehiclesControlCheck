@@ -187,8 +187,9 @@
   },
   "reminder": {
   "text": "Text",
-  "title": "Title"
-}
+  "title": "Title",
+  "time":"Time"
+  }
 
 
 }

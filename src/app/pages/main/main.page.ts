@@ -23,6 +23,7 @@ import { AdmobService } from 'src/app/services/admob.service';
 import { LocalNotificationSchema } from '@capacitor/local-notifications';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { DateService } from 'src/app/services/date.service';
+import { BackupPage } from '../backup/backup.page';
 
 @Component({
   selector: 'app-main',
@@ -31,7 +32,7 @@ import { DateService } from 'src/app/services/date.service';
   standalone: true,
   imports: [IonTextarea, IonDatetime, IonSelect, IonSelectOption, IonRouterOutlet, IonAccordionGroup, IonAccordion, UserdataviewPage, IonInput, IonItem, IonLabel, TranslateModule, RouterModule, IonMenu, IonIcon, IonButtons, IonMenuButton, IonButton, IonImg, IonGrid, IonCol ,IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonRow, IonGrid],
   animations: [ MainAnimation, RoadAnimation, SecondaryAnimation ],
-  providers:[EventTypes]
+  providers:[EventTypes, BackupPage]
 })
 export class MainPage implements OnInit {
 
@@ -57,7 +58,8 @@ export class MainPage implements OnInit {
     private _admob:AdmobService,
     private navCtr:NavController,
     private _notification:NotificationsService,
-    private _date:DateService
+    private _date:DateService,
+    private backup:BackupPage
   ) {
     this.eventTypes = etypes.getEventTypes();
   }
@@ -66,13 +68,27 @@ export class MainPage implements OnInit {
     this.dashboard.isLoading=true;
     this.user = this._session.currentUser;
     this.translate.setDefaultLang(this._translation.getLanguage());
+    await this._admob.resumeBanner();
+    if(!this._session.currentUser.token){
+      await this.backup.ionViewWillEnter();
+    }
+    this.dashboard.isLoading=false;
+  }
+
+  async ionViewWillEnter() {
+    await this.loadAllData();
+  }
+
+  async loadAllData():Promise<void>{
     this.vehiclesArray = await this._session.loadVehicles();
     this.eventsArray = await this._session.loadEvents();
     this.remindersArray = await this._session.loadReminders();
     await this._session.getReminderNotifications();
-    await this._admob.resumeBanner();
-    this.dashboard.isLoading=false;
+    await this._session.getAutoBackup();
+    return
   }
+
+
 
   ionViewWillLeave() {
     this._admob.hideBanner();
@@ -94,7 +110,10 @@ export class MainPage implements OnInit {
       const index = this.vehiclesArray.indexOf(vehicle);
       this.vehiclesArray.splice(index,1)
       this._session.vehiclesArray = this.vehiclesArray;
-      this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.user.id,this.vehiclesArray);
+      await this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.user.id,this.vehiclesArray);
+      if(this._session.currentUser.backupId && this._session.autoBackup){
+        await this.backup.updateData();
+      }
     }
   }
 
@@ -136,7 +155,10 @@ export class MainPage implements OnInit {
       const index = this.eventsArray.indexOf(event);
       this.eventsArray.splice(index,1)
       this._session.eventsArray = this.eventsArray;
-      this._storage.setStorageItem(storageConstants.USER_EVENTS+this.user.id,this.eventsArray);
+      await this._storage.setStorageItem(storageConstants.USER_EVENTS+this.user.id,this.eventsArray);
+      if(this._session.currentUser.backupId && this._session.autoBackup){
+        await this.backup.updateData();
+      }
     }
   }
 
@@ -181,7 +203,9 @@ export class MainPage implements OnInit {
       await this._notification.deleteNotification(reminder);
       const array = await this._notification.getPending();
       this.remindersArray = await array.notifications;
-      console.log(this.remindersArray);
+      if(this._session.currentUser.backupId && this._session.autoBackup){
+        await this.backup.updateData();
+      }
     }
   }
 

@@ -4,5 +4,6 @@ export class User{
   id:string = "";
   email:string = "";
   method:string = "";
-  token?:string = "";
+  token:string = "";
+  backupId:string = "";
 }

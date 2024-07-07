@@ -15,12 +15,14 @@ import { StorageService } from 'src/app/services/storage.service';
 import { storageConstants } from 'src/app/const/storage';
 import { AlertService } from 'src/app/services/alert.service';
 import { AdmobService } from 'src/app/services/admob.service';
+import { BackupPage } from '../backup/backup.page';
 
 @Component({
   selector: 'app-vehicle',
   templateUrl: './vehicle.page.html',
   styleUrls: ['./vehicle.page.scss'],
   standalone: true,
+  providers:[BackupPage],
   imports: [IonSegment, IonSegmentButton, IonAvatar, RouterModule, CommonModule, TranslateModule, FormsModule, IonHeader, IonToolbar, IonTitle, IonContent, IonRow, IonCol, IonImg, IonItem, IonInput, IonIcon, IonFooter, IonButton, IonCheckbox, IonLabel],
   animations: [ MainAnimation, RoadAnimation, SecondaryAnimation ]
 })
@@ -56,7 +58,8 @@ export class VehiclePage implements OnInit {
     private _admob:AdmobService,
     private activatedroute:ActivatedRoute,
     private _admobService:AdmobService,
-    private navCtr:NavController
+    private navCtr:NavController,
+    private backup:BackupPage
   ) {
     this.user = this._session.currentUser;
   }
@@ -103,6 +106,7 @@ export class VehiclePage implements OnInit {
   }
 
   async createVehicle(){
+    this.dashboard.isLoading=true;
     if(this.vehicleToEditId){
       this.editVehicle()
     }else{
@@ -161,9 +165,12 @@ export class VehiclePage implements OnInit {
   }
 
   async saveAndExit(){
-    await this._admobService.showinterstitial();
+    this._admobService.showinterstitial();
     this._session.vehiclesArray = this.vehiclesArray;
     this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.user.id,this.vehiclesArray);
+    if(this._session.currentUser.backupId && this._session.autoBackup){
+      await this.backup.updateData();
+    }
     this.navCtr.navigateRoot('/dashboard')
   }
 

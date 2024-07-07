@@ -16,6 +16,7 @@
           <ion-icon (click)="createElement()" class="orange-icon" src="../../../assets/icons/add-circle-outline.svg"></ion-icon>
       </ion-col>
     </ion-row>
+
   </ion-content>
 
     <!-- CONTENT 1 - VEHICLES -->
@@ -136,7 +137,7 @@
                       <ng-container *ngFor="let event of eventsArray">
                         <ion-accordion *ngIf="event.vehicleId === vehicle.id" class="zoom08" value="{{event.id}}">
                           <ion-item slot="header" class="orange">
-                            <ion-label><b>{{event.type}}</b> - {{event.date | date:'dd-MM-yyyy'}}</ion-label>
+                            <ion-label><b>{{getTranslatedType(event.type)}}</b> - {{event.date | date:'dd-MM-yyyy'}}</ion-label>
                           </ion-item>
                           <div slot="content" class="gray">
                             <ion-row>
