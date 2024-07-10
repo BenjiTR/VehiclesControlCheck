@@ -37,7 +37,14 @@
       "wrong_password":"Contraseña incorrecta",
       "email_format_incorrect":"Formato de correo incorrecto",
       "auth/network-request-failed":"No es posible comprobar las credenciales, revise su conexión.",
-      "no_network_to_backup":"No dispone de conexión, se omitirán las copias de seguridad automáticas solo durante esta sesión."
+      "no_network_to_backup":"No dispone de conexión, se omitirán las copias de seguridad automáticas solo durante esta sesión.",
+      "invalid_file":"Archivo no válido",
+      "invalid_file_text":"Debe seleccionar un único archivo, y deberá tener extensión .vcc",
+      "an_error_ocurred":"Ocurrió un error",
+      "file_notcreated":"Archivo no creado",
+      "file_notcreated_text":"El archivo no pudo crearse, por favor revise si ya existe un archivo de backup para su usuario en la ruta 'Documentos/vehicles-control'",
+      "incorrect_user":"Usuario incorrecto",
+      "incorrect_user_text":"El usuario propietario de los vehículos, no coincide con el usuario de la sesión"
   },
   "alert":{
       "accept":"Aceptar",
@@ -85,8 +92,12 @@
       "enter_title":"Introduzca un título",
       "enter_title_text":"Por favor, debe introducir un título para continuar",
       "enter_date":"Introduzca una fecha",
-      "enter_date_text":"Por favor, debe introducir una fecha para continuar."
-  },
+      "enter_date_text":"Por favor, debe introducir una fecha para continuar.",
+      "file_created":"Archivo creado con éxito",
+      "file_created_text":"Se ha creado el archivo, puede encontrarlo en la carpeta 'Documentos/vehicles-control' de su dispositivo o tarjeta de memoria. Se trata de un archivo con su número de usuario y extensión '.vcc'",
+      "file_restored":"Copia restaurada con éxito",
+      "file_restored_text":"Se ha restaurado correctamente la copia de seguridad"
+    },
   "home":{
       "init_session":"Inicio de sesión",
       "email":"Correo electrónico",
@@ -210,7 +221,16 @@
     "information":"Información",
     "information_text":"Para restaurar en su dispositivo una copia de seguridad, pulse el botón 'Descargar y restaurar'",
     "unconnect_account":"Desconectar cuenta",
-    "update_backup":"Actualizar Backup"
+    "update_backup":"Actualizar Backup",
+    "see_information":"Ver información",
+    "in_device":"En el dispositivo",
+    "in_device_text":"Si prevé que va a cambiar de dispositivo, o quiere guardar una copia completa de sus datos en el, puede usar este método. Un documento con extensión '.vcc' se guardará en la carpeta DOCUMENTOS de su dispositivo o tarjeta de memoria",
+    "in_device_text_recovery":"Para recuperar los datos en su nuevo dispositivo deberá buscar y seleccionar de nuevo el archivo de su dispositivo o tarjeta de memoria",
+    "download":"Descargar",
+    "restore":"Restaurar",
+    "in_drive":"En Drive",
+    "in_drive_text":"Conectando con su cuenta de Drive, podrá mantener una sincronización de los datos de forma automática, o manualmente. Puede cambiar esta opción desde el menú de ajustes. La copia de seguridad no será visible en su drive, evitando el riesgo de borrado accidental.",
+    "in_drive_text_recovery":"Para recuperar los datos en su nuevo dispositivo solo pulse el boton 'Descargar y restaurar'"
   },
   "exportfile":{
     "export_data":"Exportar datos",

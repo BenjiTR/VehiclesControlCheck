@@ -165,7 +165,7 @@ export class VehiclePage implements OnInit {
   }
 
   async saveAndExit(){
-    this._admobService.showinterstitial();
+    await this._admobService.showinterstitial();
     this._session.vehiclesArray = this.vehiclesArray;
     this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.user.id,this.vehiclesArray);
     if(this._session.currentUser.backupId && this._session.autoBackup){

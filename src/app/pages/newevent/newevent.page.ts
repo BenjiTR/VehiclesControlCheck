@@ -52,7 +52,6 @@ export class NeweventPage {
     private router:Router,
     private etypes:EventTypes,
     private _alert:AlertService,
-    private _admob:AdmobService,
     private _session:SessionService,
     private activatedroute:ActivatedRoute,
     private _hash:HashService,
@@ -107,7 +106,6 @@ export class NeweventPage {
   }
 
   async createEvent(){
-    this.dashboard.isLoading=true;
     if(this.eventToEditId){
       this.editEvent()
     }else{
@@ -154,7 +152,7 @@ export class NeweventPage {
   }
 
   async saveAndExit(){
-    this._admobService.showinterstitial();
+    await this._admobService.showinterstitial();
     this._session.eventsArray = this.eventsArray;
     await this._storage.setStorageItem(storageConstants.USER_EVENTS+this.user.id,this.eventsArray);
     if(this._session.currentUser.backupId && this._session.autoBackup){

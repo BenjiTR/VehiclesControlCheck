@@ -165,7 +165,7 @@ export class ReminderPage{
 
   async saveAndExit(){
     this._session.remindersArray = this.remindersArray
-    this._admobService.showinterstitial();
+    await this._admobService.showinterstitial();
     if(this._session.currentUser.backupId && this._session.autoBackup){
       await this.backup.updateData();
     }

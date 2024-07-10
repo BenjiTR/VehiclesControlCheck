@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonCol, IonButton, IonRow, IonIcon, IonLabel, IonItem, IonCardContent, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, NavController, Platform } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonCol, IonButton, IonRow, IonIcon, IonLabel, IonItem, IonCardContent, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, NavController, Platform, IonItemDivider, IonPopover } from '@ionic/angular/standalone';
 import { FileSystemService } from 'src/app/services/filesystem.service';
 import { StorageService } from 'src/app/services/storage.service';
 import { storageConstants } from 'src/app/const/storage';
@@ -23,13 +23,15 @@ import { AlertService } from 'src/app/services/alert.service';
   templateUrl: './backup.page.html',
   styleUrls: ['./backup.page.scss'],
   standalone: true,
-  imports: [RouterModule, IonCardSubtitle, IonCardTitle, IonCardHeader, IonCard, IonCardContent, IonItem, IonLabel, IonIcon, TranslateModule, IonRow, IonButton, IonCol, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  providers:[DashboardPage],
+  imports: [IonPopover, IonItemDivider, RouterModule, IonCardSubtitle, IonCardTitle, IonCardHeader, IonCard, IonCardContent, IonItem, IonLabel, IonIcon, TranslateModule, IonRow, IonButton, IonCol, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
 })
 export class BackupPage implements OnInit {
 
   public token:string = "";
   public connected:boolean = false;
-  public haveFile:boolean = false;
+  public haveFile:boolean = true;
+  public creatingFile:boolean = false;
 
   constructor(
     private _file:FileSystemService,
@@ -44,71 +46,28 @@ export class BackupPage implements OnInit {
     private _platform:Platform,
     private navCtr:NavController,
     private _alert:AlertService
-  ) {
-  }
+  ) { }
 
   async ngOnInit() {
-    this.dashboard.isLoading = true;
     this.translate.setDefaultLang(this._translation.getLanguage());
   }
 
   async ionViewWillEnter(){
+    this.token = this._drive.token;
+    this.connected = this._drive.connected;
+    this.haveFile = this._drive.haveFile;
+  }
+
+  async connectAccount(){
     this.dashboard.isLoading = true;
-    await this.haveToken()
+    await this._drive.connectAccount();
     this.dashboard.isLoading = false;
   }
 
-  async haveToken(){
-    this.token = await this._session.getToken();
-    if(this.token && (await Network.getStatus()).connected === true){
-      await this.connectAccount();
-    }else if(this.token && (await Network.getStatus()).connected === false){
-      this._alert.createAlert(this.translate.instant("error.no_network"), this.translate.instant("error.no_network_to_backup"));
-    }else{
-      this.dashboard.isLoading = false;
-    }
-  }
-
-  async connectAccount():Promise<void>{
-    if(this.token && (await Network.getStatus()).connected === false){
-      this._alert.createAlert(this.translate.instant("error.no_network"),"");
-    }else{
-      this.dashboard.isLoading = true;
-      await this._auth.refreshGoogle()
-      .then(async(msg)=>{
-        this.token = msg.accessToken;
-        this._session.setGoogleToken(this.token);
-        this.connected = true;
-        await this.existsFile();
-      })
-      .catch(async (err)=>{
-        console.log("error",err);
-        await this._auth.loginWithGoogle()
-        .then(async(user)=>{
-          this.token = user.authentication.accessToken;
-          this._session.setGoogleToken(this.token);
-          this.connected = true;
-          await this.existsFile();
-        })
-        .catch(async (err)=>{
-          console.log("error",err);
-          if(err.error){
-          alert(err.error);
-        }
-        })
-      })
-      this.dashboard.isLoading = false;
-    }
-  }
-
-  async existsFile():Promise<void>{
-    const fileId = await this._drive.findFileByName(`${this._session.currentUser.id}.vcc`, this.token)
-    console.log(fileId);
-    if(fileId){
-      this.haveFile = true;
-      this._session.currentUser.backupId = fileId;
-    }
-    return;
+  async updateData(){
+    this.dashboard.isLoading = true;
+    await this._drive.updateData();
+    this.dashboard.isLoading = false;
   }
 
   async uploadFile():Promise<void> {
@@ -142,7 +101,6 @@ export class BackupPage implements OnInit {
     this._auth.signOutGoogle();
   }
 
-
   async readFileFromDrive() {
     this.dashboard.isLoading = true;
     const fileId = await this._drive.findFileByName(`${this._session.currentUser.id}.vcc`, this.token)
@@ -175,38 +133,44 @@ export class BackupPage implements OnInit {
     return reminders;
   }
 
-  async updateData(){
-    if((await Network.getStatus()).connected === false){
-      this._alert.createAlert(this.translate.instant("error.no_network"), this.translate.instant("error.no_network_to_backup"));
-      this._session.currentUser.backupId = "";
-      return
-    }else{
-      this.dashboard.isLoading = true;
-      this.token = await this._session.getToken();
-      const data = await this._file.buildData();
-      const fileId = await this._drive.findFileByName(`${this._session.currentUser.id}.vcc`, this.token)
-      console.log(fileId,this.token)
-      if(fileId){
-        await this._drive.updateFile(fileId,data,this._session.currentUser.id+".vcc",this.token)
-        .then((msg)=>{
-          console.log(msg)
-          return
-        })
-        .catch((err)=>{
-          console.log(err);
-          if(err.error){
-            alert(err.error);
-          }
-          return
-        })
-        this.dashboard.isLoading = false;
+  async saveDataOnDevice(){
+    this.creatingFile = true;
+    await this._file.createBackupFile()
+    .then(async()=>{
+      this.creatingFile = false;
+      await this._alert.createAlert(this.translate.instant('alert.file_created'),this.translate.instant('alert.file_created_text'));
+    })
+    .catch((err)=>{
+      console.log(err);
+      this.creatingFile = false;
+      if(err.message && err.message === "FILE_NOTCREATED"){
+        this._alert.createAlert(this.translate.instant("error.file_notcreated"), this.translate.instant("error.file_notcreated_text"))
       }else{
-        this.dashboard.isLoading = false;
+        alert(err.message);
       }
-    }
+    })
   }
 
-
+  async restoreByDevice(){
+    this.creatingFile = true;
+    await this._file.restoreBackup()
+    .then(()=>{
+      this.creatingFile = false;
+      this._alert.createAlert(this.translate.instant('alert.file_restored'),this.translate.instant('alert.file_restored_text'));
+      this.navCtr.navigateRoot('/dashboard');
+    })
+    .catch((err)=>{
+      this.creatingFile = false;
+      console.log(err)
+      if(err.message &&err.message === "Archivo no válido"){
+        this._alert.createAlert(this.translate.instant('error.invalid_file'),this.translate.instant('error.invalid_file_text'));
+      }else if(err.message &&err.message === "Usuario incorrecto"){
+        this._alert.createAlert(this.translate.instant('error.incorrect_user'),this.translate.instant('error.incorrect_user_text'));
+      }else if(err.message !== "pickFiles canceled."){
+        alert(err.message);
+      }
+    })
+  }
 
 }
 

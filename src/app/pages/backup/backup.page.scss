@@ -1,12 +1,13 @@
 .z-6{
   zoom: 6;
 }
+.z-3{
+  zoom: 3;
+}
 .c-off{
-  zoom: 4;
   color:red;
 }
 .c-on{
-  zoom: 4;
   color:green;
 }
 .color-green{
@@ -24,3 +25,23 @@
 .larger{
   font-size: larger;
 }
+.black{
+  color: black;
+}
+.center{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+ion-item-divider ion-label {
+  text-align: center;
+  width: 100%;
+}
+
+.blue-color{
+  color: blue;
+}
+
+
+

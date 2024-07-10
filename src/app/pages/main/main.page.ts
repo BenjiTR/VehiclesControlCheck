@@ -76,7 +76,9 @@ export class MainPage implements OnInit {
   }
 
   async ionViewWillEnter() {
+    this.dashboard.isLoading=true;
     await this.loadAllData();
+    this.dashboard.isLoading=false;
   }
 
   async loadAllData():Promise<void>{

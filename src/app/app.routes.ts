@@ -7,11 +7,6 @@ export const routes: Routes = [
     loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
   },
   {
-    path: '',
-    redirectTo: 'home',
-    pathMatch: 'full',
-  },
-  {
     path: 'privacy',
     loadComponent: () => import('./privacy/privacy.page').then( m => m.PrivacyPage)
   },
@@ -84,6 +79,15 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/imgmodal/imgmodal.page').then( m => m.ImgmodalPage),
     canActivate: [canActivate]
   },
-
+  {
+    path: '',
+    redirectTo: 'home',
+    pathMatch: 'full',
+  },
+  {
+    path: '**',
+    redirectTo: 'home',
+    pathMatch: 'full',
+  },
 
 ];

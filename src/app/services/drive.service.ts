@@ -1,12 +1,135 @@
 import { Injectable } from '@angular/core';
+import { SessionService } from './session.service';
+import { Network } from '@capacitor/network';
+import { AlertService } from './alert.service';
+import { TranslateService } from '@ngx-translate/core';
+import { TranslationConfigService } from './translation.service';
+import { AuthService } from './auth.service';
+import { FileSystemService } from './filesystem.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DriveService {
 
-  constructor() {
+  public token:string = "";
+  public connected:boolean = false;
+  public haveFile:boolean = false;
+
+  constructor(
+    private _session:SessionService,
+    private _alert:AlertService,
+    private translate:TranslateService,
+    private _translation:TranslationConfigService,
+    private _auth:AuthService,
+    private _file:FileSystemService,
+  ) {}
+
+  //REFRESCAR TOKEN Y CONECTAR
+  async init(){
+    this.token = await this._session.getToken();
+    if(this.token && (await Network.getStatus()).connected === true){
+      //await this.connectAccount();
+    }else if(this.token && (await Network.getStatus()).connected === false){
+      this._alert.createAlert(this.translate.instant("error.no_network"), this.translate.instant("error.no_network_to_backup"));
+    }
   }
+
+  async connectAccount():Promise<void>{
+    if(this.token && (await Network.getStatus()).connected === false){
+      this._alert.createAlert(this.translate.instant("error.no_network"),"");
+    }else{
+      await this._auth.refreshGoogle()
+      .then(async(msg)=>{
+        this.token = msg.accessToken;
+        //this._session.setGoogleToken(this.token);
+        this.connected = true;
+        //await this.existsFile();
+      })
+      .catch(async (err)=>{
+        console.log("error",err);
+        await this._auth.loginWithGoogle()
+        .then(async(user)=>{
+          this.token = user.authentication.accessToken;
+          this._session.setGoogleToken(this.token);
+          this.connected = true;
+          await this.existsFile();
+        })
+        .catch(async (err)=>{
+          console.log("error",err);
+          if(err.error){
+          alert(err.error);
+          }
+        })
+      })
+    }
+  }
+
+  //COMPROBAR SI EXISTE EL ARCHIVO
+  async existsFile():Promise<void>{
+    const fileId = await this.findFileByName(`${this._session.currentUser.id}.vcc`, this.token)
+    console.log(fileId);
+    if(fileId){
+      this.haveFile = true;
+      this._session.currentUser.backupId = fileId;
+    }
+    return;
+  }
+
+  //ACTUALIZAR ARCHIVO
+  async updateData(){
+    if((await Network.getStatus()).connected === false){
+      this._alert.createAlert(this.translate.instant("error.no_network"), this.translate.instant("error.no_network_to_backup"));
+      this._session.currentUser.backupId = "";
+      return
+    }else{
+      this.token = await this._session.getToken();
+      const data = await this._file.buildData();
+      const fileId = await this.findFileByName(`${this._session.currentUser.id}.vcc`, this.token)
+      console.log(fileId,this.token)
+      if(fileId){
+        await this.updateFile(fileId,data,this._session.currentUser.id+".vcc",this.token)
+        .then((msg)=>{
+          console.log(msg)
+          return
+        })
+        .catch((err)=>{
+          console.log(err);
+          if(err.error){
+            alert(err.error);
+          }
+          return
+        })
+      }
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   async uploadFile(content: string, fileName: string, token:string): Promise<any> {
     if (!token) {

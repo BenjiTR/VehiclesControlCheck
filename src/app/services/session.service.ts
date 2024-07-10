@@ -50,7 +50,7 @@ export class SessionService{
 
   async loadVehicles(): Promise<Vehicle[]>{
     const temporalVehiclesArray = await this._storage.getStorageItem(storageConstants.USER_VEHICLES+this.currentUser.id)
-    if(this._authService.isInTest == false){
+    if(this._authService.isInTest == true){
       this.vehiclesArray = this._test.vehicles;
       this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.currentUser.id, this.vehiclesArray);
       return this.vehiclesArray;
@@ -65,7 +65,7 @@ export class SessionService{
 
   async loadEvents(): Promise<Event[]>{
     const temporalEventsArray = await this._storage.getStorageItem(storageConstants.USER_EVENTS+this.currentUser.id)
-    if(this._authService.isInTest == false){
+    if(this._authService.isInTest == true){
       this.eventsArray = this._test.events;
       this._storage.setStorageItem(storageConstants.USER_EVENTS+this.currentUser.id, this.eventsArray);
       return this.eventsArray;
