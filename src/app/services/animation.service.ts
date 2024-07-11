@@ -60,3 +60,19 @@ export const SecondaryAnimation = trigger('secondary', [
         ])),
         ]),
     ]);
+
+    export const GrowShrinkAnimation = trigger('growShrink', [
+      transition(':enter', [
+        style({ width: '0%', overflow: 'hidden' }),
+        animate('300ms ease-in', keyframes([
+          style({ width: '0%', offset: 0 }),
+          style({ width: '100%', offset: 1 }),
+        ])),
+      ]),
+      transition(':leave', [
+        animate('300ms ease-out', keyframes([
+          style({ width: '100%', offset: 0 }),
+          style({ width: '0%', offset: 1 }),
+        ])),
+      ]),
+    ]);

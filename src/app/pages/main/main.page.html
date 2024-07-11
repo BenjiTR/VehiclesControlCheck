@@ -1,4 +1,15 @@
-  <!-- CONTENT 1 - NO VEHICLES -->
+
+<ion-row class="ion-align-items-center">
+  <ion-col size="2">
+    <ion-button (click)="toogleFiltering()" *ngIf="!filtering" color="warning"><ion-icon src="../../../assets/icons/filter-outline.svg"></ion-icon></ion-button>
+    <ion-button (click)="eraseFilter()" *ngIf="filtering" color="warning"><ion-icon src="../../../assets/icons/close-outline.svg"></ion-icon></ion-button>
+  </ion-col>
+  <ion-col size="10">
+    <ion-input [@growShrink] *ngIf="filtering" (ionInput)="changefilter($event)" [(ngModel)]="filter" label="Buscar" placeholder="Busque un evento..."></ion-input>
+  </ion-col>
+</ion-row>
+
+ <!-- CONTENT 1 - NO VEHICLES -->
   <ion-content *ngIf="!creatingElement && vehiclesArray.length < 1" [@main] class="pastel-to-green" [ngStyle]="{'--padding-bottom.px':calculatePadding()}">
     <ion-row class="green round-corner-up ion-padding-top height-22">
       <ion-col size="12">
@@ -23,14 +34,15 @@
     <ion-content *ngIf="!creatingElement && vehiclesArray.length > 0" [@main] class="brown" [ngStyle]="{'--padding-bottom.px':calculatePadding()}">
 
       <ion-row *ngIf="vehiclesArray.length>0">
-        <ion-col class="ion-margin-top">
-          <ion-accordion-group class="ion-margin-top">
+        <ion-col>
+          <ion-accordion-group>
 
             <ion-accordion *ngFor="let vehicle of vehiclesArray" class="ion-margin-top main-accordion" value="{{vehicle.id}}">
               <ion-item slot="header" class="green">
                 <ion-icon *ngIf="vehicle.typeOfVehicle === '2W'" slot="start" src="../../../assets/icons/bicycle-outline.svg"></ion-icon>
                 <ion-icon *ngIf="vehicle.typeOfVehicle === '4W'" slot="start" src="../../../assets/icons/car-sport-outline.svg"></ion-icon>
                 <ion-label>{{vehicle.brandOrModel}}</ion-label>
+                <ion-badge *ngIf="filter" mode="md" class="ion-margin-end" slot="end">{{ getMatchesNumber(vehicle.id) }}</ion-badge>
               </ion-item>
               <div slot="content">
                 <!--DATOS DEL VEHÍCULO-->
@@ -126,7 +138,6 @@
                       <ion-icon class="ion-margin-end" src="../../../assets/icons/search-outline.svg"></ion-icon><ion-label>{{'mainpage.events'|translate}}</ion-label>
                     </ion-item>
                     <div slot="content">
-
                       <ion-row *ngIf="!someForThatVehicle(vehicle.id)" class="gray ion-padding-top ion-padding-bottom ion-padding-start">
                         <ion-col>
                           <ion-label>{{'mainpage.no_events'|translate}}</ion-label>
@@ -134,10 +145,10 @@
                       </ion-row>
 
                      <ion-accordion-group *ngIf="someForThatVehicle(vehicle.id)">
-                      <ng-container *ngFor="let event of eventsArray">
+                      <ng-container *ngFor="let event of filteredEventsArray">
                         <ion-accordion *ngIf="event.vehicleId === vehicle.id" class="zoom08" value="{{event.id}}">
                           <ion-item slot="header" class="orange">
-                            <ion-label><b>{{getTranslatedType(event.type)}}</b> - {{event.date | date:'dd-MM-yyyy'}}</ion-label>
+                            <ion-label><b>{{getTranslatedType(event.type)}}</b> - {{event.date | date:'dd/MM/yyyy'}}</ion-label>
                           </ion-item>
                           <div slot="content" class="gray">
                             <ion-row>

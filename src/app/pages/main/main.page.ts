@@ -1,7 +1,7 @@
 import { Component, OnInit, DoCheck } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonTextarea, IonAccordion, IonAccordionGroup, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonMenu, IonMenuButton, IonRouterOutlet, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar, MenuController, ModalController, NavController, IonDatetime } from '@ionic/angular/standalone';
+import { IonTextarea, IonAccordion, IonAccordionGroup, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonMenu, IonMenuButton, IonRouterOutlet, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar, MenuController, ModalController, NavController, IonDatetime, IonFab, IonFabList, IonFabButton, IonBadge } from '@ionic/angular/standalone';
 import { Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { UserdataviewPage } from '../userdataview/userdataview.page';
@@ -14,7 +14,7 @@ import { SessionService } from 'src/app/services/session.service';
 import { StorageService } from 'src/app/services/storage.service';
 import { TranslationConfigService } from 'src/app/services/translation.service';
 import { storageConstants } from 'src/app/const/storage';
-import { MainAnimation, RoadAnimation, SecondaryAnimation } from 'src/app/services/animation.service';
+import { GrowShrinkAnimation, MainAnimation, RoadAnimation, SecondaryAnimation } from 'src/app/services/animation.service';
 import { DashboardPage } from '../dashboard/dashboard.page';
 import { Event } from '../../models/event.model'
 import { EventTypes } from 'src/app/const/eventTypes';
@@ -24,15 +24,16 @@ import { LocalNotificationSchema } from '@capacitor/local-notifications';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { DateService } from 'src/app/services/date.service';
 import { BackupPage } from '../backup/backup.page';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-main',
   templateUrl: './main.page.html',
   styleUrls: ['./main.page.scss'],
   standalone: true,
-  imports: [IonTextarea, IonDatetime, IonSelect, IonSelectOption, IonRouterOutlet, IonAccordionGroup, IonAccordion, UserdataviewPage, IonInput, IonItem, IonLabel, TranslateModule, RouterModule, IonMenu, IonIcon, IonButtons, IonMenuButton, IonButton, IonImg, IonGrid, IonCol ,IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonRow, IonGrid],
-  animations: [ MainAnimation, RoadAnimation, SecondaryAnimation ],
-  providers:[EventTypes, BackupPage]
+  imports: [IonBadge, IonFabButton, IonFabList, IonFab, IonTextarea, IonDatetime, IonSelect, IonSelectOption, IonRouterOutlet, IonAccordionGroup, IonAccordion, UserdataviewPage, IonInput, IonItem, IonLabel, TranslateModule, RouterModule, IonMenu, IonIcon, IonButtons, IonMenuButton, IonButton, IonImg, IonGrid, IonCol ,IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonRow, IonGrid],
+  animations: [ MainAnimation, RoadAnimation, SecondaryAnimation, GrowShrinkAnimation ],
+  providers:[EventTypes, BackupPage, DatePipe]
 })
 export class MainPage implements OnInit {
 
@@ -44,6 +45,9 @@ export class MainPage implements OnInit {
   public currentVehicle:string = "";
   public eventTypes:any;
   public remindersArray:LocalNotificationSchema[] = [];
+  public filter:string = "";
+  public filteredEventsArray:Event[]=[];
+  public filtering:boolean=false;
 
   constructor(
     private translate:TranslateService,
@@ -59,7 +63,8 @@ export class MainPage implements OnInit {
     private navCtr:NavController,
     private _notification:NotificationsService,
     private _date:DateService,
-    private backup:BackupPage
+    private backup:BackupPage,
+    private datePipe: DatePipe
   ) {
     this.eventTypes = etypes.getEventTypes();
   }
@@ -87,6 +92,7 @@ export class MainPage implements OnInit {
     this.remindersArray = await this._session.loadReminders();
     await this._session.getReminderNotifications();
     await this._session.getAutoBackup();
+    this.filteredEventsArray = this.eventsArray;
     return
   }
 
@@ -129,7 +135,7 @@ export class MainPage implements OnInit {
         return false;
       }
     }else{
-      if(this.eventsArray.some((element:any)=>element.vehicleId === id)){
+      if(this.filteredEventsArray.some((element:any)=>element.vehicleId === id)){
         return true;
       }else{
         return false;
@@ -213,6 +219,45 @@ export class MainPage implements OnInit {
 
   editReminder(id:number){
     this.navCtr.navigateRoot('/dashboard/reminder',{queryParams: { reminderToEditId: id}});
+  }
+
+  changefilter(event:any){
+    this.filter = event.detail.value;
+    this.filteredEventsArray = this.eventsArray.filter(event => this.matchesFilter(event, this.filter));
+  }
+
+  matchesFilter(event: any, filter: string): boolean {
+    for (const key in event) {
+      if (event.hasOwnProperty(key) && key !== 'images') {
+        let value;
+        if (key === 'date') {
+          value = this.datePipe.transform(event[key], 'dd/MM/yyyy');
+        } else if (key === 'type') {
+          value = this.getTranslatedType(event[key]);
+        } else {
+          value = event[key].toString();
+        }
+        if (value && value.includes(filter)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  toogleFiltering(){
+    this.filtering = !this.filtering;
+  }
+
+  eraseFilter(){
+    this.filter = "";
+    const fakeEvent = { detail: { value: '' } };
+    this.changefilter(fakeEvent);
+    this.filtering = false;
+  }
+
+  getMatchesNumber(vehicleId:string){
+    return this.filteredEventsArray.filter(event=>event.vehicleId===vehicleId).length;
   }
 
 }
