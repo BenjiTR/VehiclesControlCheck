@@ -230,7 +230,8 @@
     "restore":"Restaurar",
     "in_drive":"En Drive",
     "in_drive_text":"Conectando con su cuenta de Drive, podrá mantener una sincronización de los datos de forma automática, o manualmente. Puede cambiar esta opción desde el menú de ajustes. La copia de seguridad no será visible en su drive, evitando el riesgo de borrado accidental.",
-    "in_drive_text_recovery":"Para recuperar los datos en su nuevo dispositivo solo pulse el boton 'Descargar y restaurar'"
+    "in_drive_text_recovery":"Para recuperar los datos en su nuevo dispositivo solo pulse el boton 'Descargar y restaurar'",
+    "wait_please":"Espere por favor"
   },
   "exportfile":{
     "export_data":"Exportar datos",

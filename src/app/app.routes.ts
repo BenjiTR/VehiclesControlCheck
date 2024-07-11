@@ -7,6 +7,10 @@ export const routes: Routes = [
     loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
   },
   {
+    path: 'backup',
+    loadComponent: () => import('./pages/backup/backup.page').then( m => m.BackupPage)
+  },
+  {
     path: 'privacy',
     loadComponent: () => import('./privacy/privacy.page').then( m => m.PrivacyPage)
   },
@@ -48,10 +52,7 @@ export const routes: Routes = [
         path: 'reminder',
         loadComponent: () => import('./pages/reminder/reminder.page').then( m => m.ReminderPage)
       },
-      {
-        path: 'backup',
-        loadComponent: () => import('./pages/backup/backup.page').then( m => m.BackupPage)
-      },
+
       {
         path: '**',
         redirectTo: 'home',
@@ -89,5 +90,6 @@ export const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full',
   },
+
 
 ];

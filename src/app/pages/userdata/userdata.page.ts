@@ -99,6 +99,7 @@ export class UserdataPage implements OnInit {
 
 
   async changeUserImage(){
+   if(this.user.method==="email"){
     const photo = await this._camera.takePhoto();
     if(photo){
       console.log(photo)
@@ -106,6 +107,7 @@ export class UserdataPage implements OnInit {
       this.user.photo = imageConstants.base64Prefix + photo;
       this._storage.setStorageItem(storageConstants.USER_PHOTO+this.user.id, photo);
     }
+   }
   }
 
 

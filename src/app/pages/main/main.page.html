@@ -42,7 +42,7 @@
                 <ion-icon *ngIf="vehicle.typeOfVehicle === '2W'" slot="start" src="../../../assets/icons/bicycle-outline.svg"></ion-icon>
                 <ion-icon *ngIf="vehicle.typeOfVehicle === '4W'" slot="start" src="../../../assets/icons/car-sport-outline.svg"></ion-icon>
                 <ion-label>{{vehicle.brandOrModel}}</ion-label>
-                <ion-badge *ngIf="filter" mode="md" class="ion-margin-end" slot="end">{{ getMatchesNumber(vehicle.id) }}</ion-badge>
+                <ion-badge *ngIf="filter" class="ion-margin-end" slot="end">{{ getMatchesNumber(vehicle.id) }}</ion-badge>
               </ion-item>
               <div slot="content">
                 <!--DATOS DEL VEHÍCULO-->

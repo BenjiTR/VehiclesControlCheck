@@ -15,7 +15,7 @@
       <ion-icon class="z-6" src="../../../assets/icons/phone-portrait-outline.svg"></ion-icon>
     </ion-col>
     <ion-col class="ion-text-center" size="9">
-      <ion-icon *ngIf="creatingFile" class="z-3 blue-color" src="../../../assets/icons/sync-outline.svg"></ion-icon>
+      <ion-label *ngIf="creatingFile" id="in_device_info" class="subtitle ion-justify-content-center blue-color"><ion-icon *ngIf="creatingFile" class="blue-color ion-margin-end" src="../../../assets/icons/sync-outline.svg"></ion-icon>{{"backup.wait_please"|translate}}</ion-label>
       <ion-label *ngIf="!creatingFile" id="in_device_info" class="subtitle ion-justify-content-center"><ion-icon class="larger" src="../../../assets/icons/information-circle-outline.svg"></ion-icon>{{"backup.see_information"|translate}}</ion-label>
       <ion-popover  *ngIf="!creatingFile" trigger="in_device_info" trigger-action="click">
         <ng-template>
