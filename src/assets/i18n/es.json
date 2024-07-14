@@ -135,7 +135,8 @@
       "events":"Eventos",
       "reminders":"Recordatorios",
       "no_events":"No hay eventos",
-      "no_reminders":"No hay recordatorios"
+      "no_reminders":"No hay recordatorios",
+      "filter_text":"busque por palabra o fecha..."
   },
   "newvehicle":{
       "create_a_vehicle":"Crear un vehículo",

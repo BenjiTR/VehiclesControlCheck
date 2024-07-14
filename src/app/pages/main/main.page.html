@@ -1,11 +1,13 @@
 
 <ion-row class="ion-align-items-center">
   <ion-col size="2">
-    <ion-button (click)="toogleFiltering()" *ngIf="!filtering" color="warning"><ion-icon src="../../../assets/icons/filter-outline.svg"></ion-icon></ion-button>
+    <ion-button (click)="toogleFiltering()" *ngIf="!filtering" color="warning"><ion-icon src="../../../assets/icons/search-outline.svg"></ion-icon></ion-button>
     <ion-button (click)="eraseFilter()" *ngIf="filtering" color="warning"><ion-icon src="../../../assets/icons/close-outline.svg"></ion-icon></ion-button>
   </ion-col>
   <ion-col size="10">
-    <ion-input [@growShrink] *ngIf="filtering" (ionInput)="changefilter($event)" [(ngModel)]="filter" label="Buscar" placeholder="Busque un evento..."></ion-input>
+    <ion-item *ngIf="filtering" [@growShrink] class="rounded-inputs ion-margin-end">
+      <ion-input (ionInput)="changefilter($event)" [(ngModel)]="filter"  placeholder="{{'mainpage.filter_text'|translate}}"></ion-input>
+    </ion-item>
   </ion-col>
 </ion-row>
 
@@ -135,7 +137,7 @@
                 <ion-accordion-group>
                   <ion-accordion value="vehicleEvents">
                     <ion-item slot="header" color="mediumblue">
-                      <ion-icon class="ion-margin-end" src="../../../assets/icons/search-outline.svg"></ion-icon><ion-label>{{'mainpage.events'|translate}}</ion-label>
+                      <ion-icon class="ion-margin-end" src="../../../assets/icons/build-outline.svg"></ion-icon><ion-label>{{'mainpage.events'|translate}}</ion-label>
                     </ion-item>
                     <div slot="content">
                       <ion-row *ngIf="!someForThatVehicle(vehicle.id)" class="gray ion-padding-top ion-padding-bottom ion-padding-start">
