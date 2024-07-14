@@ -70,9 +70,11 @@ export class MainPage implements OnInit {
   }
 
   async ngOnInit() {
+    console.log("entrada")
     this.dashboard.isLoading=true;
     this.user = this._session.currentUser;
     this.translate.setDefaultLang(this._translation.getLanguage());
+    await this.loadAllData();
     await this._admob.resumeBanner();
     if(!this._session.currentUser.token){
       await this.backup.ionViewWillEnter();
@@ -80,11 +82,7 @@ export class MainPage implements OnInit {
     this.dashboard.isLoading=false;
   }
 
-  async ionViewWillEnter() {
-    this.dashboard.isLoading=true;
-    await this.loadAllData();
-    this.dashboard.isLoading=false;
-  }
+
 
   async loadAllData():Promise<void>{
     this.vehiclesArray = await this._session.loadVehicles();

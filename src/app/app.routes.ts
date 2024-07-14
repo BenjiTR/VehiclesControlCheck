@@ -53,6 +53,11 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/backup/backup.page').then( m => m.BackupPage)
       },
       {
+        path: 'userdata',
+        loadComponent: () => import('./pages/userdata/userdata.page').then( m => m.UserdataPage),
+        canActivate: [canActivate]
+      },
+      {
         path: '**',
         redirectTo: 'home',
         pathMatch: 'full',
@@ -67,11 +72,6 @@ export const routes: Routes = [
   {
     path: 'userdataview',
     loadComponent: () => import('./pages/userdataview/userdataview.page').then( m => m.UserdataviewPage),
-    canActivate: [canActivate]
-  },
-  {
-    path: 'userdata',
-    loadComponent: () => import('./pages/userdata/userdata.page').then( m => m.UserdataPage),
     canActivate: [canActivate]
   },
   {

@@ -163,7 +163,8 @@
       "like_share":"Te gusta? Comparte!",
       "user_terms":"Terminos de uso",
       "privacity":"Privacidad",
-      "export_data":"Exportar datos"
+      "export_data":"Exportar datos",
+      "main_page":"Página principal"
   },
   "userpage":{
       "user_dates":"Datos de usuario",

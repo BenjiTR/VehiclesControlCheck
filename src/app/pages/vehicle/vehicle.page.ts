@@ -106,7 +106,6 @@ export class VehiclePage implements OnInit {
   }
 
   async createVehicle(){
-    this.dashboard.isLoading=true;
     if(this.vehicleToEditId){
       this.editVehicle()
     }else{
