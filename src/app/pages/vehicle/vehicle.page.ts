@@ -100,7 +100,6 @@ export class VehiclePage implements OnInit {
   async cancelCreateVehicle(){
     const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.are_you_sure?'),this.translate.instant('alert.changes_will_not_be_saved'),this.translate.instant('alert.accept'),this.translate.instant('alert.cancel'))
     if(sure){
-      this.dashboard.isLoading=true;
       this.navCtr.navigateRoot('/dashboard')
     }
   }
@@ -170,6 +169,7 @@ export class VehiclePage implements OnInit {
     if(this._session.currentUser.backupId && this._session.autoBackup){
       await this.backup.updateData();
     }
+    this.dashboard.isLoading=false;
     this.navCtr.navigateRoot('/dashboard')
   }
 

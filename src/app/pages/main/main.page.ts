@@ -60,7 +60,7 @@ export class MainPage implements OnInit {
     private etypes:EventTypes,
     private modalController: ModalController,
     private _admob:AdmobService,
-    private navCtr:NavController,
+    private router:Router,
     private _notification:NotificationsService,
     private _date:DateService,
     private backup:BackupPage,
@@ -174,33 +174,31 @@ export class MainPage implements OnInit {
     return eventType ? eventType.string : type;
   }
 
-  //CREAR EVENTO Y VEHÍCUO
+  //CREAR EVENTO, VEHÍCULO Y RECORDATORIO
   createEvent(){
-    this.navCtr.navigateRoot('/dashboard/newevent');
+    this.router.navigate(['/dashboard/newevent']);
   }
   createVehicle(){
-    this.navCtr.navigateRoot('/dashboard/vehicle');
+    this.router.navigate(['/dashboard/vehicle']);
   }
-
-
+  createReminder(){
+    this.router.navigate(['/dashboard/reminder']);
+  }
 
   //EDITAR EVENTOS Y VEHÍCULOS
   editEvent(eventId:string){
-    this.navCtr.navigateRoot('/dashboard/newevent',{queryParams: { eventToEditId: eventId }});
+    this.router.navigate(['/dashboard/newevent',{queryParams: { eventToEditId: eventId }}]);
   }
   editVehicle(vehicleId:string){
-    this.navCtr.navigateRoot('/dashboard/vehicle',{queryParams: { vehicleToEditId: vehicleId}});
+    this.router.navigate(['/dashboard/vehicle',{queryParams: { vehicleToEditId: vehicleId}}]);
+  }
+  editReminder(id:number){
+    this.router.navigate(['/dashboard/reminder',{queryParams: { reminderToEditId: id}}]);
   }
 
   //FECHA
   getDate(string: Date):string{
     return this._date.getIsoDate(string);
-  }
-
-  //RECORDATORIOS
-
-  createReminder(){
-    this.navCtr.navigateRoot('/dashboard/reminder');
   }
 
   async deleteReminder(reminder:LocalNotificationSchema){
@@ -215,9 +213,6 @@ export class MainPage implements OnInit {
     }
   }
 
-  editReminder(id:number){
-    this.navCtr.navigateRoot('/dashboard/reminder',{queryParams: { reminderToEditId: id}});
-  }
 
   changefilter(event:any){
     this.filter = event.detail.value;
