@@ -9,7 +9,7 @@
   <ion-content class="pastel-to-blue">
     <ion-row class="ion-margin-top mt-3 blue round-corner-up">
       <ion-col class="ion-margin-top" size="12">
-        <h3 class="ion-margin-top" (click)="cerrarMenu()" [routerLink]="['/dashboard/main']" class="flex ion-align-items-center"><ion-icon class="ion-margin-end" size="large" src="../../../assets/icons/document-text-outline.svg"></ion-icon>{{'dashboard.main_page'|translate}}</h3>
+        <h3 class="ion-margin-top" (click)="cerrarMenu()" (click)="goMain()" class="flex ion-align-items-center"><ion-icon class="ion-margin-end" size="large" src="../../../assets/icons/document-text-outline.svg"></ion-icon>{{'dashboard.main_page'|translate}}</h3>
         <h3 class="ion-margin-top" (click)="cerrarMenu()" [routerLink]="['/dashboard/userdata']" class="flex ion-align-items-center"><ion-icon class="ion-margin-end" size="large" src="../../../assets/icons/person-outline.svg"></ion-icon>{{'dashboard.user_data'|translate}}</h3>
         <h3 class="ion-margin-top" (click)="cerrarMenu()" [routerLink]="['/dashboard/notifications']" class="flex ion-align-items-center"><ion-icon class="ion-margin-end" size="large" src="../../../assets/icons/cog-outline.svg"></ion-icon>{{'dashboard.adjust'|translate}}</h3>
         <h3 class="ion-margin-top" (click)="cerrarMenu()" [routerLink]="['/dashboard/backup']" class="flex ion-align-items-center"><ion-icon class="ion-margin-end" size="large" src="../../../assets/icons/cloud-upload-outline.svg"></ion-icon>{{'dashboard.adjust_backup'|translate}}</h3>
@@ -53,17 +53,6 @@
 
 
 </div>
-
-
-
-<ion-content class="loading-content" *ngIf="isLoading" >
-  <ion-row class="ion-align-items-center ion-text-center height-100">
-    <ion-col>
-      <span class="loader"></span>
-    </ion-col>
-  </ion-row>
-</ion-content>
-
 
 
 

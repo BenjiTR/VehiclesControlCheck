@@ -15,6 +15,7 @@ import { NotificationsService } from 'src/app/services/notifications.service';
 import { User } from 'src/app/models/user.model';
 import { DateService } from 'src/app/services/date.service';
 import { BackupPage } from '../backup/backup.page';
+import { LoaderService } from 'src/app/services/loader.service';
 
 @Component({
   selector: 'app-reminder',
@@ -51,17 +52,17 @@ export class ReminderPage{
     private _admobService:AdmobService,
     private _notifications:NotificationsService,
     private _date:DateService,
+    private _loader:LoaderService,
     private backup:BackupPage
   ) {
     this.reminderToEditId = this.activatedroute.snapshot.queryParams['reminderToEditId'];
     if(this.reminderToEditId){
       this.getReminder();
-      this.dashboard.isLoading=false;
     }
   }
 
   async ionViewWillEnter() {
-    this.dashboard.isLoading=true;
+    await this._loader.presentLoader();
     this.translate.setDefaultLang(this._translation.getLanguage());
     this.remindersArray = await this._session.remindersArray;
     this.reminderToEditId = this.activatedroute.snapshot.queryParams['reminderToEditId'];
@@ -70,7 +71,8 @@ export class ReminderPage{
     }
     this.vehiclesArray = this._session.vehiclesArray;
     this.user = this._session.currentUser;
-    this.dashboard.isLoading=false;
+    await this._loader.dismissLoader();
+;
   }
 
   getReminder(){
@@ -99,13 +101,12 @@ export class ReminderPage{
   async cancelCreateEvent(){
     const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.are_you_sure?'),this.translate.instant('alert.changes_will_not_be_saved'),this.translate.instant('alert.accept'),this.translate.instant('alert.cancel'))
     if(sure){
-      this.dashboard.isLoading=true;
+    await this._loader.presentLoader();
       this.navCtr.navigateRoot('/dashboard')
     }
   }
 
   async createEvent(){
-    this.dashboard.isLoading=true;
     if(this.reminderToEditId){
       this.editReminder();
     }else{
@@ -121,7 +122,7 @@ export class ReminderPage{
     }else if(!this.dateOfEvent){
       this._alert.createAlert(this.translate.instant("alert.enter_date"),this.translate.instant("alert.enter_date_text"));
     }else{
-      this.dashboard.isLoading=true;
+    await this._loader.presentLoader();
       const index = this.remindersArray.findIndex(reminder => reminder.id === this.reminderToEditId);
       if(index !== -1){
          const newReminder = await this.generateReminder();
@@ -180,7 +181,7 @@ export class ReminderPage{
     }else if(!this.dateOfEvent){
       this._alert.createAlert(this.translate.instant("alert.enter_date"),this.translate.instant("alert.enter_date_text"));
     }else{
-      this.dashboard.isLoading=true;
+      await this._loader.presentLoader();
       const newReminder = await this.generateReminder();
       this.remindersArray.push(newReminder)
       await this._notifications.createNotification([newReminder]);

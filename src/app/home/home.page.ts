@@ -15,6 +15,7 @@ import { NotificationsService } from '../services/notifications.service';
 import { FileSystemService } from '../services/filesystem.service';
 import { StorageService } from '../services/storage.service';
 import { Network } from '@capacitor/network';
+import { LoaderService } from '../services/loader.service';
 
 
 
@@ -33,7 +34,6 @@ export class HomePage implements OnInit{
   public email:string = "";
   public Error:string = "";
   public password:string = "";
-  public isLoading:boolean = false;
   public rememberSession:boolean =false;
 
   constructor(
@@ -48,11 +48,12 @@ export class HomePage implements OnInit{
     private _platform:Platform,
     private navCtr:NavController,
     private _file:FileSystemService,
-    private _storage:StorageService
+    private _storage:StorageService,
+    private _loader:LoaderService
   ) {}
 
   async ngOnInit(){
-    this.isLoading=true;
+    await this._loader.presentLoader();
     await this.translate.setDefaultLang(this._translation.getLanguage());
     await this.tryRememberSession();
     await this._admobService.initialize();
@@ -61,7 +62,7 @@ export class HomePage implements OnInit{
     await this._admobService.hideBanner();
     await this.checkNotifications();
     await this._file.checkPermission();
-    this.isLoading=false;
+    await this._loader.dismissLoader();
   }
 
 
@@ -86,15 +87,15 @@ export class HomePage implements OnInit{
   }
 
   //TEST USER
-  loginWithTest(){
-    this.isLoading=true;
+  async loginWithTest(){
+    await this._loader.presentLoader();
     const user = this._userTestService.userCredential;
     this.loginExecute(user, "test");
   }
 
   //AUTENTICACIÓN CON EMAIL
   async loginWithEmail(){
-    this.isLoading=true;
+    await this._loader.presentLoader();
     this.Error="";
     this.handlerRememberSession()
     this._authService.loginWithEmailAndPaswword(this.email, this.password)
@@ -115,21 +116,21 @@ export class HomePage implements OnInit{
               this.handleErrors(err.code);
             })
           }
-        this.isLoading = false;
+        await this._loader.dismissLoader();
         }else{
           this.loginExecute(user)
         }
       })
       .catch(async (error) => {
         this.handleErrors(error.code);
-        this.isLoading=false;
+        await this._loader.dismissLoader();
       });
   }
 
   //AUTENTICACIÓN CON GOOGLE
   async signInWithGoogle(){
     if((await Network.getStatus()).connected === true){
-      this.isLoading=true;
+      await this._loader.presentLoader();
       //Primero prueba a refrescar
       await this._authService.refreshGoogle()
       .then(async (authentication)=>{
@@ -147,9 +148,9 @@ export class HomePage implements OnInit{
             console.log(user)
             this.loginExecute(user, "google")
           })
-          .catch((error)=>{
+          .catch(async (error)=>{
             this.handleErrors(error.code);
-            this.isLoading=false;
+            await this._loader.dismissLoader();
           })
       })
     }else{
@@ -174,16 +175,16 @@ export class HomePage implements OnInit{
     if(!this.email){
       this._alert.createAlert(this.translate.instant('alert.write_a_correct_email'),this.translate.instant('alert.write_a_correct_email_text'));
     }else{
-    this.isLoading=true
+    await this._loader.presentLoader()
     await this._authService.sendRestorePasswordEmail(this.email)
-      .then(()=>{
+      .then(async ()=>{
         this._alert.createAlert(this.translate.instant('alert.email_send'),this.translate.instant('alert.restored_email_sended'));
-        this.isLoading=false;
+        await this._loader.dismissLoader();
       })
-      .catch((err)=>{
+      .catch(async (err)=>{
         //console.log(err);
         this.handleErrors(err.code)
-        this.isLoading=false;
+        await this._loader.dismissLoader();
       })
     }
   }

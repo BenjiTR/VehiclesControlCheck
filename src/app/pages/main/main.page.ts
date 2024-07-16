@@ -2,7 +2,7 @@ import { Component, OnInit, DoCheck } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonTextarea, IonAccordion, IonAccordionGroup, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonMenu, IonMenuButton, IonRouterOutlet, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar, MenuController, ModalController, NavController, IonDatetime, IonFab, IonFabList, IonFabButton, IonBadge } from '@ionic/angular/standalone';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { UserdataviewPage } from '../userdataview/userdataview.page';
 import { User } from 'src/app/models/user.model';
@@ -15,7 +15,6 @@ import { StorageService } from 'src/app/services/storage.service';
 import { TranslationConfigService } from 'src/app/services/translation.service';
 import { storageConstants } from 'src/app/const/storage';
 import { GrowShrinkAnimation, MainAnimation, RoadAnimation, SecondaryAnimation } from 'src/app/services/animation.service';
-import { DashboardPage } from '../dashboard/dashboard.page';
 import { Event } from '../../models/event.model'
 import { EventTypes } from 'src/app/const/eventTypes';
 import { ImgmodalPage } from '../imgmodal/imgmodal.page';
@@ -25,6 +24,7 @@ import { NotificationsService } from 'src/app/services/notifications.service';
 import { DateService } from 'src/app/services/date.service';
 import { BackupPage } from '../backup/backup.page';
 import { DatePipe } from '@angular/common';
+import { LoaderService } from 'src/app/services/loader.service';
 
 @Component({
   selector: 'app-main',
@@ -48,6 +48,7 @@ export class MainPage implements OnInit {
   public filter:string = "";
   public filteredEventsArray:Event[]=[];
   public filtering:boolean=false;
+  public reload:boolean=false;
 
   constructor(
     private translate:TranslateService,
@@ -56,7 +57,6 @@ export class MainPage implements OnInit {
     private _session:SessionService,
     private _alert:AlertService,
     private _storage:StorageService,
-    private dashboard:DashboardPage,
     private etypes:EventTypes,
     private modalController: ModalController,
     private _admob:AdmobService,
@@ -64,14 +64,16 @@ export class MainPage implements OnInit {
     private _notification:NotificationsService,
     private _date:DateService,
     private backup:BackupPage,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private _loader:LoaderService,
+    private activatedroute:ActivatedRoute,
   ) {
     this.eventTypes = etypes.getEventTypes();
   }
 
   async ngOnInit() {
     console.log("entrada")
-    this.dashboard.isLoading=true;
+    await this._loader.presentLoader();
     this.user = this._session.currentUser;
     this.translate.setDefaultLang(this._translation.getLanguage());
     await this.loadAllData();
@@ -79,9 +81,20 @@ export class MainPage implements OnInit {
     if(!this._session.currentUser.token){
       await this.backup.ionViewWillEnter();
     }
-    this.dashboard.isLoading=false;
+    await this._loader.dismissLoader();
   }
 
+
+  async ionViewWillEnter() {
+    if(this._loader.isLoading){
+      await this._loader.dismissLoader();
+    }
+    this.reload = this.activatedroute.snapshot.queryParams['reload'] || false;
+    if(this.reload){
+      console.log("recarga")
+      await this.loadAllData();
+    }
+  }
 
 
   async loadAllData():Promise<void>{
@@ -175,25 +188,31 @@ export class MainPage implements OnInit {
   }
 
   //CREAR EVENTO, VEHÍCULO Y RECORDATORIO
-  createEvent(){
-    this.router.navigate(['/dashboard/newevent']);
+  async createEvent(){
+    await this.router.navigate(['/dashboard/newevent']);
+    this.creatingElement=false;
   }
-  createVehicle(){
-    this.router.navigate(['/dashboard/vehicle']);
+  async createVehicle(){
+    await this.router.navigate(['/dashboard/vehicle']);
+    this.creatingElement=false;
   }
-  createReminder(){
-    this.router.navigate(['/dashboard/reminder']);
+  async createReminder(){
+    await this.router.navigate(['/dashboard/reminder']);
+    this.creatingElement=false;
   }
 
   //EDITAR EVENTOS Y VEHÍCULOS
-  editEvent(eventId:string){
-    this.router.navigate(['/dashboard/newevent',{queryParams: { eventToEditId: eventId }}]);
+  async editEvent(eventId:string){
+    await this.router.navigate(['/dashboard/newevent'],{queryParams: { eventToEditId: eventId }});
+    this.creatingElement=false;
   }
-  editVehicle(vehicleId:string){
-    this.router.navigate(['/dashboard/vehicle',{queryParams: { vehicleToEditId: vehicleId}}]);
+  async editVehicle(vehicleId:string){
+    await this.router.navigate(['/dashboard/vehicle'],{queryParams: { vehicleToEditId: vehicleId}});
+    this.creatingElement=false;
   }
-  editReminder(id:number){
-    this.router.navigate(['/dashboard/reminder',{queryParams: { reminderToEditId: id}}]);
+  async editReminder(id:number){
+    await this.router.navigate(['/dashboard/reminder'],{queryParams: { reminderToEditId: id}});
+    this.creatingElement=false;
   }
 
   //FECHA
@@ -212,7 +231,6 @@ export class MainPage implements OnInit {
       }
     }
   }
-
 
   changefilter(event:any){
     this.filter = event.detail.value;

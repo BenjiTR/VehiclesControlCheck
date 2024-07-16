@@ -9,7 +9,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { AlertService } from 'src/app/services/alert.service';
 import { SessionService } from 'src/app/services/session.service';
 import { User } from 'src/app/models/user.model';
-import { DashboardPage } from '../dashboard/dashboard.page';
+import { LoaderService } from 'src/app/services/loader.service';
 
 @Component({
   selector: 'app-newuser',
@@ -35,13 +35,15 @@ export class NewuserPage implements OnInit {
     private _alert: AlertService,
     private router: Router,
     private _session:SessionService,
-    private dashboard:DashboardPage
+    private _loader:LoaderService
   ) { }
 
-  ngOnInit(): void {
-    this.dashboard.isLoading = true;
+  async ngOnInit(): Promise<void> {
+     await this._loader.presentLoader();
+
     this.translate.setDefaultLang(this._translation.getLanguage());
-    this.dashboard.isLoading = false;
+    await this._loader.dismissLoader();
+
   }
 
   //MOSTRAR U OCULTAR PASSWORD
@@ -69,7 +71,8 @@ export class NewuserPage implements OnInit {
   //REGISTRO NUEVO USUARIO
   async registerNewUser() {
 
-    this.dashboard.isLoading = true;
+     await this._loader.presentLoader();
+
     await this._authService.createuserWithEmailAndPassword(this.email, this.password)
       .then(async (userCredential) => {
         // Signed in
@@ -78,11 +81,12 @@ export class NewuserPage implements OnInit {
           .then(async (message) => {
             //console.log("message actualizar nombre = ", message)
             await this._authService.sendEmailVerificacion()
-              .then((message) => {
+              .then(async (message) => {
                 //console.log("message al enviar correo de confirmación", message)
                 this._alert.createAlert(this.translate.instant('alert.user_created_success'), (this.translate.instant('alert.user_created_success_text')));
                 this.Error = "";
-                this.dashboard.isLoading = false;
+                await this._loader.dismissLoader();
+
                 this.router.navigate(['/home'])
               })
           })
@@ -97,10 +101,11 @@ export class NewuserPage implements OnInit {
   }
 
   //GESTIÓN DE ERRORES
-  handleErrors(error: string) {
+  async handleErrors(error: string) {
     //console.log(error)
     // ..
-    this.dashboard.isLoading = false;
+    await this._loader.dismissLoader();
+
     if (error === "auth/invalid-email") {
       this.Error = this.translate.instant('error.email_no_valid');
     } else if (error === "auth/network-request-failed") {

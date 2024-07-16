@@ -11,6 +11,7 @@ import { AdmobService } from 'src/app/services/admob.service';
 import { PaddingService } from 'src/app/services/padding.service';
 import { MainAnimation, RoadAnimation, SecondaryAnimation } from 'src/app/services/animation.service';
 import { SessionService } from 'src/app/services/session.service';
+import { LoaderService } from 'src/app/services/loader.service';
 
 
 @Component({
@@ -23,8 +24,6 @@ import { SessionService } from 'src/app/services/session.service';
 })
 export class DashboardPage implements OnInit, OnDestroy {
 
-  public isLoading:Boolean=true;
-
   constructor(
     private menuCtrl: MenuController,
     private _authService: AuthService,
@@ -34,13 +33,13 @@ export class DashboardPage implements OnInit, OnDestroy {
     private _admobService:AdmobService,
     private _paddingService:PaddingService,
     private navCtr:NavController,
-    private _session:SessionService
+    private _session:SessionService,
+    private _loader:LoaderService
   ) { }
 
   async ngOnInit() {
     this.translate.setDefaultLang(this._translation.getLanguage());
     this._admobService.resumeBanner();
-    this.isLoading=true;
   }
 
 
@@ -68,7 +67,7 @@ export class DashboardPage implements OnInit, OnDestroy {
   }
 
   async endSession(){
-    this.isLoading=true;
+    this._loader.presentLoader();
     await this.menuCtrl.close();
     if(this._session.currentUser.method === "google"){
       this.closeSessionByGoogle();
@@ -87,7 +86,7 @@ export class DashboardPage implements OnInit, OnDestroy {
       await this._admobService.removeBanner();
       this._session.deleteTemporalData();
       this.navCtr.navigateRoot(['/home']);
-      this.isLoading=false;
+      this._loader.dismissLoader();
     }).catch((error) => {
       // An error happened.
       alert(error);
@@ -103,7 +102,7 @@ export class DashboardPage implements OnInit, OnDestroy {
       await this._admobService.removeBanner();
       this._session.deleteTemporalData();
       this.navCtr.navigateRoot(['/home']);
-      this.isLoading=false;
+      this._loader.dismissLoader();
     }).catch((error) => {
       // An error happened.
       alert(error);
@@ -113,5 +112,11 @@ export class DashboardPage implements OnInit, OnDestroy {
   calculatePadding(){
     return this._paddingService.calculatePadding();
   }
+
+  goMain(){
+    this.router.navigate(['/dashboard/main'])
+  }
+
+
 
 }

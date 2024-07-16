@@ -8,7 +8,6 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { EventTypes } from 'src/app/const/eventTypes';
 import { AlertService } from 'src/app/services/alert.service';
 import { TranslationConfigService } from 'src/app/services/translation.service';
-import { DashboardPage } from '../dashboard/dashboard.page';
 import { Event } from '../../models/event.model'
 import { AdmobService } from 'src/app/services/admob.service';
 import { SessionService } from 'src/app/services/session.service';
@@ -20,6 +19,7 @@ import { Vehicle } from 'src/app/models/vehicles.model';
 import { ImgmodalPage } from '../imgmodal/imgmodal.page';
 import { CameraServices } from 'src/app/services/camera.service';
 import { BackupPage } from '../backup/backup.page';
+import { LoaderService } from 'src/app/services/loader.service';
 
 @Component({
   selector: 'app-newevent',
@@ -48,7 +48,6 @@ export class NeweventPage {
   constructor(
     private translate:TranslateService,
     private _translation:TranslationConfigService,
-    private dashboard:DashboardPage,
     private router:Router,
     private etypes:EventTypes,
     private _alert:AlertService,
@@ -60,23 +59,26 @@ export class NeweventPage {
     private _camera:CameraServices,
     private _admobService:AdmobService,
     private navCtr:NavController,
-    private backup:BackupPage
+    private backup:BackupPage,
+    private _loader:LoaderService
   ) {
     this.eventTypes = etypes.getEventTypes();
     this.user = this._session.currentUser;
   }
 
   async ionViewWillEnter() {
-    this.dashboard.isLoading=true;
+          await this._loader.presentLoader();
+;
     this.translate.setDefaultLang(this._translation.getLanguage());
     this.eventsArray = await this._session.eventsArray;
     this.vehiclesArray = await this._session.vehiclesArray;
     this.eventToEditId = this.activatedroute.snapshot.queryParams['eventToEditId'];
     if(this.eventToEditId){
       this.getEvent();
-      this.dashboard.isLoading=false;
+    await this._loader.dismissLoader();
     }
-    this.dashboard.isLoading=false;
+        await this._loader.dismissLoader();
+;
   }
 
   getEvent(){
@@ -100,7 +102,8 @@ export class NeweventPage {
   async cancelCreateEvent(){
     const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.are_you_sure?'),this.translate.instant('alert.changes_will_not_be_saved'),this.translate.instant('alert.accept'),this.translate.instant('alert.cancel'))
     if(sure){
-      this.dashboard.isLoading=true;
+            await this._loader.presentLoader();
+;
       this.navCtr.navigateRoot('/dashboard')
     }
   }
@@ -118,7 +121,8 @@ export class NeweventPage {
     }else if(!this.type){
       this._alert.createAlert(this.translate.instant("alert.enter_type"),this.translate.instant("alert.enter_type_text"));
     }else{
-      this.dashboard.isLoading=true;
+            await this._loader.presentLoader();
+;
       const index = this.eventsArray.findIndex(event => event.id === this.eventToEditId);
       if(index !== -1){
          const newEvent = await this.generateEvent();
@@ -156,7 +160,7 @@ export class NeweventPage {
     this._session.eventsArray = this.eventsArray;
     await this._storage.setStorageItem(storageConstants.USER_EVENTS+this.user.id,this.eventsArray);
     if(this._session.currentUser.backupId && this._session.autoBackup){
-      await this.backup.updateData();
+      //await this.backup.updateData();
     }
     this.navCtr.navigateRoot('/dashboard')
   }
@@ -167,7 +171,8 @@ export class NeweventPage {
     }else if(!this.type){
       this._alert.createAlert(this.translate.instant("alert.enter_type"),this.translate.instant("alert.enter_type_text"));
     }else{
-      this.dashboard.isLoading=true;
+            await this._loader.presentLoader();
+;
       const newEvent = await this.generateEvent();
       this.eventsArray.push(newEvent)
       this.saveAndExit();
@@ -198,11 +203,13 @@ export class NeweventPage {
 
   async addImage() {
   const photo = await this._camera.takePhoto();
-  this.dashboard.isLoading=true;
+        await this._loader.presentLoader();
+;
   if(photo){
     this.images.push(imageConstants.base64Prefix+photo);
   }
-  this.dashboard.isLoading=false;
+      await this._loader.dismissLoader();
+;
 
 }
 

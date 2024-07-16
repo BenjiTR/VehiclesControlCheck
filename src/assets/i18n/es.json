@@ -96,7 +96,8 @@
       "file_created":"Archivo creado con éxito",
       "file_created_text":"Se ha creado el archivo, puede encontrarlo en la carpeta 'Documentos/vehicles-control' de su dispositivo o tarjeta de memoria. Se trata de un archivo con su número de usuario y extensión '.vcc'",
       "file_restored":"Copia restaurada con éxito",
-      "file_restored_text":"Se ha restaurado correctamente la copia de seguridad"
+      "file_restored_text":"Se ha restaurado correctamente la copia de seguridad",
+      "actual_data_will_be_rewrite":"Los datos actuales serán sustituidos por la copia de seguridad."
     },
   "home":{
       "init_session":"Inicio de sesión",

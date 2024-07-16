@@ -8,21 +8,19 @@ import { User } from 'src/app/models/user.model';
 import { MainAnimation, RoadAnimation, SecondaryAnimation } from 'src/app/services/animation.service';
 import { TranslationConfigService } from 'src/app/services/translation.service';
 import { Vehicle } from 'src/app/models/vehicles.model';
-import { DashboardPage } from '../dashboard/dashboard.page';
 import { HashService } from 'src/app/services/hash.service';
 import { SessionService } from 'src/app/services/session.service';
 import { StorageService } from 'src/app/services/storage.service';
 import { storageConstants } from 'src/app/const/storage';
 import { AlertService } from 'src/app/services/alert.service';
 import { AdmobService } from 'src/app/services/admob.service';
-import { BackupPage } from '../backup/backup.page';
+import { LoaderService } from 'src/app/services/loader.service';
 
 @Component({
   selector: 'app-vehicle',
   templateUrl: './vehicle.page.html',
   styleUrls: ['./vehicle.page.scss'],
   standalone: true,
-  providers:[BackupPage],
   imports: [IonSegment, IonSegmentButton, IonAvatar, RouterModule, CommonModule, TranslateModule, FormsModule, IonHeader, IonToolbar, IonTitle, IonContent, IonRow, IonCol, IonImg, IonItem, IonInput, IonIcon, IonFooter, IonButton, IonCheckbox, IonLabel],
   animations: [ MainAnimation, RoadAnimation, SecondaryAnimation ]
 })
@@ -49,17 +47,14 @@ export class VehiclePage implements OnInit {
   constructor(
     private translate:TranslateService,
     private _translation:TranslationConfigService,
-    private router:Router,
-    private dashboard:DashboardPage,
     private _hash:HashService,
     private _session:SessionService,
     private _storage:StorageService,
     private _alert:AlertService,
-    private _admob:AdmobService,
     private activatedroute:ActivatedRoute,
     private _admobService:AdmobService,
     private navCtr:NavController,
-    private backup:BackupPage
+    private _loader:LoaderService
   ) {
     this.user = this._session.currentUser;
   }
@@ -100,7 +95,8 @@ export class VehiclePage implements OnInit {
   async cancelCreateVehicle(){
     const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.are_you_sure?'),this.translate.instant('alert.changes_will_not_be_saved'),this.translate.instant('alert.accept'),this.translate.instant('alert.cancel'))
     if(sure){
-      this.navCtr.navigateRoot('/dashboard')
+      await this._loader.presentLoader();
+      this.navCtr.navigateRoot('/dashboard/main')
     }
   }
 
@@ -114,7 +110,7 @@ export class VehiclePage implements OnInit {
 
   async editVehicle(){
     if(this.brandOrModel){
-      this.dashboard.isLoading=true;
+      await this._loader.presentLoader();
       const index = this.vehiclesArray.findIndex(vehicle => vehicle.id === this.vehicleToEditId);
       if(index !== -1){
         const newvehicle = await this.generateVehicle();
@@ -128,7 +124,7 @@ export class VehiclePage implements OnInit {
 
   async createNew(){
     if(this.brandOrModel){
-      this.dashboard.isLoading=true;
+      await this._loader.presentLoader();
       const newvehicle = await this.generateVehicle();
       this.vehiclesArray.push(newvehicle)
       this.saveAndExit();
@@ -167,9 +163,8 @@ export class VehiclePage implements OnInit {
     this._session.vehiclesArray = this.vehiclesArray;
     this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.user.id,this.vehiclesArray);
     if(this._session.currentUser.backupId && this._session.autoBackup){
-      await this.backup.updateData();
+      //await this.backup.updateData();
     }
-    this.dashboard.isLoading=false;
     this.navCtr.navigateRoot('/dashboard')
   }
 
