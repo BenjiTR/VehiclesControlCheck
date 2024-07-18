@@ -7,6 +7,9 @@ import { TranslationConfigService } from 'src/app/services/translation.service';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { SessionService } from 'src/app/services/session.service';
 import { RouterModule } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
+import { DriveService } from 'src/app/services/drive.service';
+import { AlertService } from 'src/app/services/alert.service';
 
 @Component({
   selector: 'app-notifications',
@@ -20,12 +23,16 @@ export class NotificationsPage{
   public isAllowed:boolean = false;
   public errorText:string = "prueba";
   public autoBk:boolean = false;
+  public connected:boolean = false;
+  public hasFile:boolean = false;
 
   constructor(
     private translate:TranslateService,
     private _translation:TranslationConfigService,
     private _notifications:NotificationsService,
-    private _session:SessionService
+    private _session:SessionService,
+    private _drive:DriveService,
+    private _alert:AlertService
   ) { }
 
   async ionViewWillEnter() {
@@ -34,6 +41,8 @@ export class NotificationsPage{
     this.errorText = "";
     this.translate.setDefaultLang(this._translation.getLanguage());
     await this.checkPermissions();
+    this.connected = await firstValueFrom(this._drive.conected$);
+    this.hasFile = await firstValueFrom(this._drive.haveFiles$);
   }
 
   async checkPermissions():Promise<void>{
@@ -87,6 +96,13 @@ export class NotificationsPage{
     this._session.setAutoBackup(this.autoBk);
   }
 
+  segmentAlerts(){
+    if(this.connected && !this.hasFile){
+      this._alert.createAlert(this.translate.instant("alert.no_backup_file"), this.translate.instant("alert.no_backup_files_text"))
+    }else if(!this.connected && !this.hasFile){
+      this._alert.createAlert(this.translate.instant("alert.no_connected_to_backup_account"), this.translate.instant("alert.no_connected_to_backup_account_text"))
+    }
+  }
 
 
 }

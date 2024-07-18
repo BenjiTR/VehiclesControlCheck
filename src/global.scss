@@ -251,3 +251,38 @@ zoom: 0.8;
   --background: #ffcc7f;
   background: #ffcc7f9b;
 }
+
+ion-toast {
+  --background: #8bd3db;
+  --box-shadow: 3px 3px 10px 0 rgba(0, 0, 0, 0.2);
+  --color: #000000;
+}
+
+ion-toast::part(message) {
+  text-align: center;
+  font-size: larger;
+  color: #000000;
+}
+
+ion-toast::part(button) {
+  border-left: 1px solid #000000;
+  color: #030207;
+  font-size: 15px;
+}
+
+ion-popover {
+  --background: #63c9b5;
+  --backdrop-opacity: 0.6;
+  --box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0);
+  --color: white;
+  --width: 70%;
+}
+
+ion-popover ion-content {
+  --background: rgba(40, 173, 218, 0);
+}
+
+ion-popover::part(backdrop) {
+  background-color: #f5eabe;
+}
+

@@ -16,6 +16,7 @@ import { Router, RouterModule } from '@angular/router';
 import { Network } from '@capacitor/network';
 import { AlertService } from 'src/app/services/alert.service';
 import { LoaderService } from 'src/app/services/loader.service';
+import { firstValueFrom } from 'rxjs';
 
 
 @Component({
@@ -29,7 +30,7 @@ export class BackupPage implements OnInit {
 
   public token:string = "";
   public connected:boolean = false;
-  public haveFile:boolean = true;
+  public haveFiles:boolean = true;
   public creatingFile:boolean = false;
 
   constructor(
@@ -49,17 +50,23 @@ export class BackupPage implements OnInit {
 
   async ngOnInit() {
     this.translate.setDefaultLang(this._translation.getLanguage());
+    this.getData();
   }
 
-  async ionViewWillEnter(){
-    this.token = this._drive.token;
-    this.connected = this._drive.connected;
-    this.haveFile = this._drive.haveFile;
+  ionViewWillLeave() {
+    console.log("sale backup")
   }
+
+  async getData(){
+    this.connected = await firstValueFrom(this._drive.conected$);
+    this.haveFiles = await firstValueFrom(this._drive.haveFiles$);
+  }
+
 
   async connectAccount(){
     await this._loader.presentLoader();
     await this._drive.connectAccount();
+    this.getData();
     await this._loader.dismissLoader();
 
   }
@@ -108,9 +115,12 @@ export class BackupPage implements OnInit {
     }
   }
 
+
+
+//DRIVE
   async updateData(){
     await this._loader.presentLoader();
-    await this._drive.updateData();
+    //await this._drive.updateData();
     await this._loader.dismissLoader();
 
   }
@@ -124,18 +134,18 @@ export class BackupPage implements OnInit {
       const data = await this._file.buildData();
       console.log(data, this._session.currentUser.id)
       // Subir el contenido del archivo a Google Drive
-      await this._drive.uploadFile(data, `${this._session.currentUser.id}.vcc`,this.token)
-      .then((msg)=>{
-        console.log(msg);
-        this.haveFile = true;
+      // await this._drive.uploadFile(data, `${this._session.currentUser.id}.vcc`,this.token)
+      // .then((msg)=>{
+      //   console.log(msg);
+      //   this._drive.changeHaveFiles(true);
 
-      })
-      .catch((err)=>{
-        console.log(err)
-        if(err.error){
-          alert(err.error);
-        }
-      })
+      // })
+      // .catch((err)=>{
+      //   console.log(err)
+      //   if(err.error){
+      //     alert(err.error);
+      //   }
+      // })
       await this._loader.dismissLoader();
 
     }
@@ -143,37 +153,93 @@ export class BackupPage implements OnInit {
 
   unconnectAccount(){
     this._session.setGoogleToken("");
-    this.connected = false;
-    this.haveFile = false;
+    this._drive.changeConnected(false);
+    this._drive.changeHaveFiles(false);
+    this.getData();
     this._auth.signOutGoogle();
   }
 
-  async readFileFromDrive() {
-     await this._loader.presentLoader();
 
-    const fileId = await this._drive.findFileByName(`${this._session.currentUser.id}.vcc`, this.token)
-    if (fileId) {
-      const result = await this._drive.downloadFile(fileId, this.token);
-      console.log(result)
-      if(result){
-        const resp = JSON.parse(result)
-        await this._storage.setStorageItem(storageConstants.USER_VEHICLES+this._session.currentUser.id,resp.vehicles)
-        console.log(resp.vehicles)
-        await this._storage.setStorageItem(storageConstants.USER_EVENTS+this._session.currentUser.id,resp.events);
-        await this._storage.setStorageItem(storageConstants.USER_REMINDER+this._session.currentUser.id,resp.remindersOptions);
-        const preparedReminders = await this.setDates(resp.reminders);
-        console.log(preparedReminders)
-        if(this._platform.is("android")){
-          await this._notifications.createNotification(preparedReminders);
-        }
-        this.navCtr.navigateRoot('/dashboard');
+
+  async uploadSampleFile(): Promise<void> {
+    const file:any = {
+      fileName: 'prueba.vcc',
+      content: JSON.stringify([1, 2, 3, 4, 5,6,7,8,9,10]) // Contenido de prueba
+    };
+      try {
+        const response = await this._drive.updateFile("1EYHvlvBC8ig49WgiSP1TBUO5NjtEGJrF4pKSDdGvOh-nSu1dIg", file.content, file.fileName);
+        const responsefileId = response.id; // Guardar el ID del archivo subido
+        console.log('Archivo subido exitosamente:', response);
+      } catch (error) {
+        console.error('Error al subir el archivo:', error);
       }
-    } else {
-      console.log(`File with name '${`${this._session.currentUser.id}.vcc`}' not found.`);
-      await this._loader.dismissLoader();
-
-    }
   }
+
+
+
+
+  async readFileFromDrive() {
+    try {
+      // Primero, encuentra el archivo por su nombre
+      const file = await this._drive.findFileByName('prueba.vcc',);
+
+      if (!file) {
+        console.log('El archivo no fue encontrado.');
+        return;
+      }
+      console.log(file)
+      // Luego, descarga el contenido del archivo usando su fileId
+      const content = await this._drive.downloadFile(file);
+
+      //console.log('Contenido del archivo:', content);
+    } catch (error) {
+      console.error('Error al leer el archivo desde Drive:', error);
+    }
+
+
+
+
+    //  await this._loader.presentLoader();
+
+    // const fileId = await this._drive.findFileByName(`${this._session.currentUser.id}.vcc`, this.token)
+    // if (fileId) {
+    //   const result = await this._drive.downloadFile(fileId, this.token);
+    //   console.log(result)
+    //   if(result){
+    //     const resp = JSON.parse(result)
+    //     await this._storage.setStorageItem(storageConstants.USER_VEHICLES+this._session.currentUser.id,resp.vehicles)
+    //     console.log(resp.vehicles)
+    //     await this._storage.setStorageItem(storageConstants.USER_EVENTS+this._session.currentUser.id,resp.events);
+    //     await this._storage.setStorageItem(storageConstants.USER_REMINDER+this._session.currentUser.id,resp.remindersOptions);
+    //     const preparedReminders = await this.setDates(resp.reminders);
+    //     console.log(preparedReminders)
+    //     if(this._platform.is("android")){
+    //       await this._notifications.createNotification(preparedReminders);
+    //     }
+    //     this.navCtr.navigateRoot('/dashboard');
+    //   }
+    // } else {
+    //   console.log(`File with name '${`${this._session.currentUser.id}.vcc`}' not found.`);
+    //   await this._loader.dismissLoader();
+
+    // }
+  }
+
+
+  async createFolder(){
+    const resp = await this._drive.createFolder();
+    console.log(resp)
+  }
+
+  async readAll(){
+    const resp = await this._drive.listFilesInFolder();
+    console.log(resp)
+  }
+
+  async deleteFile(){
+    await this._drive.deleteFile("1EYHvlvBC8ig49WgiSP1TBUO5NjtEGJrF4pKSDdGvOh-nSu1dIg")
+  }
+
 
   async setDates(reminders:LocalNotificationSchema[]):Promise<LocalNotificationSchema[]>{
     reminders.forEach(element => {

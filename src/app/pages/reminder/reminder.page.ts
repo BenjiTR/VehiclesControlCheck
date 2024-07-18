@@ -7,22 +7,20 @@ import { IonSelectOption, IonContent, IonHeader, IonTitle, IonToolbar, IonRow, I
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslationConfigService } from 'src/app/services/translation.service';
 import { LocalNotificationSchema } from '@capacitor/local-notifications';
-import { DashboardPage } from '../dashboard/dashboard.page';
 import { SessionService } from 'src/app/services/session.service';
 import { AlertService } from 'src/app/services/alert.service';
 import { Vehicle } from 'src/app/models/vehicles.model';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { User } from 'src/app/models/user.model';
 import { DateService } from 'src/app/services/date.service';
-import { BackupPage } from '../backup/backup.page';
 import { LoaderService } from 'src/app/services/loader.service';
+import { DriveService } from 'src/app/services/drive.service';
 
 @Component({
   selector: 'app-reminder',
   templateUrl: './reminder.page.html',
   styleUrls: ['./reminder.page.scss'],
   standalone: true,
-  providers: [DashboardPage, BackupPage],
   imports: [IonSelect, IonSelectOption, IonInput, IonTextarea, TranslateModule, IonDatetime, IonLabel, IonItem, IonImg, IonButton, IonIcon, IonCol, IonRow, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
 })
 export class ReminderPage{
@@ -45,7 +43,6 @@ export class ReminderPage{
     private translate:TranslateService,
     private _translation:TranslationConfigService,
     private activatedroute:ActivatedRoute,
-    private dashboard:DashboardPage,
     private _session:SessionService,
     private _alert:AlertService,
     private navCtr:NavController,
@@ -53,7 +50,7 @@ export class ReminderPage{
     private _notifications:NotificationsService,
     private _date:DateService,
     private _loader:LoaderService,
-    private backup:BackupPage
+    private _drive:DriveService
   ) {
     this.reminderToEditId = this.activatedroute.snapshot.queryParams['reminderToEditId'];
     if(this.reminderToEditId){
@@ -167,8 +164,8 @@ export class ReminderPage{
   async saveAndExit(){
     this._session.remindersArray = this.remindersArray
     await this._admobService.showinterstitial();
-    if(this._session.currentUser.backupId && this._session.autoBackup){
-      await this.backup.updateData();
+    if(this._drive.folderId && this._session.autoBackup){
+      //await this.backup.updateData();
     }
     this.navCtr.navigateRoot('/dashboard');
   }

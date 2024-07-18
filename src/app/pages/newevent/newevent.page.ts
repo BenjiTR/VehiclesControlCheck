@@ -18,15 +18,14 @@ import { User } from 'src/app/models/user.model';
 import { Vehicle } from 'src/app/models/vehicles.model';
 import { ImgmodalPage } from '../imgmodal/imgmodal.page';
 import { CameraServices } from 'src/app/services/camera.service';
-import { BackupPage } from '../backup/backup.page';
 import { LoaderService } from 'src/app/services/loader.service';
+import { DriveService } from 'src/app/services/drive.service';
 
 @Component({
   selector: 'app-newevent',
   templateUrl: './newevent.page.html',
   styleUrls: ['./newevent.page.scss'],
   standalone: true,
-  providers:[BackupPage],
   imports: [IonImg, IonInput, TranslateModule, IonSelect, IonSelectOption, IonButton, IonIcon, IonItem, IonAvatar, IonLabel, IonRow, IonCol, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
 })
 export class NeweventPage {
@@ -59,8 +58,8 @@ export class NeweventPage {
     private _camera:CameraServices,
     private _admobService:AdmobService,
     private navCtr:NavController,
-    private backup:BackupPage,
-    private _loader:LoaderService
+    private _loader:LoaderService,
+    private _drive:DriveService
   ) {
     this.eventTypes = etypes.getEventTypes();
     this.user = this._session.currentUser;
@@ -159,7 +158,7 @@ export class NeweventPage {
     await this._admobService.showinterstitial();
     this._session.eventsArray = this.eventsArray;
     await this._storage.setStorageItem(storageConstants.USER_EVENTS+this.user.id,this.eventsArray);
-    if(this._session.currentUser.backupId && this._session.autoBackup){
+    if(this._drive.folderId && this._session.autoBackup){
       //await this.backup.updateData();
     }
     this.navCtr.navigateRoot('/dashboard')

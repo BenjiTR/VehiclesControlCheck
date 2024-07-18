@@ -28,7 +28,10 @@ export class AuthService{
 
   initializeApp() {
     this.platform.ready().then(() => {
-      GoogleAuth.initialize({ grantOfflineAccess: true })
+      GoogleAuth.initialize({
+        grantOfflineAccess: true,
+        scopes: ['profile', 'email','https://www.googleapis.com/auth/drive.appdata']
+      })
     });
   }
 

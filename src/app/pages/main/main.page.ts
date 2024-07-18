@@ -22,9 +22,9 @@ import { AdmobService } from 'src/app/services/admob.service';
 import { LocalNotificationSchema } from '@capacitor/local-notifications';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { DateService } from 'src/app/services/date.service';
-import { BackupPage } from '../backup/backup.page';
 import { DatePipe } from '@angular/common';
 import { LoaderService } from 'src/app/services/loader.service';
+import { DriveService } from 'src/app/services/drive.service';
 
 @Component({
   selector: 'app-main',
@@ -33,7 +33,7 @@ import { LoaderService } from 'src/app/services/loader.service';
   standalone: true,
   imports: [IonBadge, IonFabButton, IonFabList, IonFab, IonTextarea, IonDatetime, IonSelect, IonSelectOption, IonRouterOutlet, IonAccordionGroup, IonAccordion, UserdataviewPage, IonInput, IonItem, IonLabel, TranslateModule, RouterModule, IonMenu, IonIcon, IonButtons, IonMenuButton, IonButton, IonImg, IonGrid, IonCol ,IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonRow, IonGrid],
   animations: [ MainAnimation, RoadAnimation, SecondaryAnimation, GrowShrinkAnimation ],
-  providers:[EventTypes, BackupPage, DatePipe]
+  providers:[EventTypes, DatePipe]
 })
 export class MainPage implements OnInit {
 
@@ -63,10 +63,11 @@ export class MainPage implements OnInit {
     private router:Router,
     private _notification:NotificationsService,
     private _date:DateService,
-    private backup:BackupPage,
     private datePipe: DatePipe,
     private _loader:LoaderService,
     private activatedroute:ActivatedRoute,
+    private _drive:DriveService,
+    private navCtr:NavController
   ) {
     this.eventTypes = etypes.getEventTypes();
   }
@@ -78,12 +79,11 @@ export class MainPage implements OnInit {
     this.translate.setDefaultLang(this._translation.getLanguage());
     await this.loadAllData();
     await this._admob.resumeBanner();
-    if(!this._session.currentUser.token){
-      await this.backup.ionViewWillEnter();
+    if(this._session.currentUser.token){
+      await this._drive.init();
     }
     await this._loader.dismissLoader();
   }
-
 
   async ionViewWillEnter() {
     if(this._loader.isLoading){
@@ -96,7 +96,6 @@ export class MainPage implements OnInit {
     }
   }
 
-
   async loadAllData():Promise<void>{
     this.vehiclesArray = await this._session.loadVehicles();
     this.eventsArray = await this._session.loadEvents();
@@ -107,8 +106,6 @@ export class MainPage implements OnInit {
     return
   }
 
-
-
   ionViewWillLeave() {
     this._admob.hideBanner();
   }
@@ -116,8 +113,6 @@ export class MainPage implements OnInit {
   calculatePadding(){
     return this._paddingService.calculatePadding();
   }
-
-
 
   createElement(){
     this.creatingElement = !this.creatingElement;
@@ -130,8 +125,8 @@ export class MainPage implements OnInit {
       this.vehiclesArray.splice(index,1)
       this._session.vehiclesArray = this.vehiclesArray;
       await this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.user.id,this.vehiclesArray);
-      if(this._session.currentUser.backupId && this._session.autoBackup){
-        await this.backup.updateData();
+      if(this._drive.folderId && this._session.autoBackup){
+        //await this.backup.updateData();
       }
     }
   }
@@ -175,8 +170,8 @@ export class MainPage implements OnInit {
       this.eventsArray.splice(index,1)
       this._session.eventsArray = this.eventsArray;
       await this._storage.setStorageItem(storageConstants.USER_EVENTS+this.user.id,this.eventsArray);
-      if(this._session.currentUser.backupId && this._session.autoBackup){
-        await this.backup.updateData();
+      if(this._drive.folderId && this._session.autoBackup){
+        //await this.backup.updateData();
       }
     }
   }
@@ -226,8 +221,8 @@ export class MainPage implements OnInit {
       await this._notification.deleteNotification(reminder);
       const array = await this._notification.getPending();
       this.remindersArray = await array.notifications;
-      if(this._session.currentUser.backupId && this._session.autoBackup){
-        await this.backup.updateData();
+      if(this._drive.folderId && this._session.autoBackup){
+        //await this.backup.updateData();
       }
     }
   }

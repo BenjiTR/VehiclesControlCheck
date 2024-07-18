@@ -66,8 +66,8 @@
       <ion-label *ngIf="!connected" class="center color-red"><h1>{{'backup.account_no_connected'|translate}}</h1></ion-label>
     </ion-col>
     <ion-col size="12">
-      <ion-label *ngIf="connected && haveFile"><h1 class="center color-green"><ion-icon *ngIf="connected && haveFile" class="c-on ion-margin-end" src="../../../assets/icons/cloud-upload-outline.svg"></ion-icon>{{'backup.synchronizing'|translate}}</h1></ion-label>
-      <ion-label *ngIf="connected && !haveFile"><h1 class="center color-red"><ion-icon *ngIf="connected && !haveFile" class="c-off ion-margin-end" src="../../../assets/icons/cloud-offline-outline.svg"></ion-icon>{{'backup.backup_no_found'|translate}}</h1></ion-label>
+      <ion-label *ngIf="connected && haveFiles"><h1 class="center color-green"><ion-icon *ngIf="connected && haveFiles" class="c-on ion-margin-end" src="../../../assets/icons/cloud-upload-outline.svg"></ion-icon>{{'backup.synchronizing'|translate}}</h1></ion-label>
+      <ion-label *ngIf="connected && !haveFiles"><h1 class="center color-red"><ion-icon *ngIf="connected && !haveFiles" class="c-off ion-margin-end" src="../../../assets/icons/cloud-offline-outline.svg"></ion-icon>{{'backup.backup_no_found'|translate}}</h1></ion-label>
     </ion-col>
 
 
@@ -78,13 +78,26 @@
 
   <ion-row>
     <ion-col size="12">
-      <ion-button class="black"  *ngIf="connected && !haveFile" (click)="uploadFile()" expand="block" color="green" shape="round" translate="backup.generate_backup"></ion-button>
-      <ion-button class="black"  *ngIf="connected && haveFile" (click)="updateData()" expand="block" color="green" shape="round" translate="backup.update_backup"></ion-button>
-      <ion-button *ngIf="connected && haveFile" (click)="readFileFromDrive()" expand="block" color="warning" shape="round" translate="backup.download_and_restore"></ion-button>
+      <ion-button class="black"  *ngIf="connected && !haveFiles" (click)="uploadFile()" expand="block" color="green" shape="round" translate="backup.generate_backup"></ion-button>
+      <ion-button class="black"  *ngIf="connected && haveFiles" (click)="updateData()" expand="block" color="green" shape="round" translate="backup.update_backup"></ion-button>
+      <ion-button *ngIf="connected && haveFiles" (click)="readFileFromDrive()" expand="block" color="warning" shape="round" translate="backup.download_and_restore"></ion-button>
       <ion-button *ngIf="connected" (click)="unconnectAccount()" expand="block" color="danger" shape="round" translate="backup.unconnect_account"></ion-button>
     </ion-col>
   </ion-row>
 
+  <ion-button (click)="createFolder()" expand="block" fill="clear" shape="round">
+    Crea carpeta  </ion-button>
+  <ion-button (click)="uploadSampleFile()" expand="block" fill="clear" shape="round">
+Crea  </ion-button>
+
+<ion-button (click)="readAll()" expand="block" fill="clear" shape="round">
+  lee todo  </ion-button>
+
+<ion-button (click)="readFileFromDrive()" expand="block" fill="clear" shape="round">
+  Lee  </ion-button>
+
+  <ion-button (click)="deleteFile()" expand="block" fill="clear" shape="round">
+    Borra  </ion-button>
 
 
 
