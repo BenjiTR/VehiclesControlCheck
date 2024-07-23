@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonToggle, IonContent, IonHeader, IonTitle, IonToolbar, IonCol, IonRow, IonLabel, IonIcon, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonSegment, IonSegmentButton, IonRadio } from '@ionic/angular/standalone';
+import { IonToggle, IonContent, IonHeader, IonTitle, IonToolbar, IonCol, IonRow, IonLabel, IonIcon, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonSegment, IonSegmentButton, IonRadio, IonProgressBar, IonPopover, IonItemDivider } from '@ionic/angular/standalone';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslationConfigService } from 'src/app/services/translation.service';
 import { NotificationsService } from 'src/app/services/notifications.service';
@@ -10,19 +10,21 @@ import { RouterModule } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { DriveService } from 'src/app/services/drive.service';
 import { AlertService } from 'src/app/services/alert.service';
+import { PaddingService } from 'src/app/services/padding.service';
+import { BackupPage } from "../backup/backup.page";
 
 @Component({
   selector: 'app-notifications',
   templateUrl: './notifications.page.html',
   styleUrls: ['./notifications.page.scss'],
   standalone: true,
-  imports: [IonRadio, IonSegmentButton, IonSegment, IonCardContent, IonCardSubtitle, IonCardTitle, IonCardHeader, IonCard, RouterModule, IonIcon, FormsModule, IonLabel, IonCol, IonRow, IonToggle, TranslateModule, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [IonLabel, IonItemDivider, IonProgressBar, IonPopover, IonRadio, IonSegmentButton, IonSegment, IonCardContent, IonCardSubtitle, IonCardTitle, IonCardHeader, IonCard, RouterModule, IonIcon, FormsModule, IonLabel, IonCol, IonRow, IonToggle, TranslateModule, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, BackupPage]
 })
 export class NotificationsPage{
 
   public isAllowed:boolean = false;
   public errorText:string = "prueba";
-  public autoBk:boolean = false;
+  public autoBk:boolean = true;
   public connected:boolean = false;
   public hasFile:boolean = false;
 
@@ -32,17 +34,20 @@ export class NotificationsPage{
     private _notifications:NotificationsService,
     private _session:SessionService,
     private _drive:DriveService,
-    private _alert:AlertService
+    private _alert:AlertService,
+    private _paddingService:PaddingService
   ) { }
 
   async ionViewWillEnter() {
+    this.connected = await firstValueFrom(this._drive.conected$);
+    this.hasFile = await firstValueFrom(this._drive.haveFiles$);
+    console.log("estado: ",this.connected, this.hasFile)
     this.autoBk = this._session.autoBackup;
     console.log(this.autoBk);
     this.errorText = "";
     this.translate.setDefaultLang(this._translation.getLanguage());
     await this.checkPermissions();
-    this.connected = await firstValueFrom(this._drive.conected$);
-    this.hasFile = await firstValueFrom(this._drive.haveFiles$);
+
   }
 
   async checkPermissions():Promise<void>{
@@ -84,6 +89,8 @@ export class NotificationsPage{
         this.errorText = await this.translate.instant("notifications.not_allowed_text");
       }
     }
+    this.hasFile = await firstValueFrom(this._drive.haveFiles$);
+    this.saveInCloud(this.isAllowed)
   }
 
   onAutoBkChange(value: any) {
@@ -101,6 +108,28 @@ export class NotificationsPage{
       this._alert.createAlert(this.translate.instant("alert.no_backup_file"), this.translate.instant("alert.no_backup_files_text"))
     }else if(!this.connected && !this.hasFile){
       this._alert.createAlert(this.translate.instant("alert.no_connected_to_backup_account"), this.translate.instant("alert.no_connected_to_backup_account_text"))
+    }
+  }
+
+  calculatePadding(){
+    return this._paddingService.calculatePadding();
+  }
+
+  async saveInCloud(option:boolean){
+    if(this._drive.folderId && this._session.autoBackup){
+      const fileName = "remindersOptions";
+      let optionString:string;
+      if(option){
+        optionString = "true";
+      }else{
+        optionString = "false";
+      }
+      const exist = await this._drive.findFileByName(fileName)
+          if(exist){
+            this._drive.updateFile(exist, optionString, fileName);
+          }else{
+            this._drive.uploadFile(optionString, fileName);
+          }
     }
   }
 

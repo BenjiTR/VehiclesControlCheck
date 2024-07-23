@@ -58,6 +58,10 @@ export const routes: Routes = [
         canActivate: [canActivate]
       },
       {
+        path: 'faqs',
+        loadComponent: () => import('./pages/faqs/faqs.page').then( m => m.FaqsPage)
+      },
+      {
         path: '**',
         redirectTo: 'home',
         pathMatch: 'full',
@@ -89,5 +93,6 @@ export const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full',
   },
+
 
 ];

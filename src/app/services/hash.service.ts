@@ -47,11 +47,11 @@ export class HashService {
     const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     const caracteresLongitud = caracteres.length;
 
-    let resultado = 'V';
+    let resultado = 'E';
     let hashExists = true;
 
     while (hashExists) {
-      resultado = 'V';  // Reset the hash to start with 'V' again
+      resultado = 'E';  // Reset the hash to start with 'V' again
       for (let i = 0; i < 8; i++) {
         resultado += caracteres.charAt(Math.floor(Math.random() * caracteresLongitud));
       }

@@ -7,5 +7,6 @@ export class Backup {
   events:Event[] = [];
   reminders:LocalNotificationSchema[] = [];
   remindersOptions:boolean = false;
+  autoBackup:boolean=true;
   photo:string=""
 }

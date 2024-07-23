@@ -4,17 +4,17 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="brown" [fullscreen]="true">
+<ion-content class="brown" [fullscreen]="true" [ngStyle]="{'--padding-bottom.px':calculatePadding()}">
 
   <ion-card class="orange">
     <ion-card-header>
       <ion-card-title translate="notifications.reminders"></ion-card-title>
     </ion-card-header>
 
-    <ion-card-content>
+    <ion-card-content class="ion-no-padding">
       <ion-row class="ion-margin-top">
         <ion-col class="ion-text-center ion-margin-top" size="12">
-          <ion-toggle class="zoom-1-3" [enableOnOffLabels]="true" [checked]="isAllowed" (click)="togglePermissions()">{{'notifications.notificate'|translate}}</ion-toggle>
+          <ion-toggle class="zoom-1-3" (click)="requestPermissions()" [enableOnOffLabels]="true" [(ngModel)]="isAllowed" (click)="togglePermissions()">{{'notifications.reminders'|translate}}</ion-toggle>
         </ion-col>
       </ion-row>
       <ion-row>
@@ -30,34 +30,43 @@
       <ion-card-title translate="notifications.backup"></ion-card-title>
     </ion-card-header>
 
-    <ion-card-content>
+    <ion-card-content class="ion-no-padding">
       <ion-row class="ion-margin-top">
-        <ion-col class="ion-text-center ion-margin-top" size="12">
-          <ion-segment (click)="segmentAlerts()" disabled="!connected && hasFile" [value]="autoBk.toString()" (ionChange)="onAutoBkChange($event)">
-            <ion-segment-button value="false">
-              <ion-label>{{'notifications.manual'|translate}}</ion-label>
-            </ion-segment-button>
-            <ion-segment-button value="true">
-              <ion-label>{{'notifications.auto'|translate}}</ion-label>
-            </ion-segment-button>
-          </ion-segment>
-        </ion-col>
+       <ion-card class="no-margin-padding-card orange">
+         <ion-card-content class="ion-no-padding">
+           <app-backup></app-backup>
+         </ion-card-content>
+       </ion-card>
+
+
+       <ion-item-divider class="divider-center green ion-margin-top">
+        <ion-label><h2 class="black">{{'backup.mode_of_use'|translate}}</h2></ion-label>
+      </ion-item-divider>
+
+       <ion-col class="ion-text-center ion-no-padding ion-margin-top" size="12">
+        <ion-segment (click)="segmentAlerts()" [disabled]="!connected || !hasFile" [value]="autoBk.toString()" (ionChange)="onAutoBkChange($event)">
+          <ion-segment-button value="false">
+            <ion-label>{{'notifications.manual'|translate}}</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="true">
+            <ion-label>{{'notifications.auto'|translate}}</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+      </ion-col>
+      <ion-col size="12" class="ion-no-padding ion-margin-bottom ion-margin-top">
+        <ion-card class="no-margin-padding-card orange">
+          <ion-card-header>
+            <ion-card-subtitle class="subtitle"><ion-icon class="larger" src="../../../assets/icons/information-circle-outline.svg"></ion-icon>{{"backup.information"|translate}}</ion-card-subtitle>
+          </ion-card-header>
+
+          <ion-card-content>
+            <ion-label *ngIf="autoBk" class="ion-text-justify">{{'notifications.auto_text'|translate}}</ion-label>
+            <ion-label *ngIf="!autoBk" class="ion-text-justify">{{'notifications.no_auto_text'|translate}}</ion-label>
+          </ion-card-content>
+
+        </ion-card>
+      </ion-col>
       </ion-row>
-      <ion-row class="ion-margin-top">
-        <ion-col size="12">
-          <ion-card class="ion-no-margin ion-no-padding orange">
-            <ion-card-header>
-              <ion-card-subtitle class="subtitle"><ion-icon class="larger" src="../../../assets/icons/information-circle-outline.svg"></ion-icon>{{"backup.information"|translate}}</ion-card-subtitle>
-            </ion-card-header>
-
-            <ion-card-content>
-              <ion-label *ngIf="autoBk" class="ion-text-justify">{{'notifications.auto_text'|translate}}</ion-label>
-              <ion-label *ngIf="!autoBk" class="ion-text-justify">{{'notifications.no_auto_text'|translate}}</ion-label>
-            </ion-card-content>
-
-          </ion-card>
-        </ion-col>
-       </ion-row>
     </ion-card-content>
   </ion-card>
 

@@ -3,12 +3,11 @@ import { Filesystem, Directory, Encoding, WriteFileResult, ReadFileResult } from
 import { Backup } from '../models/backup.model';
 import { SessionService } from './session.service';
 import { StorageService } from './storage.service';
-import { storageConstants } from '../const/storage';
 import { NotificationsService } from './notifications.service';
 import { FilePicker } from '@capawesome/capacitor-file-picker';
 import { TranslateService } from '@ngx-translate/core';
 import { DateService } from './date.service';
-import { imageConstants } from '../const/img';
+import { DataService } from './data.service';
 
 @Injectable({
   providedIn:'root'
@@ -22,7 +21,8 @@ export class FileSystemService{
     private _storage:StorageService,
     private _notifications:NotificationsService,
     private translate:TranslateService,
-    private _date:DateService
+    private _date:DateService,
+    private _data:DataService
   ){
   }
 
@@ -39,35 +39,11 @@ export class FileSystemService{
   async createBackupFile():Promise<WriteFileResult>{
     return await Filesystem.writeFile({
       path: "vehicles-control/"+this._session.currentUser.id +'.vcc',
-      data: await this.buildData(),
+      data: await this._data.buildDeviceData(),
       directory: Directory.Documents,
       encoding: Encoding.UTF8,
       recursive:true
     })
-  }
-
-  async buildData():Promise<string>{
-    const backup:Backup = {
-      vehicles: await this._session.loadVehicles(),
-      events: await this._session.loadEvents(),
-      reminders: await this._session.loadReminders(),
-      remindersOptions: await this._session.getReminderNotifications(),
-      photo: await this._storage.getStorageItem(storageConstants.USER_PHOTO+this._session.currentUser.id) || ""
-    }
-    console.log(backup ,JSON.stringify(backup))
-    return JSON.stringify(backup);
-  }
-
-  async restoreData(backup:Backup):Promise<void>{
-    this._storage.setStorageItem(storageConstants.USER_VEHICLES+this._session.currentUser.id, backup.vehicles);
-    this._storage.setStorageItem(storageConstants.USER_EVENTS+this._session.currentUser.id, backup.events);
-    this._session.setReminderNotifications(backup.remindersOptions);
-    const correctReminders = await this._date.setDatesInArray(backup.reminders);
-    await this._notifications.createNotification(correctReminders);
-    this._storage.setStorageItem(storageConstants.USER_PHOTO+this._session.currentUser.id,backup.photo)
-    this._session.currentUser.photo = imageConstants.base64Prefix + backup.photo;
-
-    return;
   }
 
 
@@ -95,7 +71,7 @@ export class FileSystemService{
           if(!correctUser){
             throw new Error('Usuario incorrecto');
           }else{
-            await this.restoreData(data);
+            await this._data.restoreDeviceData(data);
             return;
           }
         } else {

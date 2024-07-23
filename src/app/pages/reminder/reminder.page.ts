@@ -127,8 +127,8 @@ export class ReminderPage{
          this._session.remindersArray[index] = newReminder;
          await this._notifications.createNotification([newReminder]);
          console.log(this.remindersArray[index]);
+         this.saveAndExit(newReminder);
       }
-      this.saveAndExit();
     }
   }
 
@@ -150,7 +150,7 @@ export class ReminderPage{
       extra:{
         vehicleId:this.vehicleId,
         userId:this.user.id,
-        titleWithoutCar:this.title
+        titleWithoutCar:this.title,
       }
     }
     return newReminder;
@@ -161,13 +161,19 @@ export class ReminderPage{
     return current!.brandOrModel;
   }
 
-  async saveAndExit(){
+  async saveAndExit(reminder:LocalNotificationSchema){
     this._session.remindersArray = this.remindersArray
     await this._admobService.showinterstitial();
     if(this._drive.folderId && this._session.autoBackup){
-      //await this.backup.updateData();
+      const fileName = "R"+reminder.id;
+      const exist = await this._drive.findFileByName(fileName)
+        if(exist){
+          this._drive.updateFile(exist, JSON.stringify(reminder), fileName, true);
+        }else{
+          this._drive.uploadFile(JSON.stringify(reminder), fileName, true);
+        }
     }
-    this.navCtr.navigateRoot('/dashboard');
+    this.navCtr.navigateRoot(['/dashboard'], { queryParams: { reload: true } });
   }
 
   async createNew(){
@@ -182,7 +188,7 @@ export class ReminderPage{
       const newReminder = await this.generateReminder();
       this.remindersArray.push(newReminder)
       await this._notifications.createNotification([newReminder]);
-      this.saveAndExit();
+      this.saveAndExit(newReminder);
     }
   }
 

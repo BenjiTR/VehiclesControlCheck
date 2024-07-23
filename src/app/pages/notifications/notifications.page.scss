@@ -10,3 +10,21 @@
   align-items: center;
   display: flex;
 }
+.backup-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+.no-margin-padding-card {
+  padding: 0px;
+  margin: 0px;
+}
+.divider-center{
+  justify-content: center;
+  display: grid;
+}
+.black{
+  color: black;
+}

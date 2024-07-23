@@ -44,7 +44,9 @@
       "file_notcreated":"Archivo no creado",
       "file_notcreated_text":"El archivo no pudo crearse, por favor revise si ya existe un archivo de backup para su usuario en la ruta 'Documentos/vehicles-control'",
       "incorrect_user":"Usuario incorrecto",
-      "incorrect_user_text":"El usuario propietario de los vehículos, no coincide con el usuario de la sesión"
+      "incorrect_user_text":"El usuario propietario de los vehículos, no coincide con el usuario de la sesión",
+      "error_cleaning":"Error limpiando",
+      "error_cleaning_text":"Error limpiando los arhivos, por favor, revise su conexión e intentelo mas tarde"
   },
   "alert":{
       "accept":"Aceptar",
@@ -99,9 +101,10 @@
       "file_restored_text":"Se ha restaurado correctamente la copia de seguridad",
       "actual_data_will_be_rewrite":"Los datos actuales serán sustituidos por la copia de seguridad.",
       "no_connected_to_backup_account":"No conectado a ninguna cuenta de respaldo",
-      "no_connected_to_backup_account_text":"Para seleccionar la copia de seguridad automática, debe conectarse a una cuenta de Drive y generar un primer Backup desde el apartado BACKUP",
+      "no_connected_to_backup_account_text":"Para seleccionar la copia de seguridad automática, debe conectarse a una cuenta de Drive y generar un primer respaldo",
       "no_backup_file":"No se ha creado una primera copia de seguridad",
-      "no_backup_files_text":"Para seleccionar la copia de seguridad automática, debe generar un primer respaldo desde el apartado BACKUP"
+      "no_backup_files_text":"Para seleccionar la copia de seguridad automática, debe generar un primer respaldo",
+      "update_files_text":"Se eliminarán los datos antiguos y se actualizarán utilizando los actuales"
     },
   "home":{
       "init_session":"Inicio de sesión",
@@ -221,7 +224,6 @@
     "account_connected":"Cuenta conectada",
     "account_no_connected":"Cuenta no conectada",
     "connect":"Conectar",
-    "synchronizing":"Sincronizando",
     "backup_no_found":"Backup no encontrado",
     "generate_backup":"Generar backup",
     "download_and_restore":"Descargar y restaurar",
@@ -238,7 +240,12 @@
     "in_drive":"En Drive",
     "in_drive_text":"Conectando con su cuenta de Drive, podrá mantener una sincronización de los datos de forma automática, o manualmente. Puede cambiar esta opción desde el menú de ajustes. La copia de seguridad no será visible en su drive, evitando el riesgo de borrado accidental.",
     "in_drive_text_recovery":"Para recuperar los datos en su nuevo dispositivo solo pulse el boton 'Descargar y restaurar'",
-    "wait_please":"Espere por favor"
+    "wait_please":"Espere por favor",
+    "backup_found":"Backup encontrado",
+    "upload_files":"Cargando archivos",
+    "download_files":"Descargando archivos",
+    "cleaning_files":"Limpiando archivos",
+    "mode_of_use":"Modo de uso (Solo Drive)"
   },
   "exportfile":{
     "export_data":"Exportar datos",
@@ -253,6 +260,9 @@
     "no_connected_info":"No se ha podido conectar con Drive",
     "is_connected_info":"Se ha conectado con Drive, pero no se han encontrado archivos de respaldo",
     "has_file_info":"Se ha conectado con Drive y se han encontrado archivos de respaldo",
-    "is_auto_info":"Se está sincronizando de forma automática con la copia de seguridad"
+    "is_auto_info":"Se está sincronizando de forma automática con la copia de seguridad",
+    "uploading_info":"Se están subiendo arhivos",
+    "downloading_info":"Se están descargando archivos",
+    "cleaning_info":"Se están limpiando archivos"
   }
 }

@@ -14,6 +14,7 @@ import { CameraServices } from 'src/app/services/camera.service';
 import { imageConstants } from 'src/app/const/img';
 import { StorageService } from 'src/app/services/storage.service';
 import { storageConstants } from 'src/app/const/storage';
+import { DriveService } from 'src/app/services/drive.service';
 
 
 @Component({
@@ -40,7 +41,8 @@ export class UserdataPage implements OnInit {
     private _authService:AuthService,
     private _alert:AlertService,
     private _camera:CameraServices,
-    private _storage:StorageService
+    private _storage:StorageService,
+    private _drive:DriveService
   ) { }
 
   ngOnInit() {
@@ -61,7 +63,6 @@ export class UserdataPage implements OnInit {
   cancelEditting(){
     this.isEditing=false;
     this.user = {...this._session.currentUser};
-    //console.log(this.user)
   }
 
   async saveNewData(){
@@ -106,11 +107,23 @@ export class UserdataPage implements OnInit {
       this._session.currentUser.photo = imageConstants.base64Prefix + photo;
       this.user.photo = imageConstants.base64Prefix + photo;
       this._storage.setStorageItem(storageConstants.USER_PHOTO+this.user.id, photo);
+      this.saveInCloud(photo)
     }
    }
   }
 
-
+  async saveInCloud(photo:string){
+    console.log(this._drive.folderId, this._session.autoBackup)
+    if(this._drive.folderId && this._session.autoBackup){
+      const fileName = "photo";
+      const exist = await this._drive.findFileByName(fileName)
+          if(exist){
+            this._drive.updateFile(exist, photo, fileName);
+          }else{
+            this._drive.uploadFile(photo, fileName);
+          }
+    }
+  }
 
 
 

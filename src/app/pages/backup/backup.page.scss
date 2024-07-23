@@ -10,11 +10,17 @@
 .c-on{
   color:green;
 }
+.c-cl{
+  color:orange;
+}
 .color-green{
   color: green;
 }
 .color-red{
   color: red;
+}
+.color-orange{
+  color: orange;
 }
 .subtitle{
   color: green;
@@ -43,5 +49,12 @@ ion-item-divider ion-label {
   color: blue;
 }
 
+ion-progress-bar {
+  --background: #ffc409;
+  --progress-background: #63c9b5;
+}
 
-
+.no-margin-padding-card {
+  padding: 0px;
+  margin: 0px;
+}

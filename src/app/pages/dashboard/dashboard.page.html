@@ -9,11 +9,10 @@
   <ion-content class="pastel-to-blue">
     <ion-row class="ion-margin-top mt-3 blue round-corner-up">
       <ion-col class="ion-margin-top" size="12">
-        <h3 class="ion-margin-top" (click)="cerrarMenu()" (click)="goMain()" class="flex ion-align-items-center"><ion-icon class="ion-margin-end" size="large" src="../../../assets/icons/document-text-outline.svg"></ion-icon>{{'dashboard.main_page'|translate}}</h3>
+        <h3 class="ion-margin-top" (click)="cerrarMenu()" [routerLink]="['/dashboard/main']" class="flex ion-align-items-center"><ion-icon class="ion-margin-end" size="large" src="../../../assets/icons/document-text-outline.svg"></ion-icon>{{'dashboard.main_page'|translate}}</h3>
         <h3 class="ion-margin-top" (click)="cerrarMenu()" [routerLink]="['/dashboard/userdata']" class="flex ion-align-items-center"><ion-icon class="ion-margin-end" size="large" src="../../../assets/icons/person-outline.svg"></ion-icon>{{'dashboard.user_data'|translate}}</h3>
         <h3 class="ion-margin-top" (click)="cerrarMenu()" [routerLink]="['/dashboard/notifications']" class="flex ion-align-items-center"><ion-icon class="ion-margin-end" size="large" src="../../../assets/icons/cog-outline.svg"></ion-icon>{{'dashboard.adjust'|translate}}</h3>
-        <h3 class="ion-margin-top" (click)="cerrarMenu()" [routerLink]="['/dashboard/backup']" class="flex ion-align-items-center"><ion-icon class="ion-margin-end" size="large" src="../../../assets/icons/cloud-upload-outline.svg"></ion-icon>{{'dashboard.adjust_backup'|translate}}</h3>
-        <h3 class="ion-margin-top" (click)="cerrarMenu()" [routerLink]="['/#']" class="flex ion-align-items-center"><ion-icon class="ion-margin-end" size="large" src="../../../assets/icons/help-outline.svg"></ion-icon>{{'dashboard.faqs'|translate}}</h3>
+        <h3 class="ion-margin-top" (click)="cerrarMenu()" [routerLink]="['/dashboard/faqs']" class="flex ion-align-items-center"><ion-icon class="ion-margin-end" size="large" src="../../../assets/icons/help-outline.svg"></ion-icon>{{'dashboard.faqs'|translate}}</h3>
         <h3 class="ion-margin-top" (click)="cerrarMenu()" [routerLink]="['/#']" class="flex ion-align-items-center"><ion-icon class="ion-margin-end" size="large" src="../../../assets/icons/alert-outline.svg"></ion-icon>{{'dashboard.point_out_problem'|translate}}</h3>
         <h3 class="ion-margin-top" (click)="cerrarMenu()" [routerLink]="['/#']" class="flex ion-align-items-center"><ion-icon class="ion-margin-end" size="large" src="../../../assets/icons/share-social-outline.svg"></ion-icon>{{'dashboard.like_share'|translate}}</h3>
         <h3 class="ion-margin-top" (click)="goUseTerms()" class="flex ion-align-items-center"><ion-icon class="ion-margin-end" size="large" src="../../../assets/icons/information-circle-outline.svg"></ion-icon>{{'dashboard.user_terms'|translate}}</h3>
@@ -43,8 +42,6 @@
       </ion-buttons>
     </ion-toolbar>
   </ion-header>
-
-    <app-userdataview></app-userdataview>
 
   <ion-content class="brown">
     <ion-router-outlet></ion-router-outlet>

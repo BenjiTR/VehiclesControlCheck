@@ -1,4 +1,4 @@
-import { Component, OnInit, DoCheck } from '@angular/core';
+import { Component, OnInit, DoCheck, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonTextarea, IonAccordion, IonAccordionGroup, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonMenu, IonMenuButton, IonRouterOutlet, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar, MenuController, ModalController, NavController, IonDatetime, IonFab, IonFabList, IonFabButton, IonBadge } from '@ionic/angular/standalone';
@@ -25,6 +25,7 @@ import { DateService } from 'src/app/services/date.service';
 import { DatePipe } from '@angular/common';
 import { LoaderService } from 'src/app/services/loader.service';
 import { DriveService } from 'src/app/services/drive.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-main',
@@ -50,6 +51,8 @@ export class MainPage implements OnInit {
   public filtering:boolean=false;
   public reload:boolean=false;
 
+  private downloadingSubscription: Subscription;
+
   constructor(
     private translate:TranslateService,
     private _translation:TranslationConfigService,
@@ -70,6 +73,12 @@ export class MainPage implements OnInit {
     private navCtr:NavController
   ) {
     this.eventTypes = etypes.getEventTypes();
+    this.downloadingSubscription = this._drive.downloading$.subscribe(data=>{
+      if(!data){
+        console.log("recargamos")
+        this.loadAllData();
+      }
+    });
   }
 
   async ngOnInit() {
@@ -92,12 +101,20 @@ export class MainPage implements OnInit {
     this.reload = this.activatedroute.snapshot.queryParams['reload'] || false;
     if(this.reload){
       console.log("recarga")
+      await this._loader.presentLoader();
       await this.loadAllData();
+      await this._loader.dismissLoader();
     }
   }
 
+  OnDestroy(){
+    this.downloadingSubscription.unsubscribe();
+  }
+
+
   async loadAllData():Promise<void>{
     this.vehiclesArray = await this._session.loadVehicles();
+    console.log(this.vehiclesArray)
     this.eventsArray = await this._session.loadEvents();
     this.remindersArray = await this._session.loadReminders();
     await this._session.getReminderNotifications();
@@ -126,7 +143,8 @@ export class MainPage implements OnInit {
       this._session.vehiclesArray = this.vehiclesArray;
       await this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.user.id,this.vehiclesArray);
       if(this._drive.folderId && this._session.autoBackup){
-        //await this.backup.updateData();
+        const id = await this._drive.findFileByName(vehicle.id)
+        await this._drive.deleteFile(id, true);
       }
     }
   }
@@ -171,7 +189,8 @@ export class MainPage implements OnInit {
       this._session.eventsArray = this.eventsArray;
       await this._storage.setStorageItem(storageConstants.USER_EVENTS+this.user.id,this.eventsArray);
       if(this._drive.folderId && this._session.autoBackup){
-        //await this.backup.updateData();
+        const id = await this._drive.findFileByName(event.id)
+        await this._drive.deleteFile(id, true);
       }
     }
   }
@@ -222,7 +241,8 @@ export class MainPage implements OnInit {
       const array = await this._notification.getPending();
       this.remindersArray = await array.notifications;
       if(this._drive.folderId && this._session.autoBackup){
-        //await this.backup.updateData();
+        const id = await this._drive.findFileByName("R"+reminder.id)
+        await this._drive.deleteFile(id, true);
       }
     }
   }

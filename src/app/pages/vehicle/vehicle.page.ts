@@ -115,10 +115,10 @@ export class VehiclePage implements OnInit {
       await this._loader.presentLoader();
       const index = this.vehiclesArray.findIndex(vehicle => vehicle.id === this.vehicleToEditId);
       if(index !== -1){
-        const newvehicle = await this.generateVehicle();
-        this.vehiclesArray[index] = newvehicle;
+        const newVehicle = await this.generateVehicle();
+        this.vehiclesArray[index] = newVehicle;
+        this.saveAndExit(newVehicle);
       }
-      this.saveAndExit();
     }else{
       this._alert.createAlert(this.translate.instant("alert.enter_name_or_model"),this.translate.instant("alert.enter_name_or_model_text"));
     }
@@ -127,9 +127,9 @@ export class VehiclePage implements OnInit {
   async createNew(){
     if(this.brandOrModel){
       await this._loader.presentLoader();
-      const newvehicle = await this.generateVehicle();
-      this.vehiclesArray.push(newvehicle)
-      this.saveAndExit();
+      const newVehicle = await this.generateVehicle();
+      this.vehiclesArray.push(newVehicle)
+      this.saveAndExit(newVehicle);
     }else{
       this._alert.createAlert(this.translate.instant("alert.enter_name_or_model"),this.translate.instant("alert.enter_name_or_model_text"));
     }
@@ -143,7 +143,7 @@ export class VehiclePage implements OnInit {
       hash = await this._hash.generateVehiclePhrase();
 
     }
-    const newvehicle:Vehicle = {
+    const newVehicle:Vehicle = {
       typeOfVehicle:this.typeOfVehicle ,
       brandOrModel: this.brandOrModel ,
       carRegistration: this.carRegistration ,
@@ -157,17 +157,23 @@ export class VehiclePage implements OnInit {
       userId: this.user.id,
       id:hash
     }
-    return newvehicle;
+    return newVehicle;
   }
 
-  async saveAndExit(){
+  async saveAndExit(vehicle:Vehicle){
     await this._admobService.showinterstitial();
     this._session.vehiclesArray = this.vehiclesArray;
     this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.user.id,this.vehiclesArray);
     if(this._drive.folderId && this._session.autoBackup){
-      //await this.backup.updateData();
+      const fileName = vehicle.id;
+      const exist = await this._drive.findFileByName(fileName)
+        if(exist){
+          this._drive.updateFile(exist, JSON.stringify(vehicle), fileName, true);
+        }else{
+          this._drive.uploadFile(JSON.stringify(vehicle), fileName, true);
+        }
     }
-    this.navCtr.navigateRoot('/dashboard')
+    this.navCtr.navigateRoot(['/dashboard'], { queryParams: { reload: true } });
   }
 
 }

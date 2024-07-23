@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonRow, IonCol, IonImg, IonItem, IonInput, IonIcon, IonFooter, IonButton, IonCheckbox, IonLabel, IonAvatar, IonPopover } from '@ionic/angular/standalone';
@@ -8,6 +8,7 @@ import { RouterModule, Router } from '@angular/router';
 import { SessionService } from 'src/app/services/session.service';
 import { User } from 'src/app/models/user.model';
 import { DriveService } from 'src/app/services/drive.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-userdataview',
@@ -22,7 +23,15 @@ export class UserdataviewPage implements OnInit {
   public token:string = "";
   public connected:boolean = false;
   public hasFiles:boolean = false;
-  public auto:boolean = false;
+  public uploading:boolean = false;
+  public downloading:boolean = false;
+  public cleaning:boolean = false;
+
+  private connectedSubscription:Subscription;
+  private haveFilesSubscription:Subscription;
+  private uploadingSubscription:Subscription;
+  private downloadingSubscription:Subscription;
+  private cleaningSubscription:Subscription;
 
   constructor(
     private translate: TranslateService,
@@ -31,23 +40,49 @@ export class UserdataviewPage implements OnInit {
     private _session:SessionService,
     private _drive:DriveService
   ) {
-    this._drive.conected$.subscribe(value=>{
+    this.connectedSubscription = this._drive.conected$.subscribe(async value=>{
+      this.token = await this._session.getToken();
+      console.log(this.token)
       this.connected = value;
     })
-    this._drive.haveFiles$.subscribe(value=>{
+    this.haveFilesSubscription = this._drive.haveFiles$.subscribe(value=>{
       this.hasFiles = value;
+    })
+    this.uploadingSubscription = this._drive.uploading$.subscribe(value=>{
+      this.uploading = value;
+    })
+    this.downloadingSubscription = this._drive.downloading$.subscribe(value=>{
+      this.downloading = value;
+    })
+    this.cleaningSubscription = this._drive.cleaning$.subscribe(value=>{
+      this.cleaning = value;
     })
   }
 
   async ngOnInit() {
     this.translate.setDefaultLang(this._translation.getLanguage());
     this.user = this._session.currentUser;
-    // console.log(this.user)
-    this.token = await this._session.getToken();
-    this.auto = await this._session.getAutoBackup();
   }
-  ionViewWillEnter(){
+  async ionViewWillEnter(){
     this.user = this._session.currentUser;
+  }
+
+  OnDestroy(){
+    if(this.connectedSubscription){
+      this.connectedSubscription.unsubscribe();
+    }
+    if(this.haveFilesSubscription){
+      this.haveFilesSubscription.unsubscribe();
+    }
+    if(this.uploadingSubscription){
+      this.uploadingSubscription.unsubscribe();
+    }
+    if(this.downloadingSubscription){
+      this.downloadingSubscription.unsubscribe();
+    }
+    if(this.cleaningSubscription){
+      this.cleaningSubscription.unsubscribe();
+    }
   }
 
 }

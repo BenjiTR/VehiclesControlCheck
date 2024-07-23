@@ -51,8 +51,9 @@ export class SessionService{
   async loadVehicles(): Promise<Vehicle[]>{
     const temporalVehiclesArray = await this._storage.getStorageItem(storageConstants.USER_VEHICLES+this.currentUser.id)
     if(this._authService.isInTest == true){
-      this.vehiclesArray = this._test.vehicles;
-      this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.currentUser.id, this.vehiclesArray);
+      //this.vehiclesArray = this._test.vehicles;
+      //this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.currentUser.id, this.vehiclesArray);
+      this.vehiclesArray = temporalVehiclesArray;
       return this.vehiclesArray;
     }else if(!temporalVehiclesArray){
       this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.currentUser.id, this.vehiclesArray)
@@ -66,8 +67,9 @@ export class SessionService{
   async loadEvents(): Promise<Event[]>{
     const temporalEventsArray = await this._storage.getStorageItem(storageConstants.USER_EVENTS+this.currentUser.id)
     if(this._authService.isInTest == true){
-      this.eventsArray = this._test.events;
-      this._storage.setStorageItem(storageConstants.USER_EVENTS+this.currentUser.id, this.eventsArray);
+      //this.eventsArray = this._test.events;
+      //this._storage.setStorageItem(storageConstants.USER_EVENTS+this.currentUser.id, this.eventsArray);
+      this.eventsArray = temporalEventsArray;
       return this.eventsArray;
     }else if(!temporalEventsArray){
       this._storage.setStorageItem(storageConstants.USER_EVENTS+this.currentUser.id, this.eventsArray);
@@ -80,8 +82,16 @@ export class SessionService{
 
   async loadReminders(): Promise<LocalNotificationSchema[]>{
     if(this._platform.is("android")){
-      const temporalArray = await this._notification.getPending()
-      this.remindersArray = temporalArray.notifications;
+      const temporalArray = await this._notification.getPending();
+      let filteredArray:any[] = [];
+      temporalArray.notifications.forEach(element => {
+        if (this.vehiclesArray.some(vehicle => vehicle.id === element.extra.vehicleId)) {
+          filteredArray.push(element);
+        }
+        });
+
+      this.remindersArray = filteredArray;
+      console.log(filteredArray, temporalArray.notifications)
       return this.remindersArray;
     }else{
       //this.remindersArray = await this._test.createTestreminders(this.remindersArray);

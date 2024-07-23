@@ -66,8 +66,7 @@ export class NeweventPage {
   }
 
   async ionViewWillEnter() {
-          await this._loader.presentLoader();
-;
+    await this._loader.presentLoader();
     this.translate.setDefaultLang(this._translation.getLanguage());
     this.eventsArray = await this._session.eventsArray;
     this.vehiclesArray = await this._session.vehiclesArray;
@@ -76,8 +75,7 @@ export class NeweventPage {
       this.getEvent();
     await this._loader.dismissLoader();
     }
-        await this._loader.dismissLoader();
-;
+    await this._loader.dismissLoader();
   }
 
   getEvent(){
@@ -120,16 +118,15 @@ export class NeweventPage {
     }else if(!this.type){
       this._alert.createAlert(this.translate.instant("alert.enter_type"),this.translate.instant("alert.enter_type_text"));
     }else{
-            await this._loader.presentLoader();
-;
+      await this._loader.presentLoader();
       const index = this.eventsArray.findIndex(event => event.id === this.eventToEditId);
       if(index !== -1){
          const newEvent = await this.generateEvent();
          this._session.eventsArray[index] = newEvent;
          console.log(this.eventsArray[index]);
          console.log(newEvent)
+         this.saveAndExit(newEvent);
       }
-      this.saveAndExit();
     }
   }
 
@@ -154,14 +151,20 @@ export class NeweventPage {
     return newEvent;
   }
 
-  async saveAndExit(){
+  async saveAndExit(event:Event){
     await this._admobService.showinterstitial();
     this._session.eventsArray = this.eventsArray;
     await this._storage.setStorageItem(storageConstants.USER_EVENTS+this.user.id,this.eventsArray);
     if(this._drive.folderId && this._session.autoBackup){
-      //await this.backup.updateData();
+      const fileName = event.id;
+      const exist = await this._drive.findFileByName(fileName)
+          if(exist){
+            this._drive.updateFile(exist, JSON.stringify(event), fileName, true);
+          }else{
+            this._drive.uploadFile(JSON.stringify(event), fileName, true);
+          }
     }
-    this.navCtr.navigateRoot('/dashboard')
+    this.navCtr.navigateRoot(['/dashboard'], { queryParams: { reload: true } });
   }
 
   async createNew(){
@@ -170,11 +173,10 @@ export class NeweventPage {
     }else if(!this.type){
       this._alert.createAlert(this.translate.instant("alert.enter_type"),this.translate.instant("alert.enter_type_text"));
     }else{
-            await this._loader.presentLoader();
-;
+      await this._loader.presentLoader();
       const newEvent = await this.generateEvent();
       this.eventsArray.push(newEvent)
-      this.saveAndExit();
+      this.saveAndExit(newEvent);
     }
   }
 
@@ -202,14 +204,11 @@ export class NeweventPage {
 
   async addImage() {
   const photo = await this._camera.takePhoto();
-        await this._loader.presentLoader();
-;
+    await this._loader.presentLoader();
   if(photo){
     this.images.push(imageConstants.base64Prefix+photo);
   }
-      await this._loader.dismissLoader();
-;
-
+    await this._loader.dismissLoader();
 }
 
 }

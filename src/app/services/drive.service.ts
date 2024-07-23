@@ -10,6 +10,7 @@ import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { backupConstants } from '../const/backup';
 import { ToastService } from './toast.service';
+import { DataService } from './data.service';
 
 
 @Injectable({
@@ -24,6 +25,14 @@ export class DriveService {
   public conected$ = this.connected.asObservable();
   private haveFiles = new BehaviorSubject<boolean>(false)
   public haveFiles$ = this.haveFiles.asObservable();
+  private uploading = new BehaviorSubject<boolean>(false)
+  public uploading$ = this.uploading.asObservable();
+  private downloading = new BehaviorSubject<boolean>(false)
+  public downloading$ = this.downloading.asObservable();
+  private progress = new BehaviorSubject<any[]>([0.0, 0.0])
+  public progress$ = this.progress.asObservable();
+  private cleaning = new BehaviorSubject<boolean>(false)
+  public cleaning$ = this.cleaning.asObservable();
 
   constructor(
     private _session:SessionService,
@@ -31,9 +40,8 @@ export class DriveService {
     private translate:TranslateService,
     private _translation:TranslationConfigService,
     private _auth:AuthService,
-    private _file:FileSystemService,
     private http: HttpClient,
-    private _toast:ToastService
+    private _data:DataService
   ) {}
 
   //REFRESCAR TOKEN Y CONECTAR
@@ -50,16 +58,16 @@ export class DriveService {
     await this._auth.refreshGoogle()
     .then(async(msg)=>{
       this.token = msg.accessToken;
-      this._session.setGoogleToken(this.token);
-      this.setConnectedAndTryFiles();
+      await this._session.setGoogleToken(this.token);
+      await this.setConnectedAndTryFiles();
     })
     .catch(async (err)=>{
       console.log("error",err);
       await this._auth.loginWithGoogle()
       .then(async(user)=>{
         this.token = user.authentication.accessToken;
-        this._session.setGoogleToken(this.token);
-        this.setConnectedAndTryFiles();
+        await this._session.setGoogleToken(this.token);
+        await this.setConnectedAndTryFiles();
       })
       .catch(async (err)=>{
         console.log("error",err);
@@ -68,18 +76,14 @@ export class DriveService {
         }
       })
     })
+    return;
   }
 
   async setConnectedAndTryFiles(){
     this.connected.next(true);
     await this.existsFolder();
-    const files = await this.listFilesInFolder();
-    console.log("files: ", files.files)
-    if(files.files.length >0){
-      this.changeHaveFiles(true);
-    }
+    return;
   }
-
 
   //CAMBIAR VALOR DE OBSERVABLES
   changeConnected(value:boolean){
@@ -88,21 +92,39 @@ export class DriveService {
   changeHaveFiles(value:boolean){
     this.haveFiles.next(value);
   }
+  changeUploading(value:boolean){
+    this.uploading.next(value);
+  }
+  changeDownloading(value:boolean){
+    this.downloading.next(value);
+  }
+  changeProgress(value:number, buffer:number){
+    this.progress.next([value,buffer]);
+  }
+  changecleaning(value:boolean){
+    this.cleaning.next(value);
+  }
 
   //MÉTODOS DE ACCIONES COMPUESTAS, LAS QUE REALIZAN USUARIO O SISTEMA UTILIZANDO LOS MÉTODOS DE CONSULTA SIMPLE.
   //COMPROBAR SI EXISTE CARPETA
   async existsFolder():Promise<void>{
     await this.getFolderId()
     .then(async (folderId)=>{
-      if(folderId){
+      if(folderId !== null){
         this.folderId = folderId;
+        console.log("carpeta: ",folderId)
+        await this.listFilesInFolder()
+        .then((resp)=>{
+          if(resp.length >0){
+            console.log("archivos: ",resp)
+            this.changeHaveFiles(true);
+            console.log("se cambia")
+          }
+        })
       }
     })
     return
   }
-
-
-
 
 
 
@@ -123,6 +145,8 @@ export class DriveService {
 
       const response: any = await firstValueFrom(this.http.post(backupConstants.API_URL_FIL, metadata, { headers }));
 
+      this.folderId = response.id;
+
       return response.id;
     } catch (error) {
       console.error('Error al crear la carpeta:', error);
@@ -132,6 +156,8 @@ export class DriveService {
 
   //OBTENER ID DE CARPETA
   async getFolderId(): Promise<any> {
+    console.log("ID de usuario: ", this._session.currentUser.id);
+
     try {
       const headers = new HttpHeaders({
         'Authorization': `Bearer ${this.token}`
@@ -145,38 +171,71 @@ export class DriveService {
 
       const response: any = await firstValueFrom(this.http.get(backupConstants.API_URL_FIL, { headers, params }));
 
+      console.log("Response de getFolderId:", response);
+
       if (response.files && response.files.length > 0 && response.files[0].id) {
         return response.files[0].id;
+      } else {
+        console.log('No se encontró la carpeta para el usuario actual.');
+        return null;
       }
     } catch (error) {
       console.error('Error al obtener el ID de la carpeta:', error);
+      throw new Error('Error al obtener el ID de la carpeta');
     }
   }
 
 
+
   //LISTAR ARCHIVOS
   listFilesInFolder(): Promise<any> {
+    console.log("carpeta: ", this.folderId);
+
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.token}`
     });
 
-    const params = new HttpParams()
-    .set('q', `'${this.folderId}' in parents and trashed=false`)
-    .set('spaces', 'appDataFolder')
-    .set('fields', 'nextPageToken, files(id, name)')
-    .set('pageSize', '10');
+    let params = new HttpParams()
+      .set('q', `'${this.folderId}' in parents and trashed=false`)
+      .set('spaces', 'appDataFolder')
+      .set('fields', 'nextPageToken, files(id, name)')
+      .set('pageSize', '10');
 
-    return firstValueFrom(this.http.get(backupConstants.API_URL_FIL, { headers, params }))
-    .then(response => response)
-    .catch(error => {
-      console.error('Error al listar archivos en la carpeta:', error);
-    });
+    const fetchFiles = async (pageToken?: string): Promise<any[]> => {
+      if (pageToken) {
+        params = params.set('pageToken', pageToken);
+      }
+
+      try {
+        const response:any = await firstValueFrom(this.http.get(backupConstants.API_URL_FIL, { headers, params }));
+        const files = response.files || [];
+        const nextPageToken = response.nextPageToken;
+
+        if (nextPageToken) {
+          // Recursively fetch the next page of files
+          const nextFiles = await fetchFiles(nextPageToken);
+          return files.concat(nextFiles);
+        }
+
+        return files;
+      } catch (error) {
+        console.error('Error al listar archivos en la carpeta:', error);
+        throw error;
+      }
+    };
+
+    return fetchFiles();
   }
 
+
   //SUBIR UN ARCHIVO
-  async uploadFile(content: string, fileName: string): Promise<any> {
+  async uploadFile(content: string, fileName: string, notComplete?:boolean): Promise<any> {
     if (!this.token) {
       throw new Error("User is not authenticated. Please log in.");
+    }
+
+    if(notComplete){
+      this.changeUploading(true);
     }
 
     const file = new Blob([content], { type: 'text/plain' });
@@ -201,6 +260,10 @@ export class DriveService {
       const error = await response.json();
       console.error("Error uploading file:", error);
       throw new Error(error.message || "Failed to upload file");
+    }
+
+    if(notComplete){
+      this.changeUploading(false);
     }
 
     return response.json();
@@ -228,9 +291,7 @@ export class DriveService {
 
     console.log(response, response.json)
     const result = await response.json();
-    console.log(result)
     const files = result.files;
-    console.log(result.files)
 
 
     if (files && files.length > 0) {
@@ -241,8 +302,11 @@ export class DriveService {
   }
 
   //ACTUALIZAR UN ARCHIVO
-  async updateFile(fileId:string, content:string, fileName:string) {
+  async updateFile(fileId:string, content:string, fileName:string, notComplete?:boolean) {
 
+    if(notComplete){
+      this.changeUploading(true);
+    }
     const file = new Blob([content], { type: 'text/plain' });
 
     const metadata = {
@@ -264,6 +328,10 @@ export class DriveService {
       const error = await response.json();
       console.error("Error updating file:", error);
       throw new Error(error.message || "Failed to update file");
+    }
+
+    if(notComplete){
+      this.changeUploading(false);
     }
 
     return response.json();
@@ -288,13 +356,15 @@ export class DriveService {
     }
 
     const fileContent = await response.text();
-    console.log(fileContent);
     return fileContent;
   }
 
 
   //BORRAR UN ARCHIVO
-  async deleteFile(fileId: string): Promise<any> {
+  async deleteFile(fileId: string, notAll?:boolean): Promise<any> {
+    if(notAll){
+      this.changecleaning(true);
+    }
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.token}`
     });
@@ -306,15 +376,22 @@ export class DriveService {
     const observable = this.http.delete(`${backupConstants.API_URL_FIL}/${fileId}`, { headers, params });
 
     return firstValueFrom(observable)
-      .then(response => response)
+      .then(response => {
+        if(notAll){
+          this.changecleaning(false);
+        }
+        return response;
+      })
       .catch(error => {
         console.error('Error al eliminar el archivo:', error);
-        throw error; // Propagar el error para manejarlo en el componente
+        throw error;
       });
+
   }
 
 
 }
+
 
 
 

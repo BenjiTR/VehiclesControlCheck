@@ -34,7 +34,7 @@ export class UserTestService {
       insurancePolicy: "POL123456789",
       insuranceRenewalDate: "2024-03-15",
       roadsideAssistanceNumber: "18001234567",
-      userId: "user123",
+      userId: "00000000000000000001",
       id: "veh123"
     },
     {
@@ -48,7 +48,7 @@ export class UserTestService {
       insurancePolicy: "POL987654321",
       insuranceRenewalDate: "2023-07-22",
       roadsideAssistanceNumber: "18007654321",
-      userId: "user456",
+      userId: "00000000000000000001",
       id: "veh456"
     },
     {
@@ -62,7 +62,7 @@ export class UserTestService {
       insurancePolicy: "POL112233445",
       insuranceRenewalDate: "2023-10-10",
       roadsideAssistanceNumber: "18009876543",
-      userId: "user789",
+      userId: "00000000000000000001",
       id: "veh789"
     }
   ];
@@ -87,186 +87,6 @@ export class UserTestService {
         cost: 1200,
         info: "Minor collision repair",
         images: []
-    },
-    {
-        id: "event003",
-        vehicleId: "veh789",
-        date: "2023-05-18",
-        type: "Maintenance",
-        km: "20000",
-        cost: 300,
-        info: "Brake pads replacement",
-        images: ["https://via.placeholder.com/150", "https://via.placeholder.com/150"]
-    },
-    {
-        id: "event004",
-        vehicleId: "veh123",
-        date: "2023-11-12",
-        type: "Inspection",
-        km: "30000",
-        cost: 75,
-        info: "Annual vehicle inspection",
-        images: []
-    },
-    {
-        id: "event005",
-        vehicleId: "veh456",
-        date: "2022-06-25",
-        type: "Maintenance",
-        km: "10000",
-        cost: 100,
-        info: "Chain adjustment and lubrication",
-        images: ["https://via.placeholder.com/150"]
-    },
-    {
-        id: "event006",
-        vehicleId: "veh789",
-        date: "2021-12-01",
-        type: "Accident",
-        km: "18000",
-        cost: 2000,
-        info: "Front bumper replacement",
-        images: []
-    },
-    {
-        id: "event007",
-        vehicleId: "veh123",
-        date: "2023-02-14",
-        type: "Maintenance",
-        km: "27000",
-        cost: 200,
-        info: "Battery replacement",
-        images: ["https://via.placeholder.com/150"]
-    },
-    {
-        id: "event008",
-        vehicleId: "veh456",
-        date: "2020-11-30",
-        type: "Maintenance",
-        km: "3000",
-        cost: 50,
-        info: "Spark plug replacement",
-        images: []
-    },
-    {
-        id: "event009",
-        vehicleId: "veh789",
-        date: "2022-07-10",
-        type: "Maintenance",
-        km: "21000",
-        cost: 250,
-        info: "Air filter replacement",
-        images: ["https://via.placeholder.com/150"]
-    },
-    {
-        id: "event010",
-        vehicleId: "veh123",
-        date: "2024-03-09",
-        type: "Accident",
-        km: "32000",
-        cost: 1700,
-        info: "Rear-end collision repair",
-        images: []
-    },
-    {
-        id: "event011",
-        vehicleId: "veh456",
-        date: "2023-01-15",
-        type: "Maintenance",
-        km: "8000",
-        cost: 80,
-        info: "Brake fluid replacement",
-        images: ["https://via.placeholder.com/150"]
-    },
-    {
-        id: "event012",
-        vehicleId: "veh789",
-        date: "2023-09-20",
-        type: "Inspection",
-        km: "23000",
-        cost: 100,
-        info: "Emission test",
-        images: []
-    },
-    {
-        id: "event013",
-        vehicleId: "veh123",
-        date: "2021-04-18",
-        type: "Maintenance",
-        km: "22000",
-        cost: 160,
-        info: "Tire replacement",
-        images: ["https://via.placeholder.com/150"]
-    },
-    {
-        id: "event014",
-        vehicleId: "veh456",
-        date: "2022-09-05",
-        type: "Maintenance",
-        km: "7000",
-        cost: 90,
-        info: "Coolant replacement",
-        images: []
-    },
-    {
-        id: "event015",
-        vehicleId: "veh789",
-        date: "2022-12-30",
-        type: "Maintenance",
-        km: "25000",
-        cost: 180,
-        info: "Transmission fluid replacement",
-        images: ["https://via.placeholder.com/150"]
-    },
-    {
-        id: "event016",
-        vehicleId: "veh123",
-        date: "2023-06-22",
-        type: "Maintenance",
-        km: "28000",
-        cost: 140,
-        info: "Alignment and balancing",
-        images: []
-    },
-    {
-        id: "event017",
-        vehicleId: "veh456",
-        date: "2023-10-10",
-        type: "Accident",
-        km: "12000",
-        cost: 500,
-        info: "Side panel replacement",
-        images: ["https://via.placeholder.com/150"]
-    },
-    {
-        id: "event018",
-        vehicleId: "veh789",
-        date: "2021-07-04",
-        type: "Maintenance",
-        km: "16000",
-        cost: 200,
-        info: "Wheel alignment",
-        images: []
-    },
-    {
-        id: "event019",
-        vehicleId: "veh123",
-        date: "2022-05-11",
-        type: "Maintenance",
-        km: "26000",
-        cost: 220,
-        info: "Fuel injector cleaning",
-        images: ["https://via.placeholder.com/150"]
-    },
-    {
-        id: "event020",
-        vehicleId: "veh456",
-        date: "2021-03-22",
-        type: "Inspection",
-        km: "9000",
-        cost: 60,
-        info: "Safety inspection",
-        images: []
     }
   ];
 
@@ -283,7 +103,7 @@ export class UserTestService {
         schedule: {at: new Date((new Date().getTime() + index * 60 * 1000))},
         extra:{
           vehicleId:"veh123",
-          userId:"00000000000000000001",
+          userId:"000000000000000000001",
           titleWithoutCar:"test - "+index
         }
       }
