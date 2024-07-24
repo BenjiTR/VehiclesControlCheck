@@ -12,6 +12,7 @@ import { PaddingService } from 'src/app/services/padding.service';
 import { MainAnimation, RoadAnimation, SecondaryAnimation } from 'src/app/services/animation.service';
 import { SessionService } from 'src/app/services/session.service';
 import { LoaderService } from 'src/app/services/loader.service';
+import { Share } from '@capacitor/share';
 
 
 @Component({
@@ -34,7 +35,7 @@ export class DashboardPage implements OnInit, OnDestroy {
     private _paddingService:PaddingService,
     private navCtr:NavController,
     private _session:SessionService,
-    private _loader:LoaderService
+    private _loader:LoaderService,
   ) { }
 
   async ngOnInit() {
@@ -117,6 +118,18 @@ export class DashboardPage implements OnInit, OnDestroy {
     this.router.navigate(['/dashboard/main'])
   }
 
+  async share(){
+
+    this.cerrarMenu();
+    const isPossible = await Share.canShare();
+    if (isPossible){
+      await Share.share({
+        text: this.translate.instant('share.check_out_this_amazing_app'),
+        url: 'http://ionicframework.com/',
+      });
+    }
+
+  }
 
 
 }

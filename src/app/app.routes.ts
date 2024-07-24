@@ -62,13 +62,22 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/faqs/faqs.page').then( m => m.FaqsPage)
       },
       {
+        path: 'problem',
+        loadComponent: () => import('./pages/problem/problem.page').then( m => m.ProblemPage)
+      },
+      {
+        path: 'data',
+        loadComponent: () => import('./pages/data/data.page').then( m => m.DataPage)
+      },
+
+      {
         path: '**',
-        redirectTo: 'home',
+        redirectTo: 'main',
         pathMatch: 'full',
       },
       {
         path: '',
-        redirectTo: 'home',
+        redirectTo: 'main',
         pathMatch: 'full',
       },
     ]
@@ -93,6 +102,7 @@ export const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full',
   },
+
 
 
 ];

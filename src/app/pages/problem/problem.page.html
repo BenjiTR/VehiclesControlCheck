@@ -1,0 +1,32 @@
+<ion-header >
+  <ion-toolbar class="green ion-text-center" >
+    <ion-title translate="dashboard.point_out_problem"></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="brown" [fullscreen]="true" [ngStyle]="{'--padding-bottom.px':calculatePadding()}">
+
+  <ion-row class="ion-margin ion-padding">
+    <ion-col class="ion-text-justify" size="12">
+        <ion-label>
+          <h1 translate="problem.text1"></h1>
+        </ion-label>
+    </ion-col>
+  </ion-row>
+
+  <ion-row class="ion-text-center">
+    <ion-col size="12">
+      <ion-label color="darkblue"><h1 translate="problem.email"></h1></ion-label>
+    </ion-col>
+  </ion-row>
+
+
+  <ion-row class="ion-margin-top ion-padding-top">
+    <ion-col class="ion-text-center ion-margin-top ion-padding-top" size="12">
+      <ion-icon [routerLink]="['/dashboard']" class="orange-icon" src="../../../assets/icons/return-up-back-outline.svg"></ion-icon>
+    </ion-col>
+  </ion-row>
+
+
+
+</ion-content>
