@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">VehiclesControlCheck</string>
+    <string name="title_activity_main">VehiclesControlCheck</string>
+    <string name="package_name">com.benjamintr.vehiclescontrol</string>
+    <string name="custom_url_scheme">com.benjamintr.vehiclescontrol</string>
+    <string name="server_client_id">329432960985-0f0oj2qbh3gp0mbgr0k32hmi0b6gbi06.apps.googleusercontent.com</string>
+    <string name="admob_app_id">ca-app-pub-7109225930546474~5137885146</string>
+</resources>
+

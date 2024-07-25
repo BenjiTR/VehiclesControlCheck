@@ -2,7 +2,7 @@
 # http://git-scm.com/docs/gitignore
 
 notas
-android
+
 vscode
 *~
 *.sw[mnpcod]
