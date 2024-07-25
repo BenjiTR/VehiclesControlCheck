@@ -4,5 +4,6 @@ export enum storageConstants {
   USER_EVENTS = 'vcc-evn-',
   USER_REMINDER = 'vcc-rem-',
   USER_AUTH = 'vcc-auth-',
-  USER_AUTBK = 'vcc-autbk-'
+  USER_AUTBK = 'vcc-autbk-',
+  USER_OPS = 'vcc-ops-'
 }

@@ -1,3 +1,4 @@
+import { StorageService } from './storage.service';
 import { Injectable } from '@angular/core';
 import { SessionService } from './session.service';
 import { Network } from '@capacitor/network';
@@ -11,6 +12,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { backupConstants } from '../const/backup';
 import { ToastService } from './toast.service';
 import { DataService } from './data.service';
+import { storageConstants } from '../const/storage';
 
 
 @Injectable({
@@ -20,6 +22,7 @@ export class DriveService {
 
   public token:string = "";
   public folderId: string = "";
+  public noFinishedOperation:boolean=false;
 
   private connected = new BehaviorSubject<boolean>(false)
   public conected$ = this.connected.asObservable();
@@ -41,7 +44,8 @@ export class DriveService {
     private _translation:TranslationConfigService,
     private _auth:AuthService,
     private http: HttpClient,
-    private _data:DataService
+    private _data:DataService,
+    private _storage:StorageService
   ) {}
 
   //REFRESCAR TOKEN Y CONECTAR
@@ -52,6 +56,96 @@ export class DriveService {
     }else if(this.token && (await Network.getStatus()).connected === false){
       this._alert.createAlert(this.translate.instant("error.no_network"), this.translate.instant("error.no_network_to_backup"));
     }
+    this.noFinishedOperation = await this._storage.getStorageItem(storageConstants.USER_OPS+this._session.currentUser.id);
+    console.log(this.noFinishedOperation)
+    if(this.noFinishedOperation){
+      this.updateInDriveProcess();
+    }
+  }
+
+  async updateInDriveProcess(){
+    const ops = await this._alert.twoOptionsAlert(this.translate.instant('alert.no_fished_op_detected'),this.translate.instant('alert.no_fished_op_detected_text'),this.translate.instant('alert.accept'),this.translate.instant('alert.cancel'))
+    if(ops){
+      if(this.token && (await Network.getStatus()).connected === false){
+        this._alert.createAlert(this.translate.instant("error.no_network"),"");
+      }else{
+        const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.are_you_sure?'),this.translate.instant('alert.update_files_text'),this.translate.instant('alert.accept'),this.translate.instant('alert.cancel'));
+        if(sure){
+          this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,true)
+          await this.removeAllElements()
+          .then(async()=>{
+            await this.uploadFiles();
+            this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,false)
+          })
+          .catch((e)=>{
+            console.log(e);
+            this._alert.createAlert(this.translate.instant('error.error_cleaning'), this.translate.instant('error.error_cleaning_text'))
+          })
+        }
+      }
+    }
+  }
+  async uploadFiles():Promise<void> {
+    if(this.token && (await Network.getStatus()).connected === false){
+      this._alert.createAlert(this.translate.instant("error.no_network"),"");
+    }else{
+      if(!this.folderId){
+        await this.createFolder();
+      }
+      const data = await this._data.buildDriveData();
+      this.changeUploading(true);
+      const total = data.length;
+      const unit = 1/total;
+      let value = 0;
+      let buffer = 0;
+
+      for(const element of data){
+        try {
+          buffer += unit;
+          this.changeProgress(value, buffer);
+          const exist = await this.findFileByName(element.fileName)
+          if(exist){
+            await this.updateFile(exist, element.content, element.fileName);
+          }else{
+            await this.uploadFile(element.content, element.fileName);
+          }
+          value += unit;
+          this.changeProgress(value, buffer);
+        } catch (err) {
+          console.log("Ocurrió un error: ", err);
+          break;
+        }
+      }
+      this.changeHaveFiles(true);
+      this.changeUploading(false);
+    }
+  }
+
+
+
+  async removeAllElements():Promise<void>{
+    this.changecleaning(true);
+    const oldFiles = await this.listFilesInFolder();
+    const total = oldFiles.length;
+    const unit = 1/total;
+    let value = 0;
+    let buffer = 0;
+
+    for(const element of oldFiles){
+
+      buffer += unit;
+      this.changeProgress(value, buffer);
+      try{
+        await this.deleteFile(element.id);
+        value += unit;
+        this.changeProgress(value, buffer);
+      }catch (err){
+        console.log(err);
+        throw new Error('Error al eliminar de Drive');
+      }
+    }
+    this.changecleaning(false);
+    return;
   }
 
   async connectAccount():Promise<void>{
@@ -62,7 +156,7 @@ export class DriveService {
       await this.setConnectedAndTryFiles();
     })
     .catch(async (err)=>{
-      console.log("error",err);
+      //console.log("error",err);
       await this._auth.loginWithGoogle()
       .then(async(user)=>{
         this.token = user.authentication.accessToken;
@@ -70,7 +164,7 @@ export class DriveService {
         await this.setConnectedAndTryFiles();
       })
       .catch(async (err)=>{
-        console.log("error",err);
+        //console.log("error",err);
         if(err){
         alert(err);
         }
@@ -112,13 +206,13 @@ export class DriveService {
     .then(async (folderId)=>{
       if(folderId !== null){
         this.folderId = folderId;
-        console.log("carpeta: ",folderId)
+        //console.log("carpeta: ",folderId)
         await this.listFilesInFolder()
         .then((resp)=>{
           if(resp.length >0){
-            console.log("archivos: ",resp)
+            //console.log("archivos: ",resp)
             this.changeHaveFiles(true);
-            console.log("se cambia")
+            //console.log("se cambia")
           }
         })
       }
@@ -149,14 +243,14 @@ export class DriveService {
 
       return response.id;
     } catch (error) {
-      console.error('Error al crear la carpeta:', error);
+      //console.error('Error al crear la carpeta:', error);
       throw error;
     }
   }
 
   //OBTENER ID DE CARPETA
   async getFolderId(): Promise<any> {
-    console.log("ID de usuario: ", this._session.currentUser.id);
+    //console.log("ID de usuario: ", this._session.currentUser.id);
 
     try {
       const headers = new HttpHeaders({
@@ -171,16 +265,16 @@ export class DriveService {
 
       const response: any = await firstValueFrom(this.http.get(backupConstants.API_URL_FIL, { headers, params }));
 
-      console.log("Response de getFolderId:", response);
+      //console.log("Response de getFolderId:", response);
 
       if (response.files && response.files.length > 0 && response.files[0].id) {
         return response.files[0].id;
       } else {
-        console.log('No se encontró la carpeta para el usuario actual.');
+        //console.log('No se encontró la carpeta para el usuario actual.');
         return null;
       }
     } catch (error) {
-      console.error('Error al obtener el ID de la carpeta:', error);
+      //console.error('Error al obtener el ID de la carpeta:', error);
       throw new Error('Error al obtener el ID de la carpeta');
     }
   }
@@ -189,7 +283,7 @@ export class DriveService {
 
   //LISTAR ARCHIVOS
   listFilesInFolder(): Promise<any> {
-    console.log("carpeta: ", this.folderId);
+    //console.log("carpeta: ", this.folderId);
 
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.token}`
@@ -216,10 +310,10 @@ export class DriveService {
           const nextFiles = await fetchFiles(nextPageToken);
           return files.concat(nextFiles);
         }
-
+        console.log(files);
         return files;
       } catch (error) {
-        console.error('Error al listar archivos en la carpeta:', error);
+        //console.error('Error al listar archivos en la carpeta:', error);
         throw error;
       }
     };
@@ -258,7 +352,7 @@ export class DriveService {
 
     if (!response.ok) {
       const error = await response.json();
-      console.error("Error uploading file:", error);
+      //console.error("Error uploading file:", error);
       throw new Error(error.message || "Failed to upload file");
     }
 
@@ -285,11 +379,11 @@ export class DriveService {
 
     if (!response.ok) {
       const error = await response.json();
-      console.error("Error finding file:", error);
+      //console.error("Error finding file:", error);
       throw new Error(error.message || "Failed to find file");
     }
 
-    console.log(response, response.json)
+    //console.log(response, response.json)
     const result = await response.json();
     const files = result.files;
 
@@ -326,7 +420,7 @@ export class DriveService {
 
     if (!response.ok) {
       const error = await response.json();
-      console.error("Error updating file:", error);
+      //console.error("Error updating file:", error);
       throw new Error(error.message || "Failed to update file");
     }
 
@@ -351,7 +445,7 @@ export class DriveService {
 
     if (!response.ok) {
       const error = await response.json();
-      console.error("Error reading file:", error);
+      //console.error("Error reading file:", error);
       throw new Error(error.message || "Failed to read file");
     }
 
@@ -383,7 +477,7 @@ export class DriveService {
         return response;
       })
       .catch(error => {
-        console.error('Error al eliminar el archivo:', error);
+        //console.error('Error al eliminar el archivo:', error);
         throw error;
       });
 

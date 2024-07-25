@@ -1,3 +1,4 @@
+import { NotificationsPage } from './../notifications/notifications.page';
 import { Backup } from './../../models/backup.model';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule, JsonPipe } from '@angular/common';
@@ -20,7 +21,6 @@ import { LoaderService } from 'src/app/services/loader.service';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { PaddingService } from 'src/app/services/padding.service';
 import { DataService } from 'src/app/services/data.service';
-
 
 @Component({
   selector: 'app-backup',
@@ -60,7 +60,8 @@ export class BackupPage implements OnInit {
     private _alert:AlertService,
     private _loader:LoaderService,
     private _paddingService:PaddingService,
-    private _data:DataService
+    private _data:DataService,
+    private notifications:NotificationsPage
   ) {
     this.progressSubscription = this._drive.progress$.subscribe(data=>{
       this.progress = data;
@@ -107,9 +108,8 @@ export class BackupPage implements OnInit {
   async connectAccount(){
     await this._loader.presentLoader();
     await this._drive.connectAccount();
-    console.log("control")
-
     this.getData();
+    this.notifications.getData();
     await this._loader.dismissLoader();
 
 
@@ -167,9 +167,11 @@ export class BackupPage implements OnInit {
 
       const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.are_you_sure?'),this.translate.instant('alert.update_files_text'),this.translate.instant('alert.accept'),this.translate.instant('alert.cancel'));
       if(sure){
+        this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,true)
         await this.removeAllElements()
         .then(async()=>{
           await this.uploadFiles();
+          this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,false)
         })
         .catch((e)=>{
           console.log(e);
@@ -183,6 +185,7 @@ export class BackupPage implements OnInit {
     if(this.token && (await Network.getStatus()).connected === false){
       this._alert.createAlert(this.translate.instant("error.no_network"),"");
     }else{
+      this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,true)
       if(!this._drive.folderId){
         await this.createFolder();
       }
@@ -203,7 +206,6 @@ export class BackupPage implements OnInit {
           }else{
             await this._drive.uploadFile(element.content, element.fileName);
           }
-          console.log("subiendo: ", element.content, element.fileName)
           value += unit;
           this._drive.changeProgress(value, buffer);
         } catch (err) {
@@ -211,6 +213,7 @@ export class BackupPage implements OnInit {
           break;
         }
       }
+      this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,false)
       this._drive.changeHaveFiles(true);
       this._drive.changeUploading(false);
       this.getData();
@@ -221,7 +224,6 @@ export class BackupPage implements OnInit {
     this._drive.changeDownloading(true);
     const backupList = await this.readAll();
     const backupData = await this.setData(backupList);
-    console.log(backupData)
     await this._data.restoreDeviceData(backupData);
     this._drive.changeDownloading(false);
     this.navCtr.navigateRoot(['/dashboard'], { queryParams: { reload: true } });
@@ -247,7 +249,6 @@ export class BackupPage implements OnInit {
       this._drive.changeProgress(value, value);
       const content = await this.readFileFromDrive(element.name);
       if (content) {
-        console.log(content);
         if (element.name === "photo") {
           temporalBackup.photo = content;
         } else if (element.name === "remindersOptions") {
@@ -281,8 +282,6 @@ export class BackupPage implements OnInit {
         console.log('El archivo no fue encontrado.');
         return;
       }
-
-      console.log(file)
       // Luego, descarga el contenido del archivo usando su fileId
       const content = await this._drive.downloadFile(file);
       return content;

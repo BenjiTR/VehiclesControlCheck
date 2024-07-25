@@ -1,5 +1,5 @@
 import { AuthService } from './../services/auth.service';
-import { Component, OnInit, getPlatform } from '@angular/core';
+import { Component, OnInit, getPlatform, OnDestroy } from '@angular/core';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonRow, IonCol, IonImg, IonItem, IonInput, IonIcon, IonFooter, IonButton, IonCheckbox, IonLabel, Platform, NavController, IonPopover } from '@ionic/angular/standalone';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslationConfigService } from '../services/translation.service';
@@ -26,7 +26,7 @@ import { LoaderService } from '../services/loader.service';
   standalone: true,
   imports: [IonPopover, RouterModule, CommonModule, FormsModule, IonLabel, IonCheckbox, IonButton, IonFooter, IonIcon, IonInput, IonItem, IonImg, IonCol, IonRow, IonHeader, IonToolbar, IonTitle, IonContent, TranslateModule],
 })
-export class HomePage implements OnInit{
+export class HomePage implements OnInit, OnDestroy{
 
 
 
@@ -63,6 +63,10 @@ export class HomePage implements OnInit{
     await this.checkNotifications();
     await this._file.checkPermission();
     await this._loader.dismissLoader();
+  }
+
+  ngOnDestroy(){
+    console.log("Home destruido");
   }
 
 
@@ -102,8 +106,6 @@ export class HomePage implements OnInit{
       .then(async (userCredential) => {
         // Signed in
         const user = userCredential.user;
-        //console.log(user)
-        // ...
         if(!user.emailVerified){
           //preguntamos y reenviamos el correo
           const verify = await this._alert.twoOptionsAlert(this.translate.instant('alert.email_no_verified'),this.translate.instant('alert.email_no_verified_text'),this.translate.instant('alert.resend'),this.translate.instant('alert.cancel'))
@@ -136,7 +138,6 @@ export class HomePage implements OnInit{
       .then(async (authentication)=>{
         const user:any = await this._authService.fetchUserInfo(authentication.accessToken)
         if(user){
-          console.log(user)
           //Como la información en si no trae el toquen, lo insertamos para poder ejecutar bien el proceso de login y guardar los datos
           this.loginExecute(user, "googlerefresh", authentication.accessToken)
         }
@@ -145,7 +146,6 @@ export class HomePage implements OnInit{
           //Si no hace el login normal
           this._authService.loginWithGoogle()
           .then((user)=>{
-            console.log(user)
             this.loginExecute(user, "google")
           })
           .catch(async (error)=>{

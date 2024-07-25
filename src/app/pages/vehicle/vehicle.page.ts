@@ -97,7 +97,6 @@ export class VehiclePage implements OnInit {
   async cancelCreateVehicle(){
     const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.are_you_sure?'),this.translate.instant('alert.changes_will_not_be_saved'),this.translate.instant('alert.accept'),this.translate.instant('alert.cancel'))
     if(sure){
-      await this._loader.presentLoader();
       this.navCtr.navigateRoot('/dashboard/main')
     }
   }
@@ -165,13 +164,15 @@ export class VehiclePage implements OnInit {
     this._session.vehiclesArray = this.vehiclesArray;
     this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.user.id,this.vehiclesArray);
     if(this._drive.folderId && this._session.autoBackup){
+      this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,true)
       const fileName = vehicle.id;
       const exist = await this._drive.findFileByName(fileName)
         if(exist){
-          this._drive.updateFile(exist, JSON.stringify(vehicle), fileName, true);
+          await this._drive.updateFile(exist, JSON.stringify(vehicle), fileName, true);
         }else{
-          this._drive.uploadFile(JSON.stringify(vehicle), fileName, true);
+          await this._drive.uploadFile(JSON.stringify(vehicle), fileName, true);
         }
+        this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,false)
     }
     this.navCtr.navigateRoot(['/dashboard'], { queryParams: { reload: true } });
   }

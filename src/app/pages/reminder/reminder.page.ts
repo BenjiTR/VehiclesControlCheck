@@ -15,6 +15,8 @@ import { User } from 'src/app/models/user.model';
 import { DateService } from 'src/app/services/date.service';
 import { LoaderService } from 'src/app/services/loader.service';
 import { DriveService } from 'src/app/services/drive.service';
+import { StorageService } from 'src/app/services/storage.service';
+import { storageConstants } from 'src/app/const/storage';
 
 @Component({
   selector: 'app-reminder',
@@ -26,7 +28,7 @@ import { DriveService } from 'src/app/services/drive.service';
 export class ReminderPage{
 
   public remindersArray:LocalNotificationSchema[] = [];
-  public reminderToEditId:number;
+  public reminderToEditId:number|undefined;
   public reminderToEdit:LocalNotificationSchema = {
     id: 0,
     title:"",
@@ -50,12 +52,10 @@ export class ReminderPage{
     private _notifications:NotificationsService,
     private _date:DateService,
     private _loader:LoaderService,
-    private _drive:DriveService
+    private _drive:DriveService,
+    private _storage:StorageService
   ) {
-    this.reminderToEditId = this.activatedroute.snapshot.queryParams['reminderToEditId'];
-    if(this.reminderToEditId){
-      this.getReminder();
-    }
+
   }
 
   async ionViewWillEnter() {
@@ -72,8 +72,10 @@ export class ReminderPage{
 ;
   }
 
-  getReminder(){
-    const current = this.remindersArray.find(reminder => reminder.id === this.reminderToEditId)
+  async getReminder(){
+    const current = await this.remindersArray.find(reminder => reminder.id == this.reminderToEditId)
+    //console.log(this.remindersArray)
+    //console.log(current)
     if (current){
       this.reminderToEdit = JSON.parse(JSON.stringify(current));
       this.asignPropertis();
@@ -98,7 +100,6 @@ export class ReminderPage{
   async cancelCreateEvent(){
     const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.are_you_sure?'),this.translate.instant('alert.changes_will_not_be_saved'),this.translate.instant('alert.accept'),this.translate.instant('alert.cancel'))
     if(sure){
-    await this._loader.presentLoader();
       this.navCtr.navigateRoot('/dashboard')
     }
   }
@@ -120,13 +121,13 @@ export class ReminderPage{
       this._alert.createAlert(this.translate.instant("alert.enter_date"),this.translate.instant("alert.enter_date_text"));
     }else{
     await this._loader.presentLoader();
-      const index = this.remindersArray.findIndex(reminder => reminder.id === this.reminderToEditId);
+      const index = this.remindersArray.findIndex(reminder => reminder.id == this.reminderToEditId);
       if(index !== -1){
          const newReminder = await this.generateReminder();
-         console.log(newReminder);
+         //console.log(newReminder);
          this._session.remindersArray[index] = newReminder;
          await this._notifications.createNotification([newReminder]);
-         console.log(this.remindersArray[index]);
+         //console.log(this.remindersArray[index]);
          this.saveAndExit(newReminder);
       }
     }
@@ -165,13 +166,15 @@ export class ReminderPage{
     this._session.remindersArray = this.remindersArray
     await this._admobService.showinterstitial();
     if(this._drive.folderId && this._session.autoBackup){
+      this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,true)
       const fileName = "R"+reminder.id;
       const exist = await this._drive.findFileByName(fileName)
         if(exist){
-          this._drive.updateFile(exist, JSON.stringify(reminder), fileName, true);
+          await this._drive.updateFile(exist, JSON.stringify(reminder), fileName, true);
         }else{
-          this._drive.uploadFile(JSON.stringify(reminder), fileName, true);
+          await this._drive.uploadFile(JSON.stringify(reminder), fileName, true);
         }
+      this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,false)
     }
     this.navCtr.navigateRoot(['/dashboard'], { queryParams: { reload: true } });
   }

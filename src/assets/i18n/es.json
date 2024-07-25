@@ -69,7 +69,7 @@
       "vehicle_erased":"Vehiculo borrado",
       "vehicle_erased_text":"El vehículo se ha borrado con éxito",
       "are_you_sure?":"¿Está seguro?",
-      "vehicle_permanently_erased":"El vehículo se borrará definitivamente",
+      "vehicle_permanently_erased":"El vehículo y todos los eventos y notificaciones asociados a el se borrará definitivamente",
       "erase":"Borrar",
       "impossible_to_delete":"Imposible borrar",
       "impossible_to_delete_text":"El vehículo no se ha sincronizado con la base de datos, por favor, inténtelo mas tarde",
@@ -104,7 +104,11 @@
       "no_connected_to_backup_account_text":"Para seleccionar la copia de seguridad automática, debe conectarse a una cuenta de Drive y generar un primer respaldo",
       "no_backup_file":"No se ha creado una primera copia de seguridad",
       "no_backup_files_text":"Para seleccionar la copia de seguridad automática, debe generar un primer respaldo",
-      "update_files_text":"Se eliminarán los datos antiguos y se actualizarán utilizando los actuales"
+      "update_files_text":"Se eliminarán los datos antiguos y se actualizarán utilizando los actuales",
+      "imposible_to_close_session":"Imposible cerrar sesión",
+      "imposible_to_close_session_text":"No puede cerrarse la sesión ya que se están realizando operaciones de lectura, escritura o borrado en la nube",
+      "no_fished_op_detected":"Se han detectado operaciones sin acabar",
+      "no_fished_op_detected_text":"Se ha detectado una interrupción en una operación de Descarga, Subida, o limpieza de Drive, para asegurar la integridad de sus datos en la nube, puede pulsar 'ACEPTAR' y realizar una actualización con los datos actuales de su dispositivo"
     },
   "home":{
       "init_session":"Inicio de sesión",
@@ -201,7 +205,8 @@
     "inspection": "Inspección",
     "refueling": "Repostaje",
     "maintenance": "Mantenimiento",
-    "accident": "Accidente"
+    "accident": "Accidente",
+    "others":"Otros"
   },
   "notifications": {
     "reminders":"Recordatorios",

@@ -19,7 +19,8 @@ export class EventTypes {
       { name: 'Refueling', string: this.translate.instant('eventypes.refueling') },
       { name: 'Maintenance', string: this.translate.instant('eventypes.maintenance') },
       { name: 'Accident', string: this.translate.instant('eventypes.accident') },
-      { name: 'Inspection', string: this.translate.instant('eventypes.inspection') }
+      { name: 'Others', string: this.translate.instant('eventypes.others') }
+
     ];
   }
 

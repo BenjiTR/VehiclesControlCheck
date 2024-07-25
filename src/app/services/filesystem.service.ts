@@ -56,7 +56,7 @@ export class FileSystemService{
     .then(async (result)=>{
       if (result.files) {
         const file = result.files[0];
-        console.log(result, result.files);
+        //console.log(result, result.files);
 
         // Verifica la extensión del archivo
         if (file.name.endsWith('.vcc') && file.path) {

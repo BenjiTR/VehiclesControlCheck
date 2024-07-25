@@ -41,12 +41,12 @@ export class DataService{
 
   async buildDeviceData():Promise<string>{
     const backup = await this.buildData();
-    console.log(backup ,JSON.stringify(backup))
+    //console.log(backup ,JSON.stringify(backup))
     return JSON.stringify(backup);
   }
 
   async restoreDeviceData(backup:Backup):Promise<void>{
-    console.log(this._session.currentUser.id)
+    //console.log(this._session.currentUser.id)
     this._storage.setStorageItem(storageConstants.USER_VEHICLES+this._session.currentUser.id, backup.vehicles);
     this._storage.setStorageItem(storageConstants.USER_EVENTS+this._session.currentUser.id, backup.events);
     this._session.setReminderNotifications(backup.remindersOptions);
@@ -86,7 +86,7 @@ export class DataService{
 
     // Opción de recordatorios
     const remindersOptionsFileName = `remindersOptions`;
-    console.log(backup.remindersOptions)
+    //console.log(backup.remindersOptions)
     let optionString:string;
     if(backup.remindersOptions){
       optionString = "true";

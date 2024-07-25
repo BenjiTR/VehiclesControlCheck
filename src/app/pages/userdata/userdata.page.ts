@@ -70,13 +70,13 @@ export class UserdataPage implements OnInit {
     if(!this._authService.isInTest && this.user.method === "email"){
       await this._authService.updateNameProfile(this.user.name)
       .then((msg)=>{
-        console.log(msg);
+        //console.log(msg);
         this._session.currentUser.name = this.user.name;
         this.isEditing=false;
         this.isLoading = false;
       })
       .catch((err)=>{
-        console.log(err);
+        //console.log(err);
       })
     }
     this._session.currentUser.name = this.user.name;
@@ -92,7 +92,7 @@ export class UserdataPage implements OnInit {
       this.isLoading=false;
     })
     .catch((err)=>{
-      console.log(err);
+      //console.log(err);
       this.isLoading=false;
     })
   }
@@ -103,7 +103,7 @@ export class UserdataPage implements OnInit {
    if(this.user.method==="email"){
     const photo = await this._camera.takePhoto();
     if(photo){
-      console.log(photo)
+      //console.log(photo)
       this._session.currentUser.photo = imageConstants.base64Prefix + photo;
       this.user.photo = imageConstants.base64Prefix + photo;
       this._storage.setStorageItem(storageConstants.USER_PHOTO+this.user.id, photo);
@@ -113,7 +113,7 @@ export class UserdataPage implements OnInit {
   }
 
   async saveInCloud(photo:string){
-    console.log(this._drive.folderId, this._session.autoBackup)
+    //console.log(this._drive.folderId, this._session.autoBackup)
     if(this._drive.folderId && this._session.autoBackup){
       const fileName = "photo";
       const exist = await this._drive.findFileByName(fileName)

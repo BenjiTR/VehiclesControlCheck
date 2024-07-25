@@ -39,16 +39,22 @@ export class NotificationsPage{
   ) { }
 
   async ionViewWillEnter() {
-    this.connected = await firstValueFrom(this._drive.conected$);
-    this.hasFile = await firstValueFrom(this._drive.haveFiles$);
-    console.log("estado: ",this.connected, this.hasFile)
+    this.getData();
+    //console.log("estado: ",this.connected, this.hasFile)
     this.autoBk = this._session.autoBackup;
-    console.log(this.autoBk);
+    //console.log(this.autoBk);
     this.errorText = "";
     this.translate.setDefaultLang(this._translation.getLanguage());
     await this.checkPermissions();
 
   }
+
+
+  async getData(){
+    this.connected = await firstValueFrom(this._drive.conected$);
+    this.hasFile = await firstValueFrom(this._drive.haveFiles$);
+  }
+
 
   async checkPermissions():Promise<void>{
     const resp = await this._notifications.checkPermissions();
@@ -94,7 +100,7 @@ export class NotificationsPage{
   }
 
   onAutoBkChange(value: any) {
-    console.log(value.detail.value)
+    //console.log(value.detail.value)
     if(value.detail.value === "true"){
       this.autoBk = true;
     }else{

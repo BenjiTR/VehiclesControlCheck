@@ -10,6 +10,7 @@ import { Event } from '../models/event.model'
 import { NotificationsService } from './notifications.service';
 import { LocalNotificationSchema } from '@capacitor/local-notifications';
 import { Platform } from '@ionic/angular';
+import { DriveService } from './drive.service';
 @Injectable({
   providedIn:'root',
 })
@@ -22,7 +23,7 @@ export class SessionService{
   public eventsArray:Event[] = [];
   public remindersArray:LocalNotificationSchema[] = [];
   public remindNotitications:boolean = false;
-  public autoBackup:boolean = false;
+  public autoBackup:boolean = true;
 
   constructor(
     private _storageService: StorageService,
@@ -30,7 +31,7 @@ export class SessionService{
     private _test:UserTestService,
     private _authService:AuthService,
     private _notification:NotificationsService,
-    private _platform:Platform
+    private _platform:Platform,
   ){
   }
 
@@ -51,9 +52,9 @@ export class SessionService{
   async loadVehicles(): Promise<Vehicle[]>{
     const temporalVehiclesArray = await this._storage.getStorageItem(storageConstants.USER_VEHICLES+this.currentUser.id)
     if(this._authService.isInTest == true){
-      //this.vehiclesArray = this._test.vehicles;
-      //this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.currentUser.id, this.vehiclesArray);
-      this.vehiclesArray = temporalVehiclesArray;
+      this.vehiclesArray = this._test.vehicles;
+      this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.currentUser.id, this.vehiclesArray);
+      //this.vehiclesArray = temporalVehiclesArray;
       return this.vehiclesArray;
     }else if(!temporalVehiclesArray){
       this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.currentUser.id, this.vehiclesArray)
@@ -67,9 +68,9 @@ export class SessionService{
   async loadEvents(): Promise<Event[]>{
     const temporalEventsArray = await this._storage.getStorageItem(storageConstants.USER_EVENTS+this.currentUser.id)
     if(this._authService.isInTest == true){
-      //this.eventsArray = this._test.events;
-      //this._storage.setStorageItem(storageConstants.USER_EVENTS+this.currentUser.id, this.eventsArray);
-      this.eventsArray = temporalEventsArray;
+      this.eventsArray = this._test.events;
+      this._storage.setStorageItem(storageConstants.USER_EVENTS+this.currentUser.id, this.eventsArray);
+      //this.eventsArray = temporalEventsArray;
       return this.eventsArray;
     }else if(!temporalEventsArray){
       this._storage.setStorageItem(storageConstants.USER_EVENTS+this.currentUser.id, this.eventsArray);
@@ -91,7 +92,7 @@ export class SessionService{
         });
 
       this.remindersArray = filteredArray;
-      console.log(filteredArray, temporalArray.notifications)
+      //console.log(filteredArray, temporalArray.notifications)
       return this.remindersArray;
     }else{
       //this.remindersArray = await this._test.createTestreminders(this.remindersArray);

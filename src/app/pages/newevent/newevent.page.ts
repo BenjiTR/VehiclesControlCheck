@@ -73,7 +73,6 @@ export class NeweventPage {
     this.eventToEditId = this.activatedroute.snapshot.queryParams['eventToEditId'];
     if(this.eventToEditId){
       this.getEvent();
-    await this._loader.dismissLoader();
     }
     await this._loader.dismissLoader();
   }
@@ -99,8 +98,6 @@ export class NeweventPage {
   async cancelCreateEvent(){
     const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.are_you_sure?'),this.translate.instant('alert.changes_will_not_be_saved'),this.translate.instant('alert.accept'),this.translate.instant('alert.cancel'))
     if(sure){
-            await this._loader.presentLoader();
-;
       this.navCtr.navigateRoot('/dashboard')
     }
   }
@@ -123,8 +120,7 @@ export class NeweventPage {
       if(index !== -1){
          const newEvent = await this.generateEvent();
          this._session.eventsArray[index] = newEvent;
-         console.log(this.eventsArray[index]);
-         console.log(newEvent)
+
          this.saveAndExit(newEvent);
       }
     }
@@ -156,13 +152,15 @@ export class NeweventPage {
     this._session.eventsArray = this.eventsArray;
     await this._storage.setStorageItem(storageConstants.USER_EVENTS+this.user.id,this.eventsArray);
     if(this._drive.folderId && this._session.autoBackup){
+      this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,true)
       const fileName = event.id;
       const exist = await this._drive.findFileByName(fileName)
           if(exist){
-            this._drive.updateFile(exist, JSON.stringify(event), fileName, true);
+            await this._drive.updateFile(exist, JSON.stringify(event), fileName, true);
           }else{
-            this._drive.uploadFile(JSON.stringify(event), fileName, true);
+            await this._drive.uploadFile(JSON.stringify(event), fileName, true);
           }
+      this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,false)
     }
     this.navCtr.navigateRoot(['/dashboard'], { queryParams: { reload: true } });
   }
@@ -191,7 +189,6 @@ export class NeweventPage {
   }
 
   async openModal(img:string){
-    console.log("modal")
     const modal = await this.modalController.create({
       component: ImgmodalPage,
       componentProps: {

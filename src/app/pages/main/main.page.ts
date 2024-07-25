@@ -26,6 +26,8 @@ import { DatePipe } from '@angular/common';
 import { LoaderService } from 'src/app/services/loader.service';
 import { DriveService } from 'src/app/services/drive.service';
 import { Subscription } from 'rxjs';
+import { Network } from '@capacitor/network';
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
   selector: 'app-main',
@@ -36,7 +38,7 @@ import { Subscription } from 'rxjs';
   animations: [ MainAnimation, RoadAnimation, SecondaryAnimation, GrowShrinkAnimation ],
   providers:[EventTypes, DatePipe]
 })
-export class MainPage implements OnInit {
+export class MainPage implements OnInit, OnDestroy {
 
   public creatingElement:Boolean=false;
   public vehiclesArray:Vehicle[]=[];
@@ -50,6 +52,7 @@ export class MainPage implements OnInit {
   public filteredEventsArray:Event[]=[];
   public filtering:boolean=false;
   public reload:boolean=false;
+  public token:string = "";
 
   private downloadingSubscription: Subscription;
 
@@ -70,19 +73,18 @@ export class MainPage implements OnInit {
     private _loader:LoaderService,
     private activatedroute:ActivatedRoute,
     private _drive:DriveService,
-    private navCtr:NavController
+    private navCtr:NavController,
+    private _data:DataService
   ) {
     this.eventTypes = etypes.getEventTypes();
     this.downloadingSubscription = this._drive.downloading$.subscribe(data=>{
       if(!data){
-        console.log("recargamos")
         this.loadAllData();
       }
     });
   }
 
   async ngOnInit() {
-    console.log("entrada")
     await this._loader.presentLoader();
     this.user = this._session.currentUser;
     this.translate.setDefaultLang(this._translation.getLanguage());
@@ -91,30 +93,34 @@ export class MainPage implements OnInit {
     if(this._session.currentUser.token){
       await this._drive.init();
     }
-    await this._loader.dismissLoader();
-  }
-
-  async ionViewWillEnter() {
     if(this._loader.isLoading){
       await this._loader.dismissLoader();
     }
+    this.token = await this._session.getToken();
+
+  }
+
+
+  async ionViewWillEnter() {
     this.reload = this.activatedroute.snapshot.queryParams['reload'] || false;
     if(this.reload){
-      console.log("recarga")
       await this._loader.presentLoader();
       await this.loadAllData();
       await this._loader.dismissLoader();
     }
+    if(this._loader.isLoading){
+      await this._loader.dismissLoader();
+    }
   }
 
-  OnDestroy(){
+  ngOnDestroy(){
+    console.log("main destruido")
     this.downloadingSubscription.unsubscribe();
   }
 
 
   async loadAllData():Promise<void>{
     this.vehiclesArray = await this._session.loadVehicles();
-    console.log(this.vehiclesArray)
     this.eventsArray = await this._session.loadEvents();
     this.remindersArray = await this._session.loadReminders();
     await this._session.getReminderNotifications();
@@ -135,18 +141,88 @@ export class MainPage implements OnInit {
     this.creatingElement = !this.creatingElement;
   }
 
-  async deleteVehicle(vehicle:Vehicle){
-    const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.are_you_sure?'),this.translate.instant('alert.vehicle_permanently_erased'),this.translate.instant('alert.erase'),this.translate.instant('alert.cancel'))
-    if(sure){
+  async deleteVehicle(vehicle: Vehicle) {
+    const sure = await this._alert.twoOptionsAlert(
+      this.translate.instant('alert.are_you_sure?'),
+      this.translate.instant('alert.vehicle_permanently_erased'),
+      this.translate.instant('alert.erase'),
+      this.translate.instant('alert.cancel')
+    );
+
+    if (sure) {
       const index = this.vehiclesArray.indexOf(vehicle);
-      this.vehiclesArray.splice(index,1)
-      this._session.vehiclesArray = this.vehiclesArray;
-      await this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.user.id,this.vehiclesArray);
-      if(this._drive.folderId && this._session.autoBackup){
-        const id = await this._drive.findFileByName(vehicle.id)
-        await this._drive.deleteFile(id, true);
+      if (index > -1) {
+        this.vehiclesArray.splice(index, 1);
+        this._session.vehiclesArray = this.vehiclesArray;
+        await this._storage.setStorageItem(
+          storageConstants.USER_VEHICLES + this.user.id,
+          this.vehiclesArray
+        );
+
+        const elements = await this.GetElementsToClean(vehicle);
+        await this.deleteLocalElements(vehicle);
+
+        if (this._drive.folderId && this._session.autoBackup) {
+          this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,true)
+          const id = await this._drive.findFileByName(vehicle.id);
+          if (id) {
+            await this._drive.deleteFile(id, true);
+          }
+          this.deleteList(elements);
+        }
       }
     }
+  }
+
+  async deleteList(elements: any[]) {
+    this._drive.changecleaning(true);
+
+    for (const element of elements) {
+      const id = await this._drive.findFileByName(element);
+      if (id) {
+        await this._drive.deleteFile(id);
+      }
+    }
+    this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,false)
+    this._drive.changecleaning(false);
+  }
+
+  async GetElementsToClean(vehicle: Vehicle): Promise<any[]> {
+    let array: any[] = [];
+
+    for (const element of this.eventsArray) {
+      if (element.vehicleId === vehicle.id) {
+        array.push(element.id);
+      }
+    }
+
+    for (const element of this.remindersArray) {
+      if (element.extra.vehicleId === vehicle.id) {
+        array.push('R' + element.id);
+      }
+    }
+    return array;
+  }
+
+  async deleteLocalElements(vehicle: Vehicle): Promise<void> {
+
+    const temporalEventArray = this.eventsArray.map(event => ({ ...event }));
+
+    for (const element of temporalEventArray) {
+      if (element.vehicleId === vehicle.id) {
+        await this.deleteEvent(element, true);
+      }
+    }
+
+    const temporalRemindersArray = this.remindersArray.map(reminder => ({ ...reminder }));
+
+    for (const element of temporalRemindersArray) {
+      if (element.extra.vehicleId === vehicle.id) {
+        await this.deleteReminder(element, true);
+      }
+    }
+
+    return;
   }
 
   //SABER SI EL EVENTO CORRESPONDE A ESE VEHÍCULO
@@ -169,7 +245,6 @@ export class MainPage implements OnInit {
 
   //MODAL IMÁGENES
   async openModal(img:string){
-    console.log("modal")
     const modal = await this.modalController.create({
       component: ImgmodalPage,
       componentProps: {
@@ -181,18 +256,27 @@ export class MainPage implements OnInit {
   }
 
   //ELIMINAR UN EVENTO
-  async deleteEvent(event:Event){
-    const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.are_you_sure?'),this.translate.instant('alert.event_permanently_erased'),this.translate.instant('alert.erase'),this.translate.instant('alert.cancel'))
-    if(sure){
-      const index = this.eventsArray.indexOf(event);
-      this.eventsArray.splice(index,1)
-      this._session.eventsArray = this.eventsArray;
-      await this._storage.setStorageItem(storageConstants.USER_EVENTS+this.user.id,this.eventsArray);
-      if(this._drive.folderId && this._session.autoBackup){
-        const id = await this._drive.findFileByName(event.id)
-        await this._drive.deleteFile(id, true);
+  async deleteEvent(event:Event, autoClean?:boolean){
+    if(autoClean){
+      await this.deleteEventProcess(event);
+    }else{
+      const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.are_you_sure?'),this.translate.instant('alert.event_permanently_erased'),this.translate.instant('alert.erase'),this.translate.instant('alert.cancel'))
+      if(sure){
+        await this.deleteEventProcess(event);
+        if(this._drive.folderId && this._session.autoBackup){
+          const id = await this._drive.findFileByName(event.id)
+          await this._drive.deleteFile(id, true);
+        }
       }
     }
+  }
+
+  async deleteEventProcess(event:Event):Promise<void>{
+    const index = this.eventsArray.indexOf(event);
+    this.eventsArray.splice(index,1)
+    this._session.eventsArray = this.eventsArray;
+    await this._storage.setStorageItem(storageConstants.USER_EVENTS+this.user.id,this.eventsArray);
+    return;
   }
 
   //TRADUCCIÓN DE TIPOS
@@ -234,17 +318,26 @@ export class MainPage implements OnInit {
     return this._date.getIsoDate(string);
   }
 
-  async deleteReminder(reminder:LocalNotificationSchema){
-    const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.are_you_sure?'),this.translate.instant('alert.event_permanently_erased'),this.translate.instant('alert.erase'),this.translate.instant('alert.cancel'))
-    if(sure){
-      await this._notification.deleteNotification(reminder);
-      const array = await this._notification.getPending();
-      this.remindersArray = await array.notifications;
-      if(this._drive.folderId && this._session.autoBackup){
-        const id = await this._drive.findFileByName("R"+reminder.id)
-        await this._drive.deleteFile(id, true);
+  async deleteReminder(reminder:LocalNotificationSchema, autoClean?:boolean){
+    if(autoClean){
+      await this.deleteReminderProcess(reminder);
+    }else{
+      const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.are_you_sure?'),this.translate.instant('alert.event_permanently_erased'),this.translate.instant('alert.erase'),this.translate.instant('alert.cancel'))
+      if(sure){
+        await this.deleteReminderProcess(reminder);
+        if(this._drive.folderId && this._session.autoBackup){
+          const id = await this._drive.findFileByName("R"+reminder.id)
+          await this._drive.deleteFile(id, true);
+        }
       }
     }
+  }
+
+  async deleteReminderProcess(reminder:LocalNotificationSchema):Promise<void>{
+    await this._notification.deleteNotification(reminder);
+    const array = await this._notification.getPending();
+    this.remindersArray = await array.notifications;
+    return;
   }
 
   changefilter(event:any){

@@ -13,6 +13,10 @@ import { MainAnimation, RoadAnimation, SecondaryAnimation } from 'src/app/servic
 import { SessionService } from 'src/app/services/session.service';
 import { LoaderService } from 'src/app/services/loader.service';
 import { Share } from '@capacitor/share';
+import { DriveService } from 'src/app/services/drive.service';
+import { storageConstants } from 'src/app/const/storage';
+import { StorageService } from 'src/app/services/storage.service';
+import { AlertService } from 'src/app/services/alert.service';
 
 
 @Component({
@@ -36,6 +40,9 @@ export class DashboardPage implements OnInit, OnDestroy {
     private navCtr:NavController,
     private _session:SessionService,
     private _loader:LoaderService,
+    private __drive:DriveService,
+    private _storage:StorageService,
+    private _alert:AlertService
   ) { }
 
   async ngOnInit() {
@@ -45,6 +52,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 
 
   ngOnDestroy(){
+    console.log("destrozado dash");
     this._admobService.hideBanner();
   }
 
@@ -68,28 +76,30 @@ export class DashboardPage implements OnInit, OnDestroy {
   }
 
   async endSession(){
-    this._loader.presentLoader();
-    await this.menuCtrl.close();
-    if(this._session.currentUser.method === "google"){
-      this.closeSessionByGoogle();
+
+    const ops = await this._storage.getStorageItem(storageConstants.USER_OPS + this._session.currentUser.id);
+    if(!ops){
+      this._loader.presentLoader();
+      await this.menuCtrl.close();
+      if(this._session.currentUser.method === "google"){
+        this.closeSessionByGoogle();
+      }else{
+        this.closeSessionByMail();
+      }
     }else{
-      this.closeSessionByMail();
+      await this._alert.createAlert(
+        this.translate.instant('alert.imposible_to_close_session'),
+        this.translate.instant('alert.imposible_to_close_session_text')
+      );
     }
+
   }
 
   async closeSessionByGoogle(){
-    console.log("goolg")
     await this._authService.signOutGoogle()
     .then(async () => {
-      // Sign-out successful.
-      this._authService.isActive = false;
-      this._authService.isInTest = false;
-      await this._admobService.removeBanner();
-      this._session.deleteTemporalData();
-      this.navCtr.navigateRoot(['/home']);
-      this._loader.dismissLoader();
+      this.proccesToClose();
     }).catch((error) => {
-      // An error happened.
       alert(error);
     });
   }
@@ -97,17 +107,28 @@ export class DashboardPage implements OnInit, OnDestroy {
   async closeSessionByMail(){
     await this._authService.signOut()
     .then(async () => {
-      // Sign-out successful.
-      this._authService.isActive = false;
-      this._authService.isInTest = false;
-      await this._admobService.removeBanner();
-      this._session.deleteTemporalData();
-      this.navCtr.navigateRoot(['/home']);
-      this._loader.dismissLoader();
+      this.proccesToClose();
     }).catch((error) => {
-      // An error happened.
       alert(error);
     });
+  }
+
+  async proccesToClose(){
+    this._authService.isActive = false;
+    this._authService.isInTest = false;
+    await this._admobService.removeBanner();
+    this._session.deleteTemporalData();
+    this.puttingFalseCloudOptions();
+    this.navCtr.navigateRoot(['/home']);
+    this._loader.dismissLoader();
+  }
+
+  puttingFalseCloudOptions(){
+    this.__drive.changeConnected(false);
+    this.__drive.changeDownloading(false);
+    this.__drive.changeHaveFiles(false);
+    this.__drive.changeUploading(false);
+    this.__drive.changecleaning(false);
   }
 
   calculatePadding(){

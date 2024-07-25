@@ -42,7 +42,7 @@ export class UserdataviewPage implements OnInit {
   ) {
     this.connectedSubscription = this._drive.conected$.subscribe(async value=>{
       this.token = await this._session.getToken();
-      console.log(this.token)
+      //console.log(this.token)
       this.connected = value;
     })
     this.haveFilesSubscription = this._drive.haveFiles$.subscribe(value=>{
