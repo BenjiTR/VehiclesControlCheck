@@ -60,7 +60,7 @@ body, ion-app {
 
 //COLORES
 .pastel{
-  --background: rgba(246, 244, 233, 1);
+  --background: #f6f4e9;
   background: rgba(246, 244, 233, 1);
 }
 .green{
@@ -178,7 +178,7 @@ border-bottom-right-radius: 30px;
   display: flex;
 }
 .pastel-to-blue{
-  --background: rgb(246,243,234);
+  --background: #f6f3ea;
   --background: linear-gradient(180deg, rgba(246,243,234,1) 0%,rgba(246,243,234,1) 25%, #8bd3db 25%, #8bd3db 100%);
 }
 .blue{
