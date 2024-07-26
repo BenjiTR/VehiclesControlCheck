@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonButton, IonContent, IonHeader, IonTitle, IonToolbar, IonCol, IonRow, IonAvatar, IonItem, IonIcon, IonFab, IonFabButton, IonInput, IonImg } from '@ionic/angular/standalone';
+import { IonButton, IonContent, IonHeader, IonTitle, IonToolbar, IonCol, IonRow, IonAvatar, IonItem, IonIcon, IonFab, IonFabButton, IonInput, IonImg, NavController } from '@ionic/angular/standalone';
 import { Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslationConfigService } from '../../services/translation.service';
@@ -33,7 +33,7 @@ export class UserdataPage implements OnInit {
   public img:any;
 
   constructor(
-    private router:Router,
+    private navCtr:NavController,
     private translate:TranslateService,
     private _translation:TranslationConfigService,
     private _session:SessionService,
@@ -125,6 +125,37 @@ export class UserdataPage implements OnInit {
     }
   }
 
+  async deleteAccountWithEmail(){
+    await this._authService.deleteAccountWithEmail()
+    .then(()=>{
+      this._alert.createAlert(this.translate.instant('alert.user_delete'), this.translate.instant('alert.user_delete_with_exit'));
+      this.navCtr.navigateRoot('/home');
+    })
+    .catch((err)=>{
+      console.log(err);
+      this._alert.createAlert(this.translate.instant('error.an_error_ocurred'), err+" "+err.message);
+    })
+  }
+
+  deleteAccount(){
+    if(this._session.currentUser.method === 'email'){
+      this.deleteAccountWithEmail()
+    }else{
+      this.deleteAccountWithGoogle();
+    }
+  }
+
+  async deleteAccountWithGoogle(){
+    await this._authService.deleteAccountWithGoogle()
+    .then(()=>{
+      this._alert.createAlert(this.translate.instant('alert.user_delete'), this.translate.instant('alert.user_delete_with_exit'));
+      this.navCtr.navigateRoot('/home');
+    })
+    .catch((err)=>{
+      console.log(err);
+      this._alert.createAlert(this.translate.instant('error.an_error_ocurred'), err+" "+err.message);
+    })
+  }
 
 
 

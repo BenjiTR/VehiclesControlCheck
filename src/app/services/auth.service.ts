@@ -1,8 +1,9 @@
-import { signOut, onAuthStateChanged, getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, sendEmailVerification, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { signInWithCredential, signOut, onAuthStateChanged, getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, sendEmailVerification, createUserWithEmailAndPassword, updateProfile, deleteUser, User, GoogleAuthProvider } from "firebase/auth";
 import { Injectable } from "@angular/core";
 import { TranslationConfigService } from '../services/translation.service';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import { Platform } from "@ionic/angular";
+import { GoogleOAuthAccessToken } from "firebase-admin";
 
 
 @Injectable({
@@ -17,7 +18,7 @@ export class AuthService{
     public isInTest:Boolean = false;
   constructor(
     private _translation: TranslationConfigService,
-    private platform:Platform
+    private platform:Platform,
   ){
     this.auth.languageCode = this._translation.getLanguage();
     this.initializeApp();
@@ -39,6 +40,23 @@ export class AuthService{
 //LOGIN CON EMAIL Y PASSWORD
 loginWithEmailAndPaswword(email:string, password:string){
   return signInWithEmailAndPassword(this.auth, email, password);
+}
+
+//BORRAR CUENTA
+deleteAccountWithEmail(){
+  const user = this.auth.currentUser;
+  console.log(user);
+  return deleteUser(user);
+}
+
+async deleteAccountWithGoogle() {
+
+  const googleUser = await GoogleAuth.refresh();
+    const credential = GoogleAuthProvider.credential(googleUser.idToken);
+    console.log(credential)
+    const userCredential = await signInWithCredential(this.auth, credential);
+    console.log(userCredential)
+    return await deleteUser(userCredential.user);
 }
 
 //LOGIN CON GOOGLE
