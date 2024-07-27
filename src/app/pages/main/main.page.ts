@@ -93,6 +93,7 @@ export class MainPage implements OnInit, OnDestroy {
     if(this._session.currentUser.token){
       await this._drive.init();
     }
+    console.log(this._loader.isLoading)
     if(this._loader.isLoading){
       await this._loader.dismissLoader();
     }

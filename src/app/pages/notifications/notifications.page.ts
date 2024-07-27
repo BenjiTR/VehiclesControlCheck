@@ -7,7 +7,7 @@ import { TranslationConfigService } from 'src/app/services/translation.service';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { SessionService } from 'src/app/services/session.service';
 import { RouterModule } from '@angular/router';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { DriveService } from 'src/app/services/drive.service';
 import { AlertService } from 'src/app/services/alert.service';
 import { PaddingService } from 'src/app/services/padding.service';
@@ -28,6 +28,8 @@ export class NotificationsPage{
   public connected:boolean = false;
   public hasFile:boolean = false;
 
+  private hasFileSubscription:Subscription;
+
   constructor(
     private translate:TranslateService,
     private _translation:TranslationConfigService,
@@ -36,7 +38,11 @@ export class NotificationsPage{
     private _drive:DriveService,
     private _alert:AlertService,
     private _paddingService:PaddingService
-  ) { }
+  ) {
+    this.hasFileSubscription = this._drive.haveFiles$.subscribe((data)=>{
+      this.hasFile = data;
+    })
+  }
 
   async ionViewWillEnter() {
     this.getData();
@@ -52,7 +58,6 @@ export class NotificationsPage{
 
   async getData(){
     this.connected = await firstValueFrom(this._drive.conected$);
-    this.hasFile = await firstValueFrom(this._drive.haveFiles$);
   }
 
 

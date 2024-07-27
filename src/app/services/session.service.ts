@@ -114,7 +114,7 @@ export class SessionService{
     this.autoBackup = await this._storage.setStorageItem(storageConstants.USER_AUTBK+this.currentUser.id,option);
   }
   async getAutoBackup():Promise<boolean>{
-    this.autoBackup = await this._storage.getStorageItem(storageConstants.USER_AUTBK+this.currentUser.id) || false;
+    this.autoBackup = await this._storage.getStorageItem(storageConstants.USER_AUTBK+this.currentUser.id) || true;
     return this.autoBackup;
   }
 

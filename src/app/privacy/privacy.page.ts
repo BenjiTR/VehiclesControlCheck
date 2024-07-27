@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonButtons, IonBackButton, IonFooter } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonButtons, IonBackButton, IonFooter, NavController } from '@ionic/angular/standalone';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslationConfigService } from '../services/translation.service';
@@ -22,7 +22,7 @@ export class PrivacyPage implements OnInit {
     private translate: TranslateService,
     private _translation:TranslationConfigService,
     private activatedroute:ActivatedRoute,
-    private router:Router,
+    private navCtr:NavController,
     private _admob:AdmobService
   ) {}
 
@@ -42,10 +42,12 @@ export class PrivacyPage implements OnInit {
 
   goback(){
     if(this.goBack){
-      this.router.navigate([this.goBack])
+      this.navCtr.navigateRoot([this.goBack], { queryParams: { reload: true } });
     }else{
-      this.router.navigate(['/home'])
+      this.navCtr.navigateRoot(['/home'])
     }
   }
+
+
 
 }

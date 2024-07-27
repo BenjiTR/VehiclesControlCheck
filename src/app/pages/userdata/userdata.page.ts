@@ -137,11 +137,14 @@ export class UserdataPage implements OnInit {
     })
   }
 
-  deleteAccount(){
-    if(this._session.currentUser.method === 'email'){
-      this.deleteAccountWithEmail()
-    }else{
-      this.deleteAccountWithGoogle();
+  async deleteAccount(){
+    const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.are_you_sure?'),this.translate.instant('alert.actual_data_will_be_rewrite'),this.translate.instant('alert.accept'),this.translate.instant('alert.cancel'))
+    if(sure){
+      if(this._session.currentUser.method === 'email'){
+        this.deleteAccountWithEmail()
+      }else{
+        this.deleteAccountWithGoogle();
+      }
     }
   }
 

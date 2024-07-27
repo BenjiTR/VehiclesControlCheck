@@ -25,7 +25,7 @@ export class UserTestService {
   public vehicles: Vehicle[] = [
     {
       typeOfVehicle: "4W",
-      brandOrModel: "Toyota Corolla",
+      brandOrModel: "Vehículo 1",
       carRegistration: "ABC1234",
       dateOfBuy: '2021-03-15',
       kmOfBuy: "20000",
@@ -39,7 +39,7 @@ export class UserTestService {
     },
     {
       typeOfVehicle: "2W",
-      brandOrModel: "Yamaha YZF-R3",
+      brandOrModel: "Motocicleta 1",
       carRegistration: "XYZ5678",
       dateOfBuy: '2019-07-22',
       kmOfBuy: "5000",
@@ -53,7 +53,7 @@ export class UserTestService {
     },
     {
       typeOfVehicle: "4W",
-      brandOrModel: "Ford F-150",
+      brandOrModel: "Vehículo 2",
       carRegistration: "LMN3456",
       dateOfBuy:'2020-10-10',
       kmOfBuy: "15000",

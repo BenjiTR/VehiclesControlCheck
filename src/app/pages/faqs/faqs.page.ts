@@ -7,6 +7,7 @@ import { Browser } from '@capacitor/browser';
 import { TranslateService, TranslateModule} from '@ngx-translate/core';
 import { TranslationConfigService } from 'src/app/services/translation.service';
 import { RouterModule } from '@angular/router';
+import { urlconstants } from 'src/app/const/url';
 
 @Component({
   selector: 'app-faqs',
@@ -31,11 +32,11 @@ export class FaqsPage implements OnInit {
   }
 
   async openFaqs(){
-      await Browser.open({ url: 'https://vehicles-control-ck.web.app/faqs.html?lang='+this.lang });
+      await Browser.open({ url: urlconstants.FAQS+this.lang});
   }
 
   async openQuickstart(){
-    await Browser.open({ url: 'https://vehicles-control-ck.web.app/quickstart.html?lang='+this.lang });
+    await Browser.open({ url: urlconstants.MAN+this.lang});
 }
 
 
