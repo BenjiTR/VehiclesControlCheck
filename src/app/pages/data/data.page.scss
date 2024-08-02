@@ -1,0 +1,23 @@
+ion-datetime-button::part(native) {
+  background: #ffffff;
+}
+.swap{
+  zoom: 1.5;
+  color: #2f939e;
+}
+.error{
+  zoom: 1.5;
+  color: red;
+}
+.divider-center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.divider-center ion-label {
+  text-align: center;
+  width: 100%;
+}
+.black{
+  color:black;
+}

@@ -17,6 +17,7 @@ import { DriveService } from 'src/app/services/drive.service';
 import { storageConstants } from 'src/app/const/storage';
 import { StorageService } from 'src/app/services/storage.service';
 import { AlertService } from 'src/app/services/alert.service';
+import { ScreenOrientationService } from '../../services/orientation.service'
 
 
 @Component({
@@ -28,6 +29,8 @@ import { AlertService } from 'src/app/services/alert.service';
   animations: [ MainAnimation, RoadAnimation, SecondaryAnimation ]
 })
 export class DashboardPage implements OnInit, OnDestroy {
+
+  public portrait:boolean=true;
 
   constructor(
     private menuCtrl: MenuController,
@@ -42,17 +45,26 @@ export class DashboardPage implements OnInit, OnDestroy {
     private _loader:LoaderService,
     private __drive:DriveService,
     private _storage:StorageService,
-    private _alert:AlertService
+    private _alert:AlertService,
+    private screenOrientationService: ScreenOrientationService
   ) { }
 
   async ngOnInit() {
     this.translate.setDefaultLang(this._translation.getLanguage());
     this._admobService.resumeBanner();
+    this.screenOrientationService.orientationChange$.subscribe(orientation => {
+      //console.log('Screen orientation changed:', orientation);
+      if(orientation.type === "landscape-primary" || orientation.type === "landscape-secondary"){
+        this.portrait=false;
+      }else{
+        this.portrait=true;
+      }
+    });
   }
 
 
   ngOnDestroy(){
-    console.log("destrozado dash");
+    //console.log("destrozado dash");
     this._admobService.hideBanner();
   }
 

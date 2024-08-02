@@ -170,9 +170,9 @@ export class ReminderPage{
       const fileName = "R"+reminder.id;
       const exist = await this._drive.findFileByName(fileName)
         if(exist){
-          await this._drive.updateFile(exist, JSON.stringify(reminder), fileName, true);
+          this._drive.updateFile(exist, JSON.stringify(reminder), fileName, true);
         }else{
-          await this._drive.uploadFile(JSON.stringify(reminder), fileName, true);
+          this._drive.uploadFile(JSON.stringify(reminder), fileName, true);
         }
       this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,false)
     }

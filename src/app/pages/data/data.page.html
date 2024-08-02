@@ -1,13 +1,153 @@
-<ion-header >
-  <ion-toolbar class="green ion-text-center" >
+<ion-header *ngIf="portrait">
+  <ion-toolbar class="green ion-text-center">
     <ion-title translate="dashboard.export_data"></ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="brown" [fullscreen]="true" [ngStyle]="{'--padding-bottom.px':calculatePadding()}">
+<ion-content class="brown" [fullscreen]="true" [ngStyle]="{'--padding-bottom.px': calculatePadding()}">
+
+  <ion-row *ngIf="eventsArray.length <= 0" class="gray ion-padding-top ion-padding-bottom">
+    <ion-col class="ion-text-center">
+      <ion-label>{{'mainpage.no_events'|translate}}</ion-label>
+    </ion-col>
+  </ion-row>
+
+  <ion-accordion-group  *ngIf="eventsArray.length > 0">
+    <ion-accordion color="green" value="filter">
+      <ion-item slot="header"  color="darkblue">
+        <ion-label class="ion-text-center">{{'data.filters'|translate}}</ion-label>
+      </ion-item>
+      <div class="ion-padding gray" slot="content">
+        <ion-row class="ion-margin-top">
+          <ion-col class="ion-text-center"  size="12">
+            <ion-label color="primary"><h1>{{'data.select_dates'|translate}}</h1></ion-label>
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="ion-align-items-center ion-justify-content-center">
+          <ion-col size="5.5">
+            <ion-datetime-button class="datetime-bk" datetime="datetime"></ion-datetime-button>
+
+            <ion-modal [keepContentsMounted]="true" id="modalStart">
+              <ng-template>
+                <ion-datetime
+                  presentation="month-year"
+                  id="datetime"
+                  [value]="startDate.toISOString()"
+                  (ionChange)="changeDate('startDate', $event)">
+                </ion-datetime>
+              </ng-template>
+            </ion-modal>
+          </ion-col>
+
+          <ion-col class="ion-text-center" size="1">
+            <ion-icon class="swap" *ngIf="correctDates()" src="../../../assets/icons/swap-horizontal-outline.svg"></ion-icon>
+            <ion-icon class="error" *ngIf="!correctDates()" src="../../../assets/icons/alert-outline.svg"></ion-icon>
+          </ion-col>
+
+          <ion-col size="5.5">
+            <ion-datetime-button class="datetime-bk" datetime="datetime2"></ion-datetime-button>
+
+            <ion-modal [keepContentsMounted]="true"id="modalEnd">
+              <ng-template>
+                <ion-datetime
+                  presentation="month-year"
+                  id="datetime2"
+                  [value]="endDate.toISOString()"
+                  (ionChange)="changeDate('endDate', $event)">
+                </ion-datetime>
+              </ng-template>
+            </ion-modal>
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="ion-justify-content-center">
+          <ion-col class="ion-text-center"  size="12">
+            <ion-label color="primary"><h1>{{'data.select_types'|translate}}</h1></ion-label>
+          </ion-col>
+          <ion-col class="ion-padding-start ion-padding-end" size="11">
+            <ion-item class="rounded-inputs">
+                <ion-select [(ngModel)]="types" label="{{'event.type'|translate}}" label-placement="floating"  [multiple]="true">
+                  <ion-select-option *ngFor="let type of eventTypes" [value]="type.name">{{type.string}}</ion-select-option>
+                </ion-select>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="ion-align-items-center">
+          <ion-col class="ion-text-center"  size="12">
+            <ion-label color="primary"><h1>{{'data.word_or_date'|translate}}</h1></ion-label>
+          </ion-col>
+          <ion-col size="2">
+            <ion-button (click)="eraseFilter()" color="warning"><ion-icon src="../../../assets/icons/close-outline.svg"></ion-icon></ion-button>
+          </ion-col>
+          <ion-col size="10">
+            <ion-item class="rounded-inputs ion-margin-end">
+              <ion-input [(ngModel)]="filter"  placeholder="{{'mainpage.filter_text'|translate}}"></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="ion-margin-top ion-justify-content-center">
+          <ion-col size="11">
+            <ion-button expand="block" (click)="updateCharts()" color="darkblue" shape="round" translate="data.generate_data"></ion-button>
+          </ion-col>
+        </ion-row>
+      </div>
+    </ion-accordion>
+  </ion-accordion-group>
 
 
 
+  <ion-row class="ion-margin-top" *ngFor="let vehicle of vehiclesArray; let i = index">
 
+    <ion-item-divider class="green ion-margin-top">
+      <ion-label><h2 class="black">{{vehicle.brandOrModel}}</h2></ion-label>
+    </ion-item-divider>
+
+    <ion-col class="ion-text-center ion-margin-top" size="12">
+      <ion-label color="secondary">
+        <h1>{{'data.events'|translate}}</h1>
+      </ion-label>
+      <canvas [id]="'canvas-' + i"></canvas>
+    </ion-col>
+    <ion-col class="ion-text-center" size="12">
+      <ion-label color="secondary">
+        <h1>{{'data.cost'|translate}}</h1>
+      </ion-label>
+      <canvas [id]="'cost-canvas-' + i"></canvas>
+    </ion-col>
+    <ion-col size="12">
+      <ion-row class="ion-align-items-center ion-justify-content-center">
+        <ion-col class="ion-margin-top ion-margin-start" size="3">
+          <ion-label color="secondary">
+            <h1>{{'data.total'|translate}}</h1>
+          </ion-label>
+        </ion-col>
+        <ion-col class="ion-margin-top ion-margin-start" size="3">
+          <ion-label>
+            <h2>{{ totalEvents(vehicle) }} {{ 'data.events' | translate }}</h2>
+          </ion-label>
+        </ion-col>
+        <ion-col class="ion-margin-top ion-margin-start" size="3">
+          <ion-label>
+            <h2>{{ totalCost(vehicle) }} €</h2>
+          </ion-label>
+        </ion-col>
+      </ion-row>
+    </ion-col>
+  </ion-row>
+
+  <ion-row *ngIf="eventsArray.length > 0" class="ion-margin-top ion-padding-top ion-justify-content-center">
+    <ion-col class="ion-margin-top ion-padding-top" size="11">
+      <ion-button expand="block" (click)="exportData()" color="darkblue" shape="round" translate="data.export_to_csv"><ion-icon class="ion-margin-start" size="large" src="../../../assets/icons/analytics-outline.svg"></ion-icon></ion-button>
+    </ion-col>
+  </ion-row>
+
+  <ion-row class="ion-margin-top ion-padding-top">
+    <ion-col class="ion-text-center ion-margin-top ion-padding-top" size="12">
+      <ion-icon [routerLink]="['/dashboard']" class="orange-icon" src="../../../assets/icons/return-up-back-outline.svg"></ion-icon>
+    </ion-col>
+  </ion-row>
 
 </ion-content>

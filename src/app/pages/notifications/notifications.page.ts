@@ -47,8 +47,8 @@ export class NotificationsPage{
   async ionViewWillEnter() {
     this.getData();
     //console.log("estado: ",this.connected, this.hasFile)
-    this.autoBk = this._session.autoBackup;
-    //console.log(this.autoBk);
+    this.autoBk = await this._session.getAutoBackup();
+    console.log(this.autoBk);
     this.errorText = "";
     this.translate.setDefaultLang(this._translation.getLanguage());
     await this.checkPermissions();

@@ -11,6 +11,7 @@ import { NotificationsService } from './notifications.service';
 import { LocalNotificationSchema } from '@capacitor/local-notifications';
 import { Platform } from '@ionic/angular';
 import { DriveService } from './drive.service';
+
 @Injectable({
   providedIn:'root',
 })
@@ -114,7 +115,8 @@ export class SessionService{
     this.autoBackup = await this._storage.setStorageItem(storageConstants.USER_AUTBK+this.currentUser.id,option);
   }
   async getAutoBackup():Promise<boolean>{
-    this.autoBackup = await this._storage.getStorageItem(storageConstants.USER_AUTBK+this.currentUser.id) || true;
+    this.autoBackup = await this._storage.getStorageItem(storageConstants.USER_AUTBK+this.currentUser.id);
+    console.log(await this._storage.getStorageItem(storageConstants.USER_AUTBK+this.currentUser.id))
     return this.autoBackup;
   }
 

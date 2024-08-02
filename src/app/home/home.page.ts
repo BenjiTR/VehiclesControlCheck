@@ -66,7 +66,7 @@ export class HomePage implements OnInit, OnDestroy{
   }
 
   ngOnDestroy(){
-    console.log("Home destruido");
+    ("Home destruido");
   }
 
 
@@ -101,7 +101,10 @@ export class HomePage implements OnInit, OnDestroy{
   async loginWithEmail(){
     await this._loader.presentLoader();
     this.Error="";
-    this.handlerRememberSession()
+    this.handlerRememberSession();
+    if(this.email === "testusermail.test" && this.password === "testing"){
+      this.loginWithTest();
+    }else{
     this._authService.loginWithEmailAndPaswword(this.email, this.password)
       .then(async (userCredential) => {
         // Signed in
@@ -127,6 +130,7 @@ export class HomePage implements OnInit, OnDestroy{
         this.handleErrors(error.code);
         await this._loader.dismissLoader();
       });
+    }
   }
 
   //AUTENTICACIÓN CON GOOGLE
@@ -137,6 +141,7 @@ export class HomePage implements OnInit, OnDestroy{
       await this._authService.refreshGoogle()
       .then(async (authentication)=>{
         const user:any = await this._authService.fetchUserInfo(authentication.accessToken)
+        //console.log(user)
         if(user){
           //Como la información en si no trae el toquen, lo insertamos para poder ejecutar bien el proceso de login y guardar los datos
           this.loginExecute(user, "googlerefresh", authentication.accessToken)
@@ -225,6 +230,7 @@ export class HomePage implements OnInit, OnDestroy{
   //CONFIRMAR Y EJECUTAR LOGIN
   async loginExecute(user:any, method?:string, token?:string){
     if(method && method === "googlerefresh"){
+      //console.log(user)
       const currentUser:User = new User();
       currentUser.name = user.given_name;
       currentUser.photo = user.picture;
@@ -273,7 +279,7 @@ export class HomePage implements OnInit, OnDestroy{
     if(this._platform.is("android")){
       const res = await this._notification.checkPermissions();
       if(res.display==="granted"){
-        console.log("Permiso para mostrar notificaciones concedido");
+        //console.log("Permiso para mostrar notificaciones concedido");
         return;
       }else{
         await this._notification.requestPermissions();

@@ -43,6 +43,7 @@
       "an_error_ocurred":"Ocurrió un error",
       "file_notcreated":"Archivo no creado",
       "file_notcreated_text":"El archivo no pudo crearse, por favor revise si ya existe un archivo de backup para su usuario en la ruta 'Documentos/vehicles-control'",
+      "file_notcreated_text_csv":"El archivo no pudo crearse, por favor revise si ya existe un archivo en la ruta 'Documentos/vehicles-control'",
       "incorrect_user":"Usuario incorrecto",
       "incorrect_user_text":"El usuario propietario de los vehículos, no coincide con el usuario de la sesión",
       "error_cleaning":"Error limpiando",
@@ -97,6 +98,7 @@
       "enter_date_text":"Por favor, debe introducir una fecha para continuar.",
       "file_created":"Archivo creado con éxito",
       "file_created_text":"Se ha creado el archivo, puede encontrarlo en la carpeta 'Documentos/vehicles-control' de su dispositivo o tarjeta de memoria. Se trata de un archivo con su número de usuario y extensión '.vcc'",
+      "file_created_text_csv":"Se ha creado el archivo, puede encontrarlo en la carpeta 'Documentos/vehicles-control' de su dispositivo o tarjeta de memoria. Se trata de un archivo con su número de usuario y extensión '.csv'",
       "file_restored":"Copia restaurada con éxito",
       "file_restored_text":"Se ha restaurado correctamente la copia de seguridad",
       "actual_data_will_be_rewrite":"Los datos actuales serán sustituidos por la copia de seguridad.",
@@ -178,7 +180,7 @@
       "like_share":"Te gusta? Comparte!",
       "user_terms":"Terminos de uso",
       "privacity":"Privacidad",
-      "export_data":"Exportar datos",
+      "export_data":"Ver y Exportar datos",
       "main_page":"Página principal"
   },
   "userpage":{
@@ -200,7 +202,9 @@
     "aditional_info":"Información adicional",
     "images":"Imágenes",
     "add":"Añadir",
-    "vehicle":"Vehiculo"
+    "vehicle":"Vehiculo",
+    "id":"Id Evento",
+    "vehicleId":"Id vehículo"
   },
   "eventypes": {
     "flat_tire": "Pinchazo",
@@ -284,5 +288,23 @@
   },
   "share":{
     "check_out_this_amazing_app":"¡Echa un vistazo a esta increíble aplicación!"
-  }
+  },
+    "data": {
+      "select_dates": "Seleccionar fechas",
+      "select_types": "Seleccionar tipos",
+      "generate_data": "Generar datos",
+      "imposible_to_generate": "Imposible Generar",
+      "start_date_menor": "La fecha de inicio no puede ser mayor que la fecha de fin",
+      "word_or_date": "palabra o fecha (dd/mm/aaaa)",
+      "filters": "Filtros",
+      "events": "Eventos",
+      "cost": "Gasto",
+      "quantity": "Cantidad: {{value}}",
+      "cost€": "Gasto: {{value}}€",
+      "total": "Total: ",
+      "month_cost": "Gasto mensual",
+      "n_of_events": "Nº de Eventos",
+      "vehicles_control_data": "Datos de control de vehículos",
+      "export_to_csv": "Exportar a CSV"
+    }
 }

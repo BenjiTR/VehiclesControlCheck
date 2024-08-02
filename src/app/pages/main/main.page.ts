@@ -85,37 +85,38 @@ export class MainPage implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
+    console.log("Inicio")
+
+    await this.loadAllData();
     await this._loader.presentLoader();
     this.user = this._session.currentUser;
     this.translate.setDefaultLang(this._translation.getLanguage());
-    await this.loadAllData();
     await this._admob.resumeBanner();
     if(this._session.currentUser.token){
       await this._drive.init();
     }
-    console.log(this._loader.isLoading)
+
+    this.token = await this._session.getToken();
+    console.log("Fin")
+    //console.log(this._loader.isLoading)
     if(this._loader.isLoading){
       await this._loader.dismissLoader();
     }
-    this.token = await this._session.getToken();
-
   }
 
 
   async ionViewWillEnter() {
+    console.log("InicioView")
     this.reload = this.activatedroute.snapshot.queryParams['reload'] || false;
     if(this.reload){
       await this._loader.presentLoader();
       await this.loadAllData();
       await this._loader.dismissLoader();
     }
-    if(this._loader.isLoading){
-      await this._loader.dismissLoader();
-    }
   }
 
   ngOnDestroy(){
-    console.log("main destruido")
+    //console.log("main destruido")
     this.downloadingSubscription.unsubscribe();
   }
 

@@ -156,9 +156,9 @@ export class NeweventPage {
       const fileName = event.id;
       const exist = await this._drive.findFileByName(fileName)
           if(exist){
-            await this._drive.updateFile(exist, JSON.stringify(event), fileName, true);
+            this._drive.updateFile(exist, JSON.stringify(event), fileName, true);
           }else{
-            await this._drive.uploadFile(JSON.stringify(event), fileName, true);
+            this._drive.uploadFile(JSON.stringify(event), fileName, true);
           }
       this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,false)
     }

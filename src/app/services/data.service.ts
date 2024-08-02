@@ -22,7 +22,7 @@ export class DataService{
     private _notifications:NotificationsService,
     private translate:TranslateService,
     private _date:DateService,
-    private _platform:Platform
+    private _platform:Platform,
   ){
   }
 
@@ -107,5 +107,42 @@ export class DataService{
     return fileRepresentations;
 
   }
+
+  async buildCsvData(eventTypes: any): Promise<string> {
+    const eventsArray = this._session.eventsArray;
+
+    const headers = [
+        'id',
+        'vehicleId',
+        'date',
+        'type',
+        'km',
+        'cost',
+        'aditional_info'
+    ].map(header => this.translate.instant('event.' + header));
+
+    // Mapeo de tipos de eventos
+    const eventTypeMap = new Map(eventTypes.map((eventType: { name: any; string: any; }) => [eventType.name, eventType.string]));
+
+    // Datos de eventos
+    const csvRows = eventsArray.map(event => [
+        event.id,
+        event.vehicleId,
+        event.date,
+        eventTypeMap.get(event.type) || event.type,
+        event.km,
+        event.cost,
+        event.info
+    ]);
+
+    // Añadir encabezados a los datos
+    csvRows.unshift(headers);
+
+    // Convertir a CSV string
+    const csvString = csvRows.map(row => row.join(',')).join('\n');
+
+    return csvString;
+}
+
 
 }

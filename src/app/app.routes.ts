@@ -69,7 +69,6 @@ export const routes: Routes = [
         path: 'data',
         loadComponent: () => import('./pages/data/data.page').then( m => m.DataPage)
       },
-
       {
         path: '**',
         redirectTo: 'main',

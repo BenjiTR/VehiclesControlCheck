@@ -57,7 +57,7 @@ export class DriveService {
       this._alert.createAlert(this.translate.instant("error.no_network"), this.translate.instant("error.no_network_to_backup"));
     }
     this.noFinishedOperation = await this._storage.getStorageItem(storageConstants.USER_OPS+this._session.currentUser.id);
-    console.log(this.noFinishedOperation)
+    //console.log(this.noFinishedOperation)
     if(this.noFinishedOperation){
       this.updateInDriveProcess();
     }
@@ -310,7 +310,7 @@ export class DriveService {
           const nextFiles = await fetchFiles(nextPageToken);
           return files.concat(nextFiles);
         }
-        console.log(files);
+        //console.log(files);
         return files;
       } catch (error) {
         //console.error('Error al listar archivos en la carpeta:', error);

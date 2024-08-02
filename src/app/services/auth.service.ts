@@ -45,7 +45,7 @@ loginWithEmailAndPaswword(email:string, password:string){
 //BORRAR CUENTA
 deleteAccountWithEmail(){
   const user = this.auth.currentUser;
-  console.log(user);
+  //console.log(user);
   return deleteUser(user);
 }
 
@@ -53,9 +53,9 @@ async deleteAccountWithGoogle() {
 
   const googleUser = await GoogleAuth.refresh();
     const credential = GoogleAuthProvider.credential(googleUser.idToken);
-    console.log(credential)
+    //console.log(credential)
     const userCredential = await signInWithCredential(this.auth, credential);
-    console.log(userCredential)
+    //console.log(userCredential)
     return await deleteUser(userCredential.user);
 }
 

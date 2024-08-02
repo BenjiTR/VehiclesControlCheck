@@ -91,6 +91,16 @@ export class FileSystemService{
   }
 
 
+  async exportToCSV(csvContent:any) {
+    //console.log(csvContent)
+      return await Filesystem.writeFile({
+        path:"vehicles-control/"+this._session.currentUser.id +'.csv',
+        data: csvContent,
+        directory: Directory.Documents,
+        encoding: Encoding.UTF8,
+        recursive:true
+      });
+    }
 
 
 
