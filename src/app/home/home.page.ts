@@ -35,6 +35,9 @@ export class HomePage implements OnInit, OnDestroy{
   public Error:string = "";
   public password:string = "";
   public rememberSession:boolean =false;
+  public emailLabel: string = "";
+  public passwordLabel: string = "";
+
 
   constructor(
     private translate:TranslateService,
@@ -50,7 +53,14 @@ export class HomePage implements OnInit, OnDestroy{
     private _file:FileSystemService,
     private _storage:StorageService,
     private _loader:LoaderService
-  ) {}
+  ) {
+    this.translate.get('home.email').subscribe((translation: string) => {
+      this.emailLabel = translation;
+    });
+    this.translate.get('home.password').subscribe((translation: string) => {
+      this.passwordLabel = translation;
+    });
+  }
 
   async ngOnInit(){
     await this._loader.presentLoader();

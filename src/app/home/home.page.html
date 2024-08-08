@@ -33,14 +33,14 @@
     <ion-row>
       <ion-col class="ion-margin-start" size="10">
         <ion-item class="rounded-inputs">
-          <ion-input [(ngModel)]="email" type="email" placeholder="{{'home.email'|translate}}"></ion-input>
+          <ion-input [(ngModel)]="email" type="email" placeholder="{{'home.email'|translate}}" [attr.aria-label]="emailLabel"></ion-input>
         </ion-item>
       </ion-col>
       <ion-col class="ion-margin-start" size="11">
         <ion-item class="rounded-inputs">
-          <ion-input [(ngModel)]="password" [type]="showPassword ? 'text' : 'password'" placeholder="{{'home.password'|translate}}"></ion-input>
-            <ion-icon *ngIf="!showPassword" slot="end" src="../../assets/icons/eye-outline.svg" (click)="togglePassword()"></ion-icon>
-            <ion-icon *ngIf="showPassword" slot="end" src="../../assets/icons/eye-off-outline.svg" (click)="togglePassword()"></ion-icon>
+          <ion-input [(ngModel)]="password" [type]="showPassword ? 'text' : 'password'" placeholder="{{'home.password'|translate}}"  [attr.aria-label]="passwordLabel"></ion-input>
+            <ion-icon *ngIf="!showPassword" slot="end" src="../../assets/icons/eye-outline.svg" (click)="togglePassword()" aria-label="Mostrar contraseña"></ion-icon>
+            <ion-icon *ngIf="showPassword" slot="end" src="../../assets/icons/eye-off-outline.svg" (click)="togglePassword()"  aria-label="Ocultar contraseña"></ion-icon>
         </ion-item>
       </ion-col>
     </ion-row>
