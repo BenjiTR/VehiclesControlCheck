@@ -39,17 +39,17 @@
       <ion-col class="ion-margin-start" size="11">
         <ion-item class="rounded-inputs">
           <ion-input [(ngModel)]="password" [type]="showPassword ? 'text' : 'password'" placeholder="{{'home.password'|translate}}"  [attr.aria-label]="passwordLabel"></ion-input>
-            <ion-icon *ngIf="!showPassword" slot="end" src="../../assets/icons/eye-outline.svg" (click)="togglePassword()" aria-label="Mostrar contraseña"></ion-icon>
-            <ion-icon *ngIf="showPassword" slot="end" src="../../assets/icons/eye-off-outline.svg" (click)="togglePassword()"  aria-label="Ocultar contraseña"></ion-icon>
+            <ion-icon class="ltpadding" *ngIf="!showPassword" slot="end" src="../../assets/icons/eye-outline.svg" (click)="togglePassword()" aria-label="Mostrar contraseña"></ion-icon>
+            <ion-icon class="ltpadding" *ngIf="showPassword" slot="end" src="../../assets/icons/eye-off-outline.svg" (click)="togglePassword()"  aria-label="Ocultar contraseña"></ion-icon>
         </ion-item>
       </ion-col>
     </ion-row>
 
     <ion-row>
       <ion-col class="ion-margin-start">
-        <ion-checkbox [(ngModel)]="rememberSession" labelPlacement="end" translate="home.remember_session"></ion-checkbox>
+        <ion-checkbox class="ion-padding-top ion-padding-bottom" [(ngModel)]="rememberSession" labelPlacement="end" translate="home.remember_session"></ion-checkbox>
       </ion-col>
-      <ion-col class="ion-text-justify color-red height-1-rem" size="12">
+      <ion-col class="ion-padding-start ion-padding-bottom ion-margin-bottom ion-text-justify color-red height-1-rem" size="12">
         <p class="mp-clear" [ngClass]="{'error': !Error}" color="danger">{{Error}}</p>
       </ion-col>
     </ion-row>
@@ -58,8 +58,8 @@
       <ion-col class="ion-text-center" size="12">
         <ion-button [disabled]="sendValidation()" (click)="loginWithEmail()" size="large" translate="home.login"></ion-button>
       </ion-col>
-      <ion-col size="12" class="ion-text-center">
-        <a class="color-purpure" (click)="restorePassword()" translate="home.forgot_your_password?"></a>
+      <ion-col size="12" class="ion-margin-top ion-text-center">
+        <a class="ion-padding color-purpure" (click)="restorePassword()" translate="home.forgot_your_password?"></a>
       </ion-col>
     </ion-row>
     <ion-row  class="ion-margin-top ion-justify-content-center">
@@ -67,7 +67,7 @@
         <ion-img (click)="signInWithGoogle()" src="../../assets/img/btn_google_signin_light_normal_web@2x.png"></ion-img>
       </ion-col>
       <ion-col size="12" class="ion-text-center">
-        <p translate="home.dont_have_user?"><a class="color-purpure no-text-decoration ion-margin-start" [routerLink]="'/newuser'" translate="home.sign_up"></a></p>
+        <p translate="home.dont_have_user?"><a class="ion-padding color-purpure no-text-decoration ion-margin-start" [routerLink]="'/newuser'" translate="home.sign_up"></a></p>
       </ion-col>
     </ion-row>
   </ion-row>
@@ -75,15 +75,15 @@
  </ion-content>
 
  <ion-footer class="pastel">
-  <ion-row class="ion-justify-content-center">
+  <ion-row class="ion-justify-content-center ion-align-items-center">
     <ion-col class="ion-text-end" size="5">
-      <a class="c-black" [routerLink]="'/privacy'" translate="home.privacity"></a>
+      <a class="bigger-a c-black" [routerLink]="'/privacy'" translate="home.privacity"></a>
     </ion-col>
-    <ion-col class="ion-text-center" size="1">
-      ·
+    <ion-col class="bigger-a ion-text-center" size="1">
+      <a>·</a>
     </ion-col>
     <ion-col class="ion-text-start" size="5">
-      <a class="c-black" [routerLink]="'/useterms'" translate="home.terms_of_use"></a>
+      <a class="bigger-a c-black" [routerLink]="'/useterms'" translate="home.terms_of_use"></a>
     </ion-col>
   </ion-row>
 </ion-footer>

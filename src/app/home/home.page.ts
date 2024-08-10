@@ -128,7 +128,7 @@ export class HomePage implements OnInit, OnDestroy{
               this._alert.createAlert(this.translate.instant('alert.email_resend'),this.translate.instant('alert.email_no_verified_text'));
             })
             .catch((err)=>{
-              this.handleErrors(err.code);
+              this.handleErrors(err.message);
             })
           }
         await this._loader.dismissLoader();
