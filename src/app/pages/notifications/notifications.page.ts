@@ -48,10 +48,6 @@ export class NotificationsPage{
     this.getData();
     //console.log("estado: ",this.connected, this.hasFile)
     this.autoBk = await this._session.getAutoBackup();
-    if(this.autoBk === null){
-      this._session.setAutoBackup(true);
-      this.autoBk = true;
-    }
     console.log(this.autoBk);
     this.errorText = "";
     this.translate.setDefaultLang(this._translation.getLanguage());

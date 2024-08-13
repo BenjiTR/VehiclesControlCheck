@@ -16,7 +16,6 @@ import { AlertService } from 'src/app/services/alert.service';
 import { AdmobService } from 'src/app/services/admob.service';
 import { LoaderService } from 'src/app/services/loader.service';
 import { DriveService } from 'src/app/services/drive.service';
-import { CryptoService } from 'src/app/services/crypto.services';
 
 @Component({
   selector: 'app-vehicle',
@@ -57,8 +56,7 @@ export class VehiclePage implements OnInit {
     private _admobService:AdmobService,
     private navCtr:NavController,
     private _loader:LoaderService,
-    private _drive:DriveService,
-    private _crypto:CryptoService
+    private _drive:DriveService
   ) {
     this.user = this._session.currentUser;
   }
@@ -164,15 +162,15 @@ export class VehiclePage implements OnInit {
   async saveAndExit(vehicle:Vehicle){
     await this._admobService.showinterstitial();
     this._session.vehiclesArray = this.vehiclesArray;
-    this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.user.id,this._crypto.encryptMessage(JSON.stringify(this.vehiclesArray)));
+    this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.user.id,this.vehiclesArray);
     if(this._drive.folderId && this._session.autoBackup){
       this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,true)
       const fileName = vehicle.id;
       const exist = await this._drive.findFileByName(fileName)
         if(exist){
-          this._drive.updateFile(exist, this._crypto.encryptMessage(JSON.stringify(vehicle)), fileName, true);
+          this._drive.updateFile(exist, JSON.stringify(vehicle), fileName, true);
         }else{
-          this._drive.uploadFile(this._crypto.encryptMessage(JSON.stringify(vehicle)), fileName, true);
+          this._drive.uploadFile(JSON.stringify(vehicle), fileName, true);
         }
         this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,false)
     }

@@ -8,7 +8,6 @@ import { FilePicker } from '@capawesome/capacitor-file-picker';
 import { TranslateService } from '@ngx-translate/core';
 import { DateService } from './date.service';
 import { DataService } from './data.service';
-import { CryptoService } from './crypto.services';
 
 @Injectable({
   providedIn:'root'
@@ -23,8 +22,7 @@ export class FileSystemService{
     private _notifications:NotificationsService,
     private translate:TranslateService,
     private _date:DateService,
-    private _data:DataService,
-    private _crypto:CryptoService
+    private _data:DataService
   ){
   }
 
@@ -68,7 +66,7 @@ export class FileSystemService{
             encoding: Encoding.UTF8
           });
 
-          const data = (JSON.parse(this._crypto.decryptMessage(readFile.data.toString())))
+          const data = JSON.parse(readFile.data.toString())
           const correctUser = await this.itsForThisUser(data)
           if(!correctUser){
             throw new Error('Usuario incorrecto');

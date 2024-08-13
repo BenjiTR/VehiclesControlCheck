@@ -11,7 +11,6 @@ import { NotificationsService } from './notifications.service';
 import { LocalNotificationSchema } from '@capacitor/local-notifications';
 import { Platform } from '@ionic/angular';
 import { DriveService } from './drive.service';
-import { CryptoService } from './crypto.services';
 
 @Injectable({
   providedIn:'root',
@@ -34,7 +33,6 @@ export class SessionService{
     private _authService:AuthService,
     private _notification:NotificationsService,
     private _platform:Platform,
-    private _crypto:CryptoService
   ){
   }
 
@@ -43,8 +41,7 @@ export class SessionService{
     if(method === "email"){
       const photo = await this._storageService.getStorageItem(storageConstants.USER_PHOTO+id);
       if(photo){
-        const decrypt = this._crypto.decryptMessage(photo);
-        return imageConstants.base64Prefix+decrypt;
+        return imageConstants.base64Prefix+photo;
       }else{
         return "../../assets/img/user_avatar.png";
       }
@@ -54,17 +51,17 @@ export class SessionService{
   }
 
   async loadVehicles(): Promise<Vehicle[]>{
-    const temporalVehiclesArray = await this._storage.getStorageItem(storageConstants.USER_VEHICLES+this.currentUser.id);
+    const temporalVehiclesArray = await this._storage.getStorageItem(storageConstants.USER_VEHICLES+this.currentUser.id)
     if(this._authService.isInTest == true){
       this.vehiclesArray = this._test.vehicles;
-      this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.currentUser.id, this._crypto.encryptMessage(JSON.stringify(this.vehiclesArray)));
+      this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.currentUser.id, this.vehiclesArray);
       //this.vehiclesArray = temporalVehiclesArray;
       return this.vehiclesArray;
     }else if(!temporalVehiclesArray){
-      this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.currentUser.id, this._crypto.decryptMessage(JSON.stringify(this.vehiclesArray)));
+      this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.currentUser.id, this.vehiclesArray)
       return this.vehiclesArray;
     }else{
-      this.vehiclesArray = JSON.parse(this._crypto.decryptMessage(temporalVehiclesArray));
+      this.vehiclesArray = temporalVehiclesArray;
       return this.vehiclesArray;
     }
   }
@@ -73,14 +70,14 @@ export class SessionService{
     const temporalEventsArray = await this._storage.getStorageItem(storageConstants.USER_EVENTS+this.currentUser.id)
     if(this._authService.isInTest == true){
       this.eventsArray = this._test.events;
-      this._storage.setStorageItem(storageConstants.USER_EVENTS+this.currentUser.id, this._crypto.encryptMessage(JSON.stringify(this.eventsArray)));
+      this._storage.setStorageItem(storageConstants.USER_EVENTS+this.currentUser.id, this.eventsArray);
       //this.eventsArray = temporalEventsArray;
       return this.eventsArray;
     }else if(!temporalEventsArray){
-      this._storage.setStorageItem(storageConstants.USER_EVENTS+this.currentUser.id, this._crypto.decryptMessage(JSON.stringify(this.eventsArray)));
+      this._storage.setStorageItem(storageConstants.USER_EVENTS+this.currentUser.id, this.eventsArray);
       return this.eventsArray;
     }else{
-      this.eventsArray = JSON.parse(this._crypto.decryptMessage(temporalEventsArray));
+      this.eventsArray = temporalEventsArray;
       return this.eventsArray;
     }
   }
