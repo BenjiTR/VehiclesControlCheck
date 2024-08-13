@@ -17,7 +17,7 @@ import { getAuth } from "firebase/auth";
 //TRANSLATE
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 //ANIMACIONES
 import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-browser/animations';
@@ -38,15 +38,18 @@ bootstrapApplication(AppComponent, {
     importProvidersFrom(IonicModule.forRoot({innerHTMLTemplatesEnabled: true})),
     provideIonicAngular(),
     provideRouter(routes),
-    importProvidersFrom(  HttpClientModule,
+    importProvidersFrom(IonicModule.forRoot({ innerHTMLTemplatesEnabled: true })),
+    provideHttpClient(withInterceptorsFromDi()), // Actualiza HttpClientModule aquí
+    importProvidersFrom(
       TranslateModule.forRoot({
-          loader: {
-              provide: TranslateLoader,
-              useFactory: HttpLoaderFactory,
-              deps: [HttpClient]
-          }
-      }))
-  ],
+        loader: {
+          provide: TranslateLoader,
+          useFactory: HttpLoaderFactory,
+          deps: [HttpClient]
+        }
+      })
+    )
+  ]
 });
 
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
