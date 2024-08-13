@@ -8,6 +8,7 @@ import { StorageService } from './storage.service';
 import { NotificationsService } from './notifications.service';
 import { imageConstants } from '../const/img';
 import { Platform } from '@ionic/angular';
+import { CryptoService } from './crypto.services';
 
 @Injectable({
   providedIn:'root'
@@ -23,6 +24,7 @@ export class DataService{
     private translate:TranslateService,
     private _date:DateService,
     private _platform:Platform,
+    private _crypto:CryptoService
   ){
   }
 
@@ -42,13 +44,14 @@ export class DataService{
   async buildDeviceData():Promise<string>{
     const backup = await this.buildData();
     //console.log(backup ,JSON.stringify(backup))
-    return JSON.stringify(backup);
+    return this._crypto.encryptMessage(JSON.stringify(backup));
   }
 
   async restoreDeviceData(backup:Backup):Promise<void>{
-    //console.log(this._session.currentUser.id)
-    this._storage.setStorageItem(storageConstants.USER_VEHICLES+this._session.currentUser.id, backup.vehicles);
-    this._storage.setStorageItem(storageConstants.USER_EVENTS+this._session.currentUser.id, backup.events);
+    console.log(this._session.currentUser.id, backup)
+    this._storage.setStorageItem(storageConstants.USER_VEHICLES+this._session.currentUser.id, this._crypto.encryptMessage(JSON.stringify(backup.vehicles)));
+    this._storage.setStorageItem(storageConstants.USER_EVENTS+this._session.currentUser.id, this._crypto.encryptMessage(JSON.stringify(backup.events)));
+
     this._session.setReminderNotifications(backup.remindersOptions);
     const correctReminders = await this._date.setDatesInArray(backup.reminders);
     if(this._platform.is("android")){
@@ -56,8 +59,9 @@ export class DataService{
     }
     this._session.setAutoBackup(backup.autoBackup)
     if(backup.photo){
+
       this._storage.setStorageItem(storageConstants.USER_PHOTO+this._session.currentUser.id,backup.photo)
-      this._session.currentUser.photo = imageConstants.base64Prefix + backup.photo;
+      this._session.currentUser.photo = imageConstants.base64Prefix + this._crypto.decryptMessage(backup.photo);
     }
     return;
   }
@@ -69,13 +73,13 @@ export class DataService{
     // Vehículos
     backup.vehicles.forEach((vehicle) => {
       const fileName = vehicle.id;
-      fileRepresentations.push({ fileName, content: JSON.stringify(vehicle) });
+      fileRepresentations.push({ fileName, content: this._crypto.encryptMessage(JSON.stringify(vehicle)) });
     });
 
     // Eventos
     backup.events.forEach((event) => {
       const fileName = event.id;
-      fileRepresentations.push({ fileName, content: JSON.stringify(event) });
+      fileRepresentations.push({ fileName, content: this._crypto.encryptMessage(JSON.stringify(event)) });
     });
 
     // Recordatorios

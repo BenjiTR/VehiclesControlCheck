@@ -28,6 +28,7 @@ import { DriveService } from 'src/app/services/drive.service';
 import { Subscription } from 'rxjs';
 import { Network } from '@capacitor/network';
 import { DataService } from 'src/app/services/data.service';
+import { CryptoService } from 'src/app/services/crypto.services';
 
 @Component({
   selector: 'app-main',
@@ -74,7 +75,8 @@ export class MainPage implements OnInit, OnDestroy {
     private activatedroute:ActivatedRoute,
     private _drive:DriveService,
     private navCtr:NavController,
-    private _data:DataService
+    private _data:DataService,
+    private _crypto:CryptoService
   ) {
     this.eventTypes = etypes.getEventTypes();
     this.downloadingSubscription = this._drive.downloading$.subscribe(data=>{
@@ -85,19 +87,16 @@ export class MainPage implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    console.log("Inicio")
-
+    this.user = this._session.currentUser;
+    this._crypto.init(this.user);
     await this.loadAllData();
     await this._loader.presentLoader();
-    this.user = this._session.currentUser;
     this.translate.setDefaultLang(this._translation.getLanguage());
     await this._admob.resumeBanner();
     if(this._session.currentUser.token){
       await this._drive.init();
     }
-
     this.token = await this._session.getToken();
-    console.log("Fin")
     //console.log(this._loader.isLoading)
     if(this._loader.isLoading){
       await this._loader.dismissLoader();
@@ -106,7 +105,6 @@ export class MainPage implements OnInit, OnDestroy {
 
 
   async ionViewWillEnter() {
-    console.log("InicioView")
     this.reload = this.activatedroute.snapshot.queryParams['reload'] || false;
     if(this.reload){
       await this._loader.presentLoader();
@@ -156,10 +154,7 @@ export class MainPage implements OnInit, OnDestroy {
       if (index > -1) {
         this.vehiclesArray.splice(index, 1);
         this._session.vehiclesArray = this.vehiclesArray;
-        await this._storage.setStorageItem(
-          storageConstants.USER_VEHICLES + this.user.id,
-          this.vehiclesArray
-        );
+        await this._storage.setStorageItem(storageConstants.USER_VEHICLES + this.user.id, this._crypto.encryptMessage(JSON.stringify(this.vehiclesArray)));
 
         const elements = await this.GetElementsToClean(vehicle);
         await this.deleteLocalElements(vehicle);
@@ -277,7 +272,7 @@ export class MainPage implements OnInit, OnDestroy {
     const index = this.eventsArray.indexOf(event);
     this.eventsArray.splice(index,1)
     this._session.eventsArray = this.eventsArray;
-    await this._storage.setStorageItem(storageConstants.USER_EVENTS+this.user.id,this.eventsArray);
+    await this._storage.setStorageItem(storageConstants.USER_EVENTS+this.user.id,this._crypto.encryptMessage(JSON.stringify(this.eventsArray)));
     return;
   }
 
