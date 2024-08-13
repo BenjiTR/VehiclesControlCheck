@@ -17,7 +17,7 @@ import { getAuth } from "firebase/auth";
 //TRANSLATE
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-import {HttpClient, HttpClientModule} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 //ANIMACIONES
 import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-browser/animations';
