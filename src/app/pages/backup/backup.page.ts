@@ -21,6 +21,7 @@ import { LoaderService } from 'src/app/services/loader.service';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { PaddingService } from 'src/app/services/padding.service';
 import { DataService } from 'src/app/services/data.service';
+import { CryptoService } from 'src/app/services/crypto.services';
 
 @Component({
   selector: 'app-backup',
@@ -61,7 +62,8 @@ export class BackupPage implements OnInit {
     private _loader:LoaderService,
     private _paddingService:PaddingService,
     private _data:DataService,
-    private notifications:NotificationsPage
+    private notifications:NotificationsPage,
+    private _crypto:CryptoService
   ) {
     this.progressSubscription = this._drive.progress$.subscribe(data=>{
       this.progress = data;
@@ -254,9 +256,11 @@ export class BackupPage implements OnInit {
         } else if (element.name === "remindersOptions") {
           temporalBackup.remindersOptions = JSON.parse(content) ;
         } else if (element.name.startsWith("V")) {
-          temporalBackup.vehicles.push(JSON.parse(content));
+          console.log("Vehiculos: ",content)
+          temporalBackup.vehicles.push(JSON.parse(this._crypto.decryptMessage(content)));
         } else if (element.name.startsWith("E")) {
-          temporalBackup.events.push(JSON.parse(content));
+          console.log("Eventos: ",content)
+          temporalBackup.events.push(JSON.parse(this._crypto.decryptMessage(content)));
         } else if (element.name.startsWith("R")) {
           temporalBackup.reminders.push(JSON.parse(content));
         }
