@@ -15,7 +15,6 @@ import { imageConstants } from 'src/app/const/img';
 import { StorageService } from 'src/app/services/storage.service';
 import { storageConstants } from 'src/app/const/storage';
 import { DriveService } from 'src/app/services/drive.service';
-import { CryptoService } from 'src/app/services/crypto.services';
 
 
 @Component({
@@ -43,8 +42,7 @@ export class UserdataPage implements OnInit {
     private _alert:AlertService,
     private _camera:CameraServices,
     private _storage:StorageService,
-    private _drive:DriveService,
-    private _crypto:CryptoService
+    private _drive:DriveService
   ) { }
 
   ngOnInit() {
@@ -108,9 +106,8 @@ export class UserdataPage implements OnInit {
       //console.log(photo)
       this._session.currentUser.photo = imageConstants.base64Prefix + photo;
       this.user.photo = imageConstants.base64Prefix + photo;
-      const encrypted = this._crypto.encryptMessage(photo)
-      this._storage.setStorageItem(storageConstants.USER_PHOTO+this.user.id, encrypted);
-      this.saveInCloud(encrypted)
+      this._storage.setStorageItem(storageConstants.USER_PHOTO+this.user.id, photo);
+      this.saveInCloud(photo)
     }
    }
   }

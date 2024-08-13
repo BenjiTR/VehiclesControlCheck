@@ -20,7 +20,6 @@ import { ImgmodalPage } from '../imgmodal/imgmodal.page';
 import { CameraServices } from 'src/app/services/camera.service';
 import { LoaderService } from 'src/app/services/loader.service';
 import { DriveService } from 'src/app/services/drive.service';
-import { CryptoService } from 'src/app/services/crypto.services';
 
 @Component({
   selector: 'app-newevent',
@@ -60,8 +59,7 @@ export class NeweventPage {
     private _admobService:AdmobService,
     private navCtr:NavController,
     private _loader:LoaderService,
-    private _drive:DriveService,
-    private _crypto:CryptoService
+    private _drive:DriveService
   ) {
     this.eventTypes = etypes.getEventTypes();
     this.user = this._session.currentUser;
@@ -152,15 +150,15 @@ export class NeweventPage {
   async saveAndExit(event:Event){
     await this._admobService.showinterstitial();
     this._session.eventsArray = this.eventsArray;
-    await this._storage.setStorageItem(storageConstants.USER_EVENTS+this.user.id,this._crypto.encryptMessage(JSON.stringify(this.eventsArray)));
+    await this._storage.setStorageItem(storageConstants.USER_EVENTS+this.user.id,this.eventsArray);
     if(this._drive.folderId && this._session.autoBackup){
       this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,true)
       const fileName = event.id;
       const exist = await this._drive.findFileByName(fileName)
           if(exist){
-            this._drive.updateFile(exist, this._crypto.encryptMessage(JSON.stringify(event)), fileName, true);
+            this._drive.updateFile(exist, JSON.stringify(event), fileName, true);
           }else{
-            this._drive.uploadFile(this._crypto.encryptMessage(JSON.stringify(event)), fileName, true);
+            this._drive.uploadFile(JSON.stringify(event), fileName, true);
           }
       this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,false)
     }
