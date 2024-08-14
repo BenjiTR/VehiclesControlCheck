@@ -120,6 +120,10 @@ export class MainPage implements OnInit, OnDestroy {
 
 
   async loadAllData():Promise<void>{
+    if(this.user.method === 'email'){
+      this._session.currentUser.photo = await this._session.searchphoto( this._session.currentUser.method, this._session.currentUser.id);
+      this.user.photo = await this._session.searchphoto( this._session.currentUser.method, this._session.currentUser.id);
+    }
     this.vehiclesArray = await this._session.loadVehicles();
     this.eventsArray = await this._session.loadEvents();
     this.remindersArray = await this._session.loadReminders();

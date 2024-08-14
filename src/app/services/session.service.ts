@@ -43,8 +43,7 @@ export class SessionService{
     if(method === "email"){
       const photo = await this._storageService.getStorageItem(storageConstants.USER_PHOTO+id);
       if(photo){
-        const decrypt = this._crypto.decryptMessage(photo);
-        return imageConstants.base64Prefix+decrypt;
+        return imageConstants.base64Prefix+this._crypto.decryptMessage(photo);
       }else{
         return "../../assets/img/user_avatar.png";
       }

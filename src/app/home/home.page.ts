@@ -268,7 +268,6 @@ export class HomePage implements OnInit, OnDestroy{
       currentUser.method = "email";
       currentUser.email = user.email;
       this._authService.isInTest = true;
-      currentUser.photo = await this._session.searchphoto(currentUser.method, currentUser.id);
       this._session.currentUser = currentUser
     }else{
       //observable del estado de autenticación
@@ -279,7 +278,6 @@ export class HomePage implements OnInit, OnDestroy{
       currentUser.id = user.uid;
       currentUser.method = "email";
       currentUser.email = user.email;
-      currentUser.photo = await this._session.searchphoto(currentUser.method, currentUser.id);
       this._session.currentUser = currentUser;
     }
     this.navCtr.navigateRoot(["\dashboard"]);
