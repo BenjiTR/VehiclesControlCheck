@@ -52,7 +52,7 @@ export class NotificationsPage{
       this._session.setAutoBackup(true);
       this.autoBk = true;
     }
-    console.log(this.autoBk);
+    //console.log(this.autoBk);
     this.errorText = "";
     this.translate.setDefaultLang(this._translation.getLanguage());
     await this.checkPermissions();

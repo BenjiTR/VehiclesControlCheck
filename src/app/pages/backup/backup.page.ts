@@ -256,10 +256,10 @@ export class BackupPage implements OnInit {
         } else if (element.name === "remindersOptions") {
           temporalBackup.remindersOptions = JSON.parse(content) ;
         } else if (element.name.startsWith("V")) {
-          console.log("Vehiculos: ",content)
+          //console.log("Vehiculos: ",content)
           temporalBackup.vehicles.push(JSON.parse(this._crypto.decryptMessage(content)));
         } else if (element.name.startsWith("E")) {
-          console.log("Eventos: ",content)
+          //console.log("Eventos: ",content)
           temporalBackup.events.push(JSON.parse(this._crypto.decryptMessage(content)));
         } else if (element.name.startsWith("R")) {
           temporalBackup.reminders.push(JSON.parse(content));
@@ -283,7 +283,7 @@ export class BackupPage implements OnInit {
       const file = await this._drive.findFileByName(fileName);
 
       if (!file) {
-        console.log('El archivo no fue encontrado.');
+        //console.log('El archivo no fue encontrado.');
         return;
       }
       // Luego, descarga el contenido del archivo usando su fileId

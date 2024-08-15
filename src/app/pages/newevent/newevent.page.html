@@ -36,7 +36,7 @@
         </ion-col>
         <ion-col class="ion-padding-start ion-padding-end" size="12">
           <ion-item class="rounded-inputs">
-            <ion-input [(ngModel)]="cost" type="text" label="{{'event.cost' | translate}}" label-placement="floating"></ion-input>
+            <ion-input  [clearOnEdit]="true" [(ngModel)]="cost" type="number" label="{{'event.cost' | translate}}" label-placement="floating"></ion-input>
           </ion-item>
         </ion-col>
 

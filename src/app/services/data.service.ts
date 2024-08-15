@@ -48,7 +48,7 @@ export class DataService{
   }
 
   async restoreDeviceData(backup:Backup):Promise<void>{
-    console.log(this._session.currentUser.id, backup)
+    //console.log(this._session.currentUser.id, backup)
     this._storage.setStorageItem(storageConstants.USER_VEHICLES+this._session.currentUser.id, this._crypto.encryptMessage(JSON.stringify(backup.vehicles)));
     this._storage.setStorageItem(storageConstants.USER_EVENTS+this._session.currentUser.id, this._crypto.encryptMessage(JSON.stringify(backup.events)));
 

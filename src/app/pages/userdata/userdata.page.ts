@@ -109,7 +109,7 @@ export class UserdataPage implements OnInit {
       this._session.currentUser.photo = imageConstants.base64Prefix + photo;
       this.user.photo = imageConstants.base64Prefix + photo;
       const encrypted = this._crypto.encryptMessage(photo)
-      console.log(photo, encrypted)
+      //console.log(photo, encrypted)
       this._storage.setStorageItem(storageConstants.USER_PHOTO+this.user.id, encrypted);
       this.saveInCloud(encrypted)
     }
