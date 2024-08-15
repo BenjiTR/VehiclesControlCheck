@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { AdMob, AdMobBannerSize, AdmobConsentStatus, BannerAdOptions, BannerAdPluginEvents, BannerAdPosition, BannerAdSize } from "@capacitor-community/admob";
 import { AdOptions, AdLoadInfo, InterstitialAdPluginEvents } from '@capacitor-community/admob';
+import { Capacitor } from "@capacitor/core";
 
 @Injectable
 ({
@@ -53,11 +54,11 @@ export class AdmobService {
     });
 
     const options: BannerAdOptions = {
-      adId: 'ca-app-pub-7109225930546474~5137885146',
+      adId: this.getBannerId(),
       adSize: BannerAdSize.ADAPTIVE_BANNER,
       position: BannerAdPosition.BOTTOM_CENTER,
       margin:0,
-      isTesting: true,
+      isTesting: this.gettesting(),
       // npa: true
     };
     AdMob.showBanner(options);
@@ -82,13 +83,37 @@ async showinterstitial(): Promise<void> {
     });
 
     const options: AdOptions = {
-      adId: 'ca-app-pub-7109225930546474~5137885146',
-      isTesting: true
+      adId: this.getIntersticialId(),
+      isTesting: this.gettesting()
       // npa: true
     };
     await AdMob.prepareInterstitial(options);
     await AdMob.showInterstitial();
     this.showing = 1;
+  }
+}
+
+getBannerId(){
+    if(Capacitor.getPlatform()==='ios'){
+      return 'ca-app-pub-7109225930546474/1305900979'
+    }else{
+      return 'ca-app-pub-7109225930546474/8937529358'
+    }
+}
+
+getIntersticialId(){
+  if(Capacitor.getPlatform()==='ios'){
+    return 'ca-app-pub-7109225930546474/1824775721'
+  }else{
+    return 'ca-app-pub-7109225930546474/7383858235'
+  }
+}
+
+gettesting(){
+  if(Capacitor.getPlatform()==='ios'){
+    return true
+  }else{
+    return false
   }
 }
 

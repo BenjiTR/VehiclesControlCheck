@@ -16,6 +16,7 @@ import { FileSystemService } from '../services/filesystem.service';
 import { StorageService } from '../services/storage.service';
 import { Network } from '@capacitor/network';
 import { LoaderService } from '../services/loader.service';
+import { Capacitor } from '@capacitor/core';
 
 
 
