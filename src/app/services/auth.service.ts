@@ -3,7 +3,6 @@ import { Injectable } from "@angular/core";
 import { TranslationConfigService } from '../services/translation.service';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import { Platform } from "@ionic/angular";
-import { GoogleOAuthAccessToken } from "firebase-admin";
 
 
 @Injectable({
@@ -16,6 +15,8 @@ export class AuthService{
     public auth:any = getAuth();
     public isActive:Boolean = false;
     public isInTest:Boolean = false;
+
+
   constructor(
     private _translation: TranslationConfigService,
     private platform:Platform,
@@ -30,6 +31,7 @@ export class AuthService{
   initializeApp() {
     this.platform.ready().then(() => {
       GoogleAuth.initialize({
+        clientId:'329432960985-0f0oj2qbh3gp0mbgr0k32hmi0b6gbi06.apps.googleusercontent.com',
         grantOfflineAccess: true,
         scopes: ['profile', 'email','https://www.googleapis.com/auth/drive.appdata']
       })
