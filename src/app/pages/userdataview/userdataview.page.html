@@ -9,7 +9,7 @@
         <h1 class="black" translate="mainpage.hello!"></h1>
       </ion-label>
     </ion-col>
-    <ion-col class="ion-margin-top ion-text-center" size="2">
+    <ion-col class="ion-margin-top ion-text-center" size="1">
 
       <ion-label id="no_connected_info" *ngIf="token && !connected && !hasFiles && !uploading">
         <h1><ion-icon color="danger" src="../../../assets/icons/cloud-offline-outline.svg"></ion-icon></h1>
@@ -37,7 +37,7 @@
         </ion-popover>
       </ion-label>
 
-      <ion-label id="has_file_info" *ngIf="token && connected && hasFiles && !uploading  && !downloading && !cleaning">
+      <ion-label id="has_file_info" *ngIf="token && connected && hasFiles && !uploading  && downloading==='false' && !cleaning">
         <h1><ion-icon class="green-icon" src="../../../assets/icons/cloud-done-outline.svg"></ion-icon></h1>
         <ion-popover trigger="has_file_info" trigger-action="click">
           <ng-template>
@@ -63,7 +63,7 @@
       </ion-popover>
     </ion-label>
 
-    <ion-label id="is_uploading_info" *ngIf="token && connected && downloading">
+    <ion-label id="is_uploading_info" *ngIf="token && connected && downloading==='true'">
       <h1><ion-icon class="green-icon" src="../../../assets/icons/cloud-download-outline.svg"></ion-icon></h1>
       <ion-popover trigger="is_uploading_info" trigger-action="click">
         <ng-template>
@@ -92,6 +92,32 @@
 
   </ion-col>
 
+  <ion-col class="ion-margin-top ion-text-center" size="1">
+    <ion-label id="auto_info" *ngIf="token && connected && hasFiles && autoBk">
+      <h2 class="green-icon"><b>A</b></h2>
+      <ion-popover trigger="auto_info" trigger-action="click">
+        <ng-template>
+          <ion-content class="ion-padding">
+            <ion-row>
+              <ion-col class="ion-text-justify" size="12"><ion-label>{{'popover.auto_info'|translate}}</ion-label></ion-col>
+            </ion-row>
+          </ion-content>
+        </ng-template>
+      </ion-popover>
+    </ion-label>
+    <ion-label id="manual_info" *ngIf="token && connected && hasFiles && !autoBk">
+      <h2 class="orange-cloud"><b>M</b></h2>
+      <ion-popover trigger="manual_info" trigger-action="click">
+        <ng-template>
+          <ion-content class="ion-padding">
+            <ion-row>
+              <ion-col class="ion-text-justify" size="12"><ion-label>{{'popover.manual_info'|translate}}</ion-label></ion-col>
+            </ion-row>
+          </ion-content>
+        </ng-template>
+      </ion-popover>
+    </ion-label>
+  </ion-col>
 
     <ion-col class="ion-margin-top" size="12">
       <ion-label>

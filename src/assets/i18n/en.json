@@ -276,7 +276,9 @@
     "is_auto_info": "Automatically syncing with backup",
     "uploading_info": "Uploading files",
     "downloading_info": "Downloading files",
-    "cleaning_info": "Cleaning files"
+    "cleaning_info": "Cleaning files",
+    "auto_info": "Any changes will be automatically saved to Drive, your data is secure!",
+    "manual_info": "Data is not saved automatically, it must be done manually from the Settings/Update Backup menu"
   },
   "faqs": {
     "you_have_doubts?": "Have any questions?",

@@ -41,7 +41,7 @@ export class NotificationsPage{
   ) {
     this.hasFileSubscription = this._drive.haveFiles$.subscribe((data)=>{
       this.hasFile = data;
-    })
+    });
   }
 
   async ionViewWillEnter() {
@@ -51,8 +51,10 @@ export class NotificationsPage{
     if(this.autoBk === null){
       this._session.setAutoBackup(true);
       this.autoBk = true;
+    }else{
+      this._drive.changeautoBk(this.autoBk);
     }
-    //console.log(this.autoBk);
+    console.log(this.autoBk);
     this.errorText = "";
     this.translate.setDefaultLang(this._translation.getLanguage());
     await this.checkPermissions();
@@ -67,7 +69,7 @@ export class NotificationsPage{
 
   async checkPermissions():Promise<void>{
     const resp = await this._notifications.checkPermissions();
-    console.log("Check: ",resp)
+    //console.log("Check: ",resp)
     this.isAllowedAndActivated(resp.display);
   }
 
@@ -94,7 +96,7 @@ export class NotificationsPage{
       this._session.setReminderNotifications(false)
     }else{
       const resp = await this._notifications.requestPermissions();
-      console.log("Req: ",resp)
+      //console.log("Req: ",resp)
       if(resp.display==="granted"){
         this.isAllowed = true;
         this._notifications.createChannel();
@@ -117,6 +119,7 @@ export class NotificationsPage{
     }else{
       this.autoBk = false;
     }
+    this._drive.changeautoBk(this.autoBk)
     this._session.setAutoBackup(this.autoBk);
   }
 

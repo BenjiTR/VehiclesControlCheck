@@ -278,7 +278,9 @@
     "is_auto_info":"Se está sincronizando de forma automática con la copia de seguridad",
     "uploading_info":"Se están subiendo arhivos",
     "downloading_info":"Se están descargando archivos",
-    "cleaning_info":"Se están limpiando archivos"
+    "cleaning_info":"Se están limpiando archivos",
+    "auto_info":"Cualquier cambio será guardado de forma automática en Drive, ¡Sus datos están seguros!",
+    "manual_info":"Los datos no se guardan de forma automática, debera hacerse desde el menú de Ajustes/Actualizar Backup"
   },
   "faqs":{
     "you_have_doubts?": "¿Tienes dudas?",

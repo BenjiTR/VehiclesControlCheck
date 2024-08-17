@@ -54,7 +54,7 @@ export class DataService{
 
     this._session.setReminderNotifications(backup.remindersOptions);
     const correctReminders = await this._date.setDatesInArray(backup.reminders);
-    if(this._platform.is("android")){
+    if(this._platform.is("android")||this._platform.is("ios")){
       await this._notifications.createNotification(correctReminders);
     }
     this._session.setAutoBackup(backup.autoBackup)

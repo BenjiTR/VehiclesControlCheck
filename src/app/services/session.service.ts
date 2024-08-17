@@ -36,6 +36,7 @@ export class SessionService{
     private _platform:Platform,
     private _crypto:CryptoService
   ){
+
   }
 
 
@@ -53,14 +54,16 @@ export class SessionService{
   }
 
   async loadVehicles(): Promise<Vehicle[]>{
+
     const temporalVehiclesArray = await this._storage.getStorageItem(storageConstants.USER_VEHICLES+this.currentUser.id);
+    //console.log(temporalVehiclesArray, this.vehiclesArray, this.currentUser)
     if(this._authService.isInTest == true){
       this.vehiclesArray = this._test.vehicles;
       this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.currentUser.id, this._crypto.encryptMessage(JSON.stringify(this.vehiclesArray)));
       //this.vehiclesArray = temporalVehiclesArray;
       return this.vehiclesArray;
     }else if(!temporalVehiclesArray){
-      this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.currentUser.id, this._crypto.decryptMessage(JSON.stringify(this.vehiclesArray)));
+      this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.currentUser.id, this._crypto.encryptMessage(JSON.stringify(this.vehiclesArray)));
       return this.vehiclesArray;
     }else{
       this.vehiclesArray = JSON.parse(this._crypto.decryptMessage(temporalVehiclesArray));
@@ -76,7 +79,7 @@ export class SessionService{
       //this.eventsArray = temporalEventsArray;
       return this.eventsArray;
     }else if(!temporalEventsArray){
-      this._storage.setStorageItem(storageConstants.USER_EVENTS+this.currentUser.id, this._crypto.decryptMessage(JSON.stringify(this.eventsArray)));
+      this._storage.setStorageItem(storageConstants.USER_EVENTS+this.currentUser.id, this._crypto.encryptMessage(JSON.stringify(this.eventsArray)));
       return this.eventsArray;
     }else{
       this.eventsArray = JSON.parse(this._crypto.decryptMessage(temporalEventsArray));
@@ -85,7 +88,7 @@ export class SessionService{
   }
 
   async loadReminders(): Promise<LocalNotificationSchema[]>{
-    if(this._platform.is("android")){
+    if(this._platform.is("android")||this._platform.is("ios")){
       const temporalArray = await this._notification.getPending();
       let filteredArray:any[] = [];
       temporalArray.notifications.forEach(element => {

@@ -38,7 +38,7 @@ export class BackupPage implements OnInit {
   public creatingFile:boolean = false;
   public progress:any = [0,0];
   public uploading:boolean = false;
-  public downloading:boolean = false;
+  public downloading:string = "false";
   public cleaning:boolean = false;
 
   private progressSubscription: Subscription;
@@ -192,6 +192,7 @@ export class BackupPage implements OnInit {
         await this.createFolder();
       }
       const data = await this._data.buildDriveData();
+      this._drive.changeProgress(0,0)
       this._drive.changeUploading(true);
       const total = data.length;
       const unit = 1/total;
@@ -223,11 +224,13 @@ export class BackupPage implements OnInit {
   }
 
   async restoreBackup(){
-    this._drive.changeDownloading(true);
+    this._drive.changeProgress(0,0)
+    this._drive.changeDownloading("true");
     const backupList = await this.readAll();
     const backupData = await this.setData(backupList);
     await this._data.restoreDeviceData(backupData);
-    this._drive.changeDownloading(false);
+    this._drive.changeDownloading("refresh");
+    this._drive.changeDownloading("false");
     this.navCtr.navigateRoot(['/dashboard'], { queryParams: { reload: true } });
   }
 

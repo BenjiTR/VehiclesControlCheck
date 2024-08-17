@@ -30,12 +30,14 @@ export class DriveService {
   public haveFiles$ = this.haveFiles.asObservable();
   private uploading = new BehaviorSubject<boolean>(false)
   public uploading$ = this.uploading.asObservable();
-  private downloading = new BehaviorSubject<boolean>(false)
+  private downloading = new BehaviorSubject<string>("false")
   public downloading$ = this.downloading.asObservable();
   private progress = new BehaviorSubject<any[]>([0.0, 0.0])
   public progress$ = this.progress.asObservable();
   private cleaning = new BehaviorSubject<boolean>(false)
   public cleaning$ = this.cleaning.asObservable();
+  private autoBk = new BehaviorSubject<boolean>(true)
+  public autoBk$ = this.autoBk.asObservable();
 
   constructor(
     private _session:SessionService,
@@ -189,7 +191,7 @@ export class DriveService {
   changeUploading(value:boolean){
     this.uploading.next(value);
   }
-  changeDownloading(value:boolean){
+  changeDownloading(value:string){
     this.downloading.next(value);
   }
   changeProgress(value:number, buffer:number){
@@ -197,6 +199,10 @@ export class DriveService {
   }
   changecleaning(value:boolean){
     this.cleaning.next(value);
+  }
+  changeautoBk(value:boolean){
+    console.log(value)
+    this.autoBk.next(value);
   }
 
   //MÉTODOS DE ACCIONES COMPUESTAS, LAS QUE REALIZAN USUARIO O SISTEMA UTILIZANDO LOS MÉTODOS DE CONSULTA SIMPLE.

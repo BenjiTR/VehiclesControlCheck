@@ -24,14 +24,16 @@ export class UserdataviewPage implements OnInit {
   public connected:boolean = false;
   public hasFiles:boolean = false;
   public uploading:boolean = false;
-  public downloading:boolean = false;
+  public downloading:string = "false";
   public cleaning:boolean = false;
+  public autoBk:boolean = true;
 
   private connectedSubscription:Subscription;
   private haveFilesSubscription:Subscription;
   private uploadingSubscription:Subscription;
   private downloadingSubscription:Subscription;
   private cleaningSubscription:Subscription;
+  private autoBkSubscription:Subscription;
 
   constructor(
     private translate: TranslateService,
@@ -57,12 +59,20 @@ export class UserdataviewPage implements OnInit {
     this.cleaningSubscription = this._drive.cleaning$.subscribe(value=>{
       this.cleaning = value;
     })
+    this.autoBkSubscription = this._drive.autoBk$.subscribe(value=>{
+      //console.log(value)
+      this.autoBk = value;
+    })
   }
 
   async ngOnInit() {
     this.translate.setDefaultLang(this._translation.getLanguage());
     this.user = this._session.currentUser;
     //console.log(this.user)
+    this.autoBk = await this._session.getAutoBackup();
+    if(this.autoBk === null){
+      this.autoBk = true;
+    };
   }
   async ionViewWillEnter(){
     this.user = this._session.currentUser;

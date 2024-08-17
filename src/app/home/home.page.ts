@@ -67,11 +67,11 @@ export class HomePage implements OnInit, OnDestroy{
     await this._loader.presentLoader();
     await this.translate.setDefaultLang(this._translation.getLanguage());
     await this.tryRememberSession();
-    await this._admobService.initialize();
+    this._admobService.initialize();
     await this._admobService.showConsent();
     await this._admobService.showBanner();
     await this._admobService.hideBanner();
-    await this.checkNotifications();
+    //await this.checkNotifications();
     await this._file.checkPermission();
     await this._loader.dismissLoader();
   }
@@ -245,6 +245,7 @@ export class HomePage implements OnInit, OnDestroy{
 
   //CONFIRMAR Y EJECUTAR LOGIN
   async loginExecute(user:any, method?:string, token?:string){
+    //console.log(user)
     if(method && method === "googlerefresh"){
       //console.log(user)
       const currentUser:User = new User();

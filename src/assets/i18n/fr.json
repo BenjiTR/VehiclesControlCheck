@@ -276,7 +276,9 @@
     "is_auto_info": "Synchronisation automatique avec la sauvegarde",
     "uploading_info": "Téléchargement des fichiers",
     "downloading_info": "Téléchargement des fichiers",
-    "cleaning_info": "Nettoyage des fichiers"
+    "cleaning_info": "Nettoyage des fichiers",
+    "auto_info": "Tout changement sera automatiquement enregistré sur Drive, vos données sont en sécurité !",
+    "manual_info": "Les données ne sont pas enregistrées automatiquement, vous devez le faire manuellement depuis le menu Paramètres/Mise à jour de la sauvegarde"
   },
   "faqs": {
     "you_have_doubts?": "Vous avez des questions ?",

@@ -15,7 +15,7 @@ export const canActivate: CanActivateFn = (
 ): boolean => {
   const authService = inject(AuthService); // Inyecta el servicio de autenticación
   const router = inject(Router); // Inyecta el router si necesitas redireccionar
-console.log(authService.isActive)
+  //console.log(authService.isActive)
   if (authService.isActive === true || authService.isInTest === true ) {
     return true;
   } else {

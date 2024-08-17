@@ -73,16 +73,16 @@ export class DashboardPage implements OnInit, OnDestroy {
     this._admobService.resumeBanner();
   }
 
-  goUseTerms(){
-    this.navCtr.navigateRoot('/useterms',{queryParams: { goBack: 'dashboard' }});
+  goUseTerms() {
+    this.router.navigate(['/useterms'], { queryParams: { goBack: 'dashboard' } });
     this.menuCtrl.close();
   }
 
-  goPrivacy(){
-    this.navCtr.navigateRoot('/privacy',{queryParams: { goBack: 'dashboard' }});
+  goPrivacy() {
+    this.router.navigate(['/privacy'], { queryParams: { goBack: 'dashboard' } });
     this.menuCtrl.close();
   }
-
+  
   HideBanner(){
     this._admobService.hideBanner();
   }
@@ -137,7 +137,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 
   puttingFalseCloudOptions(){
     this.__drive.changeConnected(false);
-    this.__drive.changeDownloading(false);
+    this.__drive.changeDownloading("false");
     this.__drive.changeHaveFiles(false);
     this.__drive.changeUploading(false);
     this.__drive.changecleaning(false);

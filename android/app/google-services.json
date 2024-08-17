@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "329432960985",
+    "project_id": "vehicles-control-ck",
+    "storage_bucket": "vehicles-control-ck.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:329432960985:android:debd1fbb420eb6964b93c8",
+        "android_client_info": {
+          "package_name": "com.benjamintr.vehiclescontrol"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "329432960985-0f0oj2qbh3gp0mbgr0k32hmi0b6gbi06.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2lJ-7Xh0EkgixEftP_JesgpixwkDdRMQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "329432960985-0f0oj2qbh3gp0mbgr0k32hmi0b6gbi06.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "329432960985-97l9q80p1v5qb14lc5ef321jameit40s.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.benjamintr.vehiclescontrol"
+              }
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-7109225930546474~5137885146"
+    }
+  ],
+  "configuration_version": "1"
+}

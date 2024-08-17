@@ -80,7 +80,8 @@ export class MainPage implements OnInit, OnDestroy {
   ) {
     this.eventTypes = etypes.getEventTypes();
     this.downloadingSubscription = this._drive.downloading$.subscribe(data=>{
-      if(!data){
+      //console.log(data)
+      if(data==="refresh"){
         this.loadAllData();
       }
     });
@@ -111,9 +112,11 @@ export class MainPage implements OnInit, OnDestroy {
       await this.loadAllData();
       await this._loader.dismissLoader();
     }
+    await this._admob.resumeBanner();
   }
 
   ngOnDestroy(){
+    this.vehiclesArray=[]
     //console.log("main destruido")
     this.downloadingSubscription.unsubscribe();
   }
@@ -126,7 +129,7 @@ export class MainPage implements OnInit, OnDestroy {
     }
     this.vehiclesArray = await this._session.loadVehicles();
     this.eventsArray = await this._session.loadEvents();
-    this.remindersArray = await this._session.loadReminders();
+    //this.remindersArray = await this._session.loadReminders();
     await this._session.getReminderNotifications();
     await this._session.getAutoBackup();
     this.filteredEventsArray = this.eventsArray;
