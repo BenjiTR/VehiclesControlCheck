@@ -82,7 +82,7 @@ export class DashboardPage implements OnInit, OnDestroy {
     this.router.navigate(['/privacy'], { queryParams: { goBack: 'dashboard' } });
     this.menuCtrl.close();
   }
-  
+
   HideBanner(){
     this._admobService.hideBanner();
   }
@@ -132,7 +132,6 @@ export class DashboardPage implements OnInit, OnDestroy {
     this._session.deleteTemporalData();
     this.puttingFalseCloudOptions();
     this.navCtr.navigateRoot(['/home']);
-    this._loader.dismissLoader();
   }
 
   puttingFalseCloudOptions(){
