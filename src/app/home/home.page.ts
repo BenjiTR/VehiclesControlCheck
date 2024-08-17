@@ -68,7 +68,7 @@ export class HomePage implements OnInit, OnDestroy{
     await this.translate.setDefaultLang(this._translation.getLanguage());
     await this.tryRememberSession();
     await this._admobService.initialize();
-    this._admobService.showConsent();
+    await this._admobService.showConsent();
     await this._admobService.showBanner();
     await this._admobService.hideBanner();
     await this.checkNotifications();
@@ -116,10 +116,10 @@ export class HomePage implements OnInit, OnDestroy{
     if(this.email === "testusermail.test" && this.password === "testing"){
       this.loginWithTest();
     }else{
-    this._authService.loginWithEmailAndPaswword(this.email, this.password)
+    await this._authService.loginWithEmailAndPaswword(this.email, this.password)
       .then(async (userCredential) => {
         // Signed in
-        const user = userCredential.user;
+        const user = userCredential;
         if(!user.emailVerified){
           //preguntamos y reenviamos el correo
           const verify = await this._alert.twoOptionsAlert(this.translate.instant('alert.email_no_verified'),this.translate.instant('alert.email_no_verified_text'),this.translate.instant('alert.resend'),this.translate.instant('alert.cancel'))
@@ -144,35 +144,35 @@ export class HomePage implements OnInit, OnDestroy{
     }
   }
 
-  //AUTENTICACIÓN CON GOOGLE
-  async signInWithGoogle(){
-    if((await Network.getStatus()).connected === true){
-      await this._loader.presentLoader();
-      //Primero prueba a refrescar
-      await this._authService.refreshGoogle()
-      .then(async (authentication)=>{
-        const user:any = await this._authService.fetchUserInfo(authentication.accessToken)
-        //console.log(user)
-        if(user){
-          //Como la información en si no trae el toquen, lo insertamos para poder ejecutar bien el proceso de login y guardar los datos
-          this.loginExecute(user, "googlerefresh", authentication.accessToken)
-        }
-      })
-      .catch((err)=>{
-          //Si no hace el login normal
-          this._authService.loginWithGoogle()
-          .then((user)=>{
-            this.loginExecute(user, "google")
-          })
-          .catch(async (error)=>{
-            this.handleErrors(error.code);
-            await this._loader.dismissLoader();
-          })
-      })
-    }else{
-      this._alert.createAlert(this.translate.instant("error.no_network"),"");
+    //AUTENTICACIÓN CON GOOGLE
+    async signInWithGoogle(){
+      if((await Network.getStatus()).connected === true){
+        await this._loader.presentLoader();
+        //Primero prueba a refrescar
+        await this._authService.refreshGoogle()
+        .then(async (authentication)=>{
+          const user:any = await this._authService.fetchUserInfo(authentication.accessToken)
+          //console.log(user)
+          if(user){
+            //Como la información en si no trae el toquen, lo insertamos para poder ejecutar bien el proceso de login y guardar los datos
+            this.loginExecute(user, "googlerefresh", authentication.accessToken)
+          }
+        })
+        .catch((err)=>{
+            //Si no hace el login normal
+            this._authService.loginWithGoogle()
+            .then((user)=>{
+              this.loginExecute(user, "google")
+            })
+            .catch(async (error)=>{
+              this.handleErrors(error.code);
+              await this._loader.dismissLoader();
+            })
+        })
+      }else{
+        this._alert.createAlert(this.translate.instant("error.no_network"),"");
+      }
     }
-  }
 
   //RECORDAR INICIO DE SESIÓN
   async tryRememberSession():Promise<void>{
@@ -217,26 +217,31 @@ export class HomePage implements OnInit, OnDestroy{
   }
 
   //MANEJO DE ERRORES
-  async handleErrors(errorCode:string){
-    //console.log("Error: ", errorCode);
-    if(errorCode === "auth/invalid-email"){
-      this.Error = this.translate.instant('error.email_format_incorrect')
-    }else if(errorCode === "auth/wrong-password"){
-      this.Error = this.translate.instant('error.wrong_password')
-    }else if(errorCode === "auth/invalid-credential"){
-      this.Error = this.translate.instant('error.invalid_credencial')
-    }else if(errorCode === "auth/too-many-requests"){
-      //ERROR QUE DA OPCIÓN A RESTAURAR CONTRASEÑA
-      const changepsw = await this._alert.twoOptionsAlert(this.translate.instant('alert.temporarily_disabled'),this.translate.instant('alert.temporarily_disabled_text'), this.translate.instant('alert.restore_password'),this.translate.instant('alert.cancel'))
-      if(changepsw){
-        this.restorePassword()
-      }
-    }else if(errorCode === "auth/network-request-failed"){
-      this.Error = this.translate.instant('error.auth/network-request-failed')
-    }else{
-      this.Error = errorCode;
+  async handleErrors(errorCode: string) {
+    if (errorCode === "auth/invalid-email" || errorCode === "invalid-email") {
+        this.Error = this.translate.instant('error.email_format_incorrect');
+    } else if (errorCode === "auth/wrong-password" || errorCode === "wrong-password") {
+        this.Error = this.translate.instant('error.wrong_password');
+    } else if (errorCode === "auth/invalid-credential" || errorCode === "invalid-credential") {
+        this.Error = this.translate.instant('error.invalid_credencial');
+    } else if (errorCode === "auth/too-many-requests" || errorCode === "too-many-requests") {
+        // ERROR QUE DA OPCIÓN A RESTAURAR CONTRASEÑA
+        const changepsw = await this._alert.twoOptionsAlert(
+            this.translate.instant('alert.temporarily_disabled'),
+            this.translate.instant('alert.temporarily_disabled_text'),
+            this.translate.instant('alert.restore_password'),
+            this.translate.instant('alert.cancel')
+        );
+        if (changepsw) {
+            this.restorePassword();
+        }
+    } else if (errorCode === "auth/network-request-failed" || errorCode === "network-request-failed") {
+        this.Error = this.translate.instant('error.auth/network-request-failed');
+    } else {
+        this.Error = errorCode;
     }
-  }
+}
+
 
   //CONFIRMAR Y EJECUTAR LOGIN
   async loginExecute(user:any, method?:string, token?:string){
@@ -273,19 +278,19 @@ export class HomePage implements OnInit, OnDestroy{
     }else{
       //observable del estado de autenticación
       this._authService.userState();
-
       const currentUser:User = new User();
       currentUser.name = user.displayName;
       currentUser.id = user.uid;
       currentUser.method = "email";
       currentUser.email = user.email;
       this._session.currentUser = currentUser;
+      this._authService.isActive=true;
     }
     this.navCtr.navigateRoot(["\dashboard"]);
   }
 
   async checkNotifications():Promise<void>{
-    if(this._platform.is("android")){
+    if(this._platform.is("android")||this._platform.is("ios")){
       const res = await this._notification.checkPermissions();
       if(res.display==="granted"){
         //console.log("Permiso para mostrar notificaciones concedido");

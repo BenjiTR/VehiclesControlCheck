@@ -47,7 +47,7 @@
     "@ngx-translate/http-loader": "^8.0.0",
     "chart.js": "^4.4.3",
     "crypto-js": "^4.2.0",
-    "firebase": "^10.12.5",
+    "firebase": "^10.13.0",
     "ionicons": "^7.2.1",
     "rxjs": "^7.5.0",
     "tslib": "^2.3.0",

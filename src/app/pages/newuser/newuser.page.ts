@@ -76,7 +76,7 @@ export class NewuserPage implements OnInit {
     await this._authService.createuserWithEmailAndPassword(this.email, this.password)
       .then(async (userCredential) => {
         // Signed in
-        const user = userCredential.user;
+        const user = userCredential;
         await this._authService.updateNameProfile(this.name)
           .then(async (message) => {
             //console.log("message actualizar nombre = ", message)

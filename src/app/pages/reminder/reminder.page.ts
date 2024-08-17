@@ -148,6 +148,7 @@ export class ReminderPage{
       summaryText:this.body,
       id:id,
       schedule: {at: new Date(this.dateOfEvent)},
+      sound:'clockalarm.wav',
       extra:{
         vehicleId:this.vehicleId,
         userId:this.user.id,

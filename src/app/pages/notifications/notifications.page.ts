@@ -67,6 +67,7 @@ export class NotificationsPage{
 
   async checkPermissions():Promise<void>{
     const resp = await this._notifications.checkPermissions();
+    console.log("Check: ",resp)
     this.isAllowedAndActivated(resp.display);
   }
 
@@ -93,6 +94,7 @@ export class NotificationsPage{
       this._session.setReminderNotifications(false)
     }else{
       const resp = await this._notifications.requestPermissions();
+      console.log("Req: ",resp)
       if(resp.display==="granted"){
         this.isAllowed = true;
         this._notifications.createChannel();

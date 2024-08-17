@@ -1,65 +1,64 @@
-import { signInWithCredential, signOut, onAuthStateChanged, getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, sendEmailVerification, createUserWithEmailAndPassword, updateProfile, deleteUser, User, GoogleAuthProvider } from "firebase/auth";
 import { Injectable } from "@angular/core";
-import { TranslationConfigService } from '../services/translation.service';
-import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import { Platform } from "@ionic/angular";
-
+import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
+import { TranslationConfigService } from '../services/translation.service';
+import { GoogleAuth } from "@codetrix-studio/capacitor-google-auth";
 
 @Injectable({
-    providedIn:"root"
+  providedIn: "root"
 })
+export class AuthService {
 
-
-export class AuthService{
-
-    public auth:any = getAuth();
-    public isActive:Boolean = false;
-    public isInTest:Boolean = false;
-
+  public isActive: Boolean = false;
+  public isInTest: Boolean = false;
 
   constructor(
     private _translation: TranslationConfigService,
-    private platform:Platform,
-  ){
-    this.auth.languageCode = this._translation.getLanguage();
+    private platform: Platform,
+  ) {
+    FirebaseAuthentication.setLanguageCode({
+      languageCode: this._translation.getLanguage()
+    });
     this.initializeApp();
-    //console.log(this.isActive)
-
   }
 
-
   initializeApp() {
+    // Initialize any platform-specific setups if needed
     this.platform.ready().then(() => {
+      let clientId;
+      if(this.platform.is('android')){
+        clientId = '329432960985-0f0oj2qbh3gp0mbgr0k32hmi0b6gbi06.apps.googleusercontent.com'
+      }else{
+        clientId = '329432960985-97l9q80p1v5qb14lc5ef321jameit40s.apps.googleusercontent.com'
+      }
+
       GoogleAuth.initialize({
-        clientId:'329432960985-0f0oj2qbh3gp0mbgr0k32hmi0b6gbi06.apps.googleusercontent.com',
+        clientId:clientId,
+        scopes: ['profile', 'email','https://www.googleapis.com/auth/drive.appdata'],
         grantOfflineAccess: true,
-        scopes: ['profile', 'email','https://www.googleapis.com/auth/drive.appdata']
-      })
+      });
     });
   }
 
 
-//LOGIN CON EMAIL Y PASSWORD
-loginWithEmailAndPaswword(email:string, password:string){
-  return signInWithEmailAndPassword(this.auth, email, password);
-}
+  // LOGIN CON EMAIL Y PASSWORD
+  async loginWithEmailAndPaswword(email: string, password: string): Promise<any> {
+    const result = await FirebaseAuthentication.signInWithEmailAndPassword({
+      email: email,
+      password: password,
+    });
+    return result.user;
+  }
 
-//BORRAR CUENTA
-deleteAccountWithEmail(){
-  const user = this.auth.currentUser;
-  //console.log(user);
-  return deleteUser(user);
-}
+  // BORRAR CUENTA
+  async deleteAccountWithEmail() {
+    await FirebaseAuthentication.deleteUser();
+  }
 
-async deleteAccountWithGoogle() {
-
-  const googleUser = await GoogleAuth.refresh();
-    const credential = GoogleAuthProvider.credential(googleUser.idToken);
-    //console.log(credential)
-    const userCredential = await signInWithCredential(this.auth, credential);
-    //console.log(userCredential)
-    return await deleteUser(userCredential.user);
-}
+  async deleteAccountWithGoogle() {
+    const result = await FirebaseAuthentication.signInWithGoogle();
+    return await FirebaseAuthentication.deleteUser();
+  }
 
 //LOGIN CON GOOGLE
 async loginWithGoogle(){
@@ -70,88 +69,80 @@ async refreshGoogle(){
   return GoogleAuth.refresh();
 }
 
-async fetchUserInfo(accessToken: string) {
-  const userInfoEndpoint = 'https://www.googleapis.com/oauth2/v3/userinfo';
+  // RESTAURAR EL PASSWORD
+  async sendRestorePasswordEmail(email: string) {
+    return FirebaseAuthentication.sendPasswordResetEmail({ email });
+  }
 
-  try {
-    const response = await fetch(userInfoEndpoint, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`
+  // ENVIAR EMAIL DE VERIFICACIÓN
+  async sendEmailVerificacion() {
+    const user = await FirebaseAuthentication.getCurrentUser();
+    if (user) {
+      return FirebaseAuthentication.sendEmailVerification();
+    }
+    throw new Error('No user is signed in.');
+  }
+
+  // CREAR USUARIO
+  async createuserWithEmailAndPassword(email: string, password: string) {
+    const result = await FirebaseAuthentication.createUserWithEmailAndPassword({
+      email,
+      password,
+    });
+    return result.user;
+  }
+
+  // CAMBIAR NOMBRE DE USUARIO
+  async updateNameProfile(name: string) {
+    const user = await FirebaseAuthentication.getCurrentUser();
+    if (user) {
+      return FirebaseAuthentication.updateProfile({ displayName: name });
+    }
+    throw new Error('No user is signed in.');
+  }
+
+  // OBSERVABLE DEL ESTADO DE USUARIO
+  userState() {
+    FirebaseAuthentication.addListener('authStateChange', (state) => {
+      const user = state.user;
+      if (user) {
+        this.isActive = true;
+      } else {
+        this.isActive = false;
       }
     });
+  }
 
-    if (!response.ok) {
-      throw new Error('Error fetching user info');
+  // CIERRE DE SESIÓN
+  async signOut() {
+    await FirebaseAuthentication.signOut();
+  }
+
+  //CIERRE DE SESIÓN GOOGLE
+  async signOutGoogle(){
+    return GoogleAuth.signOut();
+  }
+
+  // Método para obtener la información del usuario usando el token de acceso
+  async fetchUserInfo(accessToken: string) {
+    const userInfoEndpoint = 'https://www.googleapis.com/oauth2/v3/userinfo';
+
+    try {
+      const response = await fetch(userInfoEndpoint, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Error fetching user info');
+      }
+
+      const userInfo = await response.json();
+      return userInfo;
+    } catch (error) {
+      console.error('Error fetching user info:', error);
+      throw error;
     }
-
-    const userInfo = await response.json();
-    return userInfo;
-  } catch (error) {
-    console.error('Error fetching user info:', error);
-    throw error;
   }
 }
-
-//RESTAURAR EL PASSWORD
-sendRestorePasswordEmail(email:string){
-  return sendPasswordResetEmail(this.auth, email)
-}
-
-//ENVIAR EMAIL DE VERIFICACIÓN
-sendEmailVerificacion(){
-  //console.log("user", this.auth.currentUser)
-  return sendEmailVerification(this.auth.currentUser);
-}
-
-//CREAR USUARIO
-createuserWithEmailAndPassword(email:string, password:string){
-  return createUserWithEmailAndPassword(this.auth, email, password)
-}
-
-//CAMBIAR NOMBRE DE USUARIO
-updateNameProfile(name:string){
-  return updateProfile(this.auth.currentUser, {displayName: name})
-}
-
-//OBSERVABLE DEL ESTADO DE USUARIO.
-userState(){
-  onAuthStateChanged(this.auth, (user) => {
-    if (user) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/auth.user
-
-        const uid = user!.uid;
-
-      this.isActive = true
-      // console.log(this.isActive)
-      // console.log(user)
-
-      // ...
-    } else {
-      this.isActive = false;
-      // console.log(this.isActive);
-      // User is signed out
-      // ...
-    }
-  });
-}
-
-//CIERRE DE SESIÓN
-signOut(){
-  return signOut(this.auth)
-}
-
-//CIERRE DE SESIÓN GOOGLE
-signOutGoogle(){
-  return GoogleAuth.signOut();
-}
-
-
-
-
-
-
-
-
-}
-
