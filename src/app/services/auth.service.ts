@@ -19,8 +19,26 @@ export class AuthService {
     FirebaseAuthentication.setLanguageCode({
       languageCode: this._translation.getLanguage()
     });
+    this.initializeApp();
   }
 
+  initializeApp() {
+    // Initialize any platform-specific setups if needed
+    this.platform.ready().then(() => {
+      let clientId;
+      if(this.platform.is('android')||this.platform.is('desktop')){
+        clientId = '329432960985-0f0oj2qbh3gp0mbgr0k32hmi0b6gbi06.apps.googleusercontent.com'
+      }else{
+        clientId = '329432960985-97l9q80p1v5qb14lc5ef321jameit40s.apps.googleusercontent.com'
+      }
+
+      GoogleAuth.initialize({
+        clientId:clientId,
+        scopes: ['profile', 'email','https://www.googleapis.com/auth/drive.appdata'],
+        grantOfflineAccess: true,
+      });
+    });
+  }
 
 
   // LOGIN CON EMAIL Y PASSWORD

@@ -129,7 +129,7 @@ export class MainPage implements OnInit, OnDestroy {
     }
     this.vehiclesArray = await this._session.loadVehicles();
     this.eventsArray = await this._session.loadEvents();
-    //this.remindersArray = await this._session.loadReminders();
+    this.remindersArray = await this._session.loadReminders();
     await this._session.getReminderNotifications();
     await this._session.getAutoBackup();
     this.filteredEventsArray = this.eventsArray;
@@ -172,6 +172,7 @@ export class MainPage implements OnInit, OnDestroy {
           if (id) {
             await this._drive.deleteFile(id, true);
           }
+          //Borra todos los eventos y recordatorios asociados
           this.deleteList(elements);
         }
       }
@@ -268,8 +269,15 @@ export class MainPage implements OnInit, OnDestroy {
       if(sure){
         await this.deleteEventProcess(event);
         if(this._drive.folderId && this._session.autoBackup){
-          const id = await this._drive.findFileByName(event.id)
-          await this._drive.deleteFile(id, true);
+          this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,true)
+          if((await Network.getStatus()).connected === true){
+            const id = await this._drive.findFileByName(event.id)
+            await this._drive.deleteFile(id, true);
+            this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,false)
+          }else{
+            this._alert.createAlert(this.translate.instant("error.no_network"), this.translate.instant("error.no_network_to_backup"));
+            this._drive.folderId = "";
+          }
         }
       }
     }
@@ -330,8 +338,13 @@ export class MainPage implements OnInit, OnDestroy {
       if(sure){
         await this.deleteReminderProcess(reminder);
         if(this._drive.folderId && this._session.autoBackup){
-          const id = await this._drive.findFileByName("R"+reminder.id)
-          await this._drive.deleteFile(id, true);
+          if((await Network.getStatus()).connected === true){
+            const id = await this._drive.findFileByName("R"+reminder.id)
+            await this._drive.deleteFile(id, true);
+          }else{
+            this._alert.createAlert(this.translate.instant("error.no_network"), this.translate.instant("error.no_network_to_backup"));
+            this._drive.folderId = "";
+          }
         }
       }
     }

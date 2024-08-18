@@ -17,6 +17,7 @@ import { LoaderService } from 'src/app/services/loader.service';
 import { DriveService } from 'src/app/services/drive.service';
 import { StorageService } from 'src/app/services/storage.service';
 import { storageConstants } from 'src/app/const/storage';
+import { Network } from '@capacitor/network';
 
 @Component({
   selector: 'app-reminder',
@@ -168,6 +169,7 @@ export class ReminderPage{
     await this._admobService.showinterstitial();
     if(this._drive.folderId && this._session.autoBackup){
       this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,true)
+      if((await Network.getStatus()).connected === true){
       const fileName = "R"+reminder.id;
       const exist = await this._drive.findFileByName(fileName)
         if(exist){
@@ -176,6 +178,10 @@ export class ReminderPage{
           this._drive.uploadFile(JSON.stringify(reminder), fileName, true);
         }
       this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,false)
+      }else{
+        this._alert.createAlert(this.translate.instant("error.no_network"), this.translate.instant("error.no_network_to_backup"));
+        this._drive.folderId = "";
+      }
     }
     this.navCtr.navigateRoot(['/dashboard'], { queryParams: { reload: true } });
   }

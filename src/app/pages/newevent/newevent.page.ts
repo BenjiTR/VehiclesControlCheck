@@ -21,6 +21,7 @@ import { CameraServices } from 'src/app/services/camera.service';
 import { LoaderService } from 'src/app/services/loader.service';
 import { DriveService } from 'src/app/services/drive.service';
 import { CryptoService } from 'src/app/services/crypto.services';
+import { Network } from '@capacitor/network';
 
 @Component({
   selector: 'app-newevent',
@@ -155,14 +156,19 @@ export class NeweventPage {
     await this._storage.setStorageItem(storageConstants.USER_EVENTS+this.user.id,this._crypto.encryptMessage(JSON.stringify(this.eventsArray)));
     if(this._drive.folderId && this._session.autoBackup){
       this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,true)
-      const fileName = event.id;
-      const exist = await this._drive.findFileByName(fileName)
-          if(exist){
-            this._drive.updateFile(exist, this._crypto.encryptMessage(JSON.stringify(event)), fileName, true);
-          }else{
-            this._drive.uploadFile(this._crypto.encryptMessage(JSON.stringify(event)), fileName, true);
-          }
-      this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,false)
+      if((await Network.getStatus()).connected === true){
+        const fileName = event.id;
+        const exist = await this._drive.findFileByName(fileName)
+            if(exist){
+              this._drive.updateFile(exist, this._crypto.encryptMessage(JSON.stringify(event)), fileName, true);
+            }else{
+              this._drive.uploadFile(this._crypto.encryptMessage(JSON.stringify(event)), fileName, true);
+            }
+        this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,false)
+      }else{
+        this._alert.createAlert(this.translate.instant("error.no_network"), this.translate.instant("error.no_network_to_backup"));
+        this._drive.folderId = "";
+      }
     }
     this.navCtr.navigateRoot(['/dashboard'], { queryParams: { reload: true } });
   }

@@ -67,10 +67,24 @@ const firebaseConfig = {
   measurementId: "G-GYSN7J9W02"
 };
 
+const config: CapacitorConfig = {
+  plugins: {
+    FirebaseAuthentication: {
+      skipNativeAuth: false,
+      providers: ["google.com"],
+    },
+    GoogleAuth: {
+      clientId:'329432960985-0f0oj2qbh3gp0mbgr0k32hmi0b6gbi06.apps.googleusercontent.com',
+      forceCodeForRefreshToken: true,
+      scopes: ['profile', 'email','https://www.googleapis.com/auth/drive.appdata']
+    }
+  },
+};
+
+export default config;
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
 
 defineCustomElements(window);
 if (environment.production) {

@@ -67,11 +67,11 @@ export class HomePage implements OnInit, OnDestroy{
     await this._loader.presentLoader();
     await this.translate.setDefaultLang(this._translation.getLanguage());
     await this.tryRememberSession();
+    await this.checkNotifications();
     this._admobService.initialize();
-    await this._admobService.showConsent();
+    this._admobService.showConsent();
     await this._admobService.showBanner();
     await this._admobService.hideBanner();
-    //await this.checkNotifications();
     await this._file.checkPermission();
     await this._loader.dismissLoader();
   }
@@ -138,7 +138,12 @@ export class HomePage implements OnInit, OnDestroy{
         }
       })
       .catch(async (error) => {
-        this.handleErrors(error.code);
+        console.log("error: ", error.code, error.message)
+        if(error.code){
+          this.handleErrors(error.code);
+        }else if(error.message){
+          this.handleErrors(error.message);
+        }
         await this._loader.dismissLoader();
       });
     }
@@ -237,6 +242,8 @@ export class HomePage implements OnInit, OnDestroy{
         }
     } else if (errorCode === "auth/network-request-failed" || errorCode === "network-request-failed") {
         this.Error = this.translate.instant('error.auth/network-request-failed');
+    } else if (errorCode === "A network error (such as timeout, interrupted connection or unreachable host) has occurred."){
+      this.Error = this.translate.instant('error.auth/network-request-failed');
     } else {
         this.Error = errorCode;
     }

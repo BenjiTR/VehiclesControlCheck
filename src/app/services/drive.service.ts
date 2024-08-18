@@ -57,6 +57,7 @@ export class DriveService {
       await this.connectAccount();
     }else if(this.token && (await Network.getStatus()).connected === false){
       this._alert.createAlert(this.translate.instant("error.no_network"), this.translate.instant("error.no_network_to_backup"));
+      this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,true)
     }
     this.noFinishedOperation = await this._storage.getStorageItem(storageConstants.USER_OPS+this._session.currentUser.id);
     //console.log(this.noFinishedOperation)

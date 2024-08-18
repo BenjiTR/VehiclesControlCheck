@@ -17,6 +17,7 @@ import { AdmobService } from 'src/app/services/admob.service';
 import { LoaderService } from 'src/app/services/loader.service';
 import { DriveService } from 'src/app/services/drive.service';
 import { CryptoService } from 'src/app/services/crypto.services';
+import { Network } from '@capacitor/network';
 
 @Component({
   selector: 'app-vehicle',
@@ -167,6 +168,7 @@ export class VehiclePage implements OnInit {
     this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.user.id,this._crypto.encryptMessage(JSON.stringify(this.vehiclesArray)));
     if(this._drive.folderId && this._session.autoBackup){
       this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,true)
+      if((await Network.getStatus()).connected === true){
       const fileName = vehicle.id;
       const exist = await this._drive.findFileByName(fileName)
         if(exist){
@@ -175,6 +177,10 @@ export class VehiclePage implements OnInit {
           this._drive.uploadFile(this._crypto.encryptMessage(JSON.stringify(vehicle)), fileName, true);
         }
         this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,false)
+      }else{
+        this._alert.createAlert(this.translate.instant("error.no_network"), this.translate.instant("error.no_network_to_backup"));
+        this._drive.folderId = "";
+      }
     }
     this.navCtr.navigateRoot(['/dashboard'], { queryParams: { reload: true } });
   }

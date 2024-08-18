@@ -128,7 +128,7 @@ export class DashboardPage implements OnInit, OnDestroy {
   async proccesToClose(){
     this._authService.isActive = false;
     this._authService.isInTest = false;
-    await this._admobService.removeBanner();
+    this._admobService.removeBanner();
     this._session.deleteTemporalData();
     this.puttingFalseCloudOptions();
     this.navCtr.navigateRoot(['/home']);
