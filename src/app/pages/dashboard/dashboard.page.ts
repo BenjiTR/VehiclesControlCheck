@@ -31,6 +31,7 @@ import { ScreenOrientationService } from '../../services/orientation.service'
 export class DashboardPage implements OnInit, OnDestroy {
 
   public portrait:boolean=true;
+  public language:string = "";
 
   constructor(
     private menuCtrl: MenuController,
@@ -47,7 +48,10 @@ export class DashboardPage implements OnInit, OnDestroy {
     private _storage:StorageService,
     private _alert:AlertService,
     private screenOrientationService: ScreenOrientationService
-  ) { }
+  ) {
+    this.translate.setDefaultLang(this._translation.getLanguage());
+    this.language = this._translation.getLanguage();
+  }
 
   async ngOnInit() {
     this.translate.setDefaultLang(this._translation.getLanguage());
@@ -93,6 +97,9 @@ export class DashboardPage implements OnInit, OnDestroy {
     if(!ops){
       this._loader.presentLoader();
       await this.menuCtrl.close();
+      localStorage.setItem('vehiclesUser', '');
+      localStorage.setItem('vehiclesPassword','');
+      localStorage.setItem('googleSign','');
       if(this._session.currentUser.method === "google"){
         this.closeSessionByGoogle();
       }else{

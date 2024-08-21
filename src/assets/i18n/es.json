@@ -260,7 +260,9 @@
     "upload_files":"Cargando archivos",
     "download_files":"Descargando archivos",
     "cleaning_files":"Limpiando archivos",
-    "mode_of_use":"Modo de uso (Solo Drive)"
+    "mode_of_use":"Modo de uso (Solo Drive)",
+    "only_referencial_currency_text":"No se aplican conversiones con el cambio de moneda, es unicamente a modo de referencia",
+    "currency":"Moneda"
   },
   "exportfile":{
     "export_data":"Exportar datos",
@@ -305,7 +307,7 @@
       "events": "Eventos",
       "cost": "Gasto",
       "quantity": "Cantidad: {{value}}",
-      "cost€": "Gasto: {{value}}€",
+      "cost€": "Gasto: {{value}} {{currency}}",
       "total": "Total: ",
       "month_cost": "Gasto mensual",
       "n_of_events": "Nº de Eventos",

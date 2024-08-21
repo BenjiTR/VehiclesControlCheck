@@ -39,6 +39,7 @@ export class DataPage implements OnInit {
   private charts: { [key: string]: Chart } = {};
   public filter:string = "";
   public portrait:boolean=true;
+  public currency:string ="";
 
 
   constructor(
@@ -70,6 +71,7 @@ export class DataPage implements OnInit {
         this.portrait=true;
       }
     });
+    this.currency = this._session.currency;
   }
 
   async ngOnInit() {
@@ -82,10 +84,10 @@ export class DataPage implements OnInit {
   }
 
   ionViewWillEnter() {
-    ScreenOrientation.unlock();
+    //ScreenOrientation.unlock();
   }
   ionViewWillLeave() {
-    ScreenOrientation.lock({ orientation: 'portrait' });
+    //ScreenOrientation.lock({ orientation: 'portrait' });
   }
 
   async generateData(): Promise<void> {
@@ -269,7 +271,7 @@ export class DataPage implements OnInit {
                       return `${this.translate.instant('event.date')}: ${event.date}\n` +
                              `${this.translate.instant('event.type')}: ${translatedType}\n` +
                              `${this.translate.instant('event.aditional_info')}: ${event.info}\n` +
-                             `${this.translate.instant('event.cost')}: ${event.cost} €`;
+                             `${this.translate.instant('event.cost')}: ${event.cost} ${this.currency}`;
                     }).join('\n\n');
                   }
                 },
@@ -311,7 +313,7 @@ export class DataPage implements OnInit {
               callbacks: {
                 label: (tooltipItem) => {
                   const cost = tooltipItem.raw;
-                  const translatedText = this.translate.instant('data.cost€', { value: cost });
+                  const translatedText = this.translate.instant('data.cost€', { value: cost, currency: this._session.currency });
                   return translatedText;
                 }
               },
@@ -483,8 +485,10 @@ export class DataPage implements OnInit {
       monthlyCosts[monthYear] += event.cost;
     });
 
-    // Obtén solo las etiquetas para los meses con eventos
-    const labels = Object.keys(monthlyCosts).sort();
+    // Obtén las etiquetas utilizando la misma lógica de ordenación que en la gráfica de datos
+    const labels = this.getUniqueLabelsForVehicle(vehicleEvents);
+
+    // Obtén los datos de costes de forma ordenada
     const monthlyData = labels.map(label => monthlyCosts[label] || 0);
 
     // Conjunto de datos para el gráfico de costos
@@ -500,6 +504,8 @@ export class DataPage implements OnInit {
       datasets: [set]
     };
   }
+
+
 
 
   eraseFilter(){

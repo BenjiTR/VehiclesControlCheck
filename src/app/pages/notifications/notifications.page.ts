@@ -12,6 +12,8 @@ import { DriveService } from 'src/app/services/drive.service';
 import { AlertService } from 'src/app/services/alert.service';
 import { PaddingService } from 'src/app/services/padding.service';
 import { BackupPage } from "../backup/backup.page";
+import { StorageService } from 'src/app/services/storage.service';
+import { storageConstants } from 'src/app/const/storage';
 
 @Component({
   selector: 'app-notifications',
@@ -27,6 +29,7 @@ export class NotificationsPage{
   public autoBk:boolean = true;
   public connected:boolean = false;
   public hasFile:boolean = false;
+  public currency:string = ""
 
   private hasFileSubscription:Subscription;
 
@@ -37,7 +40,9 @@ export class NotificationsPage{
     private _session:SessionService,
     private _drive:DriveService,
     private _alert:AlertService,
-    private _paddingService:PaddingService
+    private _paddingService:PaddingService,
+    private _storage:StorageService,
+
   ) {
     this.hasFileSubscription = this._drive.haveFiles$.subscribe((data)=>{
       this.hasFile = data;
@@ -57,8 +62,8 @@ export class NotificationsPage{
     console.log(this.autoBk);
     this.errorText = "";
     this.translate.setDefaultLang(this._translation.getLanguage());
+    this.currency = this._session.currency;
     await this.checkPermissions();
-
   }
 
 
@@ -122,6 +127,13 @@ export class NotificationsPage{
     this._drive.changeautoBk(this.autoBk)
     this._session.setAutoBackup(this.autoBk);
   }
+
+  async currencyChange(value: any) {
+    //console.log(value.detail.value)
+    await this._storage.setStorageItem(storageConstants.USER_CURRENCY+this._session.currentUser.id, value.detail.value);
+    this._session.currency = value.detail.value;
+  }
+
 
   segmentAlerts(){
     if(this.connected && !this.hasFile){

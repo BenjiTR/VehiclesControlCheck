@@ -258,7 +258,9 @@
     "upload_files": "Uploading Files",
     "download_files": "Downloading Files",
     "cleaning_files": "Cleaning Files",
-    "mode_of_use": "Mode of Use (Drive Only)"
+    "mode_of_use": "Mode of Use (Drive Only)",
+    "only_referencial_currency_text": "No currency conversions are applied; this is for reference purposes only.",
+    "currency":"Currency"
   },
   "exportfile": {
     "export_data": "Export Data",
@@ -303,7 +305,7 @@
     "events": "Events",
     "cost": "Cost",
     "quantity": "Quantity: {{value}}",
-    "cost€": "Cost: {{value}}€",
+    "cost€": "Cost: {{value}} {{currency}}",
     "total": "Total: ",
     "month_cost": "Monthly cost",
     "n_of_events": "Number of Events",

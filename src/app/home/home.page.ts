@@ -38,7 +38,7 @@ export class HomePage implements OnInit, OnDestroy{
   public rememberSession:boolean =false;
   public emailLabel: string = "";
   public passwordLabel: string = "";
-
+  public language:string = "";
 
   constructor(
     private translate:TranslateService,
@@ -61,11 +61,12 @@ export class HomePage implements OnInit, OnDestroy{
     this.translate.get('home.password').subscribe((translation: string) => {
       this.passwordLabel = translation;
     });
+    this.language = this._translation.getLanguage();
+    this.translate.setDefaultLang(this._translation.getLanguage());
   }
 
   async ngOnInit(){
     await this._loader.presentLoader();
-    await this.translate.setDefaultLang(this._translation.getLanguage());
     await this.tryRememberSession();
     await this.checkNotifications();
     this._admobService.initialize();
@@ -85,6 +86,7 @@ export class HomePage implements OnInit, OnDestroy{
   changeLanguage(language:string){
     this._translation.language = language
     this.translate.use(language)
+    this.language = language;
   }
 
   //TOOGLE PASSWORD
@@ -152,6 +154,7 @@ export class HomePage implements OnInit, OnDestroy{
     //AUTENTICACIÓN CON GOOGLE
     async signInWithGoogle(){
       if((await Network.getStatus()).connected === true){
+        this.handlerRememberSession(true);
         await this._loader.presentLoader();
         //Primero prueba a refrescar
         await this._authService.refreshGoogle()
@@ -183,10 +186,14 @@ export class HomePage implements OnInit, OnDestroy{
   async tryRememberSession():Promise<void>{
     const remMail = await localStorage.getItem('vehiclesUser');
     const remPassword = await localStorage.getItem('vehiclesPassword');
+    const remGoogle = await localStorage.getItem('googleSign');
     if(remMail && remPassword){
       this.rememberSession= true;
       this.email = remMail;
       this.password = remPassword;
+      this.loginWithEmail();
+    }else if(remGoogle){
+      this.signInWithGoogle();
     }
     return;
   }
@@ -211,10 +218,14 @@ export class HomePage implements OnInit, OnDestroy{
   }
 
   //MANEJO DE RECORDAR LA SESIÓN
-  handlerRememberSession(){
+  handlerRememberSession(google?:boolean){
     if(this.rememberSession){
-      localStorage.setItem('vehiclesUser', this.email);
-      localStorage.setItem('vehiclesPassword',this.password);
+      if(google){
+        localStorage.setItem('googleSign', 'google');
+      }else{
+        localStorage.setItem('vehiclesUser', this.email);
+        localStorage.setItem('vehiclesPassword',this.password);
+      }
     }else{
       localStorage.setItem('vehiclesUser', '');
       localStorage.setItem('vehiclesPassword','');
@@ -298,7 +309,7 @@ export class HomePage implements OnInit, OnDestroy{
   }
 
   async checkNotifications():Promise<void>{
-    if(this._platform.is("android")||this._platform.is("ios")){
+    if(this._platform.is("android")){
       const res = await this._notification.checkPermissions();
       if(res.display==="granted"){
         //console.log("Permiso para mostrar notificaciones concedido");

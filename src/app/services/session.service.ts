@@ -26,6 +26,7 @@ export class SessionService{
   public remindersArray:LocalNotificationSchema[] = [];
   public remindNotitications:boolean = false;
   public autoBackup:boolean = true;
+  public currency:string = "";
 
   constructor(
     private _storageService: StorageService,
@@ -88,7 +89,7 @@ export class SessionService{
   }
 
   async loadReminders(): Promise<LocalNotificationSchema[]>{
-    if(this._platform.is("android")||this._platform.is("ios")){
+    if(this._platform.is("android")){
       const temporalArray = await this._notification.getPending();
       let filteredArray:any[] = [];
       temporalArray.notifications.forEach(element => {

@@ -113,7 +113,7 @@
 
                         <ion-col class="ion-padding-start ion-padding-end" size="12">
                           <ion-item class="rounded-inputs">
-                            <ion-input label="{{ 'newvehicle.insurance_renewal_date' | translate }}" label-placement="floating" [readonly]="true" [(ngModel)]="vehicle.insuranceRenewalDate" type="text"></ion-input>
+                            <ion-input label="{{ 'newvehicle.insurance_renewal_date' | translate }}" label-placement="floating" [readonly]="true" [(ngModel)]="vehicle.insuranceRenewalDate" type="date"></ion-input>
                           </ion-item>
                         </ion-col>
 
@@ -176,6 +176,8 @@
                               <ion-col class="ion-padding-start ion-padding-end" size="12">
                                 <ion-item class="rounded-inputs">
                                   <ion-input label="{{ 'event.cost' | translate }}" label-placement="floating" [readonly]="true"  [(ngModel)]="event.cost" type="text" ></ion-input>
+                                  <div slot="end">{{currency}}</div>
+
                                 </ion-item>
                               </ion-col>
 
