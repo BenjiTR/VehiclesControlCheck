@@ -5,6 +5,7 @@ import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonItem, IonFoo
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslationConfigService } from '../services/translation.service';
+import { AdmobService } from '../services/admob.service';
 
 @Component({
   selector: 'app-useterms',
@@ -21,15 +22,21 @@ export class UsetermsPage implements OnInit {
     private translate: TranslateService,
     private _translation:TranslationConfigService,
     private activatedroute:ActivatedRoute,
-    private navCtr:NavController
+    private navCtr:NavController,
+    private _admob:AdmobService
   ) {}
 
   ngOnInit(): void {
     this.translate.setDefaultLang(this._translation.getLanguage()) ;
   }
 
-  ionViewWillEnter() {
+  async ionViewWillEnter() {
     this.goBack = this.activatedroute.snapshot.queryParams['goBack'];
+    await this._admob.hideBanner();
+  }
+
+  async ionViewWillLeave(){
+    await this._admob.resumeBanner();
   }
 
   goback(){

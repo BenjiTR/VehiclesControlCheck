@@ -1,7 +1,7 @@
 import { Component, OnInit, DoCheck, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonTextarea, IonAccordion, IonAccordionGroup, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonMenu, IonMenuButton, IonRouterOutlet, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar, MenuController, ModalController, NavController, IonDatetime, IonFab, IonFabList, IonFabButton, IonBadge, IonText } from '@ionic/angular/standalone';
+import { Platform, IonTextarea, IonAccordion, IonAccordionGroup, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonMenu, IonMenuButton, IonRouterOutlet, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar, MenuController, ModalController, NavController, IonDatetime, IonFab, IonFabList, IonFabButton, IonBadge, IonText } from '@ionic/angular/standalone';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { UserdataviewPage } from '../userdataview/userdataview.page';
@@ -55,6 +55,7 @@ export class MainPage implements OnInit, OnDestroy {
   public reload:boolean=false;
   public token:string = "";
   public currency:string = "";
+  public platform:string="";
 
   private downloadingSubscription: Subscription;
 
@@ -77,7 +78,8 @@ export class MainPage implements OnInit, OnDestroy {
     private _drive:DriveService,
     private navCtr:NavController,
     private _data:DataService,
-    private _crypto:CryptoService
+    private _crypto:CryptoService,
+    private _platform:Platform
   ) {
     this.eventTypes = etypes.getEventTypes();
     this.downloadingSubscription = this._drive.downloading$.subscribe(data=>{
@@ -86,13 +88,18 @@ export class MainPage implements OnInit, OnDestroy {
         this.loadAllData();
       }
     });
+    if(this._platform.is('android')){
+      this.platform = 'android'
+    }else{
+      this.platform = 'ios'
+    }
   }
 
   async ngOnInit() {
+    await this._loader.presentLoader();
     this.user = this._session.currentUser;
     this._crypto.init(this.user);
     await this.loadAllData();
-    await this._loader.presentLoader();
     this.translate.setDefaultLang(this._translation.getLanguage());
     await this._admob.resumeBanner();
     if(this._session.currentUser.token){
@@ -121,9 +128,10 @@ export class MainPage implements OnInit, OnDestroy {
       await this.loadAllData();
       await this._loader.dismissLoader();
     }
-    await this._admob.resumeBanner();
     this.currency = this._session.currency;
   }
+
+
 
   ngOnDestroy(){
     this.vehiclesArray=[]

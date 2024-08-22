@@ -67,14 +67,13 @@ export class HomePage implements OnInit, OnDestroy{
 
   async ngOnInit(){
     await this._loader.presentLoader();
-    await this.tryRememberSession();
     await this.checkNotifications();
     this._admobService.initialize();
-    this._admobService.showConsent();
+    await this._admobService.showConsent();
     await this._admobService.showBanner();
     await this._admobService.hideBanner();
     await this._file.checkPermission();
-    await this._loader.dismissLoader();
+    await this.tryRememberSession();
   }
 
   ngOnDestroy(){
@@ -194,6 +193,8 @@ export class HomePage implements OnInit, OnDestroy{
       this.loginWithEmail();
     }else if(remGoogle){
       this.signInWithGoogle();
+    }else{
+      this._loader.dismissLoader();
     }
     return;
   }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonRow, IonCol, IonImg, IonItem, IonInput, IonIcon, IonFooter, IonButton, IonCheckbox, IonLabel } from '@ionic/angular/standalone';
+import { Platform, IonHeader, IonToolbar, IonTitle, IonContent, IonRow, IonCol, IonImg, IonItem, IonInput, IonIcon, IonFooter, IonButton, IonCheckbox, IonLabel } from '@ionic/angular/standalone';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslationConfigService } from '../../services/translation.service';
 import { RouterModule, Router } from '@angular/router';
@@ -27,6 +27,7 @@ export class NewuserPage implements OnInit {
   public password: string = "";
   public repeatPassword: string = "";
   public name: string = "";
+  public platform:string = "";
 
   constructor(
     private translate: TranslateService,
@@ -35,8 +36,15 @@ export class NewuserPage implements OnInit {
     private _alert: AlertService,
     private router: Router,
     private _session:SessionService,
-    private _loader:LoaderService
-  ) { }
+    private _loader:LoaderService,
+    private _platform:Platform
+  ) {
+    if(this._platform.is('android')){
+      this.platform = 'android'
+    }else{
+      this.platform = 'ios'
+    }
+  }
 
   async ngOnInit(): Promise<void> {
      await this._loader.presentLoader();

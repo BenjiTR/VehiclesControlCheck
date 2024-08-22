@@ -9,8 +9,11 @@
       <ion-row class="round-corner-up blue-green">
         <ion-col>
           <ion-row>
-            <ion-col size="8">
+            <ion-col *ngIf="platform === 'android'" size="8">
               <ion-title translate="newuser.create_account"></ion-title>
+            </ion-col>
+            <ion-col class="ion-margin-start ion-padding-start" *ngIf="platform === 'ios'" size="8">
+              <ion-title class="customIOS" translate="newuser.create_account"></ion-title>
             </ion-col>
           </ion-row>
           <ion-row>
@@ -47,7 +50,10 @@
           <ion-row class="ion-margin-top">
             <ion-col class="ion-text-center mt--2" size="12">
               <ion-button [disabled]="sendValidation()" (click)="registerNewUser()" size="large" translate="newuser.create_account"></ion-button>            </ion-col>
-            <ion-col size="12" class="ion-text-center">
+            <ion-col *ngIf="platform==='android'" size="12" class="ion-text-center">
+              <ion-title translate="newuser.or_init_with"></ion-title>
+            </ion-col>
+            <ion-col *ngIf="platform==='ios'" size="12" class="ion-text-center ion-margin-top">
               <ion-title translate="newuser.or_init_with"></ion-title>
             </ion-col>
           </ion-row>

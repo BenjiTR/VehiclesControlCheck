@@ -84,7 +84,8 @@
                         </ion-col>
                         <ion-col class="ion-padding-start ion-padding-end" size="12">
                           <ion-item class="rounded-inputs">
-                            <ion-input label="{{'newvehicle.date_of_buy'|translate}}" label-placement="floating"[readonly]="true" [(ngModel)]="vehicle.dateOfBuy"  type="date"></ion-input>
+                            <ion-input *ngIf="platform==='android'" label="{{'newvehicle.date_of_buy'|translate}}" label-placement="floating"[readonly]="true" [(ngModel)]="vehicle.dateOfBuy"  type="date"></ion-input>
+                            <ion-input *ngIf="platform==='ios'" label="{{'newvehicle.date_of_buy'|translate}}" label-placement="floating"[readonly]="true" [(ngModel)]="vehicle.dateOfBuy"  type="text"></ion-input>
                           </ion-item>
                         </ion-col>
                         <ion-col class="ion-padding-start ion-padding-end" size="12">
@@ -113,7 +114,8 @@
 
                         <ion-col class="ion-padding-start ion-padding-end" size="12">
                           <ion-item class="rounded-inputs">
-                            <ion-input label="{{ 'newvehicle.insurance_renewal_date' | translate }}" label-placement="floating" [readonly]="true" [(ngModel)]="vehicle.insuranceRenewalDate" type="date"></ion-input>
+                            <ion-input *ngIf="platform==='android'" label="{{ 'newvehicle.insurance_renewal_date' | translate }}" label-placement="floating" [readonly]="true" [(ngModel)]="vehicle.insuranceRenewalDate" type="date"></ion-input>
+                            <ion-input *ngIf="platform==='ios'" label="{{ 'newvehicle.insurance_renewal_date' | translate }}" label-placement="floating" [readonly]="true" [(ngModel)]="vehicle.insuranceRenewalDate" type="text"></ion-input>
                           </ion-item>
                         </ion-col>
 
@@ -158,7 +160,8 @@
                             <ion-row>
                               <ion-col class="ion-padding-start ion-padding-end ion-margin-top" size="12">
                                 <ion-item class="rounded-inputs">
-                                  <ion-input label="{{'event.date'|translate}}" label-placement="floating" [readonly]="true" [(ngModel)]="event.date" type="date"></ion-input>
+                                  <ion-input *ngIf="platform==='android'" label="{{'event.date'|translate}}" label-placement="floating" [readonly]="true" [(ngModel)]="event.date" type="date"></ion-input>
+                                  <ion-input *ngIf="platform==='ios'" label="{{'event.date'|translate}}" label-placement="floating" [readonly]="true" [(ngModel)]="event.date" type="text"></ion-input>
                                 </ion-item>
                               </ion-col>
                               <ion-col class="ion-padding-start ion-padding-end" size="12">

@@ -30,13 +30,13 @@ export class PrivacyPage implements OnInit {
     this.translate.setDefaultLang(this._translation.getLanguage()) ;
   }
 
-  ionViewWillEnter() {
+  async ionViewWillEnter() {
     this.goBack = this.activatedroute.snapshot.queryParams['goBack'];
-    this._admob.hideBanner;
+    await this._admob.hideBanner();
   }
 
   ionViewWillLeave(){
-    this._admob.resumeBanner;
+    this._admob.resumeBanner();
   }
 
 
