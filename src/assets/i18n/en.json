@@ -49,7 +49,9 @@
     "incorrect_user": "Incorrect user",
     "incorrect_user_text": "The user associated with the vehicles does not match the current session user",
     "error_cleaning": "Error cleaning",
-    "error_cleaning_text": "Error cleaning the files, please check your connection and try again later"
+    "error_cleaning_text": "Error cleaning the files, please check your connection and try again later",
+    "number_its_not_correct":"Number incorrect",
+    "number_its_not_correct_text":"Please check the phone number"
   },
   "alert": {
     "accept": "Accept",

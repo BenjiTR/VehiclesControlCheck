@@ -49,7 +49,9 @@
     "incorrect_user": "Utilisateur incorrect",
     "incorrect_user_text": "L'utilisateur associé aux véhicules ne correspond pas à l'utilisateur de la session",
     "error_cleaning": "Erreur de nettoyage",
-    "error_cleaning_text": "Erreur lors du nettoyage des fichiers, veuillez vérifier votre connexion et réessayer plus tard"
+    "error_cleaning_text": "Erreur lors du nettoyage des fichiers, veuillez vérifier votre connexion et réessayer plus tard",
+    "number_its_not_correct":"Numéro incorrect",
+    "number_its_not_correct_text":"Veuillez vérifier le numéro de téléphone"
   },
   "alert": {
     "accept": "Accepter",

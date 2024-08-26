@@ -89,7 +89,7 @@ export class SessionService{
   }
 
   async loadReminders(): Promise<LocalNotificationSchema[]>{
-    if(this._platform.is("android")){
+    if(this._platform.is("android")||this._platform.is('ios')){
       const temporalArray = await this._notification.getPending();
       let filteredArray:any[] = [];
       temporalArray.notifications.forEach(element => {
@@ -99,7 +99,7 @@ export class SessionService{
         });
 
       this.remindersArray = filteredArray;
-      //console.log(filteredArray, temporalArray.notifications)
+      console.log(filteredArray, temporalArray.notifications)
       return this.remindersArray;
     }else{
       //this.remindersArray = await this._test.createTestreminders(this.remindersArray);

@@ -125,10 +125,10 @@ export class ReminderPage{
       const index = this.remindersArray.findIndex(reminder => reminder.id == this.reminderToEditId);
       if(index !== -1){
          const newReminder = await this.generateReminder();
-         //console.log(newReminder);
+         console.log(newReminder);
          this._session.remindersArray[index] = newReminder;
          await this._notifications.createNotification([newReminder]);
-         //console.log(this.remindersArray[index]);
+         console.log(this.remindersArray[index]);
          this.saveAndExit(newReminder);
       }
     }
@@ -147,7 +147,7 @@ export class ReminderPage{
       body:this.body,
       largeBody:this.body,
       summaryText:this.body,
-      id:id,
+      id: Number(id),
       schedule: {at: new Date(this.dateOfEvent)},
       sound:'clockalarm.wav',
       extra:{

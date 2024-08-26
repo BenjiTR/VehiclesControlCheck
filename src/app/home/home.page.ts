@@ -1,6 +1,6 @@
 import { AuthService } from './../services/auth.service';
 import { Component, OnInit, getPlatform, OnDestroy } from '@angular/core';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonRow, IonCol, IonImg, IonItem, IonInput, IonIcon, IonFooter, IonButton, IonCheckbox, IonLabel, Platform, NavController, IonPopover } from '@ionic/angular/standalone';
+import { IonHeader, IonToolbar, IonTitle, IonContent, IonRow, IonCol, IonImg, IonItem, IonInput, IonIcon, IonFooter, IonButton, IonCheckbox, IonLabel, Platform, NavController, IonPopover, IonDatetime } from '@ionic/angular/standalone';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslationConfigService } from '../services/translation.service';
 import { FormsModule } from '@angular/forms';
@@ -25,7 +25,7 @@ import { Capacitor } from '@capacitor/core';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [IonPopover, RouterModule, CommonModule, FormsModule, IonLabel, IonCheckbox, IonButton, IonFooter, IonIcon, IonInput, IonItem, IonImg, IonCol, IonRow, IonHeader, IonToolbar, IonTitle, IonContent, TranslateModule],
+  imports: [IonDatetime, IonPopover, RouterModule, CommonModule, FormsModule, IonLabel, IonCheckbox, IonButton, IonFooter, IonIcon, IonInput, IonItem, IonImg, IonCol, IonRow, IonHeader, IonToolbar, IonTitle, IonContent, TranslateModule],
 })
 export class HomePage implements OnInit, OnDestroy{
 
@@ -310,7 +310,7 @@ export class HomePage implements OnInit, OnDestroy{
   }
 
   async checkNotifications():Promise<void>{
-    if(this._platform.is("android")){
+    if(this._platform.is("android")||this._platform.is("ios")){
       const res = await this._notification.checkPermissions();
       if(res.display==="granted"){
         //console.log("Permiso para mostrar notificaciones concedido");

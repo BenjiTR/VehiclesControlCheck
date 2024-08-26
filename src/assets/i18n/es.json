@@ -10,7 +10,6 @@
     "information_security": "Implementamos medidas de seguridad adecuadas para proteger su información personal contra el acceso no autorizado, la alteración, la divulgación o la destrucción. La autenticación está gestionada por Firebase o el proveedor de Google, que cumple con los estándares de seguridad de la industria. La información almacenada en el dispositivo o en Drive se encuentra cifrada para mayor protección.",
     "your_rights_header": "Sus derechos",
     "your_rights": "Puede solicitar el acceso, la corrección o la eliminación de su información personal en cualquier momento. Para ejercer estos derechos, póngase en contacto con nosotros a través de la información de contacto proporcionada en la aplicación.",
-
     "publicity_info_header":"Publicidad",
     "publicity_info":"Durante el uso de la aplicación se muestra publicidad. Usamos la publicidad de forma responsable para mejorar la experiencia de uso. Unicamente debe aparecer un banner en la parte inferior, que no interfiere en el uso de la aplicación, y un anuncio a pantalla completa, la primera vez que se realiza una acción en la sesión activa. Esta publicidad está gestionada por Google. Nosotros no tratamos ningún dato que pueda almacenar con objetivos publicitarios ni de ningún tipo.",
     "policy_updates_header": "Actualizaciones de esta política",
@@ -50,7 +49,9 @@
       "incorrect_user":"Usuario incorrecto",
       "incorrect_user_text":"El usuario propietario de los vehículos, no coincide con el usuario de la sesión",
       "error_cleaning":"Error limpiando",
-      "error_cleaning_text":"Error limpiando los arhivos, por favor, revise su conexión e intentelo mas tarde"
+      "error_cleaning_text":"Error limpiando los arhivos, por favor, revise su conexión e intentelo mas tarde",
+      "number_its_not_correct":"Numero incorrecto",
+      "number_its_not_correct_text":"Por favor revise el número de teléfono"
   },
   "alert":{
       "accept":"Aceptar",
@@ -114,7 +115,6 @@
       "imposible_to_close_session_text":"No puede cerrarse la sesión ya que se están realizando operaciones de lectura, escritura o borrado en la nube",
       "no_fished_op_detected":"Se han detectado operaciones sin acabar",
       "no_fished_op_detected_text":"Se ha detectado una interrupción en una operación de Descarga, Subida, o limpieza de Drive, para asegurar la integridad de sus datos en la nube, puede pulsar 'ACEPTAR' y realizar una actualización con los datos actuales de su dispositivo",
-
       "user_delete":"Usuario eliminado",
       "user_delete_with_exit":"El usuario se ha eliminado con éxito"
     },

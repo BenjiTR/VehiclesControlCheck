@@ -414,4 +414,12 @@ export class MainPage implements OnInit, OnDestroy {
     return this.filteredEventsArray.filter(event=>event.vehicleId===vehicleId).length;
   }
 
+  makeCall(numberString:string){
+    const number:number = parseInt(numberString)
+    if(number){
+      window.location.href=`tel:${number}`
+    }else{
+      this._alert.createAlert(this.translate.instant('error.number_its_not_correct'),this.translate.instant('error.number_its_not_correct_text'));
+    }
+  }
 }

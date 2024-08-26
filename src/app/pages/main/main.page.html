@@ -119,17 +119,20 @@
                           </ion-item>
                         </ion-col>
 
-                        <ion-col class="ion-padding-start ion-padding-end" size="12">
+                        <ion-col class="ion-padding-start ion-padding-end" size="10">
                           <ion-item class="rounded-inputs">
                             <ion-input label="{{ 'newvehicle.roadside_assistance_number' | translate }}" label-placement="floating" [readonly]="true" [(ngModel)]="vehicle.roadsideAssistanceNumber" type="text"></ion-input>
                           </ion-item>
+                        </ion-col>
+                        <ion-col class="ion-text-center ion-align-items-center flex" size="2">
+                          <ion-icon (click)="makeCall(vehicle.roadsideAssistanceNumber)" class="call-icon" src="../../../assets/icons/call-outline.svg" ></ion-icon>
                         </ion-col>
 
                         <ion-col (click)="deleteVehicle(vehicle)" class="ion-margin-top ion-margin-bottom ion-text-center" size="6">
                           <ion-icon color="danger" size="large" src="../../../assets/icons/trash-outline.svg"></ion-icon>
                         </ion-col>
                         <ion-col (click)="editVehicle(vehicle.id)" class="ion-margin-top ion-margin-bottom ion-text-center" size="6">
-                          <ion-icon  size="large" src="../../../assets/icons/pencil-outline.svg"></ion-icon>
+                          <ion-icon size="large" src="../../../assets/icons/pencil-outline.svg"></ion-icon>
                         </ion-col>
 
 
@@ -238,7 +241,8 @@
 
                             <ion-col class="ion-padding-start ion-padding-end" size="12">
                               <ion-item>
-                                <ion-datetime [readonly]="true" [value]="getDate(reminder.schedule!.at!)" [preferWheel]="true"></ion-datetime>
+                                <ion-datetime *ngIf="platform==='android'" [readonly]="true" [value]="getDate(reminder.schedule!.at!)" [preferWheel]="true"></ion-datetime>
+                                <ion-datetime *ngIf="platform==='ios'" [readonly]="true" [value]="getDate(reminder.schedule!.at!)"></ion-datetime>
                               </ion-item>
                             </ion-col>
 
