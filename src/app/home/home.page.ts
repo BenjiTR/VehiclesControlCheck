@@ -111,44 +111,51 @@ export class HomePage implements OnInit, OnDestroy{
 
   //AUTENTICACIÓN CON EMAIL
   async loginWithEmail(){
-    await this._loader.presentLoader();
-    this.Error="";
-    this.handlerRememberSession();
-    if(this.email === "testusermail.test" && this.password === "testing"){
-      this.loginWithTest();
-    }else{
-    await this._authService.loginWithEmailAndPaswword(this.email, this.password)
-      .then(async (userCredential) => {
-        // Signed in
-        const user = userCredential;
-        if(!user.emailVerified){
-          //preguntamos y reenviamos el correo
-          const verify = await this._alert.twoOptionsAlert(this.translate.instant('alert.email_no_verified'),this.translate.instant('alert.email_no_verified_text'),this.translate.instant('alert.resend'),this.translate.instant('alert.cancel'))
-          if(verify){
-            this._authService.sendEmailVerificacion()
-            .then(()=>{
-              this._alert.createAlert(this.translate.instant('alert.email_resend'),this.translate.instant('alert.email_no_verified_text'));
-            })
-            .catch((err)=>{
-              this.handleErrors(err.message);
-            })
+    if((await Network.getStatus()).connected === true){
+      await this._loader.presentLoader();
+      this.Error="";
+      this.handlerRememberSession();
+      if(this.email === "testusermail.test" && this.password === "testing"){
+        this.loginWithTest();
+      }else{
+      await this._authService.loginWithEmailAndPaswword(this.email, this.password)
+        .then(async (userCredential) => {
+          // Signed in
+          const user = userCredential;
+          if(!user.emailVerified){
+            //preguntamos y reenviamos el correo
+            const verify = await this._alert.twoOptionsAlert(this.translate.instant('alert.email_no_verified'),this.translate.instant('alert.email_no_verified_text'),this.translate.instant('alert.resend'),this.translate.instant('alert.cancel'))
+            if(verify){
+              this._authService.sendEmailVerificacion()
+              .then(()=>{
+                this._alert.createAlert(this.translate.instant('alert.email_resend'),this.translate.instant('alert.email_no_verified_text'));
+              })
+              .catch((err)=>{
+                this.handleErrors(err.message);
+              })
+            }
+
+          }else{
+            this.loginExecute(user)
           }
-        await this._loader.dismissLoader();
-        }else{
-          this.loginExecute(user)
-        }
-      })
-      .catch(async (error) => {
-        console.log("error: ", error.code, error.message)
-        if(error.code){
-          this.handleErrors(error.code);
-        }else if(error.message){
-          this.handleErrors(error.message);
-        }
-        await this._loader.dismissLoader();
-      });
+        })
+        .catch(async (error) => {
+          console.log("error: ", error.code, error.message)
+          if(error.code){
+            this.handleErrors(error.code);
+          }else if(error.message){
+            this.handleErrors(error.message);
+          }
+          console.log("lelga aqui")
+          await this._loader.dismissLoader();
+        });
+      }
+    }else{
+      this._alert.createAlert(this.translate.instant("error.no_network"),"");
+      await this._loader.dismissLoader();
     }
   }
+
 
     //AUTENTICACIÓN CON GOOGLE
     async signInWithGoogle(){
@@ -166,15 +173,15 @@ export class HomePage implements OnInit, OnDestroy{
           }
         })
         .catch((err)=>{
-            //Si no hace el login normal
-            this._authService.loginWithGoogle()
-            .then((user)=>{
-              this.loginExecute(user, "google")
-            })
-            .catch(async (error)=>{
-              this.handleErrors(error.code);
-              await this._loader.dismissLoader();
-            })
+          //Si no hace el login normal
+          this._authService.loginWithGoogle()
+          .then((user)=>{
+            this.loginExecute(user, "google")
+          })
+          .catch(async (error)=>{
+            this.handleErrors(error.code);
+            await this._loader.dismissLoader();
+          })
         })
       }else{
         this._alert.createAlert(this.translate.instant("error.no_network"),"");
@@ -310,7 +317,7 @@ export class HomePage implements OnInit, OnDestroy{
   }
 
   async checkNotifications():Promise<void>{
-    if(this._platform.is("android")||this._platform.is("ios")){
+    if(this._platform.is("android")||this._platform.is("android")){
       const res = await this._notification.checkPermissions();
       if(res.display==="granted"){
         //console.log("Permiso para mostrar notificaciones concedido");

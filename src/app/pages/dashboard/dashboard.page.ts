@@ -2,7 +2,7 @@ import { UserdataviewPage } from './../userdataview/userdataview.page';
 import { Component, OnInit, OnChanges, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonAccordionGroup, IonContent, IonHeader, IonTitle, IonToolbar, IonCol, IonRow, IonGrid, IonImg, IonButton, IonButtons, IonMenuButton, IonIcon, IonMenu, MenuController, IonLabel, IonItem, IonInput, IonAccordion, IonRouterOutlet, NavController, IonNavLink } from '@ionic/angular/standalone';
+import { Platform, IonAccordionGroup, IonContent, IonHeader, IonTitle, IonToolbar, IonCol, IonRow, IonGrid, IonImg, IonButton, IonButtons, IonMenuButton, IonIcon, IonMenu, MenuController, IonLabel, IonItem, IonInput, IonAccordion, IonRouterOutlet, NavController, IonNavLink } from '@ionic/angular/standalone';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -32,6 +32,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 
   public portrait:boolean=true;
   public language:string = "";
+  public platform:string = "";
 
   constructor(
     private menuCtrl: MenuController,
@@ -47,13 +48,19 @@ export class DashboardPage implements OnInit, OnDestroy {
     private __drive:DriveService,
     private _storage:StorageService,
     private _alert:AlertService,
-    private screenOrientationService: ScreenOrientationService
+    private screenOrientationService: ScreenOrientationService,
+    private _platform:Platform
   ) {
     this.translate.setDefaultLang(this._translation.getLanguage());
     this.language = this._translation.getLanguage();
   }
 
   async ngOnInit() {
+    if(this._platform.is('android')){
+      this.platform = 'android'
+    }else{
+      this.platform = 'ios'
+    }
     this.translate.setDefaultLang(this._translation.getLanguage());
     this._admobService.resumeBanner();
     this.screenOrientationService.orientationChange$.subscribe(orientation => {
@@ -64,6 +71,7 @@ export class DashboardPage implements OnInit, OnDestroy {
         this.portrait=true;
       }
     });
+
   }
 
 

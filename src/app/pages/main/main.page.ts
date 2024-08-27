@@ -101,15 +101,15 @@ export class MainPage implements OnInit, OnDestroy {
     this._crypto.init(this.user);
     await this.loadAllData();
     this.translate.setDefaultLang(this._translation.getLanguage());
+    if(this._loader.isLoading){
+      await this._loader.dismissLoader();
+    }
     await this._admob.resumeBanner();
     if(this._session.currentUser.token){
       await this._drive.init();
     }
     this.token = await this._session.getToken();
     //console.log(this._loader.isLoading)
-    if(this._loader.isLoading){
-      await this._loader.dismissLoader();
-    }
     const currency = await this._storage.getStorageItem(storageConstants.USER_CURRENCY+this.user.id);
     if(currency){
       this._session.currency = currency;

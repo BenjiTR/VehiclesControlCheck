@@ -2,11 +2,18 @@
 
   <ion-header>
     <ion-toolbar class="pastel">
-      <ion-title>
+      <ion-title *ngIf="platform==='android'">
         <ion-img *ngIf="language === 'es'" src="../../assets/img/Logo App Vehiculos.png"></ion-img>
         <ion-img *ngIf="language === 'fr'" src="../../assets/img/Logo App Vehiculos fr.png"></ion-img>
         <ion-img *ngIf="language === 'en'" src="../../assets/img/Logo App Vehiculos en.png"></ion-img>
       </ion-title>
+      <ion-row *ngIf="platform==='ios'">
+        <ion-col class="ion-padding" size="12">
+          <ion-img *ngIf="language === 'es'" src="../../assets/img/Logo App Vehiculos.png"></ion-img>
+          <ion-img *ngIf="language === 'fr'" src="../../assets/img/Logo App Vehiculos fr.png"></ion-img>
+          <ion-img *ngIf="language === 'en'" src="../../assets/img/Logo App Vehiculos en.png"></ion-img>
+        </ion-col>
+      </ion-row>
     </ion-toolbar>
   </ion-header>
 
