@@ -116,7 +116,10 @@
     "no_fished_op_detected": "Opérations non terminées détectées",
     "no_fished_op_detected_text": "Une interruption dans une opération de Téléchargement, Téléversement ou nettoyage de Drive a été détectée. Pour garantir l'intégrité de vos données dans le cloud, vous pouvez cliquer sur 'ACCEPTER' et effectuer une mise à jour avec les données actuelles de votre appareil.",
     "user_delete": "Utilisateur supprimé",
-    "user_delete_with_exit": "L'utilisateur a été supprimé avec succès"
+    "user_delete_with_exit": "L'utilisateur a été supprimé avec succès",
+    "incorrect_date": "Date incorrecte",
+    "incorrect_date_text": "La date du rappel ne peut pas être antérieure à la date actuelle"
+
   },
   "home": {
     "init_session": "Connexion",
@@ -227,7 +230,8 @@
     "auto_text": "La sauvegarde sera mise à jour à chaque modification effectuée dans l'application",
     "no_auto_text": "La sauvegarde doit être mise à jour manuellement depuis le menu Sauvegarde",
     "auto": "Automatique",
-    "manual": "Manuel"
+    "manual": "Manuel",
+    "allow_notifications": "Autoriser les notifications"
   },
   "reminder": {
     "text": "Texte",

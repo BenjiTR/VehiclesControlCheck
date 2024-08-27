@@ -116,7 +116,9 @@
     "no_fished_op_detected": "Unfinished operations detected",
     "no_fished_op_detected_text": "An interruption in a Download, Upload, or Drive cleanup operation has been detected. To ensure the integrity of your data in the cloud, you can click 'ACCEPT' and perform an update with the current data from your device.",
     "user_delete": "User Deleted",
-    "user_delete_with_exit": "The user has been successfully deleted"
+    "user_delete_with_exit": "The user has been successfully deleted",
+    "incorrect_date": "Incorrect date",
+    "incorrect_date_text": "The reminder date cannot be earlier than the current date"
   },
   "home": {
     "init_session": "Sign In",
@@ -227,7 +229,8 @@
     "auto_text": "The backup will be updated with every change made in the app",
     "no_auto_text": "The backup must be updated manually from the Backup menu",
     "auto": "Automatic",
-    "manual": "Manual"
+    "manual": "Manual",
+    "allow_notifications": "Autoriser les notifications"
   },
   "reminder": {
     "text": "Text",

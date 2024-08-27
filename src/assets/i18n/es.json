@@ -116,7 +116,9 @@
       "no_fished_op_detected":"Se han detectado operaciones sin acabar",
       "no_fished_op_detected_text":"Se ha detectado una interrupción en una operación de Descarga, Subida, o limpieza de Drive, para asegurar la integridad de sus datos en la nube, puede pulsar 'ACEPTAR' y realizar una actualización con los datos actuales de su dispositivo",
       "user_delete":"Usuario eliminado",
-      "user_delete_with_exit":"El usuario se ha eliminado con éxito"
+      "user_delete_with_exit":"El usuario se ha eliminado con éxito",
+      "incorrect_date":"Fecha incorrecta",
+      "incorrect_date_text":"La fecha del recordatorio no puede ser menor a la fecha actual"
     },
   "home":{
       "init_session":"Inicio de sesión",
@@ -227,7 +229,8 @@
     "auto_text":"Se actualizará la copia de seguridad con cada cambio realizado en la aplicación",
     "no_auto_text":"La copia de seguridad deberá actualizarse manualmente desde el menú de Backup",
     "auto":"Automático",
-    "manual":"Manual"
+    "manual":"Manual",
+    "allow_notifications":"Permitir notificaciones"
   },
   "reminder": {
     "text":"Texto",

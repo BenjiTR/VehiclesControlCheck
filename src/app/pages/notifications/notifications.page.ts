@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonToggle, IonContent, IonHeader, IonTitle, IonToolbar, IonCol, IonRow, IonLabel, IonIcon, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonSegment, IonSegmentButton, IonRadio, IonProgressBar, IonPopover, IonItemDivider } from '@ionic/angular/standalone';
+import { Platform, IonToggle, IonContent, IonHeader, IonTitle, IonToolbar, IonCol, IonRow, IonLabel, IonIcon, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonSegment, IonSegmentButton, IonRadio, IonProgressBar, IonPopover, IonItemDivider, IonButton } from '@ionic/angular/standalone';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslationConfigService } from 'src/app/services/translation.service';
 import { NotificationsService } from 'src/app/services/notifications.service';
@@ -20,7 +20,7 @@ import { storageConstants } from 'src/app/const/storage';
   templateUrl: './notifications.page.html',
   styleUrls: ['./notifications.page.scss'],
   standalone: true,
-  imports: [IonLabel, IonItemDivider, IonProgressBar, IonPopover, IonRadio, IonSegmentButton, IonSegment, IonCardContent, IonCardSubtitle, IonCardTitle, IonCardHeader, IonCard, RouterModule, IonIcon, FormsModule, IonLabel, IonCol, IonRow, IonToggle, TranslateModule, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, BackupPage]
+  imports: [IonButton, IonLabel, IonItemDivider, IonProgressBar, IonPopover, IonRadio, IonSegmentButton, IonSegment, IonCardContent, IonCardSubtitle, IonCardTitle, IonCardHeader, IonCard, RouterModule, IonIcon, FormsModule, IonLabel, IonCol, IonRow, IonToggle, TranslateModule, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, BackupPage]
 })
 export class NotificationsPage{
 
@@ -29,7 +29,8 @@ export class NotificationsPage{
   public autoBk:boolean = true;
   public connected:boolean = false;
   public hasFile:boolean = false;
-  public currency:string = ""
+  public currency:string = "";
+  public platform:string = "";
 
   private hasFileSubscription:Subscription;
 
@@ -42,11 +43,16 @@ export class NotificationsPage{
     private _alert:AlertService,
     private _paddingService:PaddingService,
     private _storage:StorageService,
-
+    private _platform:Platform
   ) {
     this.hasFileSubscription = this._drive.haveFiles$.subscribe((data)=>{
       this.hasFile = data;
     });
+    if(this._platform.is('android')){
+      this.platform = 'android'
+    }else{
+      this.platform = 'ios'
+    }
   }
 
   async ionViewWillEnter() {

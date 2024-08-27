@@ -55,9 +55,7 @@ export class ReminderPage{
     private _loader:LoaderService,
     private _drive:DriveService,
     private _storage:StorageService
-  ) {
-
-  }
+  ) {}
 
   async ionViewWillEnter() {
     await this._loader.presentLoader();
@@ -70,7 +68,6 @@ export class ReminderPage{
     this.vehiclesArray = this._session.vehiclesArray;
     this.user = this._session.currentUser;
     await this._loader.dismissLoader();
-;
   }
 
   async getReminder(){
@@ -106,10 +103,15 @@ export class ReminderPage{
   }
 
   async createEvent(){
-    if(this.reminderToEditId){
-      this.editReminder();
+    const rightNow = new Date();
+    if(this.dateOfEvent>rightNow){
+      if(this.reminderToEditId){
+        this.editReminder();
+      }else{
+        this.createNew();
+      }
     }else{
-      this.createNew();
+      this._alert.createAlert(this.translate.instant('alert.date_less_than_right_now'),this.translate.instant('alert.date_less_than_right_now_text'))
     }
   }
 

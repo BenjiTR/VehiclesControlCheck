@@ -113,7 +113,7 @@ export class SessionService{
     this.remindNotitications = await this._storage.setStorageItem(storageConstants.USER_REMINDER+this.currentUser.id,reminder);
   }
   async getReminderNotifications():Promise<boolean>{
-    this.remindNotitications = await this._storage.getStorageItem(storageConstants.USER_REMINDER+this.currentUser.id) || false;
+    this.remindNotitications = await this._storage.getStorageItem(storageConstants.USER_REMINDER+this.currentUser.id) || true;
     return this.remindNotitications;
   }
 
