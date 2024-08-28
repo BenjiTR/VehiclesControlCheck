@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonRow, IonCol, IonImg, IonItem, IonInput, IonIcon, IonFooter, IonButton, IonCheckbox, IonLabel, IonAvatar, IonPopover } from '@ionic/angular/standalone';
+import { Platform, IonHeader, IonToolbar, IonTitle, IonContent, IonRow, IonCol, IonImg, IonItem, IonInput, IonIcon, IonFooter, IonButton, IonCheckbox, IonLabel, IonAvatar, IonPopover } from '@ionic/angular/standalone';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslationConfigService } from '../../services/translation.service';
 import { RouterModule, Router } from '@angular/router';
@@ -27,6 +27,7 @@ export class UserdataviewPage implements OnInit {
   public downloading:string = "false";
   public cleaning:boolean = false;
   public autoBk:boolean = true;
+  public platform:string = "";
 
   private connectedSubscription:Subscription;
   private haveFilesSubscription:Subscription;
@@ -40,7 +41,8 @@ export class UserdataviewPage implements OnInit {
     private _translation: TranslationConfigService,
     private router: Router,
     private _session:SessionService,
-    private _drive:DriveService
+    private _drive:DriveService,
+    private _platform:Platform
   ) {
     this.connectedSubscription = this._drive.conected$.subscribe(async value=>{
       this.token = await this._session.getToken();
@@ -63,6 +65,11 @@ export class UserdataviewPage implements OnInit {
       //console.log(value)
       this.autoBk = value;
     })
+    if(this._platform.is('android')){
+      this.platform = 'android'
+    }else{
+      this.platform = 'ios'
+    }
   }
 
   async ngOnInit() {

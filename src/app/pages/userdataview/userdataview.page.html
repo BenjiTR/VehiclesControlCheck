@@ -3,7 +3,7 @@
     <img src="{{user.photo ? user.photo : '../../../../../assets/img/user_avatar.png'}}" />
   </ion-avatar>
 
-  <ion-row class="ion-margin-start ion-align-items-center">
+  <ion-row class="ion-margin-start" [ngClass]="{'ion-align-items-center': platform === 'ios'}">
     <ion-col class="ion-margin-top ion-margin-start" size="4">
       <ion-label>
         <h1 class="black" translate="mainpage.hello!"></h1>

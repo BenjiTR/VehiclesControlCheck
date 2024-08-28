@@ -1,3 +1,4 @@
+import { storageConstants } from 'src/app/const/storage';
 import { AuthService } from './../services/auth.service';
 import { Component, OnInit, getPlatform, OnDestroy } from '@angular/core';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonRow, IonCol, IonImg, IonItem, IonInput, IonIcon, IonFooter, IonButton, IonCheckbox, IonLabel, Platform, NavController, IonPopover, IonDatetime } from '@ionic/angular/standalone';
@@ -67,6 +68,7 @@ export class HomePage implements OnInit, OnDestroy{
 
   async ngOnInit(){
     await this._loader.presentLoader();
+    this.autoinitHandler();
     await this.checkNotifications();
     this._admobService.initialize();
     await this._admobService.showConsent();
@@ -80,6 +82,14 @@ export class HomePage implements OnInit, OnDestroy{
     ("Home destruido");
   }
 
+  autoinitHandler(){
+    const auto = localStorage.getItem('autoInitVcc');
+    if(auto==='true'){
+      this.rememberSession = true;
+    }else{
+      this.rememberSession = false;
+    }
+  }
 
   //CAMBIAR LENGUAJE
   changeLanguage(language:string){
@@ -191,14 +201,17 @@ export class HomePage implements OnInit, OnDestroy{
   //RECORDAR INICIO DE SESIÓN
   async tryRememberSession():Promise<void>{
     const remMail = await localStorage.getItem('vehiclesUser');
-    const remPassword = await localStorage.getItem('vehiclesPassword');
-    const remGoogle = await localStorage.getItem('googleSign');
-    if(remMail && remPassword){
-      this.rememberSession= true;
+    if(remMail){
       this.email = remMail;
+    }
+    const remPassword = await localStorage.getItem('vehiclesPassword');
+    if(remPassword){
       this.password = remPassword;
+    }
+    const remGoogle = await localStorage.getItem('googleSign');
+    if(remMail && remPassword && this.rememberSession){
       this.loginWithEmail();
-    }else if(remGoogle){
+    }else if(remGoogle && this.rememberSession){
       this.signInWithGoogle();
     }else{
       this._loader.dismissLoader();
@@ -228,6 +241,7 @@ export class HomePage implements OnInit, OnDestroy{
   //MANEJO DE RECORDAR LA SESIÓN
   handlerRememberSession(google?:boolean){
     if(this.rememberSession){
+      localStorage.setItem('autoInitVcc','true')
       if(google){
         localStorage.setItem('googleSign', 'google');
       }else{

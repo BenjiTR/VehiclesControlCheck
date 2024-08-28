@@ -105,7 +105,7 @@ export class DashboardPage implements OnInit, OnDestroy {
     if(!ops){
       this._loader.presentLoader();
       await this.menuCtrl.close();
-      localStorage.setItem('vehiclesUser', '');
+      localStorage.setItem('autoInitVcc', '');
       localStorage.setItem('vehiclesPassword','');
       localStorage.setItem('googleSign','');
       if(this._session.currentUser.method === "google"){
