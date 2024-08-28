@@ -86,6 +86,8 @@ export class ReminderPage{
 
   updateDate(event:any){
     this.dateOfEvent = event.detail.value;
+    console.log(this.dateOfEvent);
+    console.log(event.detail.value);
   }
 
   asignPropertis(){
@@ -103,15 +105,18 @@ export class ReminderPage{
   }
 
   async createEvent(){
-    const rightNow = new Date();
-    if(this.dateOfEvent>rightNow){
+    const rightNow = new Date().toISOString();
+    const eventDate = new Date(this.dateOfEvent).toISOString();
+
+    console.log(rightNow);
+    if(eventDate>rightNow){
       if(this.reminderToEditId){
         this.editReminder();
       }else{
         this.createNew();
       }
     }else{
-      this._alert.createAlert(this.translate.instant('alert.date_less_than_right_now'),this.translate.instant('alert.date_less_than_right_now_text'))
+      this._alert.createAlert(this.translate.instant('alert.incorrect_date'),this.translate.instant('alert.incorrect_date_text'))
     }
   }
 

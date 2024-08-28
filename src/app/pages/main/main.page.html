@@ -239,24 +239,28 @@
                           </ion-item>
                           <div slot="content" class="gray">
 
-                            <ion-col class="ion-padding-start ion-padding-end" size="12">
-                              <ion-item>
-                                <ion-datetime *ngIf="platform==='android'" [readonly]="true" [value]="getDate(reminder.schedule!.at!)" [preferWheel]="true"></ion-datetime>
-                                <ion-datetime *ngIf="platform==='ios'" [readonly]="true" [value]="getDate(reminder.schedule!.at!)"></ion-datetime>
-                              </ion-item>
-                            </ion-col>
+                            <ion-row class="ion-padding">
+                              <ion-col class="ion-padding-start ion-padding-end" *ngIf="platform==='android'" size="12">
+                                <ion-item>
+                                  <ion-datetime [readonly]="true" [value]="getDate(reminder.schedule!.at!)" [preferWheel]="true"></ion-datetime>
+                                </ion-item>
+                              </ion-col>
+                              <ion-col class="ion-padding-start" *ngIf="platform==='ios'" size="12">
+                                  <ion-datetime [readonly]="true" [value]="getDate(reminder.schedule!.at!)"></ion-datetime>
+                              </ion-col>
 
-                            <ion-col class="ion-padding-start ion-padding-end" size="12">
-                              <ion-item class="rounded-inputs">
-                                <ion-input label="{{'reminder.title' | translate}}" label-placement="floating" [readonly]="true" [(ngModel)]="reminder.extra.titleWithoutCar" type="text"></ion-input>
-                              </ion-item>
-                            </ion-col>
+                              <ion-col class="ion-padding-start ion-padding-end" size="12">
+                                <ion-item class="rounded-inputs">
+                                  <ion-input label="{{'reminder.title' | translate}}" label-placement="floating" [readonly]="true" [(ngModel)]="reminder.extra.titleWithoutCar" type="text"></ion-input>
+                                </ion-item>
+                              </ion-col>
 
-                            <ion-col class="ion-padding-start ion-padding-end" size="12">
-                              <ion-item class="rounded-inputs">
-                                <ion-textarea auto-grow="true" label="{{'reminder.text' | translate}}" label-placement="floating" [readonly]="true" [(ngModel)]="reminder.body" type="text"></ion-textarea>
-                              </ion-item>
-                            </ion-col>
+                              <ion-col class="ion-padding-start ion-padding-end" size="12">
+                                <ion-item class="rounded-inputs">
+                                  <ion-textarea auto-grow="true" label="{{'reminder.text' | translate}}" label-placement="floating" [readonly]="true" [(ngModel)]="reminder.body" type="text"></ion-textarea>
+                                </ion-item>
+                              </ion-col>
+                            </ion-row>
 
                             <ion-row>
                               <ion-col class="ion-margin-top ion-margin-bottom ion-text-center" size="6">
