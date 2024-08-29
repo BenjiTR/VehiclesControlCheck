@@ -9,6 +9,7 @@ import { NotificationsService } from './notifications.service';
 import { imageConstants } from '../const/img';
 import { Platform } from '@ionic/angular';
 import { CryptoService } from './crypto.services';
+import { DriveService } from './drive.service';
 
 @Injectable({
   providedIn:'root'
@@ -24,7 +25,8 @@ export class DataService{
     private translate:TranslateService,
     private _date:DateService,
     private _platform:Platform,
-    private _crypto:CryptoService
+    private _crypto:CryptoService,
+    private _drive:DriveService
   ){
   }
 
@@ -55,7 +57,28 @@ export class DataService{
     this._session.setReminderNotifications(backup.remindersOptions);
     const correctReminders = await this._date.setDatesInArray(backup.reminders);
     if(this._platform.is("android")||this._platform.is('ios')){
-      await this._notifications.createNotification(correctReminders);
+
+      const remindersCopy = [...correctReminders];
+
+      for (const reminder of remindersCopy) {
+
+        const rightNow = new Date();
+        const reminderDate = new Date(reminder.schedule!.at!)
+
+        if(reminderDate<rightNow){
+
+          const indexToRemove = correctReminders.indexOf(reminder);
+          if (indexToRemove > -1) {
+            correctReminders.splice(indexToRemove, 1);
+          }
+
+          const id = await this._drive.findFileByName("R"+reminder.id)
+          await this._drive.deleteFile(id, true);
+
+        }
+
+        await this._notifications.createNotification(correctReminders);
+      }
     }
     this._session.setAutoBackup(backup.autoBackup)
     if(backup.photo){

@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>vehicles control</string>
+	<string>Control de Vehículos</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -45,79 +45,46 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
-
-
-  <!-- ADMOB -->
-<key>GADIsAdManagerApp</key>
-<true/>
-<key>GADApplicationIdentifier</key>
-<string>ca-app-pub-7109225930546474~5245145989</string>
-<key>SKAdNetworkItems</key>
-<array>
-  <dict>
-    <key>SKAdNetworkIdentifier</key>
-    <string>cstr6suwn9.skadnetwork</string>
-  </dict>
-</array>
-<key>NSUserTrackingUsageDescription</key>
-<string>[Why you use NSUserTracking. ex: This identifier will be used to deliver personalized ads to you.]</string>
-
-
-<!-- Google Sign-In -->
+	<key>GADIsAdManagerApp</key>
+	<true/>
+	<key>GADApplicationIdentifier</key>
+	<string>ca-app-pub-7109225930546474~5245145989</string>
+	<key>SKAdNetworkItems</key>
+	<array>
+		<dict>
+			<key>SKAdNetworkIdentifier</key>
+			<string>cstr6suwn9.skadnetwork</string>
+		</dict>
+	</array>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>[Why you use NSUserTracking. ex: This identifier will be used to deliver personalized ads to you.]</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string></string>
+				<string>com.googleusercontent.apps.329432960985-97l9q80p1v5qb14lc5ef321jameit40s</string>
 			</array>
 		</dict>
 	</array>
-  <key>GIDClientID</key>
-  <string>329432960985-97l9q80p1v5qb14lc5ef321jameit40s.apps.googleusercontent.com</string>
-
-<!-- Google Sign-in Section -->
-<key>CFBundleURLTypes</key>
-<array>
-	<dict>
-		<key>CFBundleTypeRole</key>
-		<string>Editor</string>
-		<key>CFBundleURLSchemes</key>
-		<array>
-			<string>com.googleusercontent.apps.329432960985-97l9q80p1v5qb14lc5ef321jameit40s</string>
-		</array>
-	</dict>
-</array>
-
-<!-- NOTIFICACIONES -->
-<key>UIBackgroundModes</key>
-<array>
-    <string>fetch</string>
-    <string>remote-notification</string>
-</array>
-
-
-<!-- CÁMARA -->
-<key>NSCameraUsageDescription</key>
-<string>Necesitamos acceso a la cámara para tomar fotos.</string>
-
-<key>NSPhotoLibraryAddUsageDescription</key>
-<string>Necesitamos acceso a la galería para guardar fotos.</string>
-
-<key>NSPhotoLibraryUsageDescription</key>
-<string>Necesitamos acceso a la galería para seleccionar fotos.</string>
-
-<!-- FILESYSTEM -->
-<key>UIFileSharingEnabled</key>
-<true/>
-
-<key>LSSupportsOpeningDocumentsInPlace</key>
-<true/>
-
-
-
-
+	<key>GIDClientID</key>
+	<string>329432960985-97l9q80p1v5qb14lc5ef321jameit40s.apps.googleusercontent.com</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>Necesitamos acceso a la cámara para tomar fotos.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Necesitamos acceso a la galería para guardar fotos.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Necesitamos acceso a la galería para seleccionar fotos.</string>
+	<key>UIFileSharingEnabled</key>
+	<true/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
 </dict>
 </plist>
-
-
