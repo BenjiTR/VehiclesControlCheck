@@ -1,4 +1,4 @@
-import {Injectable } from '@angular/core';
+import {Injectable, Injector } from '@angular/core';
 import { Backup } from '../models/backup.model';
 import { storageConstants } from '../const/storage';
 import { DateService } from './date.service';
@@ -17,6 +17,8 @@ import { DriveService } from './drive.service';
 
 export class DataService{
 
+  private _drive: DriveService | undefined;
+
 
   constructor(
     private _session:SessionService,
@@ -26,8 +28,15 @@ export class DataService{
     private _date:DateService,
     private _platform:Platform,
     private _crypto:CryptoService,
-    private _drive:DriveService
+    private injector: Injector // Injector en lugar de DriveService
   ){
+  }
+
+  private get driveService(): DriveService {
+    if (!this._drive) {
+      this._drive = this.injector.get(DriveService);
+    }
+    return this._drive;
   }
 
   async buildData(){
@@ -72,8 +81,8 @@ export class DataService{
             correctReminders.splice(indexToRemove, 1);
           }
 
-          const id = await this._drive.findFileByName("R"+reminder.id)
-          await this._drive.deleteFile(id, true);
+          const id = await this.driveService.findFileByName("R"+reminder.id)
+          await this.driveService.deleteFile(id, true);
 
         }
 
