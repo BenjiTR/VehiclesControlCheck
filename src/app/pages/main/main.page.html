@@ -129,10 +129,10 @@
                         </ion-col>
 
                         <ion-col (click)="deleteVehicle(vehicle)" class="ion-margin-top ion-margin-bottom ion-text-center" size="6">
-                          <ion-icon color="danger" size="large" src="../../../assets/icons/trash-outline.svg"></ion-icon>
+                          <ion-button color="danger"><ion-icon  size="large" src="../../../assets/icons/trash-outline.svg"></ion-icon></ion-button>
                         </ion-col>
                         <ion-col (click)="editVehicle(vehicle.id)" class="ion-margin-top ion-margin-bottom ion-text-center" size="6">
-                          <ion-icon size="large" src="../../../assets/icons/pencil-outline.svg"></ion-icon>
+                          <ion-button color="success"><ion-icon size="large" src="../../../assets/icons/pencil-outline.svg"></ion-icon></ion-button>
                         </ion-col>
 
 
@@ -181,7 +181,7 @@
                               </ion-col>
                               <ion-col class="ion-padding-start ion-padding-end" size="12">
                                 <ion-item class="rounded-inputs">
-                                  <ion-input label="{{ 'event.cost' | translate }}" label-placement="floating" [readonly]="true"  [(ngModel)]="event.cost" type="text" ></ion-input>
+                                  <ion-input label="{{ 'event.cost' | translate }}" label-placement="floating" [readonly]="true" [value]="event.cost | number:'1.2-2'" ></ion-input>
                                   <div slot="end">{{currency}}</div>
 
                                 </ion-item>
@@ -202,11 +202,11 @@
                               </ion-col>
                             </ion-row>
                             <ion-row>
-                              <ion-col class="ion-margin-top ion-margin-bottom ion-text-center" size="6">
-                                <ion-icon (click)="deleteEvent(event)" color="danger" size="large" src="../../../assets/icons/trash-outline.svg"></ion-icon>
+                              <ion-col (click)="deleteEvent(event)" class="ion-margin-top ion-margin-bottom ion-text-center" size="6">
+                                <ion-button color="danger"><ion-icon size="large" src="../../../assets/icons/trash-outline.svg"></ion-icon></ion-button>
                               </ion-col>
                               <ion-col (click)="editEvent(event.id)" class="ion-margin-top ion-margin-bottom ion-text-center" size="6">
-                                <ion-icon  size="large" src="../../../assets/icons/pencil-outline.svg"></ion-icon>
+                                <ion-button color="success"><ion-icon  size="large" src="../../../assets/icons/pencil-outline.svg"></ion-icon></ion-button>
                               </ion-col>
                             </ion-row>
                           </div>
@@ -263,11 +263,11 @@
                             </ion-row>
 
                             <ion-row>
-                              <ion-col class="ion-margin-top ion-margin-bottom ion-text-center" size="6">
-                                <ion-icon (click)="deleteReminder(reminder)" color="danger" size="large" src="../../../assets/icons/trash-outline.svg"></ion-icon>
+                              <ion-col (click)="deleteReminder(reminder)" class="ion-margin-top ion-margin-bottom ion-text-center" size="6">
+                                <ion-button color="danger"><ion-icon size="large" src="../../../assets/icons/trash-outline.svg"></ion-icon></ion-button>
                               </ion-col>
                               <ion-col (click)="editReminder(reminder.id)" class="ion-margin-top ion-margin-bottom ion-text-center" size="6">
-                                <ion-icon  size="large" src="../../../assets/icons/pencil-outline.svg"></ion-icon>
+                                <ion-button color="success"><ion-icon size="large" src="../../../assets/icons/pencil-outline.svg"></ion-icon></ion-button>
                               </ion-col>
                             </ion-row>
 

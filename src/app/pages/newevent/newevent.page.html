@@ -46,24 +46,21 @@
           </ion-item>
         </ion-col>
 
-        <ion-col class="ion-padding-start ion-text-center ion-padding-end" size="12">
-          <h2 translate="event.images"></h2>
-        </ion-col>
-
-        <ion-col size="12" *ngFor="let image of images">
-          <ion-icon color="danger" (click)="deleteImg(image)" class="zoom-2" src="../../../assets/icons/close-outline.svg"></ion-icon>
-            <ion-img (click)="openModal(image)" src="{{image}}"></ion-img>
+        <ion-row class="img-row">
+          <ion-col size="12" *ngFor="let image of images">
+            <ion-icon color="danger" (click)="deleteImg(image)" class="zoom-2" src="../../../assets/icons/trash-outline.svg"></ion-icon>
+              <ion-img (click)="openModal(image)" src="{{image}}"></ion-img>
+            </ion-col>
+          <ion-col class="ion-padding-start ion-text-center ion-padding-end" size="12">
+            <ion-button color="green" (click)="addImage()" translate="event.add"><ion-icon class="ion-margin-start" src="../../../assets/icons/images-outline.svg"></ion-icon></ion-button>
           </ion-col>
-
-        <ion-col class="ion-padding-start ion-text-center ion-padding-end" size="12">
-          <ion-button (click)="addImage()" translate="event.add"></ion-button>
-        </ion-col>
+        </ion-row>
 
         <ion-col class="ion-margin-top ion-margin-bottom ion-text-center" size="6">
-          <ion-icon (click)="cancelCreateEvent()" color="danger" size="large" src="../../../assets/icons/arrow-back-outline.svg"></ion-icon>
+          <ion-button (click)="cancelCreateEvent()" color="danger"><ion-icon size="large" src="../../../assets/icons/arrow-back-outline.svg"></ion-icon></ion-button>
         </ion-col>
         <ion-col class="ion-margin-top ion-margin-bottom ion-text-center" size="6">
-          <ion-icon (click)="createEvent()" class="success-color" size="large" src="../../../assets/icons/checkmark-outline.svg"></ion-icon>
+          <ion-button color="success" (click)="createEvent()"><ion-icon size="large" src="../../../assets/icons/checkmark-outline.svg"></ion-icon></ion-button>
         </ion-col>
 
   </ion-row>

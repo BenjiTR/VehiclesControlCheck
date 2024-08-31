@@ -74,7 +74,7 @@ export class UserTestService {
         "date": "2024-01-15",
         "type": "Flat tire",
         "km": "12000",
-        "cost": 75,
+        "cost": 75.30,
         "info": "Cambio de neumático en carretera.",
         "images": ["https://via.placeholder.com/150?text=Flat+tire"]
     },

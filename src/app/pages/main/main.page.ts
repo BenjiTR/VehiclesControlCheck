@@ -381,6 +381,9 @@ export class MainPage implements OnInit, OnDestroy {
   }
 
   matchesFilter(event: any, filter: string): boolean {
+    // Convertimos el filtro a minúsculas para la comparación
+    const lowerCaseFilter = filter.toLowerCase();
+
     for (const key in event) {
       if (event.hasOwnProperty(key) && key !== 'images') {
         let value;
@@ -391,13 +394,16 @@ export class MainPage implements OnInit, OnDestroy {
         } else {
           value = event[key].toString();
         }
-        if (value && value.includes(filter)) {
+
+        // Convertimos el valor a minúsculas para la comparación
+        if (value && value.toLowerCase().includes(lowerCaseFilter)) {
           return true;
         }
       }
     }
     return false;
   }
+
 
   toogleFiltering(){
     this.filtering = !this.filtering;
