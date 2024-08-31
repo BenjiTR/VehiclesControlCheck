@@ -49,7 +49,7 @@
 
     <ion-row>
       <ion-col class="ion-margin-start">
-        <ion-checkbox class="ion-padding-top ion-padding-bottom" [(ngModel)]="rememberSession" labelPlacement="end" translate="home.remember_session"></ion-checkbox>
+        <ion-checkbox class="ion-padding-top ion-padding-bottom" [(ngModel)]="rememberSession" (ionChange)="toogleAutoInit($event)" labelPlacement="end" translate="home.remember_session"></ion-checkbox>
       </ion-col>
       <ion-col class="ion-padding-start ion-padding-end ion-text-justify color-red" size="12">
         <p class="mp-clear">{{Error}}</p>

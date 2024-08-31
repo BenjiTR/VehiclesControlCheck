@@ -91,6 +91,11 @@ export class HomePage implements OnInit, OnDestroy{
     }
   }
 
+  toogleAutoInit(event:CustomEvent){
+    console.log(event.detail.checked);
+    localStorage.setItem('autoInitVcc',event.detail.checked);
+  }
+
   //CAMBIAR LENGUAJE
   changeLanguage(language:string){
     this._translation.language = language
@@ -133,6 +138,7 @@ export class HomePage implements OnInit, OnDestroy{
           // Signed in
           const user = userCredential;
           if(!user.emailVerified){
+            await this._loader.dismissLoader();
             //preguntamos y reenviamos el correo
             const verify = await this._alert.twoOptionsAlert(this.translate.instant('alert.email_no_verified'),this.translate.instant('alert.email_no_verified_text'),this.translate.instant('alert.resend'),this.translate.instant('alert.cancel'))
             if(verify){
@@ -144,7 +150,7 @@ export class HomePage implements OnInit, OnDestroy{
                 this.handleErrors(err.message);
               })
             }
-
+            await this._loader.dismissLoader();
           }else{
             this.loginExecute(user)
           }
