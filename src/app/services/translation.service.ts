@@ -17,7 +17,7 @@ export class TranslationConfigService {
     constructor(
         private translate: TranslateService,
     ){
-        this.language="";
+        this.language=localStorage.getItem('VccPreferLang')||"";
         this.deviceLanguage="";
         this.translate.addLangs(['fr', 'en', 'es']);
         registerLocaleData(localeEn);

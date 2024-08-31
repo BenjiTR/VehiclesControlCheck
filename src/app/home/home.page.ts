@@ -98,8 +98,9 @@ export class HomePage implements OnInit, OnDestroy{
 
   //CAMBIAR LENGUAJE
   changeLanguage(language:string){
-    this._translation.language = language
-    this.translate.use(language)
+    this._translation.language = language;
+    localStorage.setItem('VccPreferLang', language);
+    this.translate.use(language);
     this.language = language;
   }
 
