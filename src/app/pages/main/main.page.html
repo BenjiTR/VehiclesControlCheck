@@ -187,15 +187,12 @@
                                 </ion-item>
                               </ion-col>
 
-                              <ion-col class="ion-padding-start ion-padding-end" size="12">
+                              <ion-col class="ion-padding-start ion-padding-end ion-margin-bottom" size="12">
                                 <ion-item class="rounded-inputs">
                                   <ion-input label="{{'event.aditional_info' | translate}}" label-placement="floating" [readonly]="true" [(ngModel)]="event.info" type="text"></ion-input>
                                 </ion-item>
                               </ion-col>
 
-                              <ion-col *ngIf="event.images.length >=1" class="ion-padding-start ion-text-center ion-padding-end" size="12">
-                                <h2 translate="event.images"></h2>
-                              </ion-col>
 
                               <ion-col class="img" size="12" *ngFor="let image of event.images">
                                 <ion-img (click)="openModal(image)" src="{{image}}"></ion-img>
