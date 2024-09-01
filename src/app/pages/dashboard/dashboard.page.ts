@@ -172,7 +172,7 @@ export class DashboardPage implements OnInit, OnDestroy {
     if (isPossible){
       await Share.share({
         text: this.translate.instant('share.check_out_this_amazing_app'),
-        url: 'http://ionicframework.com/',
+        url: 'https://play.google.com/store/apps/details?id=com.benjamintr.vehiclescontrol',
       });
     }
 
