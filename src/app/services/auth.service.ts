@@ -16,6 +16,10 @@ export class AuthService {
     private _translation: TranslationConfigService,
     private platform: Platform,
   ) {
+   this.setAuthLanguage()
+  }
+
+  setAuthLanguage(){
     FirebaseAuthentication.setLanguageCode({
       languageCode: this._translation.getLanguage()
     });

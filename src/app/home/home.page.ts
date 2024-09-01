@@ -102,6 +102,7 @@ export class HomePage implements OnInit, OnDestroy{
     localStorage.setItem('VccPreferLang', language);
     this.translate.use(language);
     this.language = language;
+    this._authService.setAuthLanguage();
   }
 
   //TOOGLE PASSWORD

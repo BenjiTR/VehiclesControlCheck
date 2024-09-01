@@ -152,14 +152,14 @@
     "user_name": "Nom d'utilisateur",
     "main_text": "Vous n'avez pas encore de véhicule enregistré. Créez le vôtre !",
     "vehicle": "Véhicule",
-    "event": "Événement",
+    "event": "Évènement",
     "recordatory": "Rappel",
     "data_of_vehicle": "Données du véhicule",
-    "events": "Événements",
+    "events": "Évènements",
     "reminders": "Rappels",
     "no_events": "Pas d'événements",
     "no_reminders": "Pas de rappels",
-    "filter_text": "rechercher par mot-clé ou date..."
+    "filter_text": "rechercher Évènements par mot-clé ou date..."
   },
   "newvehicle": {
     "create_a_vehicle": "Créer un véhicule",
