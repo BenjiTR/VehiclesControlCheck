@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Vehicles Control</string>
-    <string name="title_activity_main">Vehicles Control</string>
+    <string name="app_name">Control de Vehículos</string>
+    <string name="title_activity_main">Control de Vehículos</string>
     <string name="package_name">com.benjamintr.vehiclescontrol</string>
     <string name="custom_url_scheme">com.benjamintr.vehiclescontrol</string>
     <string name="server_client_id">329432960985-0f0oj2qbh3gp0mbgr0k32hmi0b6gbi06.apps.googleusercontent.com</string>

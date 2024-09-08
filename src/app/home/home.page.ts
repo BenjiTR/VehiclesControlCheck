@@ -71,7 +71,9 @@ export class HomePage implements OnInit, OnDestroy{
     this.autoinitHandler();
     await this.checkNotifications();
     this._admobService.initialize();
-    await this._admobService.showConsent();
+    if((await Network.getStatus()).connected === true){
+      await this._admobService.showConsent();
+    }
     await this._admobService.showBanner();
     await this._admobService.hideBanner();
     await this._file.checkPermission();
