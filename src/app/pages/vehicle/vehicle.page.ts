@@ -46,6 +46,7 @@ export class VehiclePage implements OnInit {
   public vehiclesArray:Vehicle[] = [];
   public vehicleToEdit:Vehicle = new Vehicle;
   public vehicleToEditId:string = "";
+  public notes:string = "";
 
   constructor(
     private translate:TranslateService,
@@ -95,6 +96,7 @@ export class VehiclePage implements OnInit {
     this.insurancePolicy = this.vehicleToEdit.insurancePolicy
     this.insuranceRenewalDate = this.vehicleToEdit.insuranceRenewalDate
     this.roadsideAssistanceNumber = this.vehicleToEdit.roadsideAssistanceNumber
+    this.notes = this.vehicleToEdit.notes
   }
 
   async cancelCreateVehicle(){
@@ -156,6 +158,7 @@ export class VehiclePage implements OnInit {
       insurancePolicy: this.insurancePolicy ,
       insuranceRenewalDate: this.insuranceRenewalDate ,
       roadsideAssistanceNumber: this.roadsideAssistanceNumber ,
+      notes: this.notes,
       userId: this.user.id,
       id:hash
     }

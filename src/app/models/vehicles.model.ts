@@ -9,6 +9,7 @@ export class Vehicle{
   insurancePolicy: string="";
   insuranceRenewalDate: string="";
   roadsideAssistanceNumber: string="";
+  notes:string="";
   userId:string="";
   id:string="";
 }

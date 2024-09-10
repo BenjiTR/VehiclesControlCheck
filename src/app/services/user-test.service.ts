@@ -34,6 +34,7 @@ export class UserTestService {
       insurancePolicy: "POL123456789",
       insuranceRenewalDate: "2024-03-15",
       roadsideAssistanceNumber: "18001234567",
+      notes:"",
       userId: "00000000000000000001",
       id: "veh123"
     },
@@ -48,6 +49,7 @@ export class UserTestService {
       insurancePolicy: "POL987654321",
       insuranceRenewalDate: "2023-07-22",
       roadsideAssistanceNumber: "18007654321",
+      notes:"",
       userId: "00000000000000000001",
       id: "veh456"
     },
@@ -62,6 +64,7 @@ export class UserTestService {
       insurancePolicy: "POL112233445",
       insuranceRenewalDate: "2023-10-10",
       roadsideAssistanceNumber: "18009876543",
+      notes:"",
       userId: "00000000000000000001",
       id: "veh789"
     }

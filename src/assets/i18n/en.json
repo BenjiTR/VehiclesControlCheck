@@ -173,7 +173,8 @@
     "insurance_policy": "Insurance Policy",
     "insurance_renewal_date": "Insurance Renewal Date",
     "roadside_assistance_number": "Roadside Assistance Number",
-    "edit_vehicle": "Edit Vehicle"
+    "edit_vehicle": "Edit Vehicle",
+    "notes": "Notes"
   },
   "dashboard": {
     "user_data": "User Data",

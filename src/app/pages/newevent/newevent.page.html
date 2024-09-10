@@ -42,7 +42,7 @@
 
         <ion-col class="ion-padding-start ion-padding-end" size="12">
           <ion-item class="rounded-inputs">
-            <ion-input [(ngModel)]="info" type="text" label="{{'event.aditional_info' | translate}}" label-placement="floating"></ion-input>
+            <ion-textarea auto-grow="true" label="{{'event.aditional_info' | translate}}" label-placement="floating" [(ngModel)]="info" type="text" ></ion-textarea>
           </ion-item>
         </ion-col>
 
@@ -60,7 +60,7 @@
           <ion-button (click)="cancelCreateEvent()" color="danger"><ion-icon size="large" src="../../../assets/icons/arrow-back-outline.svg"></ion-icon></ion-button>
         </ion-col>
         <ion-col class="ion-margin-top ion-margin-bottom ion-text-center" size="6">
-          <ion-button color="success" (click)="createEvent()"><ion-icon size="large" src="../../../assets/icons/checkmark-outline.svg"></ion-icon></ion-button>
+          <ion-button color="nmgreen" (click)="createEvent()"><ion-icon size="large" src="../../../assets/icons/checkmark-outline.svg"></ion-icon></ion-button>
         </ion-col>
 
   </ion-row>

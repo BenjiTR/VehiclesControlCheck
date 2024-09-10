@@ -119,20 +119,27 @@
                           </ion-item>
                         </ion-col>
 
-                        <ion-col class="ion-padding-start ion-padding-end" size="10">
+                        <ion-col class="ion-padding-start ion-padding-end" size="12">
                           <ion-item class="rounded-inputs">
-                            <ion-input label="{{ 'newvehicle.roadside_assistance_number' | translate }}" label-placement="floating" [readonly]="true" [(ngModel)]="vehicle.roadsideAssistanceNumber" type="text"></ion-input>
+                            <ion-input label="{{ 'newvehicle.roadside_assistance_number' | translate }}" label-placement="floating" [readonly]="true" [(ngModel)]="vehicle.roadsideAssistanceNumber" type="text">
+                              <ion-button slot="end" (click)="makeCall(vehicle.roadsideAssistanceNumber)" expand="block" fill="shape" shape="round" aria-label="Call asistence">
+                                <ion-icon color="nmgreen" class="call-icon" src="../../../assets/icons/call-outline.svg" ></ion-icon>
+                              </ion-button>
+                            </ion-input>
                           </ion-item>
                         </ion-col>
-                        <ion-col class="ion-text-center ion-align-items-center flex" size="2">
-                          <ion-icon (click)="makeCall(vehicle.roadsideAssistanceNumber)" class="call-icon" src="../../../assets/icons/call-outline.svg" ></ion-icon>
+
+                        <ion-col class="ion-padding-start ion-padding-end ion-margin-bottom" size="12">
+                          <ion-item class="rounded-inputs">
+                            <ion-textarea auto-grow="true" label="{{'newvehicle.notes' | translate}}" label-placement="floating" [readonly]="true" [(ngModel)]="vehicle.notes" type="text"></ion-textarea>
+                          </ion-item>
                         </ion-col>
 
                         <ion-col (click)="deleteVehicle(vehicle)" class="ion-margin-top ion-margin-bottom ion-text-center" size="6">
                           <ion-button color="danger"><ion-icon  size="large" src="../../../assets/icons/trash-outline.svg"></ion-icon></ion-button>
                         </ion-col>
                         <ion-col (click)="editVehicle(vehicle.id)" class="ion-margin-top ion-margin-bottom ion-text-center" size="6">
-                          <ion-button color="success"><ion-icon size="large" src="../../../assets/icons/pencil-outline.svg"></ion-icon></ion-button>
+                          <ion-button color="nmgreen"><ion-icon size="large" src="../../../assets/icons/pencil-outline.svg"></ion-icon></ion-button>
                         </ion-col>
 
 
@@ -189,7 +196,7 @@
 
                               <ion-col class="ion-padding-start ion-padding-end ion-margin-bottom" size="12">
                                 <ion-item class="rounded-inputs">
-                                  <ion-input label="{{'event.aditional_info' | translate}}" label-placement="floating" [readonly]="true" [(ngModel)]="event.info" type="text"></ion-input>
+                                  <ion-textarea auto-grow="true" label="{{'event.aditional_info' | translate}}" label-placement="floating" [readonly]="true" [(ngModel)]="event.info" type="text"></ion-textarea>
                                 </ion-item>
                               </ion-col>
 
@@ -203,7 +210,7 @@
                                 <ion-button color="danger"><ion-icon size="large" src="../../../assets/icons/trash-outline.svg"></ion-icon></ion-button>
                               </ion-col>
                               <ion-col (click)="editEvent(event.id)" class="ion-margin-top ion-margin-bottom ion-text-center" size="6">
-                                <ion-button color="success"><ion-icon  size="large" src="../../../assets/icons/pencil-outline.svg"></ion-icon></ion-button>
+                                <ion-button color="nmgreen"><ion-icon  size="large" src="../../../assets/icons/pencil-outline.svg"></ion-icon></ion-button>
                               </ion-col>
                             </ion-row>
                           </div>
@@ -264,7 +271,7 @@
                                 <ion-button color="danger"><ion-icon size="large" src="../../../assets/icons/trash-outline.svg"></ion-icon></ion-button>
                               </ion-col>
                               <ion-col (click)="editReminder(reminder.id)" class="ion-margin-top ion-margin-bottom ion-text-center" size="6">
-                                <ion-button color="success"><ion-icon size="large" src="../../../assets/icons/pencil-outline.svg"></ion-icon></ion-button>
+                                <ion-button color="nmgreen"><ion-icon size="large" src="../../../assets/icons/pencil-outline.svg"></ion-icon></ion-button>
                               </ion-col>
                             </ion-row>
 

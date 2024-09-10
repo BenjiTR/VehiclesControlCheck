@@ -173,7 +173,8 @@
       "insurance_policy": "Póliza de seguro",
       "insurance_renewal_date": "Fecha de renovación del seguro",
       "roadside_assistance_number": "Número de asistencia en carretera",
-      "edit_vehicle":"Editar vehículo"
+      "edit_vehicle":"Editar vehículo",
+      "notes":"Notas"
   },
   "dashboard":{
       "user_data":"Datos de usuario",
