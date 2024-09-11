@@ -6,6 +6,8 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class EventTypes {
   eventTypes: any[] = [];
+  types: string[] = [];
+
 
   constructor(private translate: TranslateService) {
     this.initializeEventTypes();
@@ -22,9 +24,22 @@ export class EventTypes {
       { name: 'Others', string: this.translate.instant('eventypes.others') }
 
     ];
+    this.types = [
+      'Flat tire',
+      'Repair',
+      'Inspection',
+      'Refueling',
+      'Maintenance',
+      'Accident',
+      'Others'
+
+    ];
   }
 
   getEventTypes(): any[] {
     return this.eventTypes;
+  }
+  getTypes():string[] {
+    return this.types;
   }
 }

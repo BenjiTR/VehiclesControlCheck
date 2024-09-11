@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { trigger, transition, style, animate, keyframes } from '@angular/animations';
+import { trigger, transition, style, animate, keyframes, query } from '@angular/animations';
 
 
 @Injectable({
@@ -76,3 +76,34 @@ export const SecondaryAnimation = trigger('secondary', [
         ])),
       ]),
     ]);
+
+    export const slideInOutAnimation = trigger('slideInOut', [
+      transition(':enter', [
+        style({ transform: 'translateX(-100%)', opacity: 0 }), // Inicia fuera de la vista (a la izquierda)
+        animate('300ms ease-in',
+          style({ transform: 'translateX(0)', opacity: 1 }) // Se desplaza hacia su posición normal
+        )
+      ]),
+      transition(':leave', [
+        animate('300ms ease-out',
+          style({ transform: 'translateX(-100%)', opacity: 0 }) // Se desplaza hacia la izquierda y desaparece
+        )
+      ])
+    ]);
+
+    export const SlideUpDownAnimation = trigger('slideUpDown', [
+      transition(':enter', [
+        style({ transform: 'translateY(-100%)', opacity: 0 }), // Empieza desplazado hacia arriba
+        animate('300ms ease-in', keyframes([
+          style({ transform: 'translateY(-100%)', opacity: 0, offset: 0 }), // Fuera de la vista al inicio
+          style({ transform: 'translateY(0)', opacity: 1, offset: 1 }) // Desplaza hacia su posición original
+        ]))
+      ]),
+      transition(':leave', [
+        animate('300ms ease-out', keyframes([
+          style({ transform: 'translateY(0)', opacity: 1, offset: 0 }), // Posición original
+          style({ transform: 'translateY(-100%)', opacity: 0, offset: 1 }) // Desplaza hacia arriba y desaparece
+        ]))
+      ])
+    ]);
+

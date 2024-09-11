@@ -17,13 +17,14 @@ import { ScreenOrientation } from '@capacitor/screen-orientation';
 import { ScreenOrientationService } from '../../services/orientation.service'
 import { DataService } from 'src/app/services/data.service';
 import { FileSystemService } from 'src/app/services/filesystem.service';
+import { FilterService } from 'src/app/services/filter.service';
 
 @Component({
   selector: 'app-data',
   templateUrl: './data.page.html',
   styleUrls: ['./data.page.scss'],
   standalone: true,
-  providers:[EventTypes, DatePipe],
+  providers:[EventTypes, DatePipe, FilterService],
   imports: [IonAccordionGroup, IonAccordion, IonInput, RouterModule, IonItemDivider, IonSelect, IonSelectOption, IonItem, CommonModule, FormsModule, IonDatetime, IonModal, IonDatetimeButton, TranslateModule, IonIcon, IonButton, IonLabel, IonCol, IonRow, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
 })
 export class DataPage implements OnInit {
@@ -52,17 +53,10 @@ export class DataPage implements OnInit {
     private datePipe: DatePipe,
     private screenOrientationService: ScreenOrientationService,
     private _data:DataService,
-    private _file:FileSystemService
+    private _file:FileSystemService,
+    private _filter:FilterService
   ) {
-    this.types =  [
-      "Flat tire",
-      "Repair",
-      "Inspection",
-      "Refueling",
-      "Maintenance",
-      "Accident",
-      "Others"
-    ]
+    this.types = this.etypes.getTypes();
     this.eventTypes = etypes.getEventTypes();
     this.screenOrientationService.orientationChange$.subscribe(orientation => {
       if(orientation.type === "landscape-primary" || orientation.type === "landscape-secondary"){
@@ -88,111 +82,6 @@ export class DataPage implements OnInit {
   }
   ionViewWillLeave() {
     //ScreenOrientation.lock({ orientation: 'portrait' });
-  }
-
-  async generateData(): Promise<void> {
-    // Asegúrate de que `startDate` y `endDate` sean Date y no estén en formato incorrecto
-    const startDate = new Date(this.startDate);
-    const endDate = new Date(this.endDate);
-
-    // Ajustar la fecha de inicio al primer día del mes
-    startDate.setDate(1);
-    startDate.setHours(0, 0, 0, 0);
-
-    // Ajustar la fecha de fin al último día del mes
-    endDate.setMonth(endDate.getMonth() + 1);
-    endDate.setDate(0);
-    endDate.setHours(23, 59, 59, 999);
-
-    const startTimestamp = startDate.getTime();
-    const endTimestamp = endDate.getTime();
-
-    // Filtrar el array de eventos
-    this.filteredArray = this.eventsArray.filter(event => {
-      const eventDate = new Date(event.date).getTime();
-      const eventType = event.type;
-
-      // Comprobar si la fecha del evento está dentro del rango
-      const isDateInRange = eventDate >= startTimestamp && eventDate <= endTimestamp;
-
-      // Comprobar si el tipo de evento está en el array de tipos permitidos
-      const isTypeValid = this.types.includes(eventType);
-
-    // Comprobar si el evento coincide con el filtro de texto
-    const isTextMatch = this.matchesFilter(event, this.filter);
-
-    // Retornar true solo si todas las condiciones son válidas
-    return isDateInRange && isTypeValid && isTextMatch;
-
-    });
-
-    //(this.filteredArray);
-    return;
-  }
-
-
-    //CAMBIAR FECHAS
-  changeDate(property:String, event:CustomEvent){
-    const newValue = new Date(event.detail.value);
-    if (property === 'startDate') {
-      this.startDate = newValue;
-    } else if (property === 'endDate') {
-      this.endDate = newValue;
-    }
-  }
-
-  //CALCULAR FECHA MAS TEMPRANA Y MAS TARDÍA DEL ARRAY
-  async calculateDates():Promise<void>{
-
-    // Inicializa las fechas con el primer elemento del array
-    let earliestDate = new Date(this.eventsArray[0].date);
-    let latestDate = new Date(this.eventsArray[0].date);
-
-
-  // Recorre el array para encontrar la fecha más temprana y la más tardía
-  this.eventsArray.forEach(event => {
-    const eventDate = new Date(event.date);
-
-    if (eventDate < earliestDate) {
-      earliestDate = eventDate;
-    }
-
-    if (eventDate > latestDate) {
-      latestDate = eventDate;
-    }
-  });
-
-  // Asigna las fechas encontradas a las propiedades startDate y endDate
-  this.startDate = earliestDate;
-  this.endDate = latestDate;
-
-  return;
-
-  }
-
-  //COMPROBAR QUE LA FECHA DE INICIO NO ES MAYOR QUE LA DE FINAL
-  correctDates(): boolean {
-    // Obtener el año y el mes para la fecha de inicio
-    const startYear = this.startDate.getFullYear();
-    const startMonth = this.startDate.getMonth();
-
-    // Obtener el año y el mes para la fecha de fin
-    const endYear = this.endDate.getFullYear();
-    const endMonth = this.endDate.getMonth();
-
-    // Comparar los años primero
-    if (startYear < endYear) {
-      return true;
-    } else if (startYear > endYear) {
-      return false;
-    }
-
-    // Si los años son iguales, comparar los meses
-    return startMonth <= endMonth;
-  }
-
-  calculatePadding(){
-    return this._paddingService.calculatePadding();
   }
 
 
@@ -506,43 +395,6 @@ export class DataPage implements OnInit {
   }
 
 
-
-
-  eraseFilter(){
-    this.filter = "";
-    const fakeEvent = { detail: { value: '' } };
-  }
-
-  getMatchesNumber(vehicleId:string){
-    return this.filteredArray.filter(event=>event.vehicleId===vehicleId).length;
-  }
-
-  matchesFilter(event: any, filter: string): boolean {
-    for (const key in event) {
-      if (event.hasOwnProperty(key) && key !== 'images') {
-        let value;
-        if (key === 'date') {
-          value = this.datePipe.transform(event[key], 'dd/MM/yyyy');
-        } else if (key === 'type') {
-          value = this.getTranslatedType(event[key]);
-        } else {
-          value = event[key].toString();
-        }
-        if (value && value.includes(filter)) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-    //TRADUCCIÓN DE TIPOS
-    getTranslatedType(type: string): string {
-      const eventType = this.eventTypes.find((eventType: { name: string; }) => eventType.name === type);
-      return eventType ? eventType.string : type;
-    }
-
-
   //TOTALES
   // Calcular el total de eventos para un vehículo específico
   totalEvents(vehicle: Vehicle): number {
@@ -574,6 +426,51 @@ export class DataPage implements OnInit {
       await this._alert.createAlert(this.translate.instant("error.an_error_ocurred"), this.translate.instant("error.file_notcreated_text_csv"))
     })
   }
+
+
+  //FILTROS
+  //BORRAR FILTROS
+  eraseFilter(){
+    this.filter = "";
+    const fakeEvent = { detail: { value: '' } };
+  }
+
+  //FILTRO POR PALABRAS O FECHA ESCRITA
+  matchesFilter(event: any, filter: string): boolean {
+    return this._filter.matchesFilter(event, filter)
+  }
+
+  //DEVUELVE EL ARRAY FILTRADO
+  async generateData(): Promise<void> {
+    this.filteredArray = await this._filter.generateData(this.startDate, this.endDate, this.eventsArray, this.filter, this.types);
+  }
+
+
+    //CAMBIAR FECHAS
+  changeDate(property:String, event:CustomEvent){
+    const newValue = new Date(event.detail.value);
+    if (property === 'startDate') {
+      this.startDate = newValue;
+    } else if (property === 'endDate') {
+      this.endDate = newValue;
+    }
+  }
+
+  async calculateDates():Promise<void>{
+    this.startDate = await this._filter.getFirstDate(this.eventsArray);
+    this.endDate = await this._filter.getLastDate(this.eventsArray);
+    return;
+    }
+
+  //COMPROBAR QUE LA FECHA DE INICIO NO ES MAYOR QUE LA DE FINAL
+  correctDates(): boolean {
+    return this._filter.correctDates(this.startDate,this.endDate)
+  }
+
+  calculatePadding(){
+    return this._paddingService.calculatePadding();
+  }
+
 
 
 }

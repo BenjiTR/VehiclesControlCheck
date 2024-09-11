@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonLabel, IonButton, IonCheckbox, IonCol, IonFooter, IonIcon, IonImg, IonInput, IonItem, IonRow, IonAvatar, IonSegmentButton, IonSegment, NavController } from '@ionic/angular/standalone';
+import { IonTextarea, IonContent, IonHeader, IonTitle, IonToolbar, IonLabel, IonButton, IonCheckbox, IonCol, IonFooter, IonIcon, IonImg, IonInput, IonItem, IonRow, IonAvatar, IonSegmentButton, IonSegment, NavController } from '@ionic/angular/standalone';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { User } from 'src/app/models/user.model';
@@ -24,7 +24,7 @@ import { Network } from '@capacitor/network';
   templateUrl: './vehicle.page.html',
   styleUrls: ['./vehicle.page.scss'],
   standalone: true,
-  imports: [IonSegment, IonSegmentButton, IonAvatar, RouterModule, CommonModule, TranslateModule, FormsModule, IonHeader, IonToolbar, IonTitle, IonContent, IonRow, IonCol, IonImg, IonItem, IonInput, IonIcon, IonFooter, IonButton, IonCheckbox, IonLabel],
+  imports: [IonTextarea, IonSegment, IonSegmentButton, IonAvatar, RouterModule, CommonModule, TranslateModule, FormsModule, IonHeader, IonToolbar, IonTitle, IonContent, IonRow, IonCol, IonImg, IonItem, IonInput, IonIcon, IonFooter, IonButton, IonCheckbox, IonLabel],
   animations: [ MainAnimation, RoadAnimation, SecondaryAnimation ]
 })
 export class VehiclePage implements OnInit {

@@ -75,6 +75,13 @@
           </ion-item>
         </ion-col>
 
+
+        <ion-col class="ion-padding-start ion-padding-end ion-margin-bottom" size="12">
+          <ion-item class="rounded-inputs">
+            <ion-textarea auto-grow="true" label="{{'newvehicle.notes' | translate}}" label-placement="floating" [(ngModel)]="notes" type="text"></ion-textarea>
+          </ion-item>
+        </ion-col>
+
         <ion-col (click)="cancelCreateVehicle()" class="ion-margin-top ion-margin-bottom ion-text-center" size="6">
           <ion-button color="danger"><ion-icon size="large" src="../../../assets/icons/arrow-back-outline.svg"></ion-icon></ion-button>
         </ion-col>

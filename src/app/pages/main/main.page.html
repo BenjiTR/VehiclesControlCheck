@@ -30,10 +30,59 @@
           <ion-button (click)="toogleFiltering()" *ngIf="!filtering" color="warning"><ion-icon src="../../../assets/icons/search-outline.svg"></ion-icon></ion-button>
           <ion-button (click)="eraseFilter()" *ngIf="filtering" color="warning"><ion-icon src="../../../assets/icons/close-outline.svg"></ion-icon></ion-button>
         </ion-col>
-        <ion-col size="10">
-          <ion-item *ngIf="filtering" [@growShrink] class="rounded-inputs ion-margin-end">
-            <ion-input (ionInput)="changefilter($event)" [(ngModel)]="filter"  placeholder="{{'mainpage.filter_text'|translate}}"></ion-input>
-          </ion-item>
+        <ion-col size="12">
+
+          <ion-row class="ion-align-items-center" *ngIf="filtering" [@slideUpDown]>
+
+            <ion-col size="12">
+              <ion-item class="rounded-inputs ">
+                <ion-input [clearInput]="true" (ionInput)="changefilter($event)" [(ngModel)]="filter"  placeholder="{{'mainpage.filter_text'|translate}}"></ion-input>
+              </ion-item>
+            </ion-col>
+
+            <ion-col size="5.5">
+              <ion-datetime-button class="datetime-bk" datetime="datetime"></ion-datetime-button>
+              <ion-modal [keepContentsMounted]="true" id="modalStart">
+                <ng-template>
+                  <ion-datetime
+                    presentation="month-year"
+                    id="datetime"
+                    [value]="startDate.toISOString()"
+                    (ionChange)="changeDate('startDate', $event)">
+                  </ion-datetime>
+                </ng-template>
+              </ion-modal>
+            </ion-col>
+
+            <ion-col class="ion-text-center center" size="1">
+              <ion-icon class="swap" *ngIf="correctDates()" src="../../../assets/icons/swap-horizontal-outline.svg"></ion-icon>
+              <ion-icon class="error" *ngIf="!correctDates()" src="../../../assets/icons/alert-outline.svg"></ion-icon>
+            </ion-col>
+
+            <ion-col size="5.5">
+              <ion-datetime-button class="datetime-bk" datetime="datetime2"></ion-datetime-button>
+
+              <ion-modal [keepContentsMounted]="true" id="modalEnd">
+                <ng-template>
+                  <ion-datetime
+                    presentation="month-year"
+                    id="datetime2"
+                    [value]="endDate.toISOString()"
+                    (ionChange)="changeDate('endDate', $event)">
+                  </ion-datetime>
+                </ng-template>
+              </ion-modal>
+            </ion-col>
+
+            <ion-col size="12">
+              <ion-item class="rounded-inputs">
+                  <ion-select (ionChange)="changeTypesFilter($event.detail.value)" [(ngModel)]="types" label="{{'event.select_type'|translate}}" label-placement="floating"  [multiple]="true">
+                    <ion-select-option *ngFor="let type of eventTypes" [value]="type.name">{{type.string}}</ion-select-option>
+                  </ion-select>
+              </ion-item>
+            </ion-col>
+
+          </ion-row>
         </ion-col>
       </ion-row>
 
@@ -46,7 +95,7 @@
                 <ion-icon *ngIf="vehicle.typeOfVehicle === '2W'" slot="start" src="../../../assets/icons/bicycle-outline.svg"></ion-icon>
                 <ion-icon *ngIf="vehicle.typeOfVehicle === '4W'" slot="start" src="../../../assets/icons/car-sport-outline.svg"></ion-icon>
                 <ion-label>{{vehicle.brandOrModel}}</ion-label>
-                <ion-badge *ngIf="filter" class="ion-margin-end" slot="end">{{ getMatchesNumber(vehicle.id) }}</ion-badge>
+                <ion-badge *ngIf="filtering" class="ion-margin-end" slot="end">{{ getMatchesNumber(vehicle.id) }}</ion-badge>
               </ion-item>
               <div slot="content">
                 <!--DATOS DEL VEHÍCULO-->
@@ -121,10 +170,8 @@
 
                         <ion-col class="ion-padding-start ion-padding-end" size="12">
                           <ion-item class="rounded-inputs">
-                            <ion-input label="{{ 'newvehicle.roadside_assistance_number' | translate }}" label-placement="floating" [readonly]="true" [(ngModel)]="vehicle.roadsideAssistanceNumber" type="text">
-                              <ion-button slot="end" (click)="makeCall(vehicle.roadsideAssistanceNumber)" expand="block" fill="shape" shape="round" aria-label="Call asistence">
-                                <ion-icon color="nmgreen" class="call-icon" src="../../../assets/icons/call-outline.svg" ></ion-icon>
-                              </ion-button>
+                            <ion-input label="{{ 'newvehicle.roadside_assistance_number' | translate }}" label-placement="stacked" [readonly]="true" [(ngModel)]="vehicle.roadsideAssistanceNumber" type="text">
+                                <ion-icon slot="end" color="nmgreen" class="call-icon" src="../../../assets/icons/call-outline.svg" ></ion-icon>
                             </ion-input>
                           </ion-item>
                         </ion-col>

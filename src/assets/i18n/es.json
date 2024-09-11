@@ -202,7 +202,7 @@
     "create_event":"Crear evento",
     "edit_event":"Editar evento",
     "date":"Fecha",
-    "type":"Tipo",
+    "select_type":"Seleccione tipo",
     "km":"Kilómetros",
     "cost":"Coste",
     "aditional_info":"Información adicional",

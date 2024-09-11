@@ -12,5 +12,28 @@
 }
 .call-icon{
   zoom: 2;
- 
+  margin-top: -5px;
+}
+.center{
+  align-items: center;
+  display: flex;
+}
+ion-datetime-button::part(native) {
+  background: #ffffff;
+}
+.swap{
+  zoom: 1.5;
+  color: #2f939e;
+}
+.error{
+  zoom: 1.5;
+  color: red;
+}
+ion-datetime-button::part(native){
+  height: 4rem;
+  width: 100%;
+}
+.center{
+  display: flex;
+  justify-content: center;
 }

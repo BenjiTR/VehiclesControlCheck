@@ -18,13 +18,8 @@
         <ion-label class="ion-text-center">{{'data.filters'|translate}}</ion-label>
       </ion-item>
       <div class="ion-padding gray" slot="content">
-        <ion-row class="ion-margin-top">
-          <ion-col class="ion-text-center"  size="12">
-            <ion-label color="primary"><h1>{{'data.select_dates'|translate}}</h1></ion-label>
-          </ion-col>
-        </ion-row>
 
-        <ion-row class="ion-align-items-center ion-justify-content-center">
+        <ion-row class="ion-align-items-center">
           <ion-col size="5.5">
             <ion-datetime-button class="datetime-bk" datetime="datetime"></ion-datetime-button>
 
@@ -40,7 +35,7 @@
             </ion-modal>
           </ion-col>
 
-          <ion-col class="ion-text-center" size="1">
+          <ion-col class="ion-text-center center" size="1">
             <ion-icon class="swap" *ngIf="correctDates()" src="../../../assets/icons/swap-horizontal-outline.svg"></ion-icon>
             <ion-icon class="error" *ngIf="!correctDates()" src="../../../assets/icons/alert-outline.svg"></ion-icon>
           </ion-col>
@@ -62,12 +57,9 @@
         </ion-row>
 
         <ion-row class="ion-justify-content-center">
-          <ion-col class="ion-text-center"  size="12">
-            <ion-label color="primary"><h1>{{'data.select_types'|translate}}</h1></ion-label>
-          </ion-col>
-          <ion-col class="ion-padding-start ion-padding-end" size="11">
+          <ion-col size="12">
             <ion-item class="rounded-inputs">
-                <ion-select [(ngModel)]="types" label="{{'event.type'|translate}}" label-placement="floating"  [multiple]="true">
+                <ion-select [(ngModel)]="types" label="{{'event.select_type'|translate}}" label-placement="floating"  [multiple]="true">
                   <ion-select-option *ngFor="let type of eventTypes" [value]="type.name">{{type.string}}</ion-select-option>
                 </ion-select>
             </ion-item>
@@ -75,15 +67,9 @@
         </ion-row>
 
         <ion-row class="ion-align-items-center">
-          <ion-col class="ion-text-center"  size="12">
-            <ion-label color="primary"><h1>{{'data.word_or_date'|translate}}</h1></ion-label>
-          </ion-col>
-          <ion-col size="2">
-            <ion-button (click)="eraseFilter()" color="warning"><ion-icon src="../../../assets/icons/close-outline.svg"></ion-icon></ion-button>
-          </ion-col>
-          <ion-col size="10">
-            <ion-item class="rounded-inputs ion-margin-end">
-              <ion-input [(ngModel)]="filter"  placeholder="{{'mainpage.filter_text'|translate}}"></ion-input>
+          <ion-col size="12">
+            <ion-item class="rounded-inputs">
+              <ion-input [clearInput]="true" [(ngModel)]="filter" placeholder="{{'mainpage.filter_text'|translate}}"></ion-input>
             </ion-item>
           </ion-col>
         </ion-row>

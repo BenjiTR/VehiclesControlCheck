@@ -21,3 +21,11 @@ ion-datetime-button::part(native) {
 .black{
   color:black;
 }
+ion-datetime-button::part(native){
+  height: 4rem;
+  width: 100%;
+}
+.center{
+  display: flex;
+  justify-content: center;
+}

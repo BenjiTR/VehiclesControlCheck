@@ -1,7 +1,7 @@
 import { Component, OnInit, DoCheck, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Platform, IonTextarea, IonAccordion, IonAccordionGroup, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonMenu, IonMenuButton, IonRouterOutlet, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar, MenuController, ModalController, NavController, IonDatetime, IonFab, IonFabList, IonFabButton, IonBadge, IonText } from '@ionic/angular/standalone';
+import { Platform, IonTextarea, IonAccordion, IonAccordionGroup, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonMenu, IonMenuButton, IonRouterOutlet, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar, MenuController, ModalController, NavController, IonDatetime, IonFab, IonFabList, IonFabButton, IonBadge, IonText, IonDatetimeButton, IonModal } from '@ionic/angular/standalone';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { UserdataviewPage } from '../userdataview/userdataview.page';
@@ -14,7 +14,7 @@ import { SessionService } from 'src/app/services/session.service';
 import { StorageService } from 'src/app/services/storage.service';
 import { TranslationConfigService } from 'src/app/services/translation.service';
 import { storageConstants } from 'src/app/const/storage';
-import { GrowShrinkAnimation, MainAnimation, RoadAnimation, SecondaryAnimation } from 'src/app/services/animation.service';
+import { GrowShrinkAnimation, MainAnimation, RoadAnimation, SecondaryAnimation, SlideUpDownAnimation  } from 'src/app/services/animation.service';
 import { Event } from '../../models/event.model'
 import { EventTypes } from 'src/app/const/eventTypes';
 import { ImgmodalPage } from '../imgmodal/imgmodal.page';
@@ -29,15 +29,17 @@ import { Subscription } from 'rxjs';
 import { Network } from '@capacitor/network';
 import { DataService } from 'src/app/services/data.service';
 import { CryptoService } from 'src/app/services/crypto.services';
+import { FilterService } from 'src/app/services/filter.service';
+
 
 @Component({
   selector: 'app-main',
   templateUrl: './main.page.html',
   styleUrls: ['./main.page.scss'],
   standalone: true,
-  imports: [IonText, IonBadge, IonFabButton, IonFabList, IonFab, IonTextarea, IonDatetime, IonSelect, IonSelectOption, IonRouterOutlet, IonAccordionGroup, IonAccordion, UserdataviewPage, IonInput, IonItem, IonLabel, TranslateModule, RouterModule, IonMenu, IonIcon, IonButtons, IonMenuButton, IonButton, IonImg, IonGrid, IonCol ,IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonRow, IonGrid],
-  animations: [ MainAnimation, RoadAnimation, SecondaryAnimation, GrowShrinkAnimation ],
-  providers:[EventTypes, DatePipe]
+  imports: [IonModal, IonDatetimeButton, IonText, IonBadge, IonFabButton, IonFabList, IonFab, IonTextarea, IonDatetime, IonSelect, IonSelectOption, IonRouterOutlet, IonAccordionGroup, IonAccordion, UserdataviewPage, IonInput, IonItem, IonLabel, TranslateModule, RouterModule, IonMenu, IonIcon, IonButtons, IonMenuButton, IonButton, IonImg, IonGrid, IonCol ,IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonRow, IonGrid],
+  animations: [ MainAnimation, RoadAnimation, SecondaryAnimation, GrowShrinkAnimation, SlideUpDownAnimation,  ],
+  providers:[EventTypes, DatePipe, FilterService]
 })
 export class MainPage implements OnInit, OnDestroy {
 
@@ -59,6 +61,10 @@ export class MainPage implements OnInit, OnDestroy {
 
   private downloadingSubscription: Subscription;
 
+  public startDate:Date = new Date;
+  public endDate:Date = new Date;
+  public types:string[] = [];
+
   constructor(
     private translate:TranslateService,
     private _translation:TranslationConfigService,
@@ -79,7 +85,8 @@ export class MainPage implements OnInit, OnDestroy {
     private navCtr:NavController,
     private _data:DataService,
     private _crypto:CryptoService,
-    private _platform:Platform
+    private _platform:Platform,
+    private _filter:FilterService
   ) {
     this.eventTypes = etypes.getEventTypes();
     this.downloadingSubscription = this._drive.downloading$.subscribe(data=>{
@@ -97,6 +104,7 @@ export class MainPage implements OnInit, OnDestroy {
 
   async ngOnInit() {
     await this._loader.presentLoader();
+    this.types = this.etypes.getTypes();
     this.user = this._session.currentUser;
     this._crypto.init(this.user);
     await this.loadAllData();
@@ -118,6 +126,7 @@ export class MainPage implements OnInit, OnDestroy {
       this._session.currency = "€";
       this.currency = "€";
     }
+    this.calculateDates();
   }
 
 
@@ -150,7 +159,7 @@ export class MainPage implements OnInit, OnDestroy {
     this.remindersArray = await this._session.loadReminders();
     await this._session.getReminderNotifications();
     await this._session.getAutoBackup();
-    this.filteredEventsArray = this.eventsArray;
+    this.filteredEventsArray = this.eventsArray.map(event=>({...event}));
     return
   }
 
@@ -166,36 +175,6 @@ export class MainPage implements OnInit, OnDestroy {
     this.creatingElement = !this.creatingElement;
   }
 
-  async deleteVehicle(vehicle: Vehicle) {
-    const sure = await this._alert.twoOptionsAlert(
-      this.translate.instant('alert.are_you_sure?'),
-      this.translate.instant('alert.vehicle_permanently_erased'),
-      this.translate.instant('alert.erase'),
-      this.translate.instant('alert.cancel')
-    );
-
-    if (sure) {
-      const index = this.vehiclesArray.indexOf(vehicle);
-      if (index > -1) {
-        this.vehiclesArray.splice(index, 1);
-        this._session.vehiclesArray = this.vehiclesArray;
-        await this._storage.setStorageItem(storageConstants.USER_VEHICLES + this.user.id, this._crypto.encryptMessage(JSON.stringify(this.vehiclesArray)));
-
-        const elements = await this.GetElementsToClean(vehicle);
-        await this.deleteLocalElements(vehicle);
-
-        if (this._drive.folderId && this._session.autoBackup) {
-          this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,true)
-          const id = await this._drive.findFileByName(vehicle.id);
-          if (id) {
-            await this._drive.deleteFile(id, true);
-          }
-          //Borra todos los eventos y recordatorios asociados
-          this.deleteList(elements);
-        }
-      }
-    }
-  }
 
   async deleteList(elements: any[]) {
     this._drive.changecleaning(true);
@@ -278,6 +257,71 @@ export class MainPage implements OnInit, OnDestroy {
     await modal.present();
   }
 
+  //TRADUCCIÓN DE TIPOS
+  getTranslatedType(type: string): string {
+    return this._filter.getTranslatedType(type)
+  }
+
+  //CREAR EVENTO, VEHÍCULO Y RECORDATORIO
+  async createEvent(){
+    await this.router.navigate(['/dashboard/newevent']);
+    this.creatingElement=false;
+  }
+  async createVehicle(){
+    await this.router.navigate(['/dashboard/vehicle']);
+    this.creatingElement=false;
+  }
+  async createReminder(){
+    await this.router.navigate(['/dashboard/reminder']);
+    this.creatingElement=false;
+  }
+
+  //EDITAR EVENTOS Y VEHÍCULOS
+  async editEvent(eventId:string){
+    await this.router.navigate(['/dashboard/newevent'],{queryParams: { eventToEditId: eventId }});
+    this.creatingElement=false;
+  }
+  async editVehicle(vehicleId:string){
+    await this.router.navigate(['/dashboard/vehicle'],{queryParams: { vehicleToEditId: vehicleId}});
+    this.creatingElement=false;
+  }
+  async editReminder(id:number){
+    await this.router.navigate(['/dashboard/reminder'],{queryParams: { reminderToEditId: id}});
+    this.creatingElement=false;
+  }
+
+  //ELIMINAR UN VEHÍCULO
+  async deleteVehicle(vehicle: Vehicle) {
+    const sure = await this._alert.twoOptionsAlert(
+      this.translate.instant('alert.are_you_sure?'),
+      this.translate.instant('alert.vehicle_permanently_erased'),
+      this.translate.instant('alert.erase'),
+      this.translate.instant('alert.cancel')
+    );
+
+    if (sure) {
+      const index = this.vehiclesArray.indexOf(vehicle);
+      if (index > -1) {
+        this.vehiclesArray.splice(index, 1);
+        this._session.vehiclesArray = this.vehiclesArray;
+        await this._storage.setStorageItem(storageConstants.USER_VEHICLES + this.user.id, this._crypto.encryptMessage(JSON.stringify(this.vehiclesArray)));
+
+        const elements = await this.GetElementsToClean(vehicle);
+        await this.deleteLocalElements(vehicle);
+
+        if (this._drive.folderId && this._session.autoBackup) {
+          this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,true)
+          const id = await this._drive.findFileByName(vehicle.id);
+          if (id) {
+            await this._drive.deleteFile(id, true);
+          }
+          //Borra todos los eventos y recordatorios asociados
+          this.deleteList(elements);
+        }
+      }
+    }
+  }
+
   //ELIMINAR UN EVENTO
   async deleteEvent(event:Event, autoClean?:boolean){
     if(autoClean){
@@ -309,45 +353,7 @@ export class MainPage implements OnInit, OnDestroy {
     return;
   }
 
-  //TRADUCCIÓN DE TIPOS
-  getTranslatedType(type: string): string {
-    const eventType = this.eventTypes.find((eventType: { name: string; }) => eventType.name === type);
-    return eventType ? eventType.string : type;
-  }
-
-  //CREAR EVENTO, VEHÍCULO Y RECORDATORIO
-  async createEvent(){
-    await this.router.navigate(['/dashboard/newevent']);
-    this.creatingElement=false;
-  }
-  async createVehicle(){
-    await this.router.navigate(['/dashboard/vehicle']);
-    this.creatingElement=false;
-  }
-  async createReminder(){
-    await this.router.navigate(['/dashboard/reminder']);
-    this.creatingElement=false;
-  }
-
-  //EDITAR EVENTOS Y VEHÍCULOS
-  async editEvent(eventId:string){
-    await this.router.navigate(['/dashboard/newevent'],{queryParams: { eventToEditId: eventId }});
-    this.creatingElement=false;
-  }
-  async editVehicle(vehicleId:string){
-    await this.router.navigate(['/dashboard/vehicle'],{queryParams: { vehicleToEditId: vehicleId}});
-    this.creatingElement=false;
-  }
-  async editReminder(id:number){
-    await this.router.navigate(['/dashboard/reminder'],{queryParams: { reminderToEditId: id}});
-    this.creatingElement=false;
-  }
-
-  //FECHA
-  getDate(string: Date):string{
-    return this._date.getIsoDate(string);
-  }
-
+  //ELIMINAR UN RECORDATORIO
   async deleteReminder(reminder:LocalNotificationSchema, autoClean?:boolean){
     if(autoClean){
       await this.deleteReminderProcess(reminder);
@@ -375,33 +381,22 @@ export class MainPage implements OnInit, OnDestroy {
     return;
   }
 
-  changefilter(event:any){
-    this.filter = event.detail.value;
-    this.filteredEventsArray = this.eventsArray.filter(event => this.matchesFilter(event, this.filter));
+  //FECHA
+  getDate(string: Date):string{
+    return this._date.getIsoDate(string);
   }
 
+
+  //FILTROS
+  //FILTRO PALABRA
+  changefilter(event:any){
+    this.filter = event.detail.value;
+    this.generateData();
+  }
+
+  //FILTRO POR PALABRAS O FECHA ESCRITA
   matchesFilter(event: any, filter: string): boolean {
-    // Convertimos el filtro a minúsculas para la comparación
-    const lowerCaseFilter = filter.toLowerCase();
-
-    for (const key in event) {
-      if (event.hasOwnProperty(key) && key !== 'images') {
-        let value;
-        if (key === 'date') {
-          value = this.datePipe.transform(event[key], 'dd/MM/yyyy');
-        } else if (key === 'type') {
-          value = this.getTranslatedType(event[key]);
-        } else {
-          value = event[key].toString();
-        }
-
-        // Convertimos el valor a minúsculas para la comparación
-        if (value && value.toLowerCase().includes(lowerCaseFilter)) {
-          return true;
-        }
-      }
-    }
-    return false;
+    return this._filter.matchesFilter(event, filter)
   }
 
 
@@ -409,17 +404,59 @@ export class MainPage implements OnInit, OnDestroy {
     this.filtering = !this.filtering;
   }
 
-  eraseFilter(){
+  async eraseFilter(){
+    await this._loader.presentLoader();
     this.filter = "";
     const fakeEvent = { detail: { value: '' } };
     this.changefilter(fakeEvent);
     this.filtering = false;
+    this.types = this.etypes.getTypes();
+    await this.calculateDates();
+    await this.generateData();
+    await this._loader.dismissLoader();
   }
 
   getMatchesNumber(vehicleId:string){
     return this.filteredEventsArray.filter(event=>event.vehicleId===vehicleId).length;
   }
 
+
+
+  correctDates(): boolean {
+    return this._filter.correctDates(this.startDate,this.endDate)
+  }
+
+  changeDate(property:String, event:CustomEvent){
+    const newValue = new Date(event.detail.value);
+    if (property === 'startDate') {
+      this.startDate = newValue;
+    } else if (property === 'endDate') {
+      this.endDate = newValue;
+    }
+    if(this.correctDates()){
+      this.generateData();
+    }else{
+      this._alert.createAlert(this.translate.instant('data.imposible_to_generate'),this.translate.instant('data.start_date_menor'));
+    }
+  }
+
+  async calculateDates():Promise<void>{
+  this.startDate = await this._filter.getFirstDate(this.eventsArray);
+  this.endDate = await this._filter.getLastDate(this.eventsArray);
+  return;
+  }
+  
+  //DEVUELVE EL ARRAY FILTRADO
+  async generateData(): Promise<void> {
+    this.filteredEventsArray = await this._filter.generateData(this.startDate, this.endDate, this.eventsArray, this.filter, this.types);
+  }
+
+  changeTypesFilter(types:any){
+    this.types=types;
+    this.generateData();
+  }
+
+  //REALIZAR LLAMADA
   makeCall(numberString:string){
     const number:number = parseInt(numberString)
     if(number){
