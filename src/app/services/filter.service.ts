@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Event } from '../models/event.model';
 import { EventTypes } from '../const/eventTypes';
+import { SessionService } from './session.service';
 
 @Injectable({
   providedIn:'root',
@@ -11,12 +12,15 @@ import { EventTypes } from '../const/eventTypes';
 export class FilterService{
 
   public eventTypes:any;
+  public eventsArray:Event[]=[];
 
   constructor(
     private datePipe: DatePipe,
-    private etypes:EventTypes
+    private etypes:EventTypes,
+    private _session:SessionService
   ) {
     this.eventTypes = etypes.getEventTypes();
+    this.eventsArray = this._session.eventsArray;
   }
 
   //FILTRO POR PALABRAS O FECHA ESCRITA
@@ -73,11 +77,12 @@ export class FilterService{
 
   //DEVUELVE LA FECHA MAS TEMPRANA DEL ARRAY DE EVENTOS
   async getFirstDate(eventsArray:Event[]):Promise<Date>{
+    //Es la primera acción que requiere el array de eventos, por lo que lo refrescamos
+    this.eventsArray = this._session.eventsArray;
     // Inicializa las fechas con el primer elemento del array
-    let earliestDate = new Date(eventsArray[0].date);
-    const temporalArray = eventsArray.map(event => ({...event}))
+    let earliestDate = new Date();
     // Recorre el array para encontrar la fecha más temprana
-    temporalArray.forEach(event => {
+    this.eventsArray.forEach(event => {
       const eventDate = new Date(event.date);
       if (eventDate < earliestDate) {
         earliestDate = eventDate;
@@ -90,10 +95,9 @@ export class FilterService{
   //DEVUELVE LA FECHA MAS TEMPRANA DEL ARRAY DE EVENTOS
   async getLastDate(eventsArray:Event[]):Promise<Date>{
     // Inicializa las fechas con el primer elemento del array
-    let lastestDate = new Date(eventsArray[0].date);
-    const temporalArray = eventsArray.map(event => ({...event}))
+    let lastestDate = new Date();
     // Recorre el array para encontrar la fecha más temprana
-    temporalArray.forEach(event => {
+    this.eventsArray.forEach(event => {
       const eventDate = new Date(event.date);
       if (eventDate > lastestDate) {
         lastestDate = eventDate;

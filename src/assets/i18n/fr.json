@@ -159,7 +159,8 @@
     "reminders": "Rappels",
     "no_events": "Pas d'événements",
     "no_reminders": "Pas de rappels",
-    "filter_text": "rechercher Évènements par mot-clé ou date..."
+    "filter_text": "rechercher Évènements par mot-clé ou date...",
+    "search":"Rechercher"
   },
   "newvehicle": {
     "create_a_vehicle": "Créer un véhicule",
@@ -203,6 +204,7 @@
     "create_event": "Créer un événement",
     "edit_event": "Modifier l'événement",
     "date": "Date",
+    "type":"Type",
     "select_type":"Sélectionner le type",
     "km": "Kilomètres",
     "cost": "Coût",

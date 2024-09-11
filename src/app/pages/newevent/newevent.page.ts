@@ -180,6 +180,8 @@ export class NeweventPage {
       this._alert.createAlert(this.translate.instant("alert.enter_name_or_model"),this.translate.instant("alert.enter_name_or_model_text"));
     }else if(!this.type){
       this._alert.createAlert(this.translate.instant("alert.enter_type"),this.translate.instant("alert.enter_type_text"));
+    }else if(!this.date){
+      this._alert.createAlert(this.translate.instant("alert.enter_date"),this.translate.instant("alert.enter_date_text"));
     }else{
       await this._loader.presentLoader();
       const newEvent = await this.generateEvent();

@@ -126,7 +126,6 @@ export class MainPage implements OnInit, OnDestroy {
       this._session.currency = "€";
       this.currency = "€";
     }
-    this.calculateDates();
   }
 
 
@@ -157,9 +156,10 @@ export class MainPage implements OnInit, OnDestroy {
     this.vehiclesArray = await this._session.loadVehicles();
     this.eventsArray = await this._session.loadEvents();
     this.remindersArray = await this._session.loadReminders();
+    this.filteredEventsArray = this.eventsArray.map(event=>({...event}));
     await this._session.getReminderNotifications();
     await this._session.getAutoBackup();
-    this.filteredEventsArray = this.eventsArray.map(event=>({...event}));
+    this.calculateDates();
     return
   }
 
@@ -343,6 +343,7 @@ export class MainPage implements OnInit, OnDestroy {
         }
       }
     }
+    this.loadAllData();
   }
 
   async deleteEventProcess(event:Event):Promise<void>{
@@ -391,7 +392,6 @@ export class MainPage implements OnInit, OnDestroy {
   //FILTRO PALABRA
   changefilter(event:any){
     this.filter = event.detail.value;
-    this.generateData();
   }
 
   //FILTRO POR PALABRAS O FECHA ESCRITA
@@ -433,11 +433,6 @@ export class MainPage implements OnInit, OnDestroy {
     } else if (property === 'endDate') {
       this.endDate = newValue;
     }
-    if(this.correctDates()){
-      this.generateData();
-    }else{
-      this._alert.createAlert(this.translate.instant('data.imposible_to_generate'),this.translate.instant('data.start_date_menor'));
-    }
   }
 
   async calculateDates():Promise<void>{
@@ -448,12 +443,14 @@ export class MainPage implements OnInit, OnDestroy {
 
   //DEVUELVE EL ARRAY FILTRADO
   async generateData(): Promise<void> {
+    await this._loader.presentLoader();
     this.filteredEventsArray = await this._filter.generateData(this.startDate, this.endDate, this.eventsArray, this.filter, this.types);
+    await this._loader.dismissLoader();
   }
 
   changeTypesFilter(types:any){
     this.types=types;
-    this.generateData();
+
   }
 
   //REALIZAR LLAMADA
