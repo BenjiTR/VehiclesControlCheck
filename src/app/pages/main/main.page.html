@@ -170,7 +170,7 @@
 
                         <ion-col class="ion-padding-start ion-padding-end" size="12">
                           <ion-item class="rounded-inputs">
-                            <ion-input label="{{ 'newvehicle.roadside_assistance_number' | translate }}" label-placement="stacked" [readonly]="true" [(ngModel)]="vehicle.roadsideAssistanceNumber" type="text">
+                            <ion-input (click)="makeCall(vehicle.roadsideAssistanceNumber)" label="{{ 'newvehicle.roadside_assistance_number' | translate }}" label-placement="stacked" [readonly]="true" [(ngModel)]="vehicle.roadsideAssistanceNumber" type="text">
                                 <ion-icon slot="end" color="nmgreen" class="call-icon" src="../../../assets/icons/call-outline.svg" ></ion-icon>
                             </ion-input>
                           </ion-item>
