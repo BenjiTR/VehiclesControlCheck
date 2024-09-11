@@ -405,11 +405,11 @@ export class MainPage implements OnInit, OnDestroy {
   }
 
   async eraseFilter(){
+    this.filtering = false;
     await this._loader.presentLoader();
     this.filter = "";
     const fakeEvent = { detail: { value: '' } };
     this.changefilter(fakeEvent);
-    this.filtering = false;
     this.types = this.etypes.getTypes();
     await this.calculateDates();
     await this.generateData();
@@ -445,7 +445,7 @@ export class MainPage implements OnInit, OnDestroy {
   this.endDate = await this._filter.getLastDate(this.eventsArray);
   return;
   }
-  
+
   //DEVUELVE EL ARRAY FILTRADO
   async generateData(): Promise<void> {
     this.filteredEventsArray = await this._filter.generateData(this.startDate, this.endDate, this.eventsArray, this.filter, this.types);
