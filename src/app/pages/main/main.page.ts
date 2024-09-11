@@ -1,4 +1,4 @@
-import { Component, OnInit, DoCheck, OnDestroy } from '@angular/core';
+import { Component, OnInit, DoCheck, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Platform, IonTextarea, IonAccordion, IonAccordionGroup, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonMenu, IonMenuButton, IonRouterOutlet, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar, MenuController, ModalController, NavController, IonDatetime, IonFab, IonFabList, IonFabButton, IonBadge, IonText, IonDatetimeButton, IonModal } from '@ionic/angular/standalone';
@@ -42,6 +42,8 @@ import { FilterService } from 'src/app/services/filter.service';
   providers:[EventTypes, DatePipe, FilterService]
 })
 export class MainPage implements OnInit, OnDestroy {
+
+  @ViewChild('accordionGroup', { static: false }) accordionGroup: IonAccordionGroup | undefined;
 
   public creatingElement:Boolean=false;
   public vehiclesArray:Vehicle[]=[];
@@ -126,6 +128,7 @@ export class MainPage implements OnInit, OnDestroy {
       this._session.currency = "€";
       this.currency = "€";
     }
+    this.calculateDates();
   }
 
 
@@ -156,10 +159,16 @@ export class MainPage implements OnInit, OnDestroy {
     this.vehiclesArray = await this._session.loadVehicles();
     this.eventsArray = await this._session.loadEvents();
     this.remindersArray = await this._session.loadReminders();
-    this.filteredEventsArray = this.eventsArray.map(event=>({...event}));
+    if(this.filtering){
+      this.generateData();
+    }else{
+      this.filteredEventsArray = this.eventsArray.map(event=>({...event}));
+    }
+    this.filteredEventsArray = this.filteredEventsArray.sort((a, b) => {
+      return new Date(b.date).getTime() - new Date(a.date).getTime(); // Ordena por fecha, más recientes primero
+    });
     await this._session.getReminderNotifications();
     await this._session.getAutoBackup();
-    this.calculateDates();
     return
   }
 
@@ -280,6 +289,7 @@ export class MainPage implements OnInit, OnDestroy {
   async editEvent(eventId:string){
     await this.router.navigate(['/dashboard/newevent'],{queryParams: { eventToEditId: eventId }});
     this.creatingElement=false;
+    this.closeAccordion();
   }
   async editVehicle(vehicleId:string){
     await this.router.navigate(['/dashboard/vehicle'],{queryParams: { vehicleToEditId: vehicleId}});
@@ -445,6 +455,9 @@ export class MainPage implements OnInit, OnDestroy {
   async generateData(): Promise<void> {
     await this._loader.presentLoader();
     this.filteredEventsArray = await this._filter.generateData(this.startDate, this.endDate, this.eventsArray, this.filter, this.types);
+    this.filteredEventsArray = this.filteredEventsArray.sort((a, b) => {
+      return new Date(b.date).getTime() - new Date(a.date).getTime(); // Ordena por fecha, más recientes primero
+    });
     await this._loader.dismissLoader();
   }
 
@@ -462,4 +475,11 @@ export class MainPage implements OnInit, OnDestroy {
       this._alert.createAlert(this.translate.instant('error.number_its_not_correct'),this.translate.instant('error.number_its_not_correct_text'));
     }
   }
+
+
+  closeAccordion() {
+    const nativeEl = this.accordionGroup;
+      nativeEl!.value = undefined;
+  };
+
 }

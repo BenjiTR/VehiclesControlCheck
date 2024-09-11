@@ -85,7 +85,6 @@
             <ion-col size="12">
               <ion-button color="warning" (click)="generateData()" expand="block" fill="solid" shape="round">{{"mainpage.search"|translate}}</ion-button>
             </ion-col>
-
           </ion-row>
         </ion-col>
       </ion-row>
@@ -211,7 +210,7 @@
                         </ion-col>
                       </ion-row>
 
-                     <ion-accordion-group *ngIf="someForThatVehicle(vehicle.id)">
+                     <ion-accordion-group #accordionGroup *ngIf="someForThatVehicle(vehicle.id)">
                       <ng-container *ngFor="let event of filteredEventsArray">
                         <ion-accordion *ngIf="event.vehicleId === vehicle.id" class="zoom08" value="{{event.id}}">
                           <ion-item slot="header" class="orange">
