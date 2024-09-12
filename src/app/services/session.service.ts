@@ -112,11 +112,11 @@ export class SessionService{
   async setReminderNotifications(reminder:boolean){
     this.remindNotitications = await this._storage.setStorageItem(storageConstants.USER_REMINDER+this.currentUser.id,reminder);
   }
-  async getReminderNotifications():Promise<boolean>{
-    this.remindNotitications = await this._storage.getStorageItem(storageConstants.USER_REMINDER+this.currentUser.id) || true;
+  async getReminderNotifications(): Promise<boolean> {
+    const storedValue = await this._storage.getStorageItem(storageConstants.USER_REMINDER + this.currentUser.id);
+    this.remindNotitications = storedValue !== null && storedValue !== undefined ? storedValue : true;
     return this.remindNotitications;
   }
-
   async setAutoBackup(option:boolean){
     this.autoBackup = await this._storage.setStorageItem(storageConstants.USER_AUTBK+this.currentUser.id,option);
   }

@@ -144,6 +144,9 @@ export class BackupPage implements OnInit {
       await this._file.restoreBackup()
       .then(()=>{
         this.creatingFile = false;
+        if(this._drive.folderId && this._session.autoBackup){
+          this.updateData();
+        }
         this._alert.createAlert(this.translate.instant('alert.file_restored'),this.translate.instant('alert.file_restored_text'));
         this.navCtr.navigateRoot(['/dashboard'], { queryParams: { reload: true } });
       })

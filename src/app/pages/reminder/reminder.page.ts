@@ -190,7 +190,7 @@ export class ReminderPage{
         this._drive.folderId = "";
       }
     }
-    this.navCtr.navigateRoot(['/dashboard'], { queryParams: { reload: true } });
+    this.navCtr.navigateRoot(['/dashboard'], { queryParams: { reload: false } });
   }
 
   async createNew(){

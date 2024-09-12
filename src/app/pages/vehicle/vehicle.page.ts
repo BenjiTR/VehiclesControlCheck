@@ -185,7 +185,7 @@ export class VehiclePage implements OnInit {
         this._drive.folderId = "";
       }
     }
-    this.navCtr.navigateRoot(['/dashboard'], { queryParams: { reload: true } });
+    this.navCtr.navigateRoot(['/dashboard'], { queryParams: { reload: false } });
   }
 
 }

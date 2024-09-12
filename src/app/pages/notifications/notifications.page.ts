@@ -89,8 +89,9 @@ export class NotificationsPage{
       this.isAllowedAndActivated(resp.display);
   }
 
-  isAllowedAndActivated(resp:string){
-    const remindNotifications = this._session.remindNotitications;
+  async isAllowedAndActivated(resp:string){
+    const remindNotifications = await this._session.getReminderNotifications();
+    console.log(resp, remindNotifications)
     if (resp === "granted" && remindNotifications){
       this.isAllowed = true;
       this._notifications.createChannel();
@@ -101,6 +102,7 @@ export class NotificationsPage{
   }
 
   async togglePermissions(){
+    console.log(this.isAllowed)
     if(this.isAllowed){
       this.isAllowed = false;
       this._notifications.deleteChannel();

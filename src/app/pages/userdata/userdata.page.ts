@@ -16,6 +16,7 @@ import { StorageService } from 'src/app/services/storage.service';
 import { storageConstants } from 'src/app/const/storage';
 import { DriveService } from 'src/app/services/drive.service';
 import { CryptoService } from 'src/app/services/crypto.services';
+import { LoaderService } from 'src/app/services/loader.service';
 
 
 @Component({
@@ -29,8 +30,6 @@ export class UserdataPage implements OnInit {
 
   public user:User = new User;
   public isEditing:boolean=false;
-  public isLoading=false;
-
   public img:any;
 
   constructor(
@@ -44,7 +43,8 @@ export class UserdataPage implements OnInit {
     private _camera:CameraServices,
     private _storage:StorageService,
     private _drive:DriveService,
-    private _crypto:CryptoService
+    private _crypto:CryptoService,
+    private _loader:LoaderService
   ) { }
 
   ngOnInit() {
@@ -68,14 +68,14 @@ export class UserdataPage implements OnInit {
   }
 
   async saveNewData(){
-    this.isLoading = true;
+    await this._loader.presentLoader();
     if(!this._authService.isInTest && this.user.method === "email"){
       await this._authService.updateNameProfile(this.user.name)
-      .then((msg)=>{
+      .then(async (msg)=>{
         //console.log(msg);
         this._session.currentUser.name = this.user.name;
         this.isEditing=false;
-        this.isLoading = false;
+        await this._loader.dismissLoader();
       })
       .catch((err)=>{
         //console.log(err);
@@ -83,19 +83,19 @@ export class UserdataPage implements OnInit {
     }
     this._session.currentUser.name = this.user.name;
     this.isEditing=false;
-    this.isLoading = false;
+    await this._loader.dismissLoader();
   }
 
   async changePassword(){
-    this.isLoading=true;
+    await this._loader.presentLoader();
     await this._authService.sendRestorePasswordEmail(this.user.email)
-    .then(()=>{
+    .then(async ()=>{
       this._alert.createAlert(this.translate.instant('alert.email_send'),this.translate.instant('alert.restored_email_sended'));
-      this.isLoading=false;
+      await this._loader.dismissLoader();
     })
-    .catch((err)=>{
+    .catch(async (err)=>{
       //console.log(err);
-      this.isLoading=false;
+      await this._loader.dismissLoader();
     })
   }
 
@@ -105,6 +105,7 @@ export class UserdataPage implements OnInit {
    if(this.user.method==="email"){
     const photo = await this._camera.takePhoto();
     if(photo){
+      await this._loader.presentLoader();
       //console.log(photo)
       this._session.currentUser.photo = imageConstants.base64Prefix + photo;
       this.user.photo = imageConstants.base64Prefix + photo;
@@ -112,6 +113,7 @@ export class UserdataPage implements OnInit {
       //console.log(photo, encrypted)
       this._storage.setStorageItem(storageConstants.USER_PHOTO+this.user.id, encrypted);
       this.saveInCloud(encrypted)
+      await this._loader.dismissLoader();
     }
    }
   }

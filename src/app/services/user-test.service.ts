@@ -142,7 +142,7 @@ export class UserTestService {
         "images": ["https://via.placeholder.com/150?text=Others"]
     },
     {
-        "id": "event021",
+        "id": "event008",
         "vehicleId": "veh123",
         "date": "2023-07-28",
         "type": "Refueling",
@@ -152,7 +152,7 @@ export class UserTestService {
         "images": ["https://via.placeholder.com/150"]
     },
     {
-        "id": "event022",
+        "id": "event009",
         "vehicleId": "veh123",
         "date": "2023-07-30",
         "type": "Refueling",
@@ -162,7 +162,7 @@ export class UserTestService {
         "images": ["https://via.placeholder.com/150"]
     },
     {
-        "id": "event023",
+        "id": "event010",
         "vehicleId": "veh123",
         "date": "2023-08-01",
         "type": "Maintenance",
@@ -172,7 +172,7 @@ export class UserTestService {
         "images": ["https://via.placeholder.com/150"]
     },
     {
-        "id": "event024",
+        "id": "event011",
         "vehicleId": "veh456",
         "date": "2023-08-02",
         "type": "Refueling",
@@ -182,7 +182,7 @@ export class UserTestService {
         "images": ["https://via.placeholder.com/150"]
     },
     {
-        "id": "event025",
+        "id": "event012",
         "vehicleId": "veh456",
         "date": "2023-08-03",
         "type": "Refueling",
@@ -192,7 +192,7 @@ export class UserTestService {
         "images": ["https://via.placeholder.com/150"]
     },
     {
-        "id": "event026",
+        "id": "event013",
         "vehicleId": "veh456",
         "date": "2023-08-05",
         "type": "Accident",
@@ -202,7 +202,7 @@ export class UserTestService {
         "images": ["https://via.placeholder.com/150"]
     },
     {
-        "id": "event027",
+        "id": "event014",
         "vehicleId": "veh789",
         "date": "2023-08-10",
         "type": "Refueling",
@@ -212,7 +212,7 @@ export class UserTestService {
         "images": ["https://via.placeholder.com/150"]
     },
     {
-        "id": "event001",
+        "id": "event015",
         "vehicleId": "veh123",
         "date": "2022-01-10",
         "type": "Maintenance",
@@ -222,7 +222,7 @@ export class UserTestService {
         "images": ["https://via.placeholder.com/150"]
     },
     {
-        "id": "event002",
+        "id": "event016",
         "vehicleId": "veh456",
         "date": "2021-08-05",
         "type": "Accident",
@@ -232,7 +232,7 @@ export class UserTestService {
         "images": []
     },
     {
-        "id": "event003",
+        "id": "event017",
         "vehicleId": "veh789",
         "date": "2023-05-18",
         "type": "Maintenance",
@@ -242,7 +242,7 @@ export class UserTestService {
         "images": ["https://via.placeholder.com/150", "https://via.placeholder.com/150"]
     },
     {
-        "id": "event004",
+        "id": "event018",
         "vehicleId": "veh123",
         "date": "2023-11-12",
         "type": "Inspection",
@@ -252,7 +252,7 @@ export class UserTestService {
         "images": []
     },
     {
-        "id": "event005",
+        "id": "event019",
         "vehicleId": "veh456",
         "date": "2022-06-25",
         "type": "Maintenance",
@@ -262,7 +262,7 @@ export class UserTestService {
         "images": ["https://via.placeholder.com/150"]
     },
     {
-        "id": "event006",
+        "id": "event020",
         "vehicleId": "veh789",
         "date": "2021-12-01",
         "type": "Accident",
@@ -272,7 +272,7 @@ export class UserTestService {
         "images": []
     },
     {
-        "id": "event007",
+        "id": "event021",
         "vehicleId": "veh123",
         "date": "2023-02-14",
         "type": "Maintenance",
@@ -282,7 +282,7 @@ export class UserTestService {
         "images": ["https://via.placeholder.com/150"]
     },
     {
-        "id": "event008",
+        "id": "event022",
         "vehicleId": "veh456",
         "date": "2020-11-30",
         "type": "Maintenance",
@@ -292,7 +292,7 @@ export class UserTestService {
         "images": []
     },
     {
-        "id": "event009",
+        "id": "event023",
         "vehicleId": "veh789",
         "date": "2022-07-10",
         "type": "Maintenance",
@@ -302,7 +302,7 @@ export class UserTestService {
         "images": ["https://via.placeholder.com/150"]
     },
     {
-        "id": "event010",
+        "id": "event024",
         "vehicleId": "veh123",
         "date": "2024-03-09",
         "type": "Accident",
@@ -312,7 +312,7 @@ export class UserTestService {
         "images": []
     },
     {
-        "id": "event010",
+        "id": "event025",
         "vehicleId": "veh123",
         "date": "2024-03-09",
         "type": "Maintenance",
@@ -322,106 +322,58 @@ export class UserTestService {
         "images": []
     },
     {
-        "id": "event011",
+        "id": "event026",
         "vehicleId": "veh456",
         "date": "2023-01-15",
         "type": "Maintenance",
         "km": "8000",
-        "cost": 80,
-        "info": "Brake fluid replacement",
-        "images": ["https://via.placeholder.com/150"]
-    },
-    {
-        "id": "event012",
-        "vehicleId": "veh789",
-        "date": "2023-09-20",
-        "type": "Inspection",
-        "km": "23000",
         "cost": 100,
-        "info": "Emission test",
-        "images": []
-    },
-    {
-        "id": "event013",
-        "vehicleId": "veh123",
-        "date": "2021-04-18",
-        "type": "Maintenance",
-        "km": "22000",
-        "cost": 160,
         "info": "Tire replacement",
         "images": ["https://via.placeholder.com/150"]
     },
     {
-        "id": "event014",
-        "vehicleId": "veh456",
-        "date": "2022-09-05",
-        "type": "Maintenance",
-        "km": "7000",
-        "cost": 90,
-        "info": "Coolant replacement",
-        "images": []
-    },
-    {
-        "id": "event015",
+        "id": "event027",
         "vehicleId": "veh789",
-        "date": "2022-12-30",
-        "type": "Maintenance",
-        "km": "25000",
-        "cost": 180,
-        "info": "Transmission fluid replacement",
-        "images": ["https://via.placeholder.com/150"]
-    },
-    {
-        "id": "event016",
-        "vehicleId": "veh123",
-        "date": "2023-06-22",
-        "type": "Maintenance",
-        "km": "28000",
-        "cost": 140,
-        "info": "Alignment and balancing",
-        "images": []
-    },
-    {
-        "id": "event017",
-        "vehicleId": "veh456",
-        "date": "2023-10-10",
-        "type": "Accident",
-        "km": "12000",
-        "cost": 500,
-        "info": "Side panel replacement",
-        "images": ["https://via.placeholder.com/150"]
-    },
-    {
-        "id": "event018",
-        "vehicleId": "veh789",
-        "date": "2021-07-04",
-        "type": "Maintenance",
-        "km": "16000",
-        "cost": 200,
-        "info": "Wheel alignment",
-        "images": []
-    },
-    {
-        "id": "event019",
-        "vehicleId": "veh123",
-        "date": "2022-05-11",
-        "type": "Maintenance",
-        "km": "26000",
-        "cost": 220,
-        "info": "Fuel injector cleaning",
-        "images": ["https://via.placeholder.com/150"]
-    },
-    {
-        "id": "event020",
-        "vehicleId": "veh456",
-        "date": "2021-03-22",
+        "date": "2023-05-25",
         "type": "Inspection",
-        "km": "9000",
-        "cost": 60,
-        "info": "Safety inspection",
+        "km": "22000",
+        "cost": 120,
+        "info": "State inspection",
+        "images": ["https://via.placeholder.com/150"]
+    },
+    {
+        "id": "event028",
+        "vehicleId": "veh123",
+        "date": "2023-11-11",
+        "type": "Maintenance",
+        "km": "33000",
+        "cost": 300,
+        "info": "Full maintenance service",
+        "images": ["https://via.placeholder.com/150"]
+    },
+    {
+        "id": "event029",
+        "vehicleId": "veh456",
+        "date": "2023-06-30",
+        "type": "Accident",
+        "km": "17000",
+        "cost": 1000,
+        "info": "Side mirror replacement",
         "images": []
+    },
+    {
+        "id": "event030",
+        "vehicleId": "veh789",
+        "date": "2022-11-10",
+        "type": "Maintenance",
+        "km": "19000",
+        "cost": 80,
+        "info": "Oil and filter change",
+        "images": ["https://via.placeholder.com/150"]
     }
 ]
+
+
 
 
 

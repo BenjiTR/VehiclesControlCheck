@@ -155,16 +155,17 @@ export class NeweventPage {
   async saveAndExit(event:Event){
     await this._admobService.showinterstitial();
     this._session.eventsArray = this.eventsArray;
-    await this._storage.setStorageItem(storageConstants.USER_EVENTS+this.user.id,this._crypto.encryptMessage(JSON.stringify(this.eventsArray)));
+    this._storage.setStorageItem(storageConstants.USER_EVENTS+this.user.id,this._crypto.encryptMessage(JSON.stringify(this.eventsArray)));
     if(this._drive.folderId && this._session.autoBackup){
       this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,true)
       if((await Network.getStatus()).connected === true){
         const fileName = event.id;
+        const encripted = this._crypto.encryptMessage(JSON.stringify(event))
         const exist = await this._drive.findFileByName(fileName)
             if(exist){
-              this._drive.updateFile(exist, this._crypto.encryptMessage(JSON.stringify(event)), fileName, true);
+              this._drive.updateFile(exist,encripted, fileName, true);
             }else{
-              this._drive.uploadFile(this._crypto.encryptMessage(JSON.stringify(event)), fileName, true);
+              this._drive.uploadFile(encripted, fileName, true);
             }
         this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,false)
       }else{
@@ -172,7 +173,7 @@ export class NeweventPage {
         this._drive.folderId = "";
       }
     }
-    this.navCtr.navigateRoot(['/dashboard'], { queryParams: { reload: true } });
+    this.navCtr.navigateRoot(['/dashboard'], { queryParams: { reload: false } });
   }
 
   async createNew(){

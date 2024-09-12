@@ -162,7 +162,7 @@ export class MainPage implements OnInit, OnDestroy {
     if(this.filtering){
       this.generateData();
     }else{
-      this.filteredEventsArray = this.eventsArray.map(event=>({...event}));
+      this.filteredEventsArray = this.eventsArray;
     }
     this.filteredEventsArray = this.filteredEventsArray.sort((a, b) => {
       return new Date(b.date).getTime() - new Date(a.date).getTime(); // Ordena por fecha, más recientes primero
@@ -353,13 +353,13 @@ export class MainPage implements OnInit, OnDestroy {
         }
       }
     }
-    this.loadAllData();
   }
 
   async deleteEventProcess(event:Event):Promise<void>{
-    const index = this.eventsArray.indexOf(event);
+    const index = this.eventsArray.findIndex(e => e.id === event.id);
     this.eventsArray.splice(index,1)
     this._session.eventsArray = this.eventsArray;
+    this.filteredEventsArray = this.eventsArray;
     await this._storage.setStorageItem(storageConstants.USER_EVENTS+this.user.id,this._crypto.encryptMessage(JSON.stringify(this.eventsArray)));
     return;
   }
@@ -418,11 +418,12 @@ export class MainPage implements OnInit, OnDestroy {
     this.filtering = false;
     await this._loader.presentLoader();
     this.filter = "";
-    const fakeEvent = { detail: { value: '' } };
-    this.changefilter(fakeEvent);
+    this.calculateDates();
     this.types = this.etypes.getTypes();
-    await this.calculateDates();
-    await this.generateData();
+    this.filteredEventsArray = this.eventsArray;
+    this.filteredEventsArray = this.filteredEventsArray.sort((a, b) => {
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    });
     await this._loader.dismissLoader();
   }
 
