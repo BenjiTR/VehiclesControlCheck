@@ -204,7 +204,7 @@ export class DriveService {
     this.cleaning.next(value);
   }
   changeautoBk(value:boolean){
-    console.log(value)
+    //console.log(value)
     this.autoBk.next(value);
   }
 
@@ -388,15 +388,14 @@ export class DriveService {
 
     if (!response.ok) {
       const error = await response.json();
-      //console.error("Error finding file:", error);
+      console.error("Error finding file:", error);
       throw new Error(error.message || "Failed to find file");
     }
 
-    //console.log(response, response.json)
     const result = await response.json();
     const files = result.files;
 
-
+    //console.log(result, files)
     if (files && files.length > 0) {
       return files[0].id;
     } else {

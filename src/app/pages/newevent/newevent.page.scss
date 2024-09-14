@@ -7,3 +7,24 @@
 .c-black{
   color: black;
 }
+.zoom{
+  zoom: 2;
+}
+.tagslist{
+  width:max-content;
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  background:#dfdfdf;
+  -webkit-box-shadow: 4px 4px 5px 0px  rgb(0 6 6 / 41%);
+  -moz-box-shadow: 4px 4px 5px 0px  rgb(0 6 6 / 41%);
+  box-shadow: 4px 4px 5px 0px  rgb(0 6 6 / 41%);
+}
+.reduce{
+  zoom: 0.8;
+}
+.gray{
+  --background:#dfdfdf;
+}
+.noUpperCase{
+  text-transform: none;
+}

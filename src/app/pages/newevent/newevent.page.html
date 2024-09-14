@@ -46,8 +46,26 @@
 
         <ion-col class="ion-padding-start ion-padding-end" size="12">
           <ion-item class="rounded-inputs">
-            <ion-textarea auto-grow="true" label="{{'event.aditional_info' | translate}}" label-placement="floating" [(ngModel)]="info" type="text" ></ion-textarea>
+            <ion-textarea  #textareaElement auto-grow="true" label="{{'event.aditional_info' | translate}}" label-placement="floating" [(ngModel)]="info" (input)="onInputChange($event)" type="text" ></ion-textarea>
+            <ion-button fill="solid" color="secondary" slot="end" (click)="addHashtag()">
+              Añadir #
+            </ion-button>
           </ion-item>
+
+          <!-- Mostrar sugerencias cuando se escribe '#' -->
+          <ion-list class="tagslist" *ngIf="showSuggestions">
+            <ion-item class="gray" lines="none" *ngFor="let tag of filteredTags">
+              <p (click)="selectTag(tag)">{{ tag }}</p> <ion-icon (click)="deleteTag(tag)" color="danger" class="ion-margin-start ion-padding-start reduce" src="../../../assets/icons/trash-outline.svg"></ion-icon>
+            </ion-item>
+
+            <ion-button class="noUpperCase" color="secondary" *ngIf="showSuggestions && filteredTags.length === 0" fill="clear" (click)="addNewTag()">
+             {{'event.add'|translate | uppercase}} {{ '"' + currentTag + '"' }}
+            </ion-button>
+
+          </ion-list>
+
+
+
         </ion-col>
 
         <ion-row class="img-row">
@@ -56,7 +74,7 @@
               <ion-img (click)="openModal(image)" src="{{image}}"></ion-img>
             </ion-col>
           <ion-col class="ion-padding-start ion-text-center ion-padding-end" size="12">
-            <ion-button color="green" class="c-black" (click)="addImage()" translate="event.add"><ion-icon class="ion-margin-start" src="../../../assets/icons/images-outline.svg"></ion-icon></ion-button>
+            <ion-button color="secondary" class="c-black" (click)="addImage()" translate="event.add"><ion-icon class="ion-margin-start" src="../../../assets/icons/images-outline.svg"></ion-icon></ion-button>
           </ion-col>
         </ion-row>
 

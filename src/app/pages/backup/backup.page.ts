@@ -240,7 +240,6 @@ export class BackupPage implements OnInit {
       this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,false)
       this._drive.changeHaveFiles(true);
       this._drive.changeUploading(false);
-      console.log(this)
       this.getData();
     }
   }
@@ -263,7 +262,8 @@ export class BackupPage implements OnInit {
       reminders: [],
       remindersOptions: false,
       autoBackup: true,
-      photo: ""
+      photo: "",
+      tags: []
     };
 
       const total = backup.length;
@@ -288,6 +288,8 @@ export class BackupPage implements OnInit {
           temporalBackup.events.push(JSON.parse(this._crypto.decryptMessage(content)));
         } else if (element.name.startsWith("R")) {
           temporalBackup.reminders.push(JSON.parse(content));
+        }else if (element.name === "tags"){
+          temporalBackup.tags = JSON.parse(this._crypto.decryptMessage(content));
         }
       }
     }

@@ -8,5 +8,6 @@ export class Backup {
   reminders:LocalNotificationSchema[] = [];
   remindersOptions:boolean = false;
   autoBackup:boolean=true;
-  photo:string=""
+  photo:string="";
+  tags:string[]=[];
 }

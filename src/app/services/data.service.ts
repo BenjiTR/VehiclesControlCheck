@@ -46,7 +46,8 @@ export class DataService{
       reminders: await this._session.loadReminders(),
       remindersOptions: await this._session.getReminderNotifications(),
       autoBackup: await this._session.getAutoBackup(),
-      photo: await this._storage.getStorageItem(storageConstants.USER_PHOTO+this._session.currentUser.id) || ""
+      photo: await this._storage.getStorageItem(storageConstants.USER_PHOTO+this._session.currentUser.id) || "",
+      tags: await this._storage.getStorageItem(storageConstants.USER_TAGS + this._session.currentUser.id) || []
     }
     return backup
   }
@@ -95,29 +96,30 @@ export class DataService{
       this._storage.setStorageItem(storageConstants.USER_PHOTO+this._session.currentUser.id,backup.photo)
       this._session.currentUser.photo = imageConstants.base64Prefix + this._crypto.decryptMessage(backup.photo);
     }
+    this._storage.setStorageItem(storageConstants.USER_TAGS+this._session.currentUser.id,this._crypto.encryptMessage(JSON.stringify(backup.tags)));
     return;
   }
 
   async buildDriveData(): Promise<any[]> {
-    const fileRepresentations: any[] = [];
+    const arrayBackup: any[] = [];
     const backup:Backup = await this.buildData();
 
     // Vehículos
     backup.vehicles.forEach((vehicle) => {
       const fileName = vehicle.id;
-      fileRepresentations.push({ fileName, content: this._crypto.encryptMessage(JSON.stringify(vehicle)) });
+      arrayBackup.push({ fileName, content: this._crypto.encryptMessage(JSON.stringify(vehicle)) });
     });
 
     // Eventos
     backup.events.forEach((event) => {
       const fileName = event.id;
-      fileRepresentations.push({ fileName, content: this._crypto.encryptMessage(JSON.stringify(event)) });
+      arrayBackup.push({ fileName, content: this._crypto.encryptMessage(JSON.stringify(event)) });
     });
 
     // Recordatorios
     backup.reminders.forEach((reminder) => {
       const fileName = `R${reminder.id}`;
-      fileRepresentations.push({ fileName, content: JSON.stringify(reminder) });
+      arrayBackup.push({ fileName, content: JSON.stringify(reminder) });
     });
 
     // Opción de recordatorios
@@ -129,18 +131,22 @@ export class DataService{
     }else{
       optionString = "false";
     }
-    fileRepresentations.push({ fileName: remindersOptionsFileName, content: optionString });
+    arrayBackup.push({ fileName: remindersOptionsFileName, content: optionString });
 
     //AutoBk
 
     const autobackupFileName = `autoBackup`;
-    fileRepresentations.push({ fileName: autobackupFileName, content: backup.autoBackup });
+    arrayBackup.push({ fileName: autobackupFileName, content: backup.autoBackup });
 
     // Foto
     const photoFileName = `photo`;
-    fileRepresentations.push({ fileName: photoFileName, content: backup.photo });
+    arrayBackup.push({ fileName: photoFileName, content: backup.photo });
 
-    return fileRepresentations;
+    //Tags
+    const tagsFilename = `tags`
+    arrayBackup.push({ fileName: tagsFilename, content: backup.tags });
+
+    return arrayBackup;
 
   }
 
