@@ -37,7 +37,7 @@ export class EventTypes {
   }
 
   getEventTypes(): any[] {
-    return this.eventTypes;
+    return this.eventTypes.sort((a, b) => a.string.localeCompare(b.string));
   }
   getTypes():string[] {
     return this.types;

@@ -226,7 +226,7 @@
                               </ion-col>
                               <ion-col class="ion-padding-start ion-padding-end" size="12">
                                 <ion-item class="rounded-inputs">
-                                  <ion-input readonly="true" [(ngModel)]="event.type" label="{{'event.type'|translate}}" label-placement="floating" >
+                                  <ion-input readonly="true" [value]="getTranslatedType(event.type)" label="{{'event.type'|translate}}" label-placement="floating" >
                                   </ion-input>
                                 </ion-item>
                               </ion-col>
