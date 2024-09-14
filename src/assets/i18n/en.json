@@ -197,7 +197,7 @@
     "email": "Email",
     "change_password": "Change Password",
     "delete_user": "Delete Account",
-    "is_not_posibble_to_change_text": "Access was granted through an external provider, so it is not possible to change the data"
+    "is_not_posibble_to_change_text": "Access was made through an external provider (Google). Credentials obtained are used to access the application, but no user or record is created in our systems, so it is not possible to change or delete account data."
   },
   "event": {
     "create_event": "Create Event",

@@ -35,13 +35,12 @@ export class UsetermsPage implements OnInit {
     await this._admob.hideBanner();
   }
 
-  async ionViewWillLeave(){
-    await this._admob.resumeBanner();
-  }
+
 
   goback(){
     if(this.goBack){
       this.navCtr.navigateRoot([this.goBack], { queryParams: { reload: true } });
+      this._admob.resumeBanner();
     }else{
       this.navCtr.navigateRoot(['/home'])
     }

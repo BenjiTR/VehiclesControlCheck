@@ -25,8 +25,8 @@
       </ion-popover>
     </ion-col>
     <ion-col size="12">
-      <ion-button class="black" (click)="saveDataOnDevice()" expand="block" color="green" shape="round" translate="backup.download"></ion-button>
-      <ion-button expand="block" (click)="restoreByDevice()" color="warning" shape="round" translate="backup.restore"></ion-button>
+      <ion-button [disabled]="creatingFile" class="black" (click)="saveDataOnDevice()" expand="block" color="green" shape="round" translate="backup.download"></ion-button>
+      <ion-button [disabled]="creatingFile" expand="block" (click)="restoreByDevice()" color="warning" shape="round" translate="backup.restore"></ion-button>
     </ion-col>
   </ion-row>
 
@@ -78,10 +78,10 @@
 
   <ion-row>
     <ion-col size="12">
-      <ion-button class="black" *ngIf="connected && !haveFiles" (click)="uploadFiles()" expand="block" color="green" shape="round" translate="backup.generate_backup"></ion-button>
-      <ion-button class="black"  *ngIf="connected && haveFiles" (click)="updateData()" expand="block" color="green" shape="round" translate="backup.update_backup"></ion-button>
-      <ion-button *ngIf="connected && haveFiles" (click)="restoreBackup()" expand="block" color="warning" shape="round" translate="backup.download_and_restore"></ion-button>
-      <ion-button *ngIf="connected" (click)="unconnectAccount()" expand="block" color="danger" shape="round" translate="backup.unconnect_account"></ion-button>
+      <ion-button [disabled]="creatingFile" class="black" *ngIf="connected && !haveFiles" (click)="uploadFiles()" expand="block" color="green" shape="round" translate="backup.generate_backup"></ion-button>
+      <ion-button [disabled]="creatingFile" class="black"  *ngIf="connected && haveFiles" (click)="updateData()" expand="block" color="green" shape="round" translate="backup.update_backup"></ion-button>
+      <ion-button [disabled]="creatingFile" *ngIf="connected && haveFiles" (click)="restoreBackup()" expand="block" color="warning" shape="round" translate="backup.download_and_restore"></ion-button>
+      <ion-button [disabled]="creatingFile" *ngIf="connected" (click)="unconnectAccount()" expand="block" color="danger" shape="round" translate="backup.unconnect_account"></ion-button>
     </ion-col>
   </ion-row>
 

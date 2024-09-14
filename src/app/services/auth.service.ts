@@ -61,6 +61,7 @@ export class AuthService {
 
   async deleteAccountWithGoogle() {
     const result = await FirebaseAuthentication.signInWithGoogle();
+    console.log(result)
     return await FirebaseAuthentication.deleteUser();
   }
 

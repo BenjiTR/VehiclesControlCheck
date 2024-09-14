@@ -86,6 +86,8 @@ export class DriveService {
           })
         }
       }
+    }else{
+      this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,false)
     }
   }
   async uploadFiles():Promise<void> {

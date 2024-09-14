@@ -21,7 +21,7 @@ export class AlertService{
      //Alerta de error
      async errAlert(message:string){
 
-      return new Promise<boolean>(async() => {
+      return new Promise<boolean>(async(resolve) => {
 
           const txButton = await firstValueFrom(this.translate.get('alert.accept'));
 
@@ -34,6 +34,7 @@ export class AlertService{
                       text:txButton,
                       role:"cancel",
                       handler: () => {
+                        resolve(true);
                       },
                   },
               ],
@@ -46,7 +47,7 @@ export class AlertService{
     //Alerta Básica
     async createAlert(message:string, textAlert:string){
 
-        return new Promise<boolean>(async() => {
+        return new Promise<boolean>(async(resolve) => {
 
             const txButton = await firstValueFrom(this.translate.get('alert.accept'));
 
@@ -60,6 +61,7 @@ export class AlertService{
                         text:txButton,
                         role:"cancel",
                         handler: () => {
+                          resolve(true);
                         },
                     },
                 ],

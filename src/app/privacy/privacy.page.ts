@@ -35,14 +35,12 @@ export class PrivacyPage implements OnInit {
     await this._admob.hideBanner();
   }
 
-  ionViewWillLeave(){
-    this._admob.resumeBanner();
-  }
 
 
   goback(){
     if(this.goBack){
       this.navCtr.navigateRoot([this.goBack], { queryParams: { reload: true } });
+      this._admob.resumeBanner();
     }else{
       this.navCtr.navigateRoot(['/home'])
     }

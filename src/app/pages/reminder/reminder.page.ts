@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonSelectOption, IonContent, IonHeader, IonTitle, IonToolbar, IonRow, IonCol, IonIcon, IonButton, IonImg, IonItem, IonLabel, IonDatetime, IonInput, IonTextarea, NavController, IonSelect } from '@ionic/angular/standalone';
+import { IonSelectOption, IonContent, IonHeader, IonTitle, IonToolbar, IonRow, IonCol, IonIcon, IonButton, IonImg, IonItem, IonLabel, IonDatetime, IonInput, IonTextarea, NavController, IonSelect, IonText } from '@ionic/angular/standalone';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslationConfigService } from 'src/app/services/translation.service';
 import { LocalNotificationSchema } from '@capacitor/local-notifications';
@@ -24,7 +24,7 @@ import { Network } from '@capacitor/network';
   templateUrl: './reminder.page.html',
   styleUrls: ['./reminder.page.scss'],
   standalone: true,
-  imports: [IonSelect, IonSelectOption, IonInput, IonTextarea, TranslateModule, IonDatetime, IonLabel, IonItem, IonImg, IonButton, IonIcon, IonCol, IonRow, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [IonText, IonSelect, IonSelectOption, IonInput, IonTextarea, TranslateModule, IonDatetime, IonLabel, IonItem, IonImg, IonButton, IonIcon, IonCol, IonRow, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
 })
 export class ReminderPage{
 

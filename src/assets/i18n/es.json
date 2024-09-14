@@ -197,7 +197,7 @@
       "email":"Email",
       "change_password":"Cambiar contraseña",
       "delete_user":"Eliminar cuenta",
-      "is_not_posibble_to_change_text":"El acceso se ha realizado mediante un proveedor externo, por lo que no es posible cambiar los datos"
+      "is_not_posibble_to_change_text":"El acceso se ha realizado mediante un proveedor externo (Google). Se utilizan las credenciales obtenidas para acceder a la aplicación, pero no se crea ningún usuario o registro en nuestros sistemas, por lo que no es posible cambiar los datos de la cuenta ni eliminarla."
   },
   "event":{
     "create_event":"Crear evento",

@@ -185,7 +185,7 @@ export class HomePage implements OnInit, OnDestroy{
         //Primero prueba a refrescar
         await this._authService.refreshGoogle()
         .then(async (authentication)=>{
-          const user:any = await this._authService.fetchUserInfo(authentication.accessToken)
+          const user:any = await this._authService.fetchUserInfo(authentication.accessToken);
           //console.log(user)
           if(user){
             //Como la información en si no trae el toquen, lo insertamos para poder ejecutar bien el proceso de login y guardar los datos
@@ -199,7 +199,14 @@ export class HomePage implements OnInit, OnDestroy{
             this.loginExecute(user, "google")
           })
           .catch(async (error)=>{
-            this.handleErrors(error.code);
+            console.log("Error: ",error)
+            if(error.error !== "popup_closed_by_user"){
+              if(error.message){
+                this.handleErrors(error.message);
+              }else{
+                this.handleErrors(error.error);
+              }
+            }
             await this._loader.dismissLoader();
           })
         })
@@ -266,6 +273,7 @@ export class HomePage implements OnInit, OnDestroy{
 
   //MANEJO DE ERRORES
   async handleErrors(errorCode: string) {
+    console.log(errorCode)
     if (errorCode === "auth/invalid-email" || errorCode === "invalid-email") {
         this.Error = this.translate.instant('error.email_format_incorrect');
     } else if (errorCode === "auth/wrong-password" || errorCode === "wrong-password") {

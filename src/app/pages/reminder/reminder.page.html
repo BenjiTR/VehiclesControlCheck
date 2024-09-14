@@ -7,7 +7,8 @@
 
     <ion-col size="12">
       <ion-item class="rounded-inputs">
-          <ion-select [(ngModel)]="vehicleId" label="{{'event.vehicle'|translate}}" label-placement="floating">
+          <ion-select [(ngModel)]="vehicleId" label-placement="floating">
+            <div slot="label">{{'event.vehicle'|translate}} <ion-text color="danger"> *</ion-text></div>
             <ion-select-option *ngFor="let vehicle of vehiclesArray" [value]="vehicle.id">{{vehicle.brandOrModel}}</ion-select-option>
           </ion-select>
       </ion-item>
@@ -20,7 +21,9 @@
     </ion-col>
     <ion-col size="12">
       <ion-item class="rounded-inputs">
-        <ion-input label="{{'reminder.title' | translate}}" label-placement="floating" [(ngModel)]="title" type="text"></ion-input>
+        <ion-input label-placement="floating" [(ngModel)]="title" type="text">
+          <div slot="label">{{'reminder.title'|translate}} <ion-text color="danger"> *</ion-text></div>
+        </ion-input>
       </ion-item>
     </ion-col>
 

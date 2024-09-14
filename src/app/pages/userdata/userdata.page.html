@@ -38,15 +38,13 @@
 
         <ion-col *ngIf="user.method === 'email'" class="ion-text-center ion-margin-top"><ion-button class="change-button" (click)="changePassword()" translate="userpage.change_password"></ion-button></ion-col>
 
-
-
         <ion-col class="ion-padding-start ion-padding-end" size="12" *ngIf="user.method !== 'email'"><p class="ion-text-justify" translate="userpage.is_not_posibble_to_change_text"></p></ion-col>
 
   </ion-row>
 
 <ion-row>
   <ion-col class="ion-text-center">
-    <ion-button (click)="deleteAccount()" color="warning" fill="solid" class="change-button" translate="userpage.delete_user"></ion-button>
+    <ion-button  *ngIf="user.method === 'email'" (click)="deleteAccount()" color="warning" fill="solid" class="change-button" translate="userpage.delete_user"></ion-button>
   </ion-col>
 </ion-row>
 <ion-row class="ion-margin-top">

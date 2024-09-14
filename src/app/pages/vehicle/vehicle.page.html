@@ -26,7 +26,9 @@
 
         <ion-col class="ion-padding-start ion-padding-end ion-margin-top" size="12">
           <ion-item class="rounded-inputs">
-            <ion-input  type="text" [(ngModel)]="brandOrModel" label="{{'newvehicle.brand_or_model'|translate}}" label-placement="floating"></ion-input>
+            <ion-input  type="text" [(ngModel)]="brandOrModel" label-placement="floating">
+              <div slot="label">{{'newvehicle.brand_or_model'|translate}} <ion-text color="danger"> *</ion-text></div>
+            </ion-input>
           </ion-item>
         </ion-col>
         <ion-col class="ion-padding-start ion-padding-end" size="12">

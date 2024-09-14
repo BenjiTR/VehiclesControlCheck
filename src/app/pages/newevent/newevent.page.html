@@ -12,20 +12,24 @@
 
         <ion-col class="ion-padding-start ion-padding-end" size="12">
           <ion-item class="rounded-inputs">
-              <ion-select [(ngModel)]="vehicleId" label="{{'event.vehicle'|translate}}" label-placement="floating">
+              <ion-select [(ngModel)]="vehicleId" label-placement="floating">
+                <div slot="label">{{'event.vehicle'|translate}} <ion-text color="danger"> *</ion-text></div>
                 <ion-select-option *ngFor="let vehicle of vehiclesArray" [value]="vehicle.id">{{vehicle.brandOrModel}}</ion-select-option>
               </ion-select>
           </ion-item>
         </ion-col>
         <ion-col class="ion-padding-start ion-padding-end ion-margin-top" size="12">
           <ion-item class="rounded-inputs">
-            <ion-input [(ngModel)]="date" type="date" label="{{'event.date'|translate}}" label-placement="floating"></ion-input>
+            <ion-input [(ngModel)]="date" type="date" label-placement="floating">
+            <div slot="label">{{'event.date'|translate}} <ion-text color="danger"> *</ion-text></div>
+          </ion-input>
           </ion-item>
         </ion-col>
         <ion-col class="ion-padding-start ion-padding-end" size="12">
           <ion-item class="rounded-inputs">
-              <ion-select [(ngModel)]="type" label="{{'event.type'|translate}}" label-placement="floating">
+              <ion-select [(ngModel)]="type" label-placement="floating">
                 <ion-select-option *ngFor="let type of eventTypes" [value]="type.name">{{type.string}}</ion-select-option>
+                <div slot="label">{{'event.type'|translate}} <ion-text color="danger"> *</ion-text></div>
               </ion-select>
           </ion-item>
         </ion-col>

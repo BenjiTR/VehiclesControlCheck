@@ -45,6 +45,7 @@ export class BackupPage implements OnInit {
   private uploadingSubscription: Subscription;
   private downloadingSubscription: Subscription;
   private cleaningSubscription: Subscription;
+  private haveFileSubscription:Subscription;
 
 
   constructor(
@@ -77,6 +78,10 @@ export class BackupPage implements OnInit {
     this.cleaningSubscription = this._drive.cleaning$.subscribe(data=>{
       this.cleaning = data;
     });
+    this.haveFileSubscription= this._drive.haveFiles$.subscribe(data=>{
+      this.haveFiles=data;
+    });
+
   }
 
   async ngOnInit() {
@@ -103,7 +108,6 @@ export class BackupPage implements OnInit {
 
   async getData(){
     this.connected = await firstValueFrom(this._drive.conected$);
-    this.haveFiles = await firstValueFrom(this._drive.haveFiles$);
   }
 
 
@@ -142,13 +146,16 @@ export class BackupPage implements OnInit {
     if(sure){
       this.creatingFile = true;
       await this._file.restoreBackup()
-      .then(()=>{
+      .then(async ()=>{
         this.creatingFile = false;
         if(this._drive.folderId && this._session.autoBackup){
-          this.updateData();
+          this.updateData(true);
         }
-        this._alert.createAlert(this.translate.instant('alert.file_restored'),this.translate.instant('alert.file_restored_text'));
-        this.navCtr.navigateRoot(['/dashboard'], { queryParams: { reload: true } });
+        await this._alert.createAlert(this.translate.instant('alert.file_restored'),this.translate.instant('alert.file_restored_text'))
+        .then(()=>{
+          this._drive.changeDownloading("refresh");
+          this.navCtr.navigateRoot(['/dashboard'], { queryParams: { reload: true } });
+        })
       })
       .catch((err)=>{
         this.creatingFile = false;
@@ -165,32 +172,42 @@ export class BackupPage implements OnInit {
   }
 
 //DRIVE
-  async updateData(){
+  async updateData(sure?:boolean){
     if(this.token && (await Network.getStatus()).connected === false){
       this._alert.createAlert(this.translate.instant("error.no_network"),"");
+    }else if(sure){
+      this.updateProcess();
     }else{
-
       const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.are_you_sure?'),this.translate.instant('alert.update_files_text'),this.translate.instant('alert.accept'),this.translate.instant('alert.cancel'));
       if(sure){
-        this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,true)
+        this.updateProcess();
+      }
+    }
+  }
+
+  async updateProcess(){
+    this.creatingFile = true;
+    this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,true);
         await this.removeAllElements()
         .then(async()=>{
           await this.uploadFiles();
-          this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,false)
+          this.creatingFile = false;
+          this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,false);
         })
         .catch((e)=>{
           console.log(e);
-          this._alert.createAlert(this.translate.instant('error.error_cleaning'), this.translate.instant('error.error_cleaning_text'))
+          this.creatingFile = false;
+          this._alert.createAlert(this.translate.instant('error.error_cleaning'), this.translate.instant('error.error_cleaning_text'));
         })
-      }
-    }
   }
 
   async uploadFiles():Promise<void> {
     if(this.token && (await Network.getStatus()).connected === false){
       this._alert.createAlert(this.translate.instant("error.no_network"),"");
     }else{
-      this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,true)
+      this.creatingFile = true;
+      this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,true);
+
       if(!this._drive.folderId){
         await this.createFolder();
       }
@@ -219,9 +236,11 @@ export class BackupPage implements OnInit {
           break;
         }
       }
+      this.creatingFile = false;
       this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,false)
       this._drive.changeHaveFiles(true);
       this._drive.changeUploading(false);
+      console.log(this)
       this.getData();
     }
   }
