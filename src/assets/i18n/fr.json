@@ -118,8 +118,8 @@
     "user_delete": "Utilisateur supprimé",
     "user_delete_with_exit": "L'utilisateur a été supprimé avec succès",
     "incorrect_date": "Date incorrecte",
-    "incorrect_date_text": "La date du rappel ne peut pas être antérieure à la date actuelle"
-
+    "incorrect_date_text": "La date du rappel ne peut pas être antérieure à la date actuelle",
+    "do_you_want?": "Voulez-vous mettre à jour les données sur Drive ?"
   },
   "home": {
     "init_session": "Connexion",

@@ -47,7 +47,7 @@ export class DataService{
       remindersOptions: await this._session.getReminderNotifications(),
       autoBackup: await this._session.getAutoBackup(),
       photo: await this._storage.getStorageItem(storageConstants.USER_PHOTO+this._session.currentUser.id) || "",
-      tags: await this._storage.getStorageItem(storageConstants.USER_TAGS + this._session.currentUser.id) || []
+      tags: await this._session.getTags()
     }
     return backup
   }
@@ -119,7 +119,7 @@ export class DataService{
     // Recordatorios
     backup.reminders.forEach((reminder) => {
       const fileName = `R${reminder.id}`;
-      arrayBackup.push({ fileName, content: JSON.stringify(reminder) });
+      arrayBackup.push({ fileName, content: this._crypto.encryptMessage(JSON.stringify(reminder)) });
     });
 
     // Opción de recordatorios
@@ -144,7 +144,7 @@ export class DataService{
 
     //Tags
     const tagsFilename = `tags`
-    arrayBackup.push({ fileName: tagsFilename, content: backup.tags });
+    arrayBackup.push({ fileName: tagsFilename, content: this._crypto.encryptMessage(JSON.stringify(backup.tags)) });
 
     return arrayBackup;
 

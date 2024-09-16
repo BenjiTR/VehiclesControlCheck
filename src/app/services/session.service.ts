@@ -147,5 +147,14 @@ export class SessionService{
     }
   }
 
+  //ETIQUETAS
+  async getTags(){
+    const tempTags = await this._storage.getStorageItem(storageConstants.USER_TAGS + this.currentUser.id);
+      if(tempTags){
+        return JSON.parse(this._crypto.decryptMessage(tempTags));
+      }else{
+        return [];
+      }
+  }
 
 }

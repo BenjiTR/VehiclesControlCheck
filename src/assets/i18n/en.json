@@ -118,7 +118,8 @@
     "user_delete": "User Deleted",
     "user_delete_with_exit": "The user has been successfully deleted",
     "incorrect_date": "Incorrect date",
-    "incorrect_date_text": "The reminder date cannot be earlier than the current date"
+    "incorrect_date_text": "The reminder date cannot be earlier than the current date",
+    "do_you_want?": "Do you want to update the data on Drive?"
   },
   "home": {
     "init_session": "Sign In",

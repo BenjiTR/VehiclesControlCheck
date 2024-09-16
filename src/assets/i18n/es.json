@@ -118,7 +118,8 @@
       "user_delete":"Usuario eliminado",
       "user_delete_with_exit":"El usuario se ha eliminado con éxito",
       "incorrect_date":"Fecha incorrecta",
-      "incorrect_date_text":"La fecha del recordatorio no puede ser menor a la fecha actual"
+      "incorrect_date_text":"La fecha del recordatorio no puede ser menor a la fecha actual",
+      "do_you_want?":"¿Desea actualizar los datos en Drive?"
     },
   "home":{
       "init_session":"Inicio de sesión",

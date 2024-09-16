@@ -2,7 +2,7 @@ import { imageConstants } from './../../const/img';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonTextarea, IonContent, IonHeader, IonTitle, IonToolbar, IonRow, IonCol, IonLabel, IonAvatar, IonItem, IonIcon, IonButton, IonSelectOption, ModalController, IonSelect, IonInput, IonImg, NavController, IonText, IonList } from '@ionic/angular/standalone';
+import { IonTextarea, IonContent, IonHeader, IonTitle, IonToolbar, IonRow, IonCol, IonLabel, IonAvatar, IonItem, IonIcon, IonButton, IonSelectOption, ModalController, IonSelect, IonInput, IonImg, NavController, IonText, IonList, IonCheckbox } from '@ionic/angular/standalone';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { EventTypes } from 'src/app/const/eventTypes';
@@ -28,7 +28,7 @@ import { Network } from '@capacitor/network';
   templateUrl: './newevent.page.html',
   styleUrls: ['./newevent.page.scss'],
   standalone: true,
-  imports: [IonList, IonText, IonTextarea, IonImg, IonInput, TranslateModule, IonSelect, IonSelectOption, IonButton, IonIcon, IonItem, IonAvatar, IonLabel, IonRow, IonCol, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [IonCheckbox, IonList, IonText, IonTextarea, IonImg, IonInput, TranslateModule, IonSelect, IonSelectOption, IonButton, IonIcon, IonItem, IonAvatar, IonLabel, IonRow, IonCol, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
 })
 export class NeweventPage {
 
@@ -91,10 +91,7 @@ export class NeweventPage {
   }
 
   async getTags(){
-    const tempTags = await this._storage.getStorageItem(storageConstants.USER_TAGS + this._session.currentUser.id);
-    if(tempTags){
-      this.tags = JSON.parse(this._crypto.decryptMessage(tempTags));
-    }
+      this.tags = await this._session.getTags()
   }
 
   getEvent() {
@@ -224,7 +221,7 @@ export class NeweventPage {
     await this._loader.dismissLoader();
   }
 
-  //etiquetas
+  //ETIQUETAS
   onInputChange(event: any) {
     const inputValue = event.target.value;
 
@@ -285,7 +282,9 @@ export class NeweventPage {
       this.filteredTags = this.tags.filter(tag => tag.startsWith(newTag));
       this.showSuggestions = false;
       //subir a DRIVE
-      this.uploadFile('tags',this.tags);
+      if (this._drive.folderId && this._session.autoBackup) {
+        this.uploadFile('tags',this.tags);
+      }
     }
   }
 
@@ -296,7 +295,9 @@ export class NeweventPage {
     }
     await this._storage.setStorageItem(storageConstants.USER_TAGS + this._session.currentUser.id, this._crypto.encryptMessage(JSON.stringify(this.tags)));
      //subir a DRIVE
-     this.uploadFile('tags',this.tags);
+     if (this._drive.folderId && this._session.autoBackup) {
+      this.uploadFile('tags',this.tags);
+    }
   }
 
   async uploadFile(fileType:string, file:any):Promise<void>{

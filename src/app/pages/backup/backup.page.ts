@@ -148,13 +148,14 @@ export class BackupPage implements OnInit {
       await this._file.restoreBackup()
       .then(async ()=>{
         this.creatingFile = false;
-        if(this._drive.folderId && this._session.autoBackup){
-          this.updateData(true);
-        }
         await this._alert.createAlert(this.translate.instant('alert.file_restored'),this.translate.instant('alert.file_restored_text'))
         .then(()=>{
+          if(this._drive.folderId && this._session.autoBackup){
+            this.updateData(true);
+          }
           this._drive.changeDownloading("refresh");
-          this.navCtr.navigateRoot(['/dashboard'], { queryParams: { reload: true } });
+          this._drive.changeDownloading("false");
+          //this.navCtr.navigateRoot(['/dashboard'], { queryParams: { reload: true } });
         })
       })
       .catch((err)=>{
@@ -172,13 +173,20 @@ export class BackupPage implements OnInit {
   }
 
 //DRIVE
-  async updateData(sure?:boolean){
+  async updateData(alternativeAks?:boolean){
     if(this.token && (await Network.getStatus()).connected === false){
       this._alert.createAlert(this.translate.instant("error.no_network"),"");
-    }else if(sure){
-      this.updateProcess();
     }else{
-      const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.are_you_sure?'),this.translate.instant('alert.update_files_text'),this.translate.instant('alert.accept'),this.translate.instant('alert.cancel'));
+      let title;
+      let text;
+      if(alternativeAks){
+        title = this.translate.instant('alert.do_you_want?');
+        text = this.translate.instant('alert.update_files_text');
+      }else{
+        title = this.translate.instant('alert.are_you_sure?');
+        text = this.translate.instant('alert.update_files_text');
+      }
+      const sure = await this._alert.twoOptionsAlert(title,text,this.translate.instant('alert.accept'),this.translate.instant('alert.cancel'));
       if(sure){
         this.updateProcess();
       }
@@ -276,6 +284,7 @@ export class BackupPage implements OnInit {
       this._drive.changeProgress(value, value);
       const content = await this.readFileFromDrive(element.name);
       if (content) {
+        console.log(content)
         if (element.name === "photo") {
           temporalBackup.photo = content;
         } else if (element.name === "remindersOptions") {
@@ -287,7 +296,7 @@ export class BackupPage implements OnInit {
           //console.log("Eventos: ",content)
           temporalBackup.events.push(JSON.parse(this._crypto.decryptMessage(content)));
         } else if (element.name.startsWith("R")) {
-          temporalBackup.reminders.push(JSON.parse(content));
+          temporalBackup.reminders.push(JSON.parse(this._crypto.decryptMessage(content)));
         }else if (element.name === "tags"){
           temporalBackup.tags = JSON.parse(this._crypto.decryptMessage(content));
         }
