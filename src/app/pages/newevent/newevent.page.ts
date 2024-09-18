@@ -144,20 +144,24 @@ export class NeweventPage {
   }
 
   async createEvent() {
-    if (this.eventToEditId) {
-      this.editEvent()
-    } else {
-      this.createNew();
-    }
-  }
-  async editEvent() {
     if (!this.vehicleId) {
       this._alert.createAlert(this.translate.instant("alert.enter_name_or_model"), this.translate.instant("alert.enter_name_or_model_text"));
     } else if (!this.type) {
       this._alert.createAlert(this.translate.instant("alert.enter_type"), this.translate.instant("alert.enter_type_text"));
     } else if (!this.date) {
       this._alert.createAlert(this.translate.instant("alert.enter_date"), this.translate.instant("alert.enter_date_text"));
-    } else {
+    }else if(this.haveReminder && !this.reminderTittle){
+      this._alert.createAlert(this.translate.instant("alert.enter_title"),this.translate.instant("alert.enter_title_text"));
+    }
+    else {
+      if (this.eventToEditId) {
+        this.editEvent()
+      } else {
+        this.createNew();
+      }
+    }
+  }
+  async editEvent() {
       await this._loader.presentLoader();
       const index = this.eventsArray.findIndex(event => event.id === this.eventToEditId);
       if (index !== -1) {
@@ -165,7 +169,6 @@ export class NeweventPage {
         this._session.eventsArray[index] = newEvent;
         this.saveAndExit(newEvent);
       }
-    }
   }
 
 
@@ -207,18 +210,11 @@ export class NeweventPage {
   }
 
   async createNew() {
-    if (!this.vehicleId) {
-      this._alert.createAlert(this.translate.instant("alert.enter_name_or_model"), this.translate.instant("alert.enter_name_or_model_text"));
-    } else if (!this.type) {
-      this._alert.createAlert(this.translate.instant("alert.enter_type"), this.translate.instant("alert.enter_type_text"));
-    } else if (!this.date) {
-      this._alert.createAlert(this.translate.instant("alert.enter_date"), this.translate.instant("alert.enter_date_text"));
-    } else {
       await this._loader.presentLoader();
       const newEvent = await this.generateEvent();
       this.eventsArray.push(newEvent)
       this.saveAndExit(newEvent);
-    }
+
   }
 
   async deleteImg(img: any) {
