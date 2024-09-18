@@ -351,6 +351,13 @@ export class MainPage implements OnInit, OnDestroy {
             this._drive.folderId = "";
           }
         }
+        if(event.reminder){
+          const reminder = this.remindersArray.find(reminder=>reminder.extra.eventId === event.id);
+          console.log("recordatorio: ",reminder)
+          if(reminder){
+            this._notification.deleteNotification(reminder)
+          }
+        }
       }
     }
   }
@@ -511,20 +518,16 @@ export class MainPage implements OnInit, OnDestroy {
   }
 
   isFutureEvent(event:Event){
-    const thereisReminder = event.reminder;
-    if(thereisReminder){
-      const rightNow = new Date().toISOString();
-      const eventDate = new Date(event.reminderDate).toISOString();
-
-      return rightNow < eventDate;
+    if(event.reminder){
+      return this._date.isFutureEvent(event.reminderDate!);
     }else{
       return false;
     }
   }
 
   checkReminder(event:Event){
-    const isInNotifications = this.remindersArray.find(e => e.extra.eventId === event.id);
-    return isInNotifications && this.isFutureEvent;
+    const isInNotifications = this.remindersArray.some(e => e.extra.eventId === event.id);
+    return !isInNotifications && this.isFutureEvent(event);
     }
 
 

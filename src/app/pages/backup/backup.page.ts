@@ -22,6 +22,9 @@ import { firstValueFrom, Subscription } from 'rxjs';
 import { PaddingService } from 'src/app/services/padding.service';
 import { DataService } from 'src/app/services/data.service';
 import { CryptoService } from 'src/app/services/crypto.services';
+import { DateService } from 'src/app/services/date.service';
+import { Event } from 'src/app/models/event.model';
+import { Vehicle } from 'src/app/models/vehicles.model';
 
 @Component({
   selector: 'app-backup',
@@ -40,6 +43,7 @@ export class BackupPage implements OnInit {
   public uploading:boolean = false;
   public downloading:string = "false";
   public cleaning:boolean = false;
+  public vehiclesArray:Vehicle[]=[];
 
   private progressSubscription: Subscription;
   private uploadingSubscription: Subscription;
@@ -64,7 +68,8 @@ export class BackupPage implements OnInit {
     private _paddingService:PaddingService,
     private _data:DataService,
     private notifications:NotificationsPage,
-    private _crypto:CryptoService
+    private _crypto:CryptoService,
+    private _date:DateService
   ) {
     this.progressSubscription = this._drive.progress$.subscribe(data=>{
       this.progress = data;
@@ -81,7 +86,7 @@ export class BackupPage implements OnInit {
     this.haveFileSubscription= this._drive.haveFiles$.subscribe(data=>{
       this.haveFiles=data;
     });
-
+    this.vehiclesArray = this._session.vehiclesArray;
   }
 
   async ngOnInit() {
@@ -145,14 +150,16 @@ export class BackupPage implements OnInit {
     const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.are_you_sure?'),this.translate.instant('alert.actual_data_will_be_rewrite'),this.translate.instant('alert.accept'),this.translate.instant('alert.cancel'))
     if(sure){
       this.creatingFile = true;
-      await this._file.restoreBackup()
+      const data = await this._file.restoreBackup()
       .then(async ()=>{
         this.creatingFile = false;
         await this._alert.createAlert(this.translate.instant('alert.file_restored'),this.translate.instant('alert.file_restored_text'))
-        .then(()=>{
+        .then(async ()=>{
           if(this._drive.folderId && this._session.autoBackup){
             this.updateData(true);
           }
+          const events = await this._session.loadEvents();
+          this.setNotifications(events)
           this._drive.changeDownloading("refresh");
           this._drive.changeDownloading("false");
           //this.navCtr.navigateRoot(['/dashboard'], { queryParams: { reload: true } });
@@ -258,16 +265,25 @@ export class BackupPage implements OnInit {
     const backupList = await this.readAll();
     const backupData = await this.setData(backupList);
     await this._data.restoreDeviceData(backupData);
+    this.setNotifications(backupData.events)
     this._drive.changeDownloading("refresh");
     this._drive.changeDownloading("false");
     this.navCtr.navigateRoot(['/dashboard'], { queryParams: { reload: true } });
+  }
+
+  async setNotifications(events:Event[]){
+    events.forEach(async event => {
+      if(event.reminderDate && event.reminder && this._date.isFutureEvent(event.reminderDate)){
+        const reminder = await this.constructReminder(event);
+        this._notifications.createNotification([reminder])
+      }
+    });
   }
 
   async setData(backup:any):Promise<Backup>{
     let temporalBackup:Backup = {
       vehicles: [],
       events: [],
-      reminders: [],
       remindersOptions: false,
       autoBackup: true,
       photo: "",
@@ -294,9 +310,8 @@ export class BackupPage implements OnInit {
           temporalBackup.vehicles.push(JSON.parse(this._crypto.decryptMessage(content)));
         } else if (element.name.startsWith("E")) {
           //console.log("Eventos: ",content)
-          temporalBackup.events.push(JSON.parse(this._crypto.decryptMessage(content)));
-        } else if (element.name.startsWith("R")) {
-          temporalBackup.reminders.push(JSON.parse(this._crypto.decryptMessage(content)));
+          const event:Event = JSON.parse(this._crypto.decryptMessage(content))
+          temporalBackup.events.push(event);
         }else if (element.name === "tags"){
           temporalBackup.tags = JSON.parse(this._crypto.decryptMessage(content));
         }
@@ -382,6 +397,33 @@ export class BackupPage implements OnInit {
   calculatePadding(){
     return this._paddingService.calculatePadding();
   }
+
+  async constructReminder(event:Event){
+
+    const newReminder:LocalNotificationSchema = {
+      channelId:"VCC",
+      title:this.currentVehicle(event.vehicleId)+" - "+event.reminderTittle,
+      body:event.info,
+      largeBody:event.info,
+      summaryText:event.info,
+      id: event.reminderId!,
+      schedule: {at: new Date(event.reminderDate!)},
+      sound:'clockalarm.wav',
+      extra:{
+        eventId:event.id,
+        titleWithoutCar:event.reminderTittle,
+      }
+    }
+    return newReminder;
+  }
+
+  async currentVehicle(vehicleId:string){
+    this.vehiclesArray = await this._session.loadVehicles();
+    console.log("Array:", this.vehiclesArray)
+    const current = this.vehiclesArray.find(vehicle=>vehicle.id === vehicleId);
+    return current!.brandOrModel;
+  }
+
 
 
 }

@@ -43,7 +43,6 @@ export class DataService{
     const backup:Backup = {
       vehicles: await this._session.loadVehicles(),
       events: await this._session.loadEvents(),
-      reminders: await this._session.loadReminders(),
       remindersOptions: await this._session.getReminderNotifications(),
       autoBackup: await this._session.getAutoBackup(),
       photo: await this._storage.getStorageItem(storageConstants.USER_PHOTO+this._session.currentUser.id) || "",
@@ -65,35 +64,10 @@ export class DataService{
     this._storage.setStorageItem(storageConstants.USER_EVENTS+this._session.currentUser.id, this._crypto.encryptMessage(JSON.stringify(backup.events)));
 
     this._session.setReminderNotifications(backup.remindersOptions);
-    const correctReminders = await this._date.setDatesInArray(backup.reminders);
-    if(this._platform.is("android")||this._platform.is('ios')){
-
-      const remindersCopy = [...correctReminders];
-
-      for (const reminder of remindersCopy) {
-
-        const rightNow = new Date();
-        const reminderDate = new Date(reminder.schedule!.at!)
-
-        if(reminderDate<rightNow){
-
-          const indexToRemove = correctReminders.indexOf(reminder);
-          if (indexToRemove > -1) {
-            correctReminders.splice(indexToRemove, 1);
-          }
-
-          const id = await this.driveService.findFileByName("R"+reminder.id)
-          await this.driveService.deleteFile(id, true);
-
-        }
-
-        await this._notifications.createNotification(correctReminders);
-      }
-    }
-    this._session.setAutoBackup(backup.autoBackup)
+    this._session.setAutoBackup(backup.autoBackup);
     if(backup.photo){
 
-      this._storage.setStorageItem(storageConstants.USER_PHOTO+this._session.currentUser.id,backup.photo)
+      this._storage.setStorageItem(storageConstants.USER_PHOTO+this._session.currentUser.id,backup.photo);
       this._session.currentUser.photo = imageConstants.base64Prefix + this._crypto.decryptMessage(backup.photo);
     }
     this._storage.setStorageItem(storageConstants.USER_TAGS+this._session.currentUser.id,this._crypto.encryptMessage(JSON.stringify(backup.tags)));
@@ -114,12 +88,6 @@ export class DataService{
     backup.events.forEach((event) => {
       const fileName = event.id;
       arrayBackup.push({ fileName, content: this._crypto.encryptMessage(JSON.stringify(event)) });
-    });
-
-    // Recordatorios
-    backup.reminders.forEach((reminder) => {
-      const fileName = `R${reminder.id}`;
-      arrayBackup.push({ fileName, content: this._crypto.encryptMessage(JSON.stringify(reminder)) });
     });
 
     // Opción de recordatorios

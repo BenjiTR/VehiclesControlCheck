@@ -188,7 +188,7 @@ export class NeweventPage {
       reminder: this.haveReminder,
       reminderTittle: this.reminderTittle,
       reminderDate: this.reminderDate,
-      reminderId: await this.getFirstId()
+      reminderId: await this.getFirstId(this.reminderId)
     }
     return newEvent;
   }
@@ -388,7 +388,7 @@ export class NeweventPage {
       body:event.info,
       largeBody:event.info,
       summaryText:event.info,
-      id: event.reminderId!,
+      id: event.reminderId||0,
       schedule: {at: new Date(this.reminderDate)},
       sound:'clockalarm.wav',
       extra:{
@@ -404,26 +404,23 @@ export class NeweventPage {
     return current!.brandOrModel;
   }
 
-  async getFirstId(): Promise<number|undefined> {
+  async getFirstId(id:number|undefined): Promise<number|undefined> {
     let newId:number|undefined;
 
     if(this.haveReminder && !this.isFutureEvent()){
       newId = 0;
     }else if(this.haveReminder && this.isFutureEvent() && this.reminderId !== undefined){
-      newId = await this._session.getFirstId();
+      newId = id
     }else{
-      newId = 0;
+      newId = await this._session.getFirstId();
     }
+    console.log(newId)
     return newId
   }
 
   isFutureEvent(){
-    const thereisReminder = this.reminderDate;
-    if(thereisReminder){
-      const rightNow = new Date().toISOString();
-      const eventDate = new Date(this.reminderDate).toISOString();
-
-      return rightNow < eventDate;
+    if(this.reminderDate){
+      return this._date.isFutureEvent(this.reminderDate);
     }else{
       return false;
     }

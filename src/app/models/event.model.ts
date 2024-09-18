@@ -9,8 +9,8 @@ export class Event {
   cost:number=0;
   info:string="";
   images:string[]=[];
-  reminder:boolean=false;
-  reminderTittle:string="";
-  reminderDate:Date = new Date();
-  reminderId:number|undefined;
+  reminder?:boolean=false;
+  reminderTittle?:string="";
+  reminderDate?:Date = new Date();
+  reminderId?:number|undefined;
 }

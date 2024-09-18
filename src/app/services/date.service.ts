@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { LocalNotificationSchema } from '@capacitor/local-notifications';
+import { Event } from '../models/event.model';
 
 @Injectable({
   providedIn:'root'
@@ -14,13 +15,10 @@ export class DateService {
     return localISOTime;
   }
 
-  public async setDatesInArray(reminders:LocalNotificationSchema[]):Promise<LocalNotificationSchema[]>{
-    reminders.forEach(element => {
-      if(element.schedule?.at){
-        element.schedule.at = new Date(element.schedule.at);
-      }
-    });
-    return reminders;
+  isFutureEvent(reminderDate:Date){
+    const rightNow = new Date().toISOString();
+    const eventDate = new Date(reminderDate).toISOString();
+    return rightNow < eventDate;
   }
 
 

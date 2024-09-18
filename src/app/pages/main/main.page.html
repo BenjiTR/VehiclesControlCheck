@@ -225,18 +225,18 @@
                               <ion-col *ngIf="thereIsReminder(event)" class="ion-text-center ion-padding-start ion-padding-end" size="12">
                                 <ion-label><h1 class="centered"><ion-icon class="ion-margin-end" slot="start" src="../../../assets/icons/alarm-outline.svg"></ion-icon> {{getLabelOfDate(event.reminderDate)}}</h1></ion-label>
                                 <ion-label *ngIf="checkReminder(event)" id="currency_info+{{event.id}}" class="subtitle ion-justify-content-center ion-margin-start"><h1 class="centered-nm"><ion-icon color="danger" class="larger" src="../../../assets/icons/alert-outline.svg"></ion-icon></h1></ion-label>
+                                <ion-popover *ngIf="checkReminder(event)" trigger="currency_info+{{event.id}}" trigger-action="click">
+                                  <ng-template>
+                                    <ion-content class="ion-padding">
+                                      <ion-row>
+                                        <ion-col class="ion-text-justify" size="12"><ion-label>{{'alert.notification_problem_text'|translate}}</ion-label></ion-col>
+                                      </ion-row>
+                                    </ion-content>
+                                  </ng-template>
+                                </ion-popover>
                               </ion-col>
 
 
-                              <ion-popover  trigger="currency_info+{{event.id}}" trigger-action="click">
-                                <ng-template>
-                                  <ion-content class="ion-padding">
-                                    <ion-row>
-                                      <ion-col class="ion-text-justify" size="12"><ion-label>{{'alert.notification_problem_text'|translate}}</ion-label></ion-col>
-                                    </ion-row>
-                                  </ion-content>
-                                </ng-template>
-                              </ion-popover>
 
                               <ion-col class="ion-padding-start ion-padding-end" size="12">
                                 <ion-item class="rounded-inputs">

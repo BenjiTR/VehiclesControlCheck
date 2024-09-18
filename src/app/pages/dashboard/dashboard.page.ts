@@ -18,6 +18,7 @@ import { storageConstants } from 'src/app/const/storage';
 import { StorageService } from 'src/app/services/storage.service';
 import { AlertService } from 'src/app/services/alert.service';
 import { ScreenOrientationService } from '../../services/orientation.service'
+import { environment } from 'src/environments/environment.prod';
 
 
 @Component({
@@ -178,5 +179,8 @@ export class DashboardPage implements OnInit, OnDestroy {
 
   }
 
+  getVersion(){
+    return "V. "+environment.version;
+  }
 
 }

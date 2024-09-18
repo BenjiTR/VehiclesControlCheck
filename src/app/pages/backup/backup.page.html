@@ -9,7 +9,7 @@
       <ion-icon class="z-6" src="../../../assets/icons/phone-portrait-outline.svg"></ion-icon>
     </ion-col>
     <ion-col class="ion-text-center" size="9">
-      <ion-label *ngIf="creatingFile" id="in_device_info" class="subtitle ion-justify-content-center blue-color"><ion-icon *ngIf="creatingFile" class="blue-color ion-margin-end" src="../../../assets/icons/sync-outline.svg"></ion-icon>{{"backup.wait_please"|translate}}</ion-label>
+      <ion-label *ngIf="creatingFile" id="in_device_info" class="subtitle ion-justify-content-center blue-color"><ion-icon *ngIf="creatingFile && !uploading || !downloading || !cleaning" class="blue-color ion-margin-end" src="../../../assets/icons/sync-outline.svg"></ion-icon>{{"backup.wait_please"|translate}}</ion-label>
       <ion-label *ngIf="!creatingFile" id="in_device_info" class="subtitle ion-justify-content-center"><ion-icon class="larger" src="../../../assets/icons/information-circle-outline.svg"></ion-icon>{{"backup.see_information"|translate}}</ion-label>
       <ion-popover  *ngIf="!creatingFile" trigger="in_device_info" trigger-action="click">
         <ng-template>
@@ -25,8 +25,8 @@
       </ion-popover>
     </ion-col>
     <ion-col size="12">
-      <ion-button [disabled]="creatingFile" class="black" (click)="saveDataOnDevice()" expand="block" color="green" shape="round" translate="backup.download"></ion-button>
-      <ion-button [disabled]="creatingFile" expand="block" (click)="restoreByDevice()" color="warning" shape="round" translate="backup.restore"></ion-button>
+      <ion-button [disabled]="creatingFile || downloading" class="black" (click)="saveDataOnDevice()" expand="block" color="green" shape="round" translate="backup.download"></ion-button>
+      <ion-button [disabled]="creatingFile || downloading" expand="block" (click)="restoreByDevice()" color="warning" shape="round" translate="backup.restore"></ion-button>
     </ion-col>
   </ion-row>
 
@@ -78,10 +78,10 @@
 
   <ion-row>
     <ion-col size="12">
-      <ion-button [disabled]="creatingFile" class="black" *ngIf="connected && !haveFiles" (click)="uploadFiles()" expand="block" color="green" shape="round" translate="backup.generate_backup"></ion-button>
-      <ion-button [disabled]="creatingFile" class="black"  *ngIf="connected && haveFiles" (click)="updateData()" expand="block" color="green" shape="round" translate="backup.update_backup"></ion-button>
-      <ion-button [disabled]="creatingFile" *ngIf="connected && haveFiles" (click)="restoreBackup()" expand="block" color="warning" shape="round" translate="backup.download_and_restore"></ion-button>
-      <ion-button [disabled]="creatingFile" *ngIf="connected" (click)="unconnectAccount()" expand="block" color="danger" shape="round" translate="backup.unconnect_account"></ion-button>
+      <ion-button [disabled]="creatingFile || downloading" class="black" *ngIf="connected && !haveFiles" (click)="uploadFiles()" expand="block" color="green" shape="round" translate="backup.generate_backup"></ion-button>
+      <ion-button [disabled]="creatingFile || downloading" class="black"  *ngIf="connected && haveFiles" (click)="updateData()" expand="block" color="green" shape="round" translate="backup.update_backup"></ion-button>
+      <ion-button [disabled]="creatingFile || downloading" *ngIf="connected && haveFiles" (click)="restoreBackup()" expand="block" color="warning" shape="round" translate="backup.download_and_restore"></ion-button>
+      <ion-button [disabled]="creatingFile || downloading" *ngIf="connected" (click)="unconnectAccount()" expand="block" color="danger" shape="round" translate="backup.unconnect_account"></ion-button>
     </ion-col>
   </ion-row>
 
