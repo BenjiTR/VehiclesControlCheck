@@ -79,8 +79,12 @@ export class UserTestService {
         "km": "12000",
         "cost": 75.30,
         "info": "Cambio de neumático en carretera.",
-        "images": ["https://via.placeholder.com/150?text=Flat+tire"]
-    },
+        "images": ["https://via.placeholder.com/150?text=Flat+tire"],
+        "reminder": false,
+        "reminderTittle": "",
+        "reminderDate": new Date(),
+        "reminderId":undefined
+      },
     {
         "id": "event002",
         "vehicleId": "veh456",
@@ -89,8 +93,12 @@ export class UserTestService {
         "km": "35000",
         "cost": 200,
         "info": "Reparación del sistema de frenos.",
-        "images": ["https://via.placeholder.com/150?text=Repair"]
-    },
+        "images": ["https://via.placeholder.com/150?text=Repair"],
+        "reminder": false,
+        "reminderTittle": "",
+        "reminderDate": new Date(),
+        "reminderId":undefined
+      },
     {
         "id": "event003",
         "vehicleId": "veh789",
@@ -99,8 +107,12 @@ export class UserTestService {
         "km": "22000",
         "cost": 100,
         "info": "Inspección general del vehículo.",
-        "images": ["https://via.placeholder.com/150?text=Inspection"]
-    },
+        "images": ["https://via.placeholder.com/150?text=Inspection"],
+        "reminder": false,
+        "reminderTittle": "",
+        "reminderDate": new Date(),
+        "reminderId":undefined
+      },
     {
         "id": "event004",
         "vehicleId": "veh123",
@@ -109,8 +121,12 @@ export class UserTestService {
         "km": "5000",
         "cost": 55,
         "info": "Carga completa de combustible.",
-        "images": ["https://via.placeholder.com/150?text=Refueling"]
-    },
+        "images": ["https://via.placeholder.com/150?text=Refueling"],
+        "reminder": false,
+        "reminderTittle": "",
+        "reminderDate": new Date(),
+        "reminderId":undefined
+      },
     {
         "id": "event005",
         "vehicleId": "veh456",
@@ -119,8 +135,12 @@ export class UserTestService {
         "km": "45000",
         "cost": 300,
         "info": "Mantenimiento programado con cambio de aceite.",
-        "images": ["https://via.placeholder.com/150?text=Maintenance"]
-    },
+        "images": ["https://via.placeholder.com/150?text=Maintenance"],
+        "reminder": false,
+        "reminderTittle": "",
+        "reminderDate": new Date(),
+        "reminderId":undefined
+      },
     {
         "id": "event006",
         "vehicleId": "veh789",
@@ -129,8 +149,12 @@ export class UserTestService {
         "km": "16000",
         "cost": 500,
         "info": "Pinchazo durante el viaje.",
-        "images": ["https://via.placeholder.com/150?text=Accident"]
-    },
+        "images": ["https://via.placeholder.com/150?text=Accident"],
+        "reminder": false,
+        "reminderTittle": "",
+        "reminderDate": new Date(),
+        "reminderId":undefined
+      },
     {
         "id": "event007",
         "vehicleId": "veh123",
@@ -139,8 +163,12 @@ export class UserTestService {
         "km": "30000",
         "cost": 30,
         "info": "Cambio de luces.",
-        "images": ["https://via.placeholder.com/150?text=Others"]
-    },
+        "images": ["https://via.placeholder.com/150?text=Others"],
+        "reminder": false,
+        "reminderTittle": "",
+        "reminderDate": new Date(),
+        "reminderId":undefined
+      },
     {
         "id": "event008",
         "vehicleId": "veh123",
@@ -149,8 +177,12 @@ export class UserTestService {
         "km": "29000",
         "cost": 50,
         "info": "Repostaje durante el viaje.",
-        "images": ["https://via.placeholder.com/150"]
-    },
+        "images": ["https://via.placeholder.com/150"],
+        "reminder": false,
+        "reminderTittle": "",
+        "reminderDate": new Date(),
+        "reminderId":undefined
+      },
     {
         "id": "event009",
         "vehicleId": "veh123",
@@ -159,8 +191,12 @@ export class UserTestService {
         "km": "29500",
         "cost": 60,
         "info": "Repostaje después del viaje.",
-        "images": ["https://via.placeholder.com/150"]
-    },
+        "images": ["https://via.placeholder.com/150"],
+        "reminder": false,
+        "reminderTittle": "",
+        "reminderDate": new Date(),
+        "reminderId":undefined
+      },
     {
         "id": "event010",
         "vehicleId": "veh123",
@@ -169,8 +205,12 @@ export class UserTestService {
         "km": "30000",
         "cost": 70,
         "info": "Cambio de aceite después del viaje.",
-        "images": ["https://via.placeholder.com/150"]
-    },
+        "images": ["https://via.placeholder.com/150"],
+        "reminder": false,
+        "reminderTittle": "",
+        "reminderDate": new Date(),
+        "reminderId":undefined
+      },
     {
         "id": "event011",
         "vehicleId": "veh456",
@@ -179,8 +219,12 @@ export class UserTestService {
         "km": "15000",
         "cost": 40,
         "info": "Repostaje durante el viaje.",
-        "images": ["https://via.placeholder.com/150"]
-    },
+        "images": ["https://via.placeholder.com/150"],
+        "reminder": false,
+        "reminderTittle": "",
+        "reminderDate": new Date(),
+        "reminderId":undefined
+      },
     {
         "id": "event012",
         "vehicleId": "veh456",
@@ -189,8 +233,12 @@ export class UserTestService {
         "km": "15500",
         "cost": 55,
         "info": "Repostaje después del viaje.",
-        "images": ["https://via.placeholder.com/150"]
-    },
+        "images": ["https://via.placeholder.com/150"],
+        "reminder": false,
+        "reminderTittle": "",
+        "reminderDate": new Date(),
+        "reminderId":undefined
+      },
     {
         "id": "event013",
         "vehicleId": "veh456",
@@ -199,8 +247,12 @@ export class UserTestService {
         "km": "16000",
         "cost": 500,
         "info": "Pinchazo durante el viaje.",
-        "images": ["https://via.placeholder.com/150"]
-    },
+        "images": ["https://via.placeholder.com/150"],
+        "reminder": false,
+        "reminderTittle": "",
+        "reminderDate": new Date(),
+        "reminderId":undefined
+      },
     {
         "id": "event014",
         "vehicleId": "veh789",
@@ -209,8 +261,12 @@ export class UserTestService {
         "km": "22000",
         "cost": 80,
         "info": "Repostaje después del viaje largo.",
-        "images": ["https://via.placeholder.com/150"]
-    },
+        "images": ["https://via.placeholder.com/150"],
+        "reminder": false,
+        "reminderTittle": "",
+        "reminderDate": new Date(),
+        "reminderId":undefined
+      },
     {
         "id": "event015",
         "vehicleId": "veh123",
@@ -219,8 +275,12 @@ export class UserTestService {
         "km": "25000",
         "cost": 150,
         "info": "Oil change and tire rotation",
-        "images": ["https://via.placeholder.com/150"]
-    },
+        "images": ["https://via.placeholder.com/150"],
+        "reminder": false,
+        "reminderTittle": "",
+        "reminderDate": new Date(),
+        "reminderId":undefined
+      },
     {
         "id": "event016",
         "vehicleId": "veh456",
@@ -229,8 +289,12 @@ export class UserTestService {
         "km": "6000",
         "cost": 1200,
         "info": "Minor collision repair",
-        "images": []
-    },
+        "images": [],
+        "reminder": false,
+        "reminderTittle": "",
+        "reminderDate": new Date(),
+        "reminderId":undefined
+      },
     {
         "id": "event017",
         "vehicleId": "veh789",
@@ -239,8 +303,12 @@ export class UserTestService {
         "km": "20000",
         "cost": 300,
         "info": "Brake pads replacement",
-        "images": ["https://via.placeholder.com/150", "https://via.placeholder.com/150"]
-    },
+        "images": ["https://via.placeholder.com/150", "https://via.placeholder.com/150"],
+        "reminder": false,
+        "reminderTittle": "",
+        "reminderDate": new Date(),
+        "reminderId":undefined
+      },
     {
         "id": "event018",
         "vehicleId": "veh123",
@@ -249,8 +317,12 @@ export class UserTestService {
         "km": "30000",
         "cost": 75,
         "info": "Annual vehicle inspection",
-        "images": []
-    },
+        "images": [],
+        "reminder": false,
+        "reminderTittle": "",
+        "reminderDate": new Date(),
+        "reminderId":undefined
+      },
     {
         "id": "event019",
         "vehicleId": "veh456",
@@ -259,8 +331,12 @@ export class UserTestService {
         "km": "10000",
         "cost": 100,
         "info": "Chain adjustment and lubrication",
-        "images": ["https://via.placeholder.com/150"]
-    },
+        "images": ["https://via.placeholder.com/150"],
+        "reminder": false,
+        "reminderTittle": "",
+        "reminderDate": new Date(),
+        "reminderId":undefined
+      },
     {
         "id": "event020",
         "vehicleId": "veh789",
@@ -269,8 +345,12 @@ export class UserTestService {
         "km": "18000",
         "cost": 2000,
         "info": "Front bumper replacement",
-        "images": []
-    },
+        "images": [],
+        "reminder": false,
+        "reminderTittle": "",
+        "reminderDate": new Date(),
+        "reminderId":undefined
+      },
     {
         "id": "event021",
         "vehicleId": "veh123",
@@ -279,8 +359,12 @@ export class UserTestService {
         "km": "27000",
         "cost": 200,
         "info": "Battery replacement",
-        "images": ["https://via.placeholder.com/150"]
-    },
+        "images": ["https://via.placeholder.com/150"],
+        "reminder": false,
+        "reminderTittle": "",
+        "reminderDate": new Date(),
+        "reminderId":undefined
+      },
     {
         "id": "event022",
         "vehicleId": "veh456",
@@ -289,8 +373,12 @@ export class UserTestService {
         "km": "3000",
         "cost": 50,
         "info": "Spark plug replacement",
-        "images": []
-    },
+        "images": [],
+        "reminder": false,
+        "reminderTittle": "",
+        "reminderDate": new Date(),
+        "reminderId":undefined
+      },
     {
         "id": "event023",
         "vehicleId": "veh789",
@@ -299,8 +387,12 @@ export class UserTestService {
         "km": "21000",
         "cost": 250,
         "info": "Air filter replacement",
-        "images": ["https://via.placeholder.com/150"]
-    },
+        "images": ["https://via.placeholder.com/150"],
+        "reminder": false,
+        "reminderTittle": "",
+        "reminderDate": new Date(),
+        "reminderId":undefined
+      },
     {
         "id": "event024",
         "vehicleId": "veh123",
@@ -309,8 +401,12 @@ export class UserTestService {
         "km": "32000",
         "cost": 1700,
         "info": "Rear-end collision repair",
-        "images": []
-    },
+        "images": [],
+        "reminder": false,
+        "reminderTittle": "",
+        "reminderDate": new Date(),
+        "reminderId":undefined
+      },
     {
         "id": "event025",
         "vehicleId": "veh123",
@@ -319,17 +415,25 @@ export class UserTestService {
         "km": "32000",
         "cost": 1700,
         "info": "Rear-end collision repair",
-        "images": []
-    },
+        "images": [],
+        "reminder": false,
+        "reminderTittle": "",
+        "reminderDate": new Date(),
+        "reminderId":undefined
+      },
     {
-        "id": "event026",
-        "vehicleId": "veh456",
-        "date": "2023-01-15",
-        "type": "Maintenance",
-        "km": "8000",
-        "cost": 100,
-        "info": "Tire replacement",
-        "images": ["https://via.placeholder.com/150"]
+      "id": "event026",
+      "vehicleId": "veh456",
+      "date": "2023-01-15",
+      "type": "Maintenance",
+      "km": "8000",
+      "cost": 100,
+      "info": "Tire replacement",
+      "images": ["https://via.placeholder.com/150"],
+        "reminder": false,
+        "reminderTittle": "",
+        "reminderDate": new Date(),
+        "reminderId":undefined
     },
     {
         "id": "event027",
@@ -339,8 +443,12 @@ export class UserTestService {
         "km": "22000",
         "cost": 120,
         "info": "State inspection",
-        "images": ["https://via.placeholder.com/150"]
-    },
+        "images": ["https://via.placeholder.com/150"],
+        "reminder": false,
+        "reminderTittle": "",
+        "reminderDate": new Date(),
+        "reminderId":undefined
+      },
     {
         "id": "event028",
         "vehicleId": "veh123",
@@ -349,8 +457,12 @@ export class UserTestService {
         "km": "33000",
         "cost": 300,
         "info": "Full maintenance service",
-        "images": ["https://via.placeholder.com/150"]
-    },
+        "images": ["https://via.placeholder.com/150"],
+        "reminder": false,
+        "reminderTittle": "",
+        "reminderDate": new Date(),
+        "reminderId":undefined
+      },
     {
         "id": "event029",
         "vehicleId": "veh456",
@@ -359,8 +471,12 @@ export class UserTestService {
         "km": "17000",
         "cost": 1000,
         "info": "Side mirror replacement",
-        "images": []
-    },
+        "images": [],
+        "reminder": false,
+        "reminderTittle": "",
+        "reminderDate": new Date(),
+        "reminderId":undefined
+      },
     {
         "id": "event030",
         "vehicleId": "veh789",
@@ -369,7 +485,11 @@ export class UserTestService {
         "km": "19000",
         "cost": 80,
         "info": "Oil and filter change",
-        "images": ["https://via.placeholder.com/150"]
+        "images": ["https://via.placeholder.com/150"],
+        "reminder": false,
+        "reminderTittle": "",
+        "reminderDate": new Date(),
+        "reminderId":undefined
     }
 ]
 

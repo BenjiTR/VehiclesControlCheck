@@ -1,7 +1,7 @@
 import { Component, OnInit, DoCheck, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Platform, IonTextarea, IonAccordion, IonAccordionGroup, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonMenu, IonMenuButton, IonRouterOutlet, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar, MenuController, ModalController, NavController, IonDatetime, IonFab, IonFabList, IonFabButton, IonBadge, IonText, IonDatetimeButton, IonModal } from '@ionic/angular/standalone';
+import { Platform, IonTextarea, IonAccordion, IonAccordionGroup, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonMenu, IonMenuButton, IonRouterOutlet, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar, MenuController, ModalController, NavController, IonDatetime, IonFab, IonFabList, IonFabButton, IonBadge, IonText, IonDatetimeButton, IonModal, IonPopover } from '@ionic/angular/standalone';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { UserdataviewPage } from '../userdataview/userdataview.page';
@@ -37,7 +37,7 @@ import { FilterService } from 'src/app/services/filter.service';
   templateUrl: './main.page.html',
   styleUrls: ['./main.page.scss'],
   standalone: true,
-  imports: [IonModal, IonDatetimeButton, IonText, IonBadge, IonFabButton, IonFabList, IonFab, IonTextarea, IonDatetime, IonSelect, IonSelectOption, IonRouterOutlet, IonAccordionGroup, IonAccordion, UserdataviewPage, IonInput, IonItem, IonLabel, TranslateModule, RouterModule, IonMenu, IonIcon, IonButtons, IonMenuButton, IonButton, IonImg, IonGrid, IonCol ,IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonRow, IonGrid],
+  imports: [IonPopover, IonModal, IonDatetimeButton, IonText, IonBadge, IonFabButton, IonFabList, IonFab, IonTextarea, IonDatetime, IonSelect, IonSelectOption, IonRouterOutlet, IonAccordionGroup, IonAccordion, UserdataviewPage, IonInput, IonItem, IonLabel, TranslateModule, RouterModule, IonMenu, IonIcon, IonButtons, IonMenuButton, IonButton, IonImg, IonGrid, IonCol ,IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonRow, IonGrid],
   animations: [ MainAnimation, RoadAnimation, SecondaryAnimation, GrowShrinkAnimation, SlideUpDownAnimation,  ],
   providers:[EventTypes, DatePipe, FilterService]
 })
@@ -482,5 +482,52 @@ export class MainPage implements OnInit, OnDestroy {
     const nativeEl = this.accordionGroup;
       nativeEl!.value = undefined;
   };
+
+  getLabelOfDate(dateInput: any): string {
+    const date = new Date(dateInput);  // Asegura que sea un objeto Date
+
+    if (isNaN(date.getTime())) {
+      console.error('Invalid date:', dateInput);
+      return ''; // Retorna una cadena vacía si la fecha es inválida
+    }
+
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+
+    const preposition = this.translate.instant('mainpage.on');
+    const at = this.translate.instant('mainpage.at');
+
+    return `${preposition} ${day}/${month}/${year} ${at} ${hours}:${minutes}`;
+  }
+
+
+  thereIsReminder(event:Event){
+    const thereisReminder = event.reminder;
+    return thereisReminder && this.isFutureEvent(event);
+  }
+
+  isFutureEvent(event:Event){
+    const thereisReminder = event.reminder;
+    if(thereisReminder){
+      const rightNow = new Date().toISOString();
+      const eventDate = new Date(event.reminderDate).toISOString();
+
+      return rightNow < eventDate;
+    }else{
+      return false;
+    }
+  }
+
+  checkReminder(event:Event){
+    const isInNotifications = this.remindersArray.find(e => e.extra.eventId === event.id);
+    return isInNotifications && this.isFutureEvent;
+    }
+
+
+
 
 }

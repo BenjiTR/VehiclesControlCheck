@@ -160,7 +160,9 @@
     "no_events": "Pas d'événements",
     "no_reminders": "Pas de rappels",
     "filter_text": "rechercher Évènements par mot-clé ou date...",
-    "search":"Rechercher"
+    "search":"Rechercher",
+    "on":"le",
+    "at":"à"
   },
   "newvehicle": {
     "create_a_vehicle": "Créer un véhicule",
@@ -213,7 +215,9 @@
     "add": "Ajouter",
     "vehicle": "Véhicule",
     "id": "ID Événement",
-    "vehicleId": "ID Véhicule"
+    "vehicleId": "ID Véhicule",
+    "add_reminder": "Ajouter un rappel",
+    "notification_problem_text": "Un problème a été détecté avec ce rappel, veuillez essayer de le modifier et de l'enregistrer à nouveau."
   },
   "eventypes": {
     "flat_tire": "Pneu crevé",

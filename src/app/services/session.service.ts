@@ -91,22 +91,27 @@ export class SessionService{
   async loadReminders(): Promise<LocalNotificationSchema[]>{
     if(this._platform.is("android")||this._platform.is('ios')){
       const temporalArray = await this._notification.getPending();
-      let filteredArray:any[] = [];
-      temporalArray.notifications.forEach(element => {
-        if (this.vehiclesArray.some(vehicle => vehicle.id === element.extra.vehicleId)) {
-          filteredArray.push(element);
-        }
-        });
 
-      this.remindersArray = filteredArray;
-      console.log(filteredArray, temporalArray.notifications)
+      this.remindersArray = temporalArray.notifications;
+      console.log("Array Filtrado: ",temporalArray.notifications,"Array Teléfono: ",temporalArray.notifications)
       return this.remindersArray;
     }else{
       //this.remindersArray = await this._test.createTestreminders(this.remindersArray);
       return this.remindersArray;
     }
+  }
 
+  getFirstId(): Promise<number> {
+    return new Promise((resolve) => {
+      const usedIds = this.remindersArray.map(reminder => reminder.id);
+      let firstFreeId = 1;
 
+      while (usedIds.includes(firstFreeId)) {
+        firstFreeId++;
+      }
+
+      resolve(firstFreeId);
+    });
   }
 
   async setReminderNotifications(reminder:boolean){

@@ -37,3 +37,14 @@ ion-datetime-button::part(native){
   display: flex;
   justify-content: center;
 }
+.centered{
+  display: inline-flex;
+  align-items: center;
+  font-size: larger;
+  margin-left: -2rem;
+}
+.centered-nm{
+  display: inline-flex;
+  align-items: center;
+  font-size: larger;
+}

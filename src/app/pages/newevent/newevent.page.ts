@@ -1,8 +1,8 @@
 import { imageConstants } from './../../const/img';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, registerLocaleData } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonTextarea, IonContent, IonHeader, IonTitle, IonToolbar, IonRow, IonCol, IonLabel, IonAvatar, IonItem, IonIcon, IonButton, IonSelectOption, ModalController, IonSelect, IonInput, IonImg, NavController, IonText, IonList, IonCheckbox } from '@ionic/angular/standalone';
+import { IonTextarea, IonContent, IonHeader, IonTitle, IonToolbar, IonRow, IonCol, IonLabel, IonAvatar, IonItem, IonIcon, IonButton, IonSelectOption, ModalController, IonSelect, IonInput, IonImg, NavController, IonText, IonList, IonCheckbox, IonDatetime } from '@ionic/angular/standalone';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { EventTypes } from 'src/app/const/eventTypes';
@@ -22,13 +22,18 @@ import { LoaderService } from 'src/app/services/loader.service';
 import { DriveService } from 'src/app/services/drive.service';
 import { CryptoService } from 'src/app/services/crypto.services';
 import { Network } from '@capacitor/network';
+import { DateService } from 'src/app/services/date.service';
+import { SlideUpDownAnimation } from 'src/app/services/animation.service';
+import { LocalNotificationSchema } from '@capacitor/local-notifications';
+import { NotificationsService } from 'src/app/services/notifications.service';
 
 @Component({
   selector: 'app-newevent',
   templateUrl: './newevent.page.html',
   styleUrls: ['./newevent.page.scss'],
   standalone: true,
-  imports: [IonCheckbox, IonList, IonText, IonTextarea, IonImg, IonInput, TranslateModule, IonSelect, IonSelectOption, IonButton, IonIcon, IonItem, IonAvatar, IonLabel, IonRow, IonCol, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  animations: [SlideUpDownAnimation],
+  imports: [IonDatetime, IonCheckbox, IonList, IonText, IonTextarea, IonImg, IonInput, TranslateModule, IonSelect, IonSelectOption, IonButton, IonIcon, IonItem, IonAvatar, IonLabel, IonRow, IonCol, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
 })
 export class NeweventPage {
 
@@ -49,11 +54,16 @@ export class NeweventPage {
   public eventToEditId: string = "";
   public user: User = new User;
   public vehiclesArray: Vehicle[] = [];
-
+  //TAGS
   public showSuggestions: boolean = false;
   public tags: string[] = [];
   public filteredTags: string[] = [];
   public currentTag: string = '';
+  //REMINDERS
+  public reminderTittle:string="";
+  public reminderDate:Date = new Date();
+  public haveReminder:boolean = false;
+  public reminderId:number|undefined;
 
   constructor(
     private translate: TranslateService,
@@ -71,7 +81,9 @@ export class NeweventPage {
     private navCtr: NavController,
     private _loader: LoaderService,
     private _drive: DriveService,
-    private _crypto: CryptoService
+    private _crypto: CryptoService,
+    private _date: DateService,
+    private _notification: NotificationsService
   ) {
     this.eventTypes = etypes.getEventTypes();
     this.user = this._session.currentUser;
@@ -110,6 +122,18 @@ export class NeweventPage {
     this.cost = this.eventToEdit.cost;
     this.info = this.eventToEdit.info;
     this.images = this.eventToEdit.images;
+    if(this.eventToEdit.reminder){
+      this.haveReminder=this.eventToEdit.reminder
+      if(this.eventToEdit.reminderDate){
+        this.reminderDate=this.eventToEdit.reminderDate
+      }
+      if(this.eventToEdit.reminderTittle){
+        this.reminderTittle=this.eventToEdit.reminderTittle
+      }
+      if(this.eventToEdit.reminderId){
+        this.reminderId = this.eventToEdit.reminderId;
+      }
+    }
   }
 
   async cancelCreateEvent() {
@@ -139,7 +163,6 @@ export class NeweventPage {
       if (index !== -1) {
         const newEvent = await this.generateEvent();
         this._session.eventsArray[index] = newEvent;
-
         this.saveAndExit(newEvent);
       }
     }
@@ -161,13 +184,20 @@ export class NeweventPage {
       km: this.km,
       cost: this.cost,
       info: this.info,
-      images: this.images
+      images: this.images,
+      reminder: this.haveReminder,
+      reminderTittle: this.reminderTittle,
+      reminderDate: this.reminderDate,
+      reminderId: await this.getFirstId()
     }
     return newEvent;
   }
 
   async saveAndExit(event: Event) {
     await this._admobService.showinterstitial();
+    if(this.haveReminder){
+      await this.generateAndSaveNotification(event);
+    }
     this._session.eventsArray = this.eventsArray;
     this._storage.setStorageItem(storageConstants.USER_EVENTS + this.user.id, this._crypto.encryptMessage(JSON.stringify(this.eventsArray)));
     if (this._drive.folderId && this._session.autoBackup) {
@@ -332,6 +362,71 @@ export class NeweventPage {
       this._drive.folderId = "";
     }
     return;
+  }
+
+  //RECORDATORIOS
+  getDate(){
+    return this._date.getIsoDate(this.reminderDate);
+  }
+  setDate(event:CustomEvent){
+    this.reminderDate = new Date(event.detail.value);
+  }
+  toogleReminder(event:CustomEvent){
+    this.haveReminder = event.detail.checked;
+  }
+
+
+  async generateAndSaveNotification(event:Event):Promise<void>{
+    const reminder = await this.constructReminder(event);
+    this._notification.createNotification([reminder])
+  }
+
+  async constructReminder(event:Event){
+    const newReminder:LocalNotificationSchema = {
+      channelId:"VCC",
+      title:this.currentVehicle()+" - "+event.reminderTittle,
+      body:event.info,
+      largeBody:event.info,
+      summaryText:event.info,
+      id: event.reminderId!,
+      schedule: {at: new Date(this.reminderDate)},
+      sound:'clockalarm.wav',
+      extra:{
+        eventId:event.id,
+        titleWithoutCar:event.reminderTittle,
+      }
+    }
+    return newReminder;
+  }
+
+  currentVehicle(){
+    const current = this.vehiclesArray.find(vehicle=>vehicle.id === this.vehicleId);
+    return current!.brandOrModel;
+  }
+
+  async getFirstId(): Promise<number|undefined> {
+    let newId:number|undefined;
+
+    if(this.haveReminder && !this.isFutureEvent()){
+      newId = 0;
+    }else if(this.haveReminder && this.isFutureEvent() && this.reminderId !== undefined){
+      newId = await this._session.getFirstId();
+    }else{
+      newId = 0;
+    }
+    return newId
+  }
+
+  isFutureEvent(){
+    const thereisReminder = this.reminderDate;
+    if(thereisReminder){
+      const rightNow = new Date().toISOString();
+      const eventDate = new Date(this.reminderDate).toISOString();
+
+      return rightNow < eventDate;
+    }else{
+      return false;
+    }
   }
 
 

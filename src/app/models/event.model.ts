@@ -1,3 +1,5 @@
+import { LocalNotificationSchema } from "@capacitor/local-notifications";
+
 export class Event {
   id:string = "";
   vehicleId = "";
@@ -7,4 +9,8 @@ export class Event {
   cost:number=0;
   info:string="";
   images:string[]=[];
+  reminder:boolean=false;
+  reminderTittle:string="";
+  reminderDate:Date = new Date();
+  reminderId:number|undefined;
 }

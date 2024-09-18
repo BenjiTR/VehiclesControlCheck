@@ -119,7 +119,8 @@
     "user_delete_with_exit": "The user has been successfully deleted",
     "incorrect_date": "Incorrect date",
     "incorrect_date_text": "The reminder date cannot be earlier than the current date",
-    "do_you_want?": "Do you want to update the data on Drive?"
+    "do_you_want?": "Do you want to update the data on Drive?",
+    "notification_problem_text": "A problem has been detected with this reminder, please try editing and saving it again."
   },
   "home": {
     "init_session": "Sign In",
@@ -160,7 +161,9 @@
     "no_events": "No events",
     "no_reminders": "No reminders",
     "filter_text": "search Events by keyword or date...",
-    "search":"Search"
+    "search":"Search",
+    "on":"on",
+    "at":"at"
   },
   "newvehicle": {
     "create_a_vehicle": "Create a Vehicle",
@@ -213,7 +216,8 @@
     "add": "Add",
     "vehicle": "Vehicle",
     "id": "Event ID",
-    "vehicleId": "Vehicle ID"
+    "vehicleId": "Vehicle ID",
+    "add_reminder": "Add Reminder"
   },
   "eventypes": {
     "flat_tire": "Flat Tire",

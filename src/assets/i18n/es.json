@@ -119,7 +119,8 @@
       "user_delete_with_exit":"El usuario se ha eliminado con éxito",
       "incorrect_date":"Fecha incorrecta",
       "incorrect_date_text":"La fecha del recordatorio no puede ser menor a la fecha actual",
-      "do_you_want?":"¿Desea actualizar los datos en Drive?"
+      "do_you_want?":"¿Desea actualizar los datos en Drive?",
+      "notification_problem_text":"Se ha detectado un problema con este recordatorio, por favor, pruebe a editarlo y guardarlo nuevamente."
     },
   "home":{
       "init_session":"Inicio de sesión",
@@ -160,7 +161,9 @@
       "no_events":"No hay eventos",
       "no_reminders":"No hay recordatorios",
       "filter_text":"busque Eventos por palabra o fecha...",
-      "search":"Buscar"
+      "search":"Buscar",
+      "on":"el",
+      "at":"a las"
   },
   "newvehicle":{
       "create_a_vehicle":"Crear un vehículo",
@@ -213,7 +216,8 @@
     "add":"Añadir",
     "vehicle":"Vehiculo",
     "id":"Id Evento",
-    "vehicleId":"Id vehículo"
+    "vehicleId":"Id vehículo",
+    "add_reminder":"Añadir recordatorio"
   },
   "eventypes": {
     "flat_tire": "Pinchazo",

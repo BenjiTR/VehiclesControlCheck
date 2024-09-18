@@ -18,13 +18,6 @@
               </ion-select>
           </ion-item>
         </ion-col>
-        <ion-col class="ion-padding-start ion-padding-end ion-margin-top" size="12">
-          <ion-item class="rounded-inputs">
-            <ion-input [(ngModel)]="date" type="date" label-placement="floating">
-            <div slot="label">{{'event.date'|translate}} <ion-text color="danger"> *</ion-text></div>
-          </ion-input>
-          </ion-item>
-        </ion-col>
         <ion-col class="ion-padding-start ion-padding-end" size="12">
           <ion-item class="rounded-inputs">
               <ion-select [(ngModel)]="type" label-placement="floating">
@@ -33,6 +26,35 @@
               </ion-select>
           </ion-item>
         </ion-col>
+        <ion-col class="ion-padding-start ion-padding-end" size="12">
+          <ion-item class="rounded-inputs">
+            <ion-input [(ngModel)]="date" type="date" label-placement="floating">
+            <div slot="label">{{'event.date'|translate}} <ion-text color="danger"> *</ion-text></div>
+          </ion-input>
+          </ion-item>
+        </ion-col>
+
+        <ion-col class="ion-padding-start ion-padding-end" size="12">
+          <ion-checkbox labelPlacement="end" [checked]="haveReminder" (ionChange)="toogleReminder($event)">{{'event.add_reminder'|translate}}</ion-checkbox>
+        </ion-col>
+
+        <ion-row *ngIf="haveReminder" [@slideUpDown] class="dark ion-margin-start ion-margin-end ion-margin-bottom ion-padding rounded">
+
+          <ion-col size="12">
+            <ion-item class="rounded-inputs">
+              <ion-input [(ngModel)]="reminderTittle" label-placement="floating"  type="text">
+                <div slot="label">{{'reminder.title'|translate}} <ion-text color="danger"> *</ion-text></div>
+              </ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col size="12">
+              <ion-datetime [value]="getDate()" (ionChange)="setDate($event)">
+                <span slot="time-label" translate="reminder.time"></span>
+              </ion-datetime>
+          </ion-col>
+
+        </ion-row>
+
         <ion-col class="ion-padding-start ion-padding-end" size="12">
           <ion-item class="rounded-inputs">
             <ion-input [(ngModel)]="km" type="text" label="{{'event.km'|translate}}" label-placement="floating"></ion-input>
