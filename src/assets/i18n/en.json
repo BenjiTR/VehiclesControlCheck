@@ -89,6 +89,7 @@
     "please_write_more_information": "Please provide more information",
     "please_write_more_information_text": "You must provide at least the vehicle, the date, and the type of event",
     "event_permanently_erased": "The event will be permanently deleted",
+    "reminder_permanently_erased": "The reminder will be permanently deleted",
     "event_erased": "Event Deleted",
     "event_erased_text": "The event has been successfully deleted",
     "enter_name_or_model": "Enter name or model",

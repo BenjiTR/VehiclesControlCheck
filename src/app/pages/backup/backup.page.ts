@@ -162,7 +162,7 @@ export class BackupPage implements OnInit {
           this.setNotifications(events)
           this._drive.changeDownloading("refresh");
           this._drive.changeDownloading("false");
-          //this.navCtr.navigateRoot(['/dashboard'], { queryParams: { reload: true } });
+          this.navCtr.navigateRoot(['/dashboard'], { queryParams: { reload: true } });
         })
       })
       .catch((err)=>{
@@ -272,10 +272,21 @@ export class BackupPage implements OnInit {
   }
 
   async setNotifications(events:Event[]){
+    let remindersArray:LocalNotificationSchema[]= await this._session.loadReminders();
     events.forEach(async event => {
       if(event.reminderDate && event.reminder && this._date.isFutureEvent(event.reminderDate)){
+        const index = remindersArray.findIndex(reminder=>reminder.extra.eventId === event.id);
         const reminder = await this.constructReminder(event);
-        this._notifications.createNotification([reminder])
+        console.log("¿Indice? ", index);
+        if (index !=-1){
+          console.log("¿Indice si? ", index);
+          remindersArray[index] = reminder;
+        }else{
+          console.log("¿Indice no? ", index);
+          remindersArray.push(reminder);
+        }
+        console.log("se crea la notificación: ");
+        this._notifications.createNotification(remindersArray);
       }
     });
   }

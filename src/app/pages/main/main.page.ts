@@ -225,14 +225,6 @@ export class MainPage implements OnInit, OnDestroy {
       }
     }
 
-    const temporalRemindersArray = this.remindersArray.map(reminder => ({ ...reminder }));
-
-    for (const element of temporalRemindersArray) {
-      if (element.extra.vehicleId === vehicle.id) {
-        await this.deleteReminder(element, true);
-      }
-    }
-
     return;
   }
 
@@ -353,7 +345,6 @@ export class MainPage implements OnInit, OnDestroy {
         }
         if(event.reminder){
           const reminder = this.remindersArray.find(reminder=>reminder.extra.eventId === event.id);
-          console.log("recordatorio: ",reminder)
           if(reminder){
             this._notification.deleteNotification(reminder)
           }
@@ -361,6 +352,56 @@ export class MainPage implements OnInit, OnDestroy {
       }
     }
   }
+
+  async deleteReminder(event:Event){
+    const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.are_you_sure?'),this.translate.instant('alert.event_permanently_erased'),this.translate.instant('alert.erase'),this.translate.instant('alert.cancel'));
+    if(sure){
+      const reminder = this.remindersArray.find(reminder=>reminder.extra.eventId === event.id);
+          if(reminder){
+            this._notification.deleteNotification(reminder)
+            const index = this.eventsArray.findIndex(e => e.id === event.id);
+            this.eventsArray[index].reminder = false;
+            if (this._drive.folderId && this._session.autoBackup) {
+              await this.uploadFile('event',this.eventsArray[index]);
+            }
+          }
+    }
+  }
+
+  async uploadFile(fileType:string, file:any):Promise<void>{
+
+    //console.log(fileType, file);
+
+    let fileName;
+    let encripted;
+
+    if(fileType === "event"){
+      fileName = file.id;
+      encripted = this._crypto.encryptMessage(JSON.stringify(file))
+    }else{
+      fileName = 'tags';
+      encripted = this._crypto.encryptMessage(JSON.stringify(file))
+    }
+
+    //console.log(fileName, encripted);
+
+    this._storage.setStorageItem(storageConstants.USER_OPS + this._session.currentUser.id, true)
+    if ((await Network.getStatus()).connected === true) {
+      const exist = await this._drive.findFileByName(fileName)
+      if (exist) {
+        //console.log(exist);
+        this._drive.updateFile(exist, encripted, fileName, true);
+      } else {
+        this._drive.uploadFile(encripted, fileName, true);
+      }
+      this._storage.setStorageItem(storageConstants.USER_OPS + this._session.currentUser.id, false)
+    } else {
+      this._alert.createAlert(this.translate.instant("error.no_network"), this.translate.instant("error.no_network_to_backup"));
+      this._drive.folderId = "";
+    }
+    return;
+  }
+
 
   async deleteEventProcess(event:Event):Promise<void>{
     const index = this.eventsArray.findIndex(e => e.id === event.id);
@@ -371,26 +412,7 @@ export class MainPage implements OnInit, OnDestroy {
     return;
   }
 
-  //ELIMINAR UN RECORDATORIO
-  async deleteReminder(reminder:LocalNotificationSchema, autoClean?:boolean){
-    if(autoClean){
-      await this.deleteReminderProcess(reminder);
-    }else{
-      const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.are_you_sure?'),this.translate.instant('alert.event_permanently_erased'),this.translate.instant('alert.erase'),this.translate.instant('alert.cancel'))
-      if(sure){
-        await this.deleteReminderProcess(reminder);
-        if(this._drive.folderId && this._session.autoBackup){
-          if((await Network.getStatus()).connected === true){
-            const id = await this._drive.findFileByName("R"+reminder.id)
-            await this._drive.deleteFile(id, true);
-          }else{
-            this._alert.createAlert(this.translate.instant("error.no_network"), this.translate.instant("error.no_network_to_backup"));
-            this._drive.folderId = "";
-          }
-        }
-      }
-    }
-  }
+
 
   async deleteReminderProcess(reminder:LocalNotificationSchema):Promise<void>{
     await this._notification.deleteNotification(reminder);

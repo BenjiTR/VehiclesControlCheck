@@ -143,6 +143,13 @@ export class NeweventPage {
     }
   }
 
+  checkReminderDate(){
+    const rightNow = new Date().toISOString();
+    const reminderDate = new Date(this.reminderDate).toISOString();
+    return reminderDate>rightNow
+  }
+
+
   async createEvent() {
     if (!this.vehicleId) {
       this._alert.createAlert(this.translate.instant("alert.enter_name_or_model"), this.translate.instant("alert.enter_name_or_model_text"));
@@ -152,6 +159,8 @@ export class NeweventPage {
       this._alert.createAlert(this.translate.instant("alert.enter_date"), this.translate.instant("alert.enter_date_text"));
     }else if(this.haveReminder && !this.reminderTittle){
       this._alert.createAlert(this.translate.instant("alert.enter_title"),this.translate.instant("alert.enter_title_text"));
+    }else if(this.haveReminder && !this.checkReminderDate()){
+      this._alert.createAlert(this.translate.instant('alert.incorrect_date'),this.translate.instant('alert.incorrect_date_text'))
     }
     else {
       if (this.eventToEditId) {
@@ -200,13 +209,27 @@ export class NeweventPage {
     await this._admobService.showinterstitial();
     if(this.haveReminder){
       await this.generateAndSaveNotification(event);
+    }else{
+      const reminder = await this.reminderExists(event);
+      console.log("Recordatorio dentro de evento: ",reminder);
+      if(reminder){
+        await this._notification.deleteNotification(reminder)
+      }
     }
+
     this._session.eventsArray = this.eventsArray;
     this._storage.setStorageItem(storageConstants.USER_EVENTS + this.user.id, this._crypto.encryptMessage(JSON.stringify(this.eventsArray)));
     if (this._drive.folderId && this._session.autoBackup) {
       await this.uploadFile('event',event);
     }
     this.navCtr.navigateRoot(['/dashboard'], { queryParams: { reload: false } });
+  }
+
+  async reminderExists(event:Event):Promise<LocalNotificationSchema|undefined>{
+    const remindersArray = await this._session.loadReminders();
+    const reminder = remindersArray.find(reminder=>reminder.extra.eventId === event.id);
+    console.log("recordatorio: ",reminder);
+    return reminder;
   }
 
   async createNew() {
