@@ -1,4 +1,4 @@
-<ion-menu *ngIf="portrait" side="start" contentId="main-content" (ionWillClose)="cerrarMenu()">
+'<ion-menu *ngIf="portrait" side="start" contentId="main-content" (ionWillClose)="cerrarMenu()">
 
   <ion-header>
     <ion-toolbar class="pastel">
@@ -18,7 +18,7 @@
   </ion-header>
 
   <ion-content class="pastel-to-blue">
-    <ion-row class="ion-margin-top mt-3 blue round-corner-up">
+    <ion-row class="mt-3 blue round-corner-up">
       <ion-col class="ion-margin-top" size="12">
         <h3 class="ion-margin-top" (click)="cerrarMenu()" [routerLink]="['/dashboard/main']" class="flex ion-align-items-center"><ion-icon class="ion-margin-end" size="large" src="../../../assets/icons/document-text-outline.svg"></ion-icon>{{'dashboard.main_page'|translate}}</h3>
         <h3 class="ion-margin-top" (click)="cerrarMenu()" [routerLink]="['/dashboard/userdata']" class="flex ion-align-items-center"><ion-icon class="ion-margin-end" size="large" src="../../../assets/icons/person-outline.svg"></ion-icon>{{'dashboard.user_data'|translate}}</h3>
@@ -37,7 +37,7 @@
           <ion-icon (click)="cerrarMenu()" class="orange-icon" src="../../../assets/icons/arrow-back-circle-outline.svg"></ion-icon>
       </ion-col>
       <ion-col size="12">
-        <h4 class="ion-margin-top ion-padding-top ion-text-center">{{getVersion()}}</h4>
+        <h4 class="ion-margin-top ion-text-center">{{getVersion()}}</h4>
       </ion-col>
     </ion-row>
   </ion-content>

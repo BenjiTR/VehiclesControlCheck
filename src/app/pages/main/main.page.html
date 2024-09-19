@@ -89,7 +89,7 @@
         </ion-col>
       </ion-row>
 
-      <ion-row *ngIf="vehiclesArray.length>0">
+      <ion-row (mousedown)="preventFocus($event)" *ngIf="vehiclesArray.length>0">
         <ion-col>
           <ion-accordion-group>
 

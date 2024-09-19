@@ -552,6 +552,11 @@ export class MainPage implements OnInit, OnDestroy {
     return !isInNotifications && this.isFutureEvent(event);
     }
 
+    preventFocus(event: MouseEvent) {
+      if(this._platform.is('ios')){
+        event.preventDefault();
+      }
+    }
 
 
 
