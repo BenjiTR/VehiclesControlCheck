@@ -65,7 +65,7 @@ export class NotificationsPage{
     }else{
       this._drive.changeautoBk(this.autoBk);
     }
-    console.log(this.autoBk);
+    //console.log(this.autoBk);
     this.errorText = "";
     this.translate.setDefaultLang(this._translation.getLanguage());
     this.currency = this._session.currency;

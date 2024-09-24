@@ -13,6 +13,7 @@ import { backupConstants } from '../const/backup';
 import { ToastService } from './toast.service';
 import { DataService } from './data.service';
 import { storageConstants } from '../const/storage';
+import { User } from '@codetrix-studio/capacitor-google-auth';
 
 
 @Injectable({
@@ -158,6 +159,8 @@ export class DriveService {
     .then(async(msg)=>{
       this.token = msg.accessToken;
       await this._session.setGoogleToken(this.token);
+      const user:User = await this._auth.fetchUserInfo(msg.accessToken);
+      this._session.backupMail = user.email;
       await this.setConnectedAndTryFiles();
     })
     .catch(async (err)=>{
@@ -165,13 +168,16 @@ export class DriveService {
       await this._auth.loginWithGoogle()
       .then(async(user)=>{
         this.token = user.authentication.accessToken;
+        this._session.backupMail = user.email;
         await this._session.setGoogleToken(this.token);
         await this.setConnectedAndTryFiles();
       })
       .catch(async (err)=>{
         //console.log("error",err);
-        if(err){
-        alert(err);
+        if(err.message && err.message != "popup_closed_by_user"){
+          alert(err.message);
+        }else if(err.error && err.error !== "popup_closed_by_user"){
+          alert(err.error);
         }
       })
     })
@@ -282,9 +288,15 @@ export class DriveService {
         //console.log('No se encontró la carpeta para el usuario actual.');
         return null;
       }
-    } catch (error) {
+    } catch (error:any) {
       //console.error('Error al obtener el ID de la carpeta:', error);
-      throw new Error('Error al obtener el ID de la carpeta');
+      if(error.message){
+        throw new Error(error.message);
+      }else if(error.error){
+        throw new Error(error.error);
+      }else{
+        throw new Error("Error: "+JSON.stringify(error));
+      }
     }
   }
 
@@ -321,9 +333,15 @@ export class DriveService {
         }
         //console.log(files);
         return files;
-      } catch (error) {
+      } catch (error:any) {
         //console.error('Error al listar archivos en la carpeta:', error);
-        throw error;
+        if(error.message){
+          throw new Error(error.message);
+        }else if(error.error){
+          throw new Error(error.error);
+        }else{
+          throw new Error("Error: "+JSON.stringify(error));
+        }
       }
     };
 
@@ -486,7 +504,13 @@ export class DriveService {
       })
       .catch(error => {
         //console.error('Error al eliminar el archivo:', error);
-        throw error;
+        if(error.message){
+          throw new Error(error.message);
+        }else if(error.error){
+          throw new Error(error.error);
+        }else{
+          throw new Error("Error: "+JSON.stringify(error));
+        }
       });
 
   }

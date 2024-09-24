@@ -27,6 +27,7 @@ export class SessionService{
   public remindNotitications:boolean = false;
   public autoBackup:boolean = true;
   public currency:string = "";
+  public backupMail:string = "";
 
   constructor(
     private _storageService: StorageService,
@@ -142,6 +143,7 @@ export class SessionService{
     this.currentUser.token = token;
     this._storageService.setStorageItem(storageConstants.USER_AUTH+this.currentUser.id,token)
   }
+
   async getToken():Promise<string>{
     const token = await this._storageService.getStorageItem(storageConstants.USER_AUTH+this.currentUser.id);
     if(token){

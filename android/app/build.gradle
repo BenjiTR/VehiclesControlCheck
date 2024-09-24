@@ -8,7 +8,7 @@ android {
     applicationId "com.benjamintr.vehiclescontrol"
     minSdkVersion rootProject.ext.minSdkVersion
     targetSdkVersion rootProject.ext.targetSdkVersion
-    versionCode 14001
+    versionCode 140026
     versionName "1.4.0"
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 

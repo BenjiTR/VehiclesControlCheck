@@ -303,7 +303,7 @@ export class HomePage implements OnInit, OnDestroy{
 
   //CONFIRMAR Y EJECUTAR LOGIN
   async loginExecute(user:any, method?:string, token?:string){
-    console.log(user)
+    //console.log(user)
     if(method && method === "googlerefresh"){
       //console.log(user)
       const currentUser:User = new User();

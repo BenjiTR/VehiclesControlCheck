@@ -44,6 +44,7 @@ export class BackupPage implements OnInit {
   public downloading:string = "false";
   public cleaning:boolean = false;
   public vehiclesArray:Vehicle[]=[];
+  public backupAccount:string="";
 
   private progressSubscription: Subscription;
   private uploadingSubscription: Subscription;
@@ -113,13 +114,13 @@ export class BackupPage implements OnInit {
 
   async getData(){
     this.connected = await firstValueFrom(this._drive.conected$);
+    this.backupAccount = this._session.backupMail;
   }
 
 
   async connectAccount(){
     await this._loader.presentLoader();
     await this._drive.connectAccount();
-    this.getData();
     this.notifications.getData();
     await this._loader.dismissLoader();
 
