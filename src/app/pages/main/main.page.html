@@ -222,10 +222,10 @@
 
                             <ion-row class="ion-padding-top">
 
-                              <ion-col  *ngIf="thereIsReminder(event)" class="ion-text-start ion-padding-start" size="9">
+                              <ion-col *ngIf="thereIsReminder(event)" class="ion-text-start ion-padding-start" size="9">
                                 <ion-label><h1 class="centered"><ion-icon class="ion-margin-end" slot="start" src="../../../assets/icons/alarm-outline.svg"></ion-icon> {{getLabelOfDate(event.reminderDate)}}</h1></ion-label>
                               </ion-col>
-                              <ion-col *ngIf="thereIsReminder(event)" class="ion-text-end ion-padding-end"  size="2.5">
+                              <ion-col *ngIf="thereIsReminder(event)" class="ion-text-end ion-padding-end"  size="3">
                                 <ion-label (click)="deleteReminder(event)"  id="currency_info+{{event.id}}" class="subtitle ion-justify-content-center ion-margin-start"><h1 class="centered-nm"><ion-icon color="danger" class="larger" src="../../../assets/icons/trash-outline.svg"></ion-icon></h1></ion-label>
                                 <ion-label *ngIf="checkReminder(event)" id="currency_info+{{event.id}}" class="subtitle ion-justify-content-center ion-margin-start"><h1 class="centered-nm"><ion-icon color="danger" class="larger" src="../../../assets/icons/alert-outline.svg"></ion-icon></h1></ion-label>
                                 <ion-popover *ngIf="checkReminder(event)" trigger="currency_info+{{event.id}}" trigger-action="click">

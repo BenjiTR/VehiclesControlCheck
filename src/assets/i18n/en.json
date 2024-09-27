@@ -121,7 +121,9 @@
     "incorrect_date": "Incorrect date",
     "incorrect_date_text": "The reminder date cannot be earlier than the current date",
     "do_you_want?": "Do you want to update the data on Drive?",
-    "notification_problem_text": "A problem has been detected with this reminder, please try editing and saving it again."
+    "notification_problem_text": "A problem has been detected with this reminder, please try editing and saving it again.",
+    "files_not_found": "Backup files not found",
+    "files_not_found_text": "Do you want to generate a backup on Drive?"
   },
   "home": {
     "init_session": "Sign In",
@@ -274,7 +276,11 @@
     "cleaning_files": "Cleaning Files",
     "mode_of_use": "Mode of Use (Drive Only)",
     "only_referencial_currency_text": "No currency conversions are applied; this is for reference purposes only.",
-    "currency":"Currency"
+    "currency":"Currency",
+    "associated_account": "Associated Account",
+    "associated_account_text": "The associated account is a Google account that will be used to back up to Drive and sync with Google Calendar",
+    "connect_with_calendar": "Connect with Calendar",
+    "unconnect_with_calendar": "Disconnect from Calendar"
   },
   "exportfile": {
     "export_data": "Export Data",

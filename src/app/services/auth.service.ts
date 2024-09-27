@@ -38,7 +38,7 @@ export class AuthService {
 
       GoogleAuth.initialize({
         clientId:clientId,
-        scopes: ['profile', 'email','https://www.googleapis.com/auth/drive.appdata'],
+        scopes: ['profile', 'email','https://www.googleapis.com/auth/drive.appdata','https://www.googleapis.com/auth/calendar','https://www.googleapis.com/auth/calendar.events'],
         grantOfflineAccess: true,
       });
     });

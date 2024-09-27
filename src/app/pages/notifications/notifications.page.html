@@ -40,7 +40,37 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card *ngIf="platform==='android'||'web' || (platform==='ios' && !isAllowed)" class="orange">
+  <ion-card class="orange">
+    <ion-card-header>
+      <ion-card-title translate="backup.associated_account"></ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-col class="ion-text-center ion-no-margin ion-no-padding" size="12">
+
+        <ion-col size="12">
+          <ion-button (click)="connectAccount()" *ngIf="!connected" expand="block" color="green" shape="round" translate="backup.connect"></ion-button>
+          <ion-label *ngIf="connected" class="center black"><h2>({{backupAccount}})</h2></ion-label>
+          <ion-button [disabled]="creatingFile || downloading" *ngIf="connected" (click)="unconnectAccount()" expand="block" color="danger" shape="round" translate="backup.unconnect_account"></ion-button>
+        </ion-col>
+
+      </ion-col>
+      <ion-col size="12">
+        <ion-label id="associated_account_info" class="subtitle ion-justify-content-center"><ion-icon class="larger" src="../../../assets/icons/information-circle-outline.svg"></ion-icon>{{"backup.see_information"|translate}}</ion-label>
+        <ion-popover  trigger="associated_account_info" trigger-action="click">
+          <ng-template>
+            <ion-content class="ion-padding">
+              <ion-row>
+                <ion-col class="ion-text-justify" size="12"><ion-label>{{'backup.associated_account_text'|translate}}</ion-label></ion-col>
+              </ion-row>
+            </ion-content>
+          </ng-template>
+        </ion-popover>
+      </ion-col>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="platform==='android'||'desktop' || (platform==='ios' && !isAllowed)" class="orange">
     <ion-card-header>
       <ion-card-title translate="notifications.reminders"></ion-card-title>
     </ion-card-header>
@@ -48,13 +78,18 @@
     <ion-card-content class="ion-no-padding">
       <ion-row class="ion-margin-top">
         <ion-col class="ion-text-center ion-margin-top" size="12">
-          <ion-toggle *ngIf="platform==='android'||'web'" class="zoom-1-3" [enableOnOffLabels]="true" [checked]="isAllowed" (ionChange)="togglePermissions()">{{'notifications.notificate'|translate}}</ion-toggle>
-          <ion-button *ngIf="platform==='ios'"class="black" (click)="togglePermissions()" expand="block" color="green" shape="round" translate="notifications.allow_notifications"></ion-button>
+          <ion-toggle *ngIf="platform ==='android'||'desktop'" class="zoom-1-3" [enableOnOffLabels]="true" [checked]="isAllowed" (ionChange)="togglePermissions()">{{'notifications.notificate'|translate}}</ion-toggle>
+          <ion-button *ngIf="platform ==='ios'" class="black" (click)="togglePermissions()" expand="block" color="green" shape="round" translate="notifications.allow_notifications"></ion-button>
         </ion-col>
       </ion-row>
       <ion-row>
-        <ion-col class="ion-padding" size="12">
-          <ion-label class="danger" *ngIf="errorText">{{errorText}}</ion-label>
+        <ion-col *ngIf="errorText" class="ion-padding" size="12">
+          <ion-label class="danger">{{errorText}}</ion-label>
+        </ion-col>
+        <ion-col class="ion-margin-bottom" size="12">
+          <ion-button  expand="block" color="green" shape="round" translate="backup.connect_with_calendar"></ion-button>
+          <ion-label class="center color-green"><h1 class="ion-text-center">{{'backup.account_connected'|translate}}</h1></ion-label>
+          <ion-button  expand="block" color="danger" shape="round" translate="backup.unconnect_with_calendar"></ion-button>
         </ion-col>
       </ion-row>
     </ion-card-content>
@@ -69,7 +104,9 @@
       <ion-row class="ion-margin-top">
        <ion-card class="no-margin-padding-card orange">
          <ion-card-content class="ion-no-padding">
+
            <app-backup></app-backup>
+
          </ion-card-content>
        </ion-card>
 

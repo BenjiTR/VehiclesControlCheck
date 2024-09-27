@@ -39,6 +39,8 @@ export class DriveService {
   public cleaning$ = this.cleaning.asObservable();
   private autoBk = new BehaviorSubject<boolean>(true)
   public autoBk$ = this.autoBk.asObservable();
+  private creatingFile = new BehaviorSubject<boolean>(false)
+  public creatingFile$ = this.creatingFile.asObservable();
 
   constructor(
     private _session:SessionService,
@@ -210,8 +212,10 @@ export class DriveService {
     this.cleaning.next(value);
   }
   changeautoBk(value:boolean){
-    //console.log(value)
     this.autoBk.next(value);
+  }
+  changeCreatingFile(value:boolean){
+    this.creatingFile.next(value);
   }
 
   //MÉTODOS DE ACCIONES COMPUESTAS, LAS QUE REALIZAN USUARIO O SISTEMA UTILIZANDO LOS MÉTODOS DE CONSULTA SIMPLE.
@@ -228,6 +232,8 @@ export class DriveService {
             //console.log("archivos: ",resp)
             this.changeHaveFiles(true);
             //console.log("se cambia")
+          }else{
+            
           }
         })
       }

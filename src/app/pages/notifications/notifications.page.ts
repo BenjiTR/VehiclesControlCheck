@@ -14,6 +14,8 @@ import { PaddingService } from 'src/app/services/padding.service';
 import { BackupPage } from "../backup/backup.page";
 import { StorageService } from 'src/app/services/storage.service';
 import { storageConstants } from 'src/app/const/storage';
+import { LoaderService } from 'src/app/services/loader.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-notifications',
@@ -31,8 +33,13 @@ export class NotificationsPage{
   public hasFile:boolean = false;
   public currency:string = "";
   public platform:string = "";
+  public creatingFile:boolean = false;
+  public downloading:string = "false";
+  public backupAccount:string="";
 
+  private creatingFileSubscription: Subscription;
   private hasFileSubscription:Subscription;
+  private downloadingSubscription: Subscription;
 
   constructor(
     private translate:TranslateService,
@@ -43,14 +50,25 @@ export class NotificationsPage{
     private _alert:AlertService,
     private _paddingService:PaddingService,
     private _storage:StorageService,
-    private _platform:Platform
+    private _platform:Platform,
+    private _loader:LoaderService,
+    private _auth:AuthService,
   ) {
     this.hasFileSubscription = this._drive.haveFiles$.subscribe((data)=>{
       this.hasFile = data;
     });
+    this.creatingFileSubscription = this._drive.creatingFile$.subscribe(data=>{
+      this.creatingFile=data;
+    });
+    this.downloadingSubscription = this._drive.downloading$.subscribe(data=>{
+      this.downloading = data;
+    });
+
     if(this._platform.is('android')){
       this.platform = 'android'
-    }else{
+    }else if(this._platform.is('desktop')){
+      this.platform = 'desktop'
+    }else if(this._platform.is('ios')){
       this.platform = 'ios'
     }
   }
@@ -75,6 +93,7 @@ export class NotificationsPage{
 
   async getData(){
     this.connected = await firstValueFrom(this._drive.conected$);
+    this.backupAccount = this._session.backupMail;
   }
 
 
@@ -173,5 +192,24 @@ export class NotificationsPage{
     }
   }
 
+  //CONECTAR CUENTA ASOCIADA
+  async connectAccount(){
+    await this._loader.presentLoader();
+    await this._drive.connectAccount();
+    this.getData();
+    await this._loader.dismissLoader();
+  }
+
+  async unconnectAccount(){
+    await this._session.setGoogleToken("");
+    await this._drive.changeConnected(false);
+    await this._drive.changeHaveFiles(false);
+    await this.getData();
+    await this._auth.signOutGoogle();
+  }
+
+
+  //GOOGLE CALENDAR
+ 
 
 }

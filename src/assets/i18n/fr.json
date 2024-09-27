@@ -89,6 +89,7 @@
     "please_write_more_information": "Veuillez fournir plus d'informations",
     "please_write_more_information_text": "Vous devez indiquer au moins le véhicule, la date et le type d'événement",
     "event_permanently_erased": "L'événement sera définitivement supprimé",
+    "reminder_permanently_erased": "Le rappel sera définitivement supprimé",
     "event_erased": "Événement supprimé",
     "event_erased_text": "L'événement a été supprimé avec succès",
     "enter_name_or_model": "Entrez un nom ou un modèle",
@@ -119,7 +120,10 @@
     "user_delete_with_exit": "L'utilisateur a été supprimé avec succès",
     "incorrect_date": "Date incorrecte",
     "incorrect_date_text": "La date du rappel ne peut pas être antérieure à la date actuelle",
-    "do_you_want?": "Voulez-vous mettre à jour les données sur Drive ?"
+    "do_you_want?": "Voulez-vous mettre à jour les données sur Drive ?",
+    "notification_problem_text": "Un problème a été détecté avec ce rappel, veuillez essayer de le modifier et de l'enregistrer à nouveau.",
+    "files_not_found": "Fichiers de sauvegarde non trouvés",
+    "files_not_found_text": "Voulez-vous générer une sauvegarde sur Drive ?"
   },
   "home": {
     "init_session": "Connexion",
@@ -273,7 +277,11 @@
     "cleaning_files": "Nettoyage des fichiers",
     "mode_of_use": "Mode d'utilisation (Drive uniquement)",
     "only_referencial_currency_text": "Aucune conversion de devise n'est appliquée ; ceci est uniquement à titre de référence.",
-    "currency":"Monnaie"
+    "currency":"Monnaie",
+    "associated_account": "Compte associé",
+    "associated_account_text": "Le compte associé est un compte Google qui sera utilisé pour effectuer la sauvegarde sur Drive et synchroniser avec Google Agenda",
+    "connect_with_calendar": "Connecter avec Agenda",
+    "unconnect_with_calendar": "Déconnecter d'Agenda"
   },
   "exportfile": {
     "export_data": "Exporter les données",

@@ -14,7 +14,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { DriveService } from 'src/app/services/drive.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslationConfigService } from '../../services/translation.service';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { Network } from '@capacitor/network';
 import { AlertService } from 'src/app/services/alert.service';
 import { LoaderService } from 'src/app/services/loader.service';
@@ -44,21 +44,20 @@ export class BackupPage implements OnInit {
   public downloading:string = "false";
   public cleaning:boolean = false;
   public vehiclesArray:Vehicle[]=[];
-  public backupAccount:string="";
 
   private progressSubscription: Subscription;
   private uploadingSubscription: Subscription;
   private downloadingSubscription: Subscription;
   private cleaningSubscription: Subscription;
   private haveFileSubscription:Subscription;
-
+  private creatingFileSubscription: Subscription;
+  private connectedSubscription: Subscription;
 
   constructor(
     private _file:FileSystemService,
     private _storage:StorageService,
     private _session:SessionService,
     private _notifications:NotificationsService,
-    private _auth:AuthService,
     private _drive:DriveService,
     private translate:TranslateService,
     private _translation:TranslationConfigService,
@@ -84,15 +83,26 @@ export class BackupPage implements OnInit {
     this.cleaningSubscription = this._drive.cleaning$.subscribe(data=>{
       this.cleaning = data;
     });
-    this.haveFileSubscription= this._drive.haveFiles$.subscribe(data=>{
+    this.haveFileSubscription = this._drive.haveFiles$.subscribe(data=>{
       this.haveFiles=data;
     });
+    this.creatingFileSubscription = this._drive.creatingFile$.subscribe(data=>{
+      this.creatingFile=data;
+    });
+    this.connectedSubscription = this._drive.conected$.subscribe(async data=>{
+      this.connected = data;
+      if(this.connected && !this.haveFiles){
+        const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.files_not_found'),this.translate.instant('alert.files_not_found_text'),this.translate.instant('alert.accept'),this.translate.instant('alert.cancel'))
+        if(sure){
+          this.uploadFiles();
+        }
+      }
+    })
     this.vehiclesArray = this._session.vehiclesArray;
   }
 
   async ngOnInit() {
     this.translate.setDefaultLang(this._translation.getLanguage());
-    this.getData();
   }
 
   ionViewWillLeave() {
@@ -112,33 +122,18 @@ export class BackupPage implements OnInit {
     }
   }
 
-  async getData(){
-    this.connected = await firstValueFrom(this._drive.conected$);
-    this.backupAccount = this._session.backupMail;
-  }
-
-
-  async connectAccount(){
-    await this._loader.presentLoader();
-    await this._drive.connectAccount();
-    this.notifications.getData();
-    await this._loader.dismissLoader();
-
-
-  }
-
-
   //DISPOSITIVO
   async saveDataOnDevice(){
-    this.creatingFile = true;
+    this._drive.changeCreatingFile(true);
+
     await this._file.createBackupFile()
     .then(async()=>{
-      this.creatingFile = false;
+      this._drive.changeCreatingFile(false);
       await this._alert.createAlert(this.translate.instant('alert.file_created'),this.translate.instant('alert.file_created_text'));
     })
     .catch((err)=>{
       console.log(err);
-      this.creatingFile = false;
+      this._drive.changeCreatingFile(false);
       if(err.message && err.message === "FILE_NOTCREATED"){
         this._alert.createAlert(this.translate.instant("error.file_notcreated"), this.translate.instant("error.file_notcreated_text"))
       }else{
@@ -150,10 +145,10 @@ export class BackupPage implements OnInit {
   async restoreByDevice(){
     const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.are_you_sure?'),this.translate.instant('alert.actual_data_will_be_rewrite'),this.translate.instant('alert.accept'),this.translate.instant('alert.cancel'))
     if(sure){
-      this.creatingFile = true;
+      this._drive.changeCreatingFile(true);
       const data = await this._file.restoreBackup()
       .then(async ()=>{
-        this.creatingFile = false;
+        this._drive.changeCreatingFile(false);
         await this._alert.createAlert(this.translate.instant('alert.file_restored'),this.translate.instant('alert.file_restored_text'))
         .then(async ()=>{
           if(this._drive.folderId && this._session.autoBackup){
@@ -167,7 +162,7 @@ export class BackupPage implements OnInit {
         })
       })
       .catch((err)=>{
-        this.creatingFile = false;
+        this._drive.changeCreatingFile(false);
         console.log(err)
         if(err.message &&err.message === "Archivo no válido"){
           this._alert.createAlert(this.translate.instant('error.invalid_file'),this.translate.instant('error.invalid_file_text'));
@@ -180,7 +175,7 @@ export class BackupPage implements OnInit {
     }
   }
 
-//DRIVE
+  //DRIVE
   async updateData(alternativeAks?:boolean){
     if(this.token && (await Network.getStatus()).connected === false){
       this._alert.createAlert(this.translate.instant("error.no_network"),"");
@@ -202,17 +197,17 @@ export class BackupPage implements OnInit {
   }
 
   async updateProcess(){
-    this.creatingFile = true;
+    this._drive.changeCreatingFile(true);
     this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,true);
         await this.removeAllElements()
         .then(async()=>{
           await this.uploadFiles();
-          this.creatingFile = false;
+          this._drive.changeCreatingFile(false);
           this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,false);
         })
         .catch((e)=>{
           console.log(e);
-          this.creatingFile = false;
+          this._drive.changeCreatingFile(false);
           this._alert.createAlert(this.translate.instant('error.error_cleaning'), this.translate.instant('error.error_cleaning_text'));
         })
   }
@@ -221,7 +216,7 @@ export class BackupPage implements OnInit {
     if(this.token && (await Network.getStatus()).connected === false){
       this._alert.createAlert(this.translate.instant("error.no_network"),"");
     }else{
-      this.creatingFile = true;
+      this._drive.changeCreatingFile(true);
       this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,true);
 
       if(!this._drive.folderId){
@@ -252,11 +247,10 @@ export class BackupPage implements OnInit {
           break;
         }
       }
-      this.creatingFile = false;
+      this._drive.changeCreatingFile(false);
       this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,false)
       this._drive.changeHaveFiles(true);
       this._drive.changeUploading(false);
-      this.getData();
     }
   }
 
@@ -330,14 +324,6 @@ export class BackupPage implements OnInit {
       }
     }
     return temporalBackup;
-  }
-
-  async unconnectAccount(){
-    await this._session.setGoogleToken("");
-    await this._drive.changeConnected(false);
-    await this._drive.changeHaveFiles(false);
-    await this.getData();
-    await this._auth.signOutGoogle();
   }
 
   async readFileFromDrive(fileName:string):Promise<any> {
