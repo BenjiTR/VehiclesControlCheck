@@ -512,9 +512,10 @@ export class MainPage implements OnInit, OnDestroy {
 
   //REALIZAR LLAMADA
   makeCall(numberString:string){
-    const number:number = parseInt(numberString)
-    if(number){
-      window.location.href=`tel:${number}`
+    const cleanedNumber = numberString.replace(/\s+/g, '');
+
+    if(cleanedNumber){
+      window.location.href=`tel:${cleanedNumber}`
     }else{
       this._alert.createAlert(this.translate.instant('error.number_its_not_correct'),this.translate.instant('error.number_its_not_correct_text'));
     }
