@@ -25,7 +25,7 @@
       </ion-popover>
     </ion-col>
     <ion-col class="ion-text-center center ion-no-margin ion-no-padding" size="12">
-      <ion-button [disabled]="creatingFile || downloading" class="black medium-width" (click)="saveDataOnDevice()" expand="block" color="green" shape="round" translate="backup.download"></ion-button>
+      <ion-button [disabled]="creatingFile || downloading" class="black medium-width" (click)="saveDataOnDevice()" expand="block" color="green" shape="round" translate="backup.save"></ion-button>
     </ion-col>
     <ion-col class="ion-text-center center ion-no-margin ion-no-padding ion-margin-bottom" size="12">
       <ion-button class="medium-width" [disabled]="creatingFile || downloading" expand="block" (click)="restoreByDevice()" color="warning" shape="round" translate="backup.restore"></ion-button>
@@ -78,10 +78,10 @@
 
   <ion-row class="ion-margin-bottom">
     <ion-col class="ion-text-center center ion-no-margin ion-no-padding" *ngIf="connected && !haveFiles" size="12">
-      <ion-button [disabled]="creatingFile || downloading" class="black medium-width" (click)="uploadFiles()" expand="block" color="green" shape="round" translate="backup.generate_backup"></ion-button>
+      <ion-button [disabled]="creatingFile || downloading" class="black medium-width" (click)="uploadFiles()" expand="block" color="green" shape="round" translate="backup.upload_backup"></ion-button>
     </ion-col>
     <ion-col class="ion-text-center center ion-no-margin ion-no-padding" *ngIf="connected && haveFiles" size="12">
-      <ion-button [disabled]="creatingFile || downloading" class="black medium-width" (click)="updateData()" expand="block" color="green" shape="round" translate="backup.update_backup"></ion-button>
+      <ion-button [disabled]="creatingFile || downloading" class="black medium-width" (click)="updateData()" expand="block" color="green" shape="round" translate="backup.upload_backup"></ion-button>
     </ion-col>
   <ion-col class="ion-text-center center ion-no-margin ion-no-padding" *ngIf="connected && haveFiles" size="12">
       <ion-button class="medium-width" [disabled]="creatingFile || downloading" (click)="restoreBackup()" expand="block" color="warning" shape="round" translate="backup.download_and_restore"></ion-button>

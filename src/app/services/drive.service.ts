@@ -187,8 +187,8 @@ export class DriveService {
   }
 
   async setConnectedAndTryFiles(){
-    this.connected.next(true);
     await this.existsFolder();
+    this.connected.next(true);
     return;
   }
 
@@ -233,7 +233,7 @@ export class DriveService {
             this.changeHaveFiles(true);
             //console.log("se cambia")
           }else{
-            
+
           }
         })
       }

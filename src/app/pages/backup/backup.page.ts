@@ -25,6 +25,7 @@ import { CryptoService } from 'src/app/services/crypto.services';
 import { DateService } from 'src/app/services/date.service';
 import { Event } from 'src/app/models/event.model';
 import { Vehicle } from 'src/app/models/vehicles.model';
+import { CalendarService } from 'src/app/services/calendar.service';
 
 @Component({
   selector: 'app-backup',
@@ -37,7 +38,7 @@ export class BackupPage implements OnInit {
 
   public token:string = "";
   public connected:boolean = false;
-  public haveFiles:boolean = true;
+  public haveFiles:boolean = false;
   public creatingFile:boolean = false;
   public progress:any = [0,0];
   public uploading:boolean = false;
@@ -69,7 +70,8 @@ export class BackupPage implements OnInit {
     private _data:DataService,
     private notifications:NotificationsPage,
     private _crypto:CryptoService,
-    private _date:DateService
+    private _date:DateService,
+    private _calendar:CalendarService
   ) {
     this.progressSubscription = this._drive.progress$.subscribe(data=>{
       this.progress = data;
@@ -90,7 +92,21 @@ export class BackupPage implements OnInit {
       this.creatingFile=data;
     });
     this.connectedSubscription = this._drive.conected$.subscribe(async data=>{
+      console.log(data)
       this.connected = data;
+      const id = await this._storage.getStorageItem(storageConstants.USER_CALENDAR_ID+this._session.currentUser.id);
+      if(this.connected && !id){
+        const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.do_you_want_connect_calendar'),this.translate.instant('alert.do_you_want_connect_calendar_text'),this.translate.instant('alert.accept'),this.translate.instant('alert.cancel'))
+        if(sure){
+          await this._loader.presentLoader();
+          try{
+            await this._calendar.connectCalendar();
+          }catch(err:any){
+            throw err;
+          }
+          await this._loader.dismissLoader();
+        }
+      }
       if(this.connected && !this.haveFiles){
         const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.files_not_found'),this.translate.instant('alert.files_not_found_text'),this.translate.instant('alert.accept'),this.translate.instant('alert.cancel'))
         if(sure){
@@ -255,15 +271,18 @@ export class BackupPage implements OnInit {
   }
 
   async restoreBackup(){
-    this._drive.changeProgress(0,0)
-    this._drive.changeDownloading("true");
-    const backupList = await this.readAll();
-    const backupData = await this.setData(backupList);
-    await this._data.restoreDeviceData(backupData);
-    this.setNotifications(backupData.events)
-    this._drive.changeDownloading("refresh");
-    this._drive.changeDownloading("false");
-    this.navCtr.navigateRoot(['/dashboard'], { queryParams: { reload: true } });
+    const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.are_you_sure?'),this.translate.instant('alert.actual_data_will_be_rewrite'),this.translate.instant('alert.accept'),this.translate.instant('alert.cancel'))
+    if(sure){
+      this._drive.changeProgress(0,0)
+      this._drive.changeDownloading("true");
+      const backupList = await this.readAll();
+      const backupData = await this.setData(backupList);
+      await this._data.restoreDeviceData(backupData);
+      this.setNotifications(backupData.events)
+      this._drive.changeDownloading("refresh");
+      this._drive.changeDownloading("false");
+      this.navCtr.navigateRoot(['/dashboard'], { queryParams: { reload: true } });
+    }
   }
 
   async setNotifications(events:Event[]){
