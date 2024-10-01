@@ -30,6 +30,7 @@ import { Network } from '@capacitor/network';
 import { DataService } from 'src/app/services/data.service';
 import { CryptoService } from 'src/app/services/crypto.services';
 import { FilterService } from 'src/app/services/filter.service';
+import { CalendarService } from 'src/app/services/calendar.service';
 
 
 @Component({
@@ -88,7 +89,8 @@ export class MainPage implements OnInit, OnDestroy {
     private _data:DataService,
     private _crypto:CryptoService,
     private _platform:Platform,
-    private _filter:FilterService
+    private _filter:FilterService,
+    private _calendar:CalendarService
   ) {
     this.eventTypes = etypes.getEventTypes();
     this.downloadingSubscription = this._drive.downloading$.subscribe(data=>{
@@ -129,6 +131,7 @@ export class MainPage implements OnInit, OnDestroy {
       this.currency = "€";
     }
     this.calculateDates();
+    this._calendar.init();
   }
 
 
@@ -354,16 +357,27 @@ export class MainPage implements OnInit, OnDestroy {
   }
 
   async deleteReminder(event:Event){
-    const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.are_you_sure?'),this.translate.instant('alert.event_permanently_erased'),this.translate.instant('alert.erase'),this.translate.instant('alert.cancel'));
+    const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.are_you_sure?'),this.translate.instant('alert.reminder_permanently_erased'),this.translate.instant('alert.erase'),this.translate.instant('alert.cancel'));
     if(sure){
       const reminder = this.remindersArray.find(reminder=>reminder.extra.eventId === event.id);
+      console.log(reminder)
+      console.log("Evento", event)
           if(reminder){
-            this._notification.deleteNotification(reminder)
+            //this._notification.deleteNotification(reminder)
             const index = this.eventsArray.findIndex(e => e.id === event.id);
-            this.eventsArray[index].reminder = false;
             if (this._drive.folderId && this._session.autoBackup) {
               await this.uploadFile('event',this.eventsArray[index]);
             }
+            const id = await this._storage.getStorageItem(storageConstants.USER_CALENDAR_ID+this._session.currentUser.id);
+            console.log("Preparar para eliminar ",id, event.calendarEventId)
+            if(id && event.calendarEventId){
+              this._calendar.deleteCalendarEvent(event.calendarEventId)
+              .catch((err:any)=>{
+                this._alert.createAlert(this.translate.instant("error.an_error_ocurred"),err);
+              })
+            }
+            this.eventsArray[index].reminder = false;
+            this._storage.setStorageItem(storageConstants.USER_EVENTS + this.user.id, this._crypto.encryptMessage(JSON.stringify(this.eventsArray)));
           }
     }
   }

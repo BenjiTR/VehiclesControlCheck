@@ -16,6 +16,7 @@ import { StorageService } from 'src/app/services/storage.service';
 import { storageConstants } from 'src/app/const/storage';
 import { LoaderService } from 'src/app/services/loader.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { CalendarService } from 'src/app/services/calendar.service';
 
 @Component({
   selector: 'app-notifications',
@@ -36,6 +37,7 @@ export class NotificationsPage{
   public creatingFile:boolean = false;
   public downloading:string = "false";
   public backupAccount:string="";
+  public calendar:boolean = false;
 
   private creatingFileSubscription: Subscription;
   private hasFileSubscription:Subscription;
@@ -53,6 +55,7 @@ export class NotificationsPage{
     private _platform:Platform,
     private _loader:LoaderService,
     private _auth:AuthService,
+    private _calendar:CalendarService
   ) {
     this.hasFileSubscription = this._drive.haveFiles$.subscribe((data)=>{
       this.hasFile = data;
@@ -94,6 +97,12 @@ export class NotificationsPage{
   async getData(){
     this.connected = await firstValueFrom(this._drive.conected$);
     this.backupAccount = this._session.backupMail;
+    const id = await this._storage.getStorageItem(storageConstants.USER_CALENDAR_ID+this._session.currentUser.id);
+    if(id){
+      this.calendar = true;
+    }else{
+      this.calendar = false;
+    }
   }
 
 
@@ -143,6 +152,43 @@ export class NotificationsPage{
     this.hasFile = await firstValueFrom(this._drive.haveFiles$);
     this.saveInCloud(this.isAllowed)
   }
+
+  async toggleCalendar(event:CustomEvent){
+    if(event.detail.checked){
+
+      await this._loader.presentLoader();
+        await this.connectCalendar()
+        .then(()=>{
+          this.calendar = event.detail.checked;
+        })
+        .catch(async (err)=>{
+          this._alert.createAlert(this.translate.instant("error.an_error_ocurred"),err);
+          this._calendar.calendarId = "";
+          this._storage.setStorageItem(storageConstants.USER_CALENDAR_ID,"");
+          this.calendar = false;
+          if(this._calendar.calendarId){
+            await this.unconnectCalendar();
+          }
+        })
+      await this._loader.dismissLoader();
+
+    }else{
+
+      await this._loader.presentLoader();
+        await this.unconnectCalendar()
+        .then(()=>{
+          this.calendar = event.detail.checked;
+          this._storage.setStorageItem(storageConstants.USER_CALENDAR_ID+this._session.currentUser.id,"");
+          this._calendar.calendarId = "";
+        })
+        .catch((err)=>{
+          this._alert.createAlert(this.translate.instant("error.an_error_ocurred"),err);
+          this.calendar = true;
+        })
+      await this._loader.dismissLoader();
+    }
+  }
+
 
   onAutoBkChange(value: any) {
     //console.log(value.detail.value)
@@ -210,6 +256,20 @@ export class NotificationsPage{
 
 
   //GOOGLE CALENDAR
- 
+  async connectCalendar():Promise<any>{
+      try{
+        await this._calendar.connectCalendar();
+      }catch(err:any){
+        throw err;
+      }
+  }
+
+  async unconnectCalendar(){
+      try{
+        await this._calendar.deleteCalendar();
+      }catch(err:any){
+        throw err;
+      }
+  }
 
 }

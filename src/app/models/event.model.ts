@@ -13,4 +13,5 @@ export class Event {
   reminderTittle?:string="";
   reminderDate?:Date = new Date();
   reminderId?:number|undefined;
+  calendarEventId?:string = "";
 }

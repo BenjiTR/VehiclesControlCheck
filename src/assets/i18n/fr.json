@@ -51,7 +51,18 @@
     "error_cleaning": "Erreur de nettoyage",
     "error_cleaning_text": "Erreur lors du nettoyage des fichiers, veuillez vérifier votre connexion et réessayer plus tard",
     "number_its_not_correct":"Numéro incorrect",
-    "number_its_not_correct_text":"Veuillez vérifier le numéro de téléphone"
+    "number_its_not_correct_text": "Veuillez vérifier le numéro de téléphone",
+    "calendar_could_not_be_deleted": "Le calendrier n'a pas pu être supprimé",
+    "calendar_could_not_be_connected": "Le calendrier n'a pas pu être connecté",
+    "error_in_the_calendar_creation_request": "Une erreur est survenue lors de la demande de création du calendrier, veuillez réessayer plus tard",
+    "error_while_creating_the_calendar": "Une erreur est survenue lors de la création du calendrier, veuillez réessayer plus tard",
+    "error_in_the_event_creation_request": "Une erreur est survenue lors de la demande de création de l'événement, veuillez réessayer plus tard",
+    "error_while_creating_the_event": "Une erreur est survenue lors de la création de l'événement, veuillez réessayer plus tard",
+    "error_while_deleting_the_calendar": "Une erreur est survenue lors de la suppression du calendrier, veuillez réessayer plus tard",
+    "error_while_searching_the_calendar": "Une erreur est survenue lors de la recherche du calendrier, veuillez réessayer plus tard",
+    "error_while_modifying_the_event": "Une erreur est survenue lors de la modification de l'événement, veuillez réessayer plus tard",
+    "calendar_could_not_be_found": "Le calendrier n'a pas pu être trouvé, veuillez réessayer plus tard",
+    "error_while_deleting_the_event": "Une erreur est survenue lors de la suppression de l'événement du calendrier"
   },
   "alert": {
     "accept": "Accepter",
@@ -179,7 +190,7 @@
     "type_of_fuel": "Type de carburant",
     "insurance_company": "Compagnie d'assurance",
     "insurance_policy": "Police d'assurance",
-    "insurance_renewal_date": "Date de renouvellement de l'assurance",
+    "insurance_renewal_date": "Date de souscription de l'assurance",
     "roadside_assistance_number": "Numéro d'assistance routière",
     "edit_vehicle": "Modifier le véhicule",
     "notes": "Notes"

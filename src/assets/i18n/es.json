@@ -51,7 +51,18 @@
       "error_cleaning":"Error limpiando",
       "error_cleaning_text":"Error limpiando los arhivos, por favor, revise su conexión e intentelo mas tarde",
       "number_its_not_correct":"Numero incorrecto",
-      "number_its_not_correct_text":"Por favor revise el número de teléfono"
+      "number_its_not_correct_text":"Por favor revise el número de teléfono",
+      "calendar_could_not_be_deleted":"No se pudo eliminar el calendario",
+      "calendar_could_not_be_connected":"No se pudo conectar el calendario",
+      "error_in_the_calendar_creation_request":"Ocurrio un error en la petición de creación del calendario, por favor intenteló de nuevo mas tarde",
+      "error_while_creating_the_calendar":"Ocurrio un error al crear el calendario, por favor intenteló de nuevo mas tarde",
+      "error_in_the_event_creation_request":"Ocurrio un error en la petición de creación del evento, por favor intenteló de nuevo mas tarde",
+      "error_while_creating_the_event":"Ocurrio un error al crear el evento, por favor intenteló de nuevo mas tarde",
+      "error_while_deleting_the_calendar":"Ocurrio un error al eliminar el calendario, por favor intenteló de nuevo mas tarde",
+      "error_while_searching_the_calendar":"Ocurrio un error al detectar el calendario, por favor intentelo de nuevo mas tarde",
+      "error_while_modifying_the_event":"Ocurrio un error al modificar el evento, por favor intentelo de nuevo mas tarde",
+      "calendar_could_not_be_found":"No fue posible encontrar el calendario, Por favor intentelo de nuevo mas tarde",
+      "error_while_deleting_the_event":"Ocurrio un error al eliminar el evento de Calendar"
   },
   "alert":{
       "accept":"Aceptar",
@@ -179,7 +190,7 @@
       "type_of_fuel": "Tipo de combustible",
       "insurance_company": "Compañía de seguros",
       "insurance_policy": "Póliza de seguro",
-      "insurance_renewal_date": "Fecha de renovación del seguro",
+      "insurance_renewal_date": "Fecha de contratación del seguro",
       "roadside_assistance_number": "Número de asistencia en carretera",
       "edit_vehicle":"Editar vehículo",
       "notes":"Notas"

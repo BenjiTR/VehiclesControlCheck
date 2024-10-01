@@ -26,6 +26,7 @@ import { DateService } from 'src/app/services/date.service';
 import { SlideUpDownAnimation } from 'src/app/services/animation.service';
 import { LocalNotificationSchema } from '@capacitor/local-notifications';
 import { NotificationsService } from 'src/app/services/notifications.service';
+import { CalendarService } from 'src/app/services/calendar.service';
 
 @Component({
   selector: 'app-newevent',
@@ -83,7 +84,8 @@ export class NeweventPage {
     private _drive: DriveService,
     private _crypto: CryptoService,
     private _date: DateService,
-    private _notification: NotificationsService
+    private _notification: NotificationsService,
+    private _calendar:CalendarService
   ) {
     this.eventTypes = etypes.getEventTypes();
     this.user = this._session.currentUser;
@@ -174,8 +176,21 @@ export class NeweventPage {
       await this._loader.presentLoader();
       const index = this.eventsArray.findIndex(event => event.id === this.eventToEditId);
       if (index !== -1) {
+        const oldCalendarEventId = this._session.eventsArray[index].calendarEventId;
         const newEvent = await this.generateEvent();
         this._session.eventsArray[index] = newEvent;
+        const id = await this._storage.getStorageItem(storageConstants.USER_CALENDAR_ID+this._session.currentUser.id);
+        console.log("id",id)
+        if(id && newEvent.reminder){
+          console.log(newEvent.calendarEventId)
+          if(!oldCalendarEventId){
+            newEvent.calendarEventId = await this._hash.generateCalendarPhrase();
+          }else{
+            newEvent.calendarEventId = oldCalendarEventId;
+          }
+
+          this._calendar.updateEventInCalendar(newEvent);
+        }
         this.saveAndExit(newEvent);
       }
   }
@@ -236,6 +251,13 @@ export class NeweventPage {
       await this._loader.presentLoader();
       const newEvent = await this.generateEvent();
       this.eventsArray.push(newEvent)
+      const id = await this._storage.getStorageItem(storageConstants.USER_CALENDAR_ID+this._session.currentUser.id);
+      if(id && newEvent.reminder){
+        if(!newEvent.calendarEventId){
+          newEvent.calendarEventId = await this._hash.generateCalendarPhrase();
+        }
+        this._calendar.insertEvent(newEvent);
+      }
       this.saveAndExit(newEvent);
 
   }

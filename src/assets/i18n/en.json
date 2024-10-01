@@ -51,7 +51,18 @@
     "error_cleaning": "Error cleaning",
     "error_cleaning_text": "Error cleaning the files, please check your connection and try again later",
     "number_its_not_correct":"Number incorrect",
-    "number_its_not_correct_text":"Please check the phone number"
+    "number_its_not_correct_text": "Please check the phone number",
+    "calendar_could_not_be_deleted": "The calendar could not be deleted",
+    "calendar_could_not_be_connected": "The calendar could not be connected",
+    "error_in_the_calendar_creation_request": "There was an error in the calendar creation request, please try again later",
+    "error_while_creating_the_calendar": "An error occurred while creating the calendar, please try again later",
+    "error_in_the_event_creation_request": "There was an error in the event creation request, please try again later",
+    "error_while_creating_the_event": "An error occurred while creating the event, please try again later",
+    "error_while_deleting_the_calendar": "An error occurred while deleting the calendar, please try again later",
+    "error_while_searching_the_calendar": "An error occurred while searching for the calendar, please try again later",
+    "error_while_modifying_the_event": "An error occurred while modifying the event, please try again later",
+    "calendar_could_not_be_found": "The calendar could not be found, please try again later",
+    "error_while_deleting_the_event": "An error occurred while deleting the Calendar event"
   },
   "alert": {
     "accept": "Accept",
@@ -179,7 +190,7 @@
     "type_of_fuel": "Fuel Type",
     "insurance_company": "Insurance Company",
     "insurance_policy": "Insurance Policy",
-    "insurance_renewal_date": "Insurance Renewal Date",
+    "insurance_renewal_date": "Insurance contract date",
     "roadside_assistance_number": "Roadside Assistance Number",
     "edit_vehicle": "Edit Vehicle",
     "notes": "Notes"

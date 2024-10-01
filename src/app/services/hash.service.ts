@@ -63,6 +63,29 @@ export class HashService {
     return resultado;
   }
 
+  public async generateCalendarPhrase(): Promise<string> {
+    this.vehicles = await this._session.vehiclesArray;
+
+    const caracteres = 'abcdefghijklmnopqrstuv0123456789';
+    const caracteresLongitud = caracteres.length;
+
+    let resultado = 'c';
+    let hashExists = true;
+
+    while (hashExists) {
+      resultado = 'c';  // Reset the hash to start with 'V' again
+      for (let i = 0; i < 8; i++) {
+        resultado += caracteres.charAt(Math.floor(Math.random() * caracteresLongitud));
+      }
+
+      // Check if the generated hash exists in any vehicle's id
+      hashExists = this.vehicles.some(vehicle => vehicle.id === resultado);
+    }
+    console.log(resultado)
+    return resultado;
+  }
+
+
 
 
 }
