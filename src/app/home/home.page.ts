@@ -18,6 +18,7 @@ import { StorageService } from '../services/storage.service';
 import { Network } from '@capacitor/network';
 import { LoaderService } from '../services/loader.service';
 import { Capacitor } from '@capacitor/core';
+import { VersionService } from '../services/version.service';
 
 
 
@@ -54,7 +55,8 @@ export class HomePage implements OnInit, OnDestroy{
     private navCtr:NavController,
     private _file:FileSystemService,
     private _storage:StorageService,
-    private _loader:LoaderService
+    private _loader:LoaderService,
+    private versionService: VersionService
   ) {
     this.translate.get('home.email').subscribe((translation: string) => {
       this.emailLabel = translation;
@@ -77,6 +79,7 @@ export class HomePage implements OnInit, OnDestroy{
     await this._admobService.showBanner();
     await this._admobService.hideBanner();
     await this._file.checkPermission();
+    await this.versionService.checkVersion();
     await this.tryRememberSession();
   }
 

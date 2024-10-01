@@ -136,7 +136,9 @@
       "files_not_found":"Archivos de respaldo no encontrados",
       "files_not_found_text":"¿Deseas generar una copia de seguridad en Drive?",
       "do_you_want_connect_calendar":"¿Deseas conectar con Calendar?",
-      "do_you_want_connect_calendar_text":"Si conectas tu app con Calendar, podrás ver todos los recordatorios en el"
+      "do_you_want_connect_calendar_text":"Si conectas tu app con Calendar, podrás ver todos los recordatorios en el",
+      "new_version_avaliable":"Actualización disponible",
+      "new_version_avaliable_text":"Existe una nueva Versión disponible, ¿Desea acceder a la descarga?"
     },
   "home":{
       "init_session":"Inicio de sesión",

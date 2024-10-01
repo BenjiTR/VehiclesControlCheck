@@ -9,6 +9,6 @@ export const environment = {
     measurementId: "G-GYSN7J9W02"
   },
   version: "1.4.0",
-  revision: "0",
+  versioncode: "14026",
   production: true
 };
