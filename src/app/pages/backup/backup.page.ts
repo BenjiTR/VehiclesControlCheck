@@ -94,7 +94,7 @@ export class BackupPage implements OnInit {
     this.connectedSubscription = this._drive.conected$.subscribe(async data=>{
       console.log(data)
       this.connected = data;
-      const id = await this._storage.getStorageItem(storageConstants.USER_CALENDAR_ID+this._session.currentUser.id);
+      const id = await this._calendar.findVehicleControlCalendar();
       if(this.connected && !id){
         const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.do_you_want_connect_calendar'),this.translate.instant('alert.do_you_want_connect_calendar_text'),this.translate.instant('alert.accept'),this.translate.instant('alert.cancel'))
         if(sure){

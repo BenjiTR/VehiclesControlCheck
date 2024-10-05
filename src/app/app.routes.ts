@@ -88,6 +88,10 @@ export const routes: Routes = [
     canActivate: [canActivate]
   },
   {
+    path: 'newsmodal',
+    loadComponent: () => import('./pages/newsmodal/newsmodal.page').then( m => m.NewsmodalPage)
+  },
+  {
     path: '',
     redirectTo: 'home',
     pathMatch: 'full',
@@ -97,6 +101,7 @@ export const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full',
   },
+
 
 
 

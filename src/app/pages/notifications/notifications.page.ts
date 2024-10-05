@@ -97,9 +97,10 @@ export class NotificationsPage{
   async getData(){
     this.connected = await firstValueFrom(this._drive.conected$);
     this.backupAccount = this._session.backupMail;
-    const id = await this._storage.getStorageItem(storageConstants.USER_CALENDAR_ID+this._session.currentUser.id);
+    const id = await this._calendar.findVehicleControlCalendar();
     if(id){
       this.calendar = true;
+      this._storage.setStorageItem(storageConstants.USER_CALENDAR_ID,id);
     }else{
       this.calendar = false;
     }

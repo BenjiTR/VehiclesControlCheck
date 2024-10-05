@@ -28,6 +28,7 @@ export class VersionService {
       if (data && data.version !== this.currentVersion) {
         await this._loader.dismissLoader();
         await this.promptUpdate();
+        await this._loader.presentLoader();
       }
     } catch (error) {
       console.error('Error al verificar la versión:', error);

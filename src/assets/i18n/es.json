@@ -346,5 +346,15 @@
       "n_of_events": "Nº de Eventos",
       "vehicles_control_data": "Datos de control de vehículos",
       "export_to_csv": "Exportar a CSV"
+    },
+    "news":{
+      "news":"Novedades",
+      "news_1_title":"Ahora los recordatorios forman parte de los eventos.",
+      "news_1_text":"Puedes crear eventos futuros y añadirles recordatorios con notificaciones desde el propio menú de creación/edición del evento.",
+      "news_2_title":"Ahora puedes conectar con Calendar",
+      "news_2_text":"Desde los ajustes, y con una cuenta asociada, puede conectar con google calendar para tener presente cada día, los eventos con recordatorios pendientes de tus vehículos.",
+      "news_3_title":"Otras mejoras:",
+      "news_3_text":"Mejoras visuales, en algunos procesos y automatizaciones, para hacer la aplicación mas amable y práctica.",
+      "dont_show_more":"no mostrar mas"
     }
 }

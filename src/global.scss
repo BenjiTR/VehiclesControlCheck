@@ -300,4 +300,18 @@ ion-input {
 ion-textarea {
   text-transform: capitalize;
 }
+/* Clase personalizada del modal */
+.news-modal {
+  --width: 80%;    /* Ajusta el ancho del modal */
+  --height: 60%;   /* Ajusta la altura del modal */
+  --border-radius: 20px;  /* Ajusta las esquinas redondeadas */
+  --background-color: #ce1b1b;  /* Cambia el fondo del modal */
+}
+
+/* Estilos opcionales para centrar el contenido */
+.news-modal .modal-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 

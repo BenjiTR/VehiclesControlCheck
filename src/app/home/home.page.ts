@@ -1,7 +1,7 @@
 import { storageConstants } from 'src/app/const/storage';
 import { AuthService } from './../services/auth.service';
 import { Component, OnInit, getPlatform, OnDestroy } from '@angular/core';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonRow, IonCol, IonImg, IonItem, IonInput, IonIcon, IonFooter, IonButton, IonCheckbox, IonLabel, Platform, NavController, IonPopover, IonDatetime } from '@ionic/angular/standalone';
+import { IonHeader, IonToolbar, IonTitle, IonContent, IonRow, IonCol, IonImg, IonItem, IonInput, IonIcon, IonFooter, IonButton, IonCheckbox, IonLabel, Platform, NavController, IonPopover, IonDatetime, ModalController } from '@ionic/angular/standalone';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslationConfigService } from '../services/translation.service';
 import { FormsModule } from '@angular/forms';
@@ -19,6 +19,8 @@ import { Network } from '@capacitor/network';
 import { LoaderService } from '../services/loader.service';
 import { Capacitor } from '@capacitor/core';
 import { VersionService } from '../services/version.service';
+import { NewsmodalPage } from '../pages/newsmodal/newsmodal.page';
+import { environment } from 'src/environments/environment.prod';
 
 
 
@@ -56,6 +58,7 @@ export class HomePage implements OnInit, OnDestroy{
     private _file:FileSystemService,
     private _storage:StorageService,
     private _loader:LoaderService,
+    private modalController: ModalController,
     private versionService: VersionService
   ) {
     this.translate.get('home.email').subscribe((translation: string) => {
@@ -80,6 +83,7 @@ export class HomePage implements OnInit, OnDestroy{
     await this._admobService.hideBanner();
     await this._file.checkPermission();
     await this.versionService.checkVersion();
+    await this.checkNews();
     await this.tryRememberSession();
   }
 
@@ -364,6 +368,28 @@ export class HomePage implements OnInit, OnDestroy{
     }else{
       return;
     }
+  }
+
+  async checkNews():Promise<void>{
+    const newsReaded = localStorage.getItem(storageConstants.NEWS_READED);
+    if(newsReaded !== environment.versioncode){
+      await this._loader.dismissLoader();
+      await this.openModal();
+      await this._loader.presentLoader();
+      return;
+    }else{
+      return;
+    }
+  }
+
+
+  async openModal():Promise<void> {
+    const modal = await this.modalController.create({
+      component: NewsmodalPage,
+      cssClass: 'news-modal'
+    });
+    await modal.present();
+    await modal.onDidDismiss();
   }
 
 

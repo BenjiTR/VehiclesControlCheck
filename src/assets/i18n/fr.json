@@ -136,7 +136,9 @@
     "files_not_found": "Fichiers de sauvegarde non trouvés",
     "files_not_found_text": "Souhaitez-vous créer une sauvegarde sur Drive ?",
     "do_you_want_connect_calendar": "Souhaitez-vous vous connecter à Calendar ?",
-    "do_you_want_connect_calendar_text": "Si vous connectez votre application à Calendar, vous pourrez voir tous les rappels dedans."
+    "do_you_want_connect_calendar_text": "Si vous connectez votre application à Calendar, vous pourrez voir tous les rappels dedans.",
+    "new_version_avaliable": "Mise à jour disponible",
+    "new_version_avaliable_text": "Une nouvelle version est disponible, souhaitez-vous la télécharger ?"
   },
   "home": {
     "init_session": "Connexion",
@@ -233,8 +235,7 @@
     "vehicle": "Véhicule",
     "id": "ID Événement",
     "vehicleId": "ID Véhicule",
-    "add_reminder": "Ajouter un rappel",
-    "notification_problem_text": "Un problème a été détecté avec ce rappel, veuillez essayer de le modifier et de l'enregistrer à nouveau."
+    "add_reminder": "Ajouter un rappel"
   },
   "eventypes": {
     "flat_tire": "Pneu crevé",
@@ -345,6 +346,16 @@
     "n_of_events": "Nombre d'événements",
     "vehicles_control_data": "Données de contrôle des véhicules",
     "export_to_csv": "Exporter au CSV"
+  },
+  "news": {
+    "news": "Nouveautés",
+    "news_1_title": "Les rappels font désormais partie des événements.",
+    "news_1_text": "Vous pouvez créer des événements futurs et leur ajouter des rappels avec notifications depuis le menu de création/modification de l'événement.",
+    "news_2_title": "Vous pouvez désormais vous connecter à Calendar",
+    "news_2_text": "Depuis les paramètres, et avec un compte associé, vous pouvez vous connecter à Google Calendar pour suivre chaque jour les événements avec rappels en attente pour vos véhicules.",
+    "news_3_title": "Autres améliorations :",
+    "news_3_text": "Améliorations visuelles, dans certains processus et automatisations, pour rendre l'application plus conviviale et pratique.",
+    "dont_show_more": "ne plus afficher"
   }
 }
 

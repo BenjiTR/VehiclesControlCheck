@@ -152,7 +152,7 @@ async deleteCalendar(): Promise<void> {
 }
 
 // BUSCAR EL CALENDARIO
-private async findVehicleControlCalendar(): Promise<string | null> {
+public async findVehicleControlCalendar(): Promise<string | null> {
   try {
     const response = await fetch(backupConstants.API_URL_CALENDAR_LIST, {
       method: 'GET',

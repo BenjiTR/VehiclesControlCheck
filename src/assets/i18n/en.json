@@ -136,7 +136,9 @@
     "files_not_found": "Backup files not found",
     "files_not_found_text": "Do you want to create a backup in Drive?",
     "do_you_want_connect_calendar": "Do you want to connect with Calendar?",
-    "do_you_want_connect_calendar_text": "If you connect your app with Calendar, you will be able to see all the reminders in it."
+    "do_you_want_connect_calendar_text": "If you connect your app with Calendar, you will be able to see all the reminders in it.",
+    "new_version_avaliable": "Update available",
+    "new_version_avaliable_text": "A new version is available, would you like to download it?"
   },
   "home": {
     "init_session": "Sign In",
@@ -344,5 +346,15 @@
     "n_of_events": "Number of Events",
     "vehicles_control_data": "Vehicle control data",
     "export_to_csv": "Export to CSV"
+  },
+  "news": {
+    "news": "What's New",
+    "news_1_title": "Reminders are now part of events.",
+    "news_1_text": "You can create future events and add reminders with notifications from the event creation/edit menu.",
+    "news_2_title": "You can now connect with Calendar",
+    "news_2_text": "From the settings, with an associated account, you can connect to Google Calendar to keep track of events with pending reminders for your vehicles every day.",
+    "news_3_title": "Other improvements:",
+    "news_3_text": "Visual improvements, process enhancements, and automations to make the app more user-friendly and practical.",
+    "dont_show_more": "don't show again"
   }
 }

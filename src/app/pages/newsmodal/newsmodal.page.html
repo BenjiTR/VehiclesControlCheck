@@ -1,0 +1,69 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title class="ion-text-center green"><h1 translate="news.news"></h1></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="brown" [fullscreen]="true">
+
+  <div *ngIf="element === 1">
+    <ion-row>
+      <ion-col class="ion-padding " size="12">
+        <ion-label><h1 translate="news.news_1_title"></h1>
+        <h2 class="ion-padding-top ion-text-justify" translate="news.news_1_text"></h2></ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <ion-img src="../../../assets/img/news1.png"></ion-img>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <div *ngIf="element === 2">
+    <ion-row>
+      <ion-col class="ion-padding " size="12">
+        <ion-label><h1 translate="news.news_2_title"></h1>
+        <h2 class="ion-padding-top ion-text-justify" translate="news.news_2_text"></h2></ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <ion-img src="../../../assets/img/news2.png"></ion-img>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <div *ngIf="element === 3">
+    <ion-row>
+      <ion-col class="ion-padding " size="12">
+        <ion-label><h1 translate="news.news_3_title"></h1>
+        <h2 class="ion-padding-top ion-text-justify" translate="news.news_3_text"></h2></ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-margin-bottom ion-padding-bottom">
+      <ion-col class="ion-text-center" size="12">
+        <ion-icon class="smile" color="green" src="../../../assets/icons/happy-outline.svg"></ion-icon>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <ion-row class="ion-margin-top">
+    <ion-col class="ion-text-center" size="12">
+      <ion-checkbox *ngIf="element >=max" (ionChange)="changeUnderstand($event)">{{'news.dont_show_more'|translate}}</ion-checkbox>
+    </ion-col>
+    <ion-col class="ion-text-center" size="6">
+      <ion-button [disabled]="element <= 1" (click)="previous()" fill="solid" shape="round">
+        Anterior
+      </ion-button>
+    </ion-col>
+    <ion-col class="ion-text-center" size="6">
+      <ion-button *ngIf="element <max" (click)="next()" fill="solid" shape="round">
+        siguiente
+      </ion-button>
+      <ion-button *ngIf="element >=max" (click)="close()" fill="solid" color="danger" shape="round">
+        Cerrar
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-content>
