@@ -1,8 +1,8 @@
 import { RouterModule } from '@angular/router';
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonRow, IonCol, IonLabel, IonButton, IonIcon, IonDatetimeButton, IonModal, IonDatetime, IonItem, IonSelect, IonSelectOption, IonItemDivider, IonInput, IonAccordion, IonAccordionGroup } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonRow, IonCol, IonLabel, IonButton, IonIcon, IonDatetimeButton, IonModal, IonDatetime, IonItem, IonSelect, IonSelectOption, IonItemDivider, IonInput, IonAccordion, IonAccordionGroup, IonList } from '@ionic/angular/standalone';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { PaddingService } from 'src/app/services/padding.service';
 import { TranslationConfigService } from 'src/app/services/translation.service';
@@ -18,6 +18,7 @@ import { ScreenOrientationService } from '../../services/orientation.service'
 import { DataService } from 'src/app/services/data.service';
 import { FileSystemService } from 'src/app/services/filesystem.service';
 import { FilterService } from 'src/app/services/filter.service';
+import { EspecialiOS } from 'src/app/services/especialiOS.service';
 
 @Component({
   selector: 'app-data',
@@ -25,9 +26,12 @@ import { FilterService } from 'src/app/services/filter.service';
   styleUrls: ['./data.page.scss'],
   standalone: true,
   providers:[EventTypes, DatePipe, FilterService],
-  imports: [IonAccordionGroup, IonAccordion, IonInput, RouterModule, IonItemDivider, IonSelect, IonSelectOption, IonItem, CommonModule, FormsModule, IonDatetime, IonModal, IonDatetimeButton, TranslateModule, IonIcon, IonButton, IonLabel, IonCol, IonRow, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [IonList, IonAccordionGroup, IonAccordion, IonInput, RouterModule, IonItemDivider, IonSelect, IonSelectOption, IonItem, CommonModule, FormsModule, IonDatetime, IonModal, IonDatetimeButton, TranslateModule, IonIcon, IonButton, IonLabel, IonCol, IonRow, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
 })
 export class DataPage implements OnInit {
+
+  @ViewChild('textareaElement', { static: false })
+  filterInput!: IonInput;
 
   public vehiclesArray:Vehicle[] = [];
   public eventsArray:Event[] = [];
@@ -41,7 +45,11 @@ export class DataPage implements OnInit {
   public filter:string = "";
   public portrait:boolean=true;
   public currency:string ="";
-
+  //TAGS
+  public showSuggestions: boolean = false;
+  public tags: string[] = [];
+  public filteredTags: string[] = [];
+  public currentTag: string = '';
 
   constructor(
     private _paddingService:PaddingService,
@@ -54,7 +62,8 @@ export class DataPage implements OnInit {
     private screenOrientationService: ScreenOrientationService,
     private _data:DataService,
     private _file:FileSystemService,
-    private _filter:FilterService
+    private _filter:FilterService,
+    private _specialiOS:EspecialiOS
   ) {
     this.types = this.etypes.getTypes();
     this.eventTypes = etypes.getEventTypes();
@@ -75,6 +84,7 @@ export class DataPage implements OnInit {
     await this.calculateDates();
     await this.generateData();
     this.startCharts();
+    this.getTags();
   }
 
   ionViewWillEnter() {
@@ -86,7 +96,9 @@ export class DataPage implements OnInit {
 
 
 
-
+  async getTags(){
+    this.tags = await this._session.getTags()
+  }
 
   //CHARTS
   async startCharts(): Promise<void> {
@@ -471,6 +483,58 @@ export class DataPage implements OnInit {
     return this._paddingService.calculatePadding();
   }
 
+  preventFocus(event: MouseEvent) {
+    this._specialiOS.preventFocus(event);
+  }
+
+  //FILTROS
+  //FILTRO PALABRA
+  changefilter(event:any){
+    this.filter = event.detail.value;
+
+     // Buscar la última palabra que empieza con '#'
+  const tagMatch = this.filter.match(/#\w*$/);
+
+  if (tagMatch) {
+    this.currentTag = tagMatch[0];
+
+    // Filtrar las etiquetas existentes
+    this.filteredTags = this.tags.filter(tag => tag.startsWith(this.currentTag));
+    this.showSuggestions = true;
+  } else {
+    this.showSuggestions = false;
+  }
+}
+
+selectTagForFilter(tag: string) {
+  // Reemplazar la búsqueda con la etiqueta seleccionada
+  this.filter = this.filter.replace(/#\w*$/, tag);
+  this.showSuggestions = false;
+
+}
+
+addHashtag() {
+  if (!this.filter.endsWith(' ')) {
+    this.filter += ' ';
+  }
+
+  this.filter += '#';
+  this.filteredTags = this.tags;
+  this.showSuggestions = true;
+
+  setTimeout(() => {
+    this.filterInput.setFocus();
+    this.setCursorAtEnd();
+  }, 0);
+}
+
+// Función para posicionar el cursor al final del textarea
+setCursorAtEnd() {
+  this.filterInput.getInputElement().then(input => {
+    const length = input.value.length;
+    input.setSelectionRange(length, length);
+  });
+}
 
 
 }

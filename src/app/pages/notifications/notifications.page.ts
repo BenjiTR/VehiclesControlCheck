@@ -38,6 +38,7 @@ export class NotificationsPage{
   public downloading:string = "false";
   public backupAccount:string="";
   public calendar:boolean = false;
+  private calendarSubscription:Subscription;
 
   private creatingFileSubscription: Subscription;
   private hasFileSubscription:Subscription;
@@ -66,6 +67,9 @@ export class NotificationsPage{
     this.downloadingSubscription = this._drive.downloading$.subscribe(data=>{
       this.downloading = data;
     });
+    this.calendarSubscription = this._calendar.calendar$.subscribe(value=>{
+      this.calendar = value;
+    })
 
     if(this._platform.is('android')){
       this.platform = 'android'

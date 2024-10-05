@@ -355,6 +355,9 @@
     "news_2_text": "From the settings, with an associated account, you can connect to Google Calendar to keep track of events with pending reminders for your vehicles every day.",
     "news_3_title": "Other improvements:",
     "news_3_text": "Visual improvements, process enhancements, and automations to make the app more user-friendly and practical.",
-    "dont_show_more": "don't show again"
+    "dont_show_more": "don't show again",
+    "previous": "Previous",
+    "next": "Next",
+    "close": "Close"
   }
 }

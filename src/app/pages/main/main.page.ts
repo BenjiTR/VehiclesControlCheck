@@ -1,7 +1,7 @@
 import { Component, OnInit, DoCheck, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Platform, IonTextarea, IonAccordion, IonAccordionGroup, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonMenu, IonMenuButton, IonRouterOutlet, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar, MenuController, ModalController, NavController, IonDatetime, IonFab, IonFabList, IonFabButton, IonBadge, IonText, IonDatetimeButton, IonModal, IonPopover } from '@ionic/angular/standalone';
+import { Platform, IonTextarea, IonAccordion, IonAccordionGroup, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonMenu, IonMenuButton, IonRouterOutlet, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar, MenuController, ModalController, NavController, IonDatetime, IonFab, IonFabList, IonFabButton, IonBadge, IonText, IonDatetimeButton, IonModal, IonPopover, IonList } from '@ionic/angular/standalone';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { UserdataviewPage } from '../userdataview/userdataview.page';
@@ -31,6 +31,7 @@ import { DataService } from 'src/app/services/data.service';
 import { CryptoService } from 'src/app/services/crypto.services';
 import { FilterService } from 'src/app/services/filter.service';
 import { CalendarService } from 'src/app/services/calendar.service';
+import { EspecialiOS } from 'src/app/services/especialiOS.service';
 
 
 @Component({
@@ -38,13 +39,15 @@ import { CalendarService } from 'src/app/services/calendar.service';
   templateUrl: './main.page.html',
   styleUrls: ['./main.page.scss'],
   standalone: true,
-  imports: [IonPopover, IonModal, IonDatetimeButton, IonText, IonBadge, IonFabButton, IonFabList, IonFab, IonTextarea, IonDatetime, IonSelect, IonSelectOption, IonRouterOutlet, IonAccordionGroup, IonAccordion, UserdataviewPage, IonInput, IonItem, IonLabel, TranslateModule, RouterModule, IonMenu, IonIcon, IonButtons, IonMenuButton, IonButton, IonImg, IonGrid, IonCol ,IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonRow, IonGrid],
+  imports: [IonList, IonPopover, IonModal, IonDatetimeButton, IonText, IonBadge, IonFabButton, IonFabList, IonFab, IonTextarea, IonDatetime, IonSelect, IonSelectOption, IonRouterOutlet, IonAccordionGroup, IonAccordion, UserdataviewPage, IonInput, IonItem, IonLabel, TranslateModule, RouterModule, IonMenu, IonIcon, IonButtons, IonMenuButton, IonButton, IonImg, IonGrid, IonCol ,IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonRow, IonGrid],
   animations: [ MainAnimation, RoadAnimation, SecondaryAnimation, GrowShrinkAnimation, SlideUpDownAnimation,  ],
   providers:[EventTypes, DatePipe, FilterService]
 })
 export class MainPage implements OnInit, OnDestroy {
 
   @ViewChild('accordionGroup', { static: false }) accordionGroup: IonAccordionGroup | undefined;
+  @ViewChild('textareaElement', { static: false })
+  filterInput!: IonInput;
 
   public creatingElement:Boolean=false;
   public vehiclesArray:Vehicle[]=[];
@@ -67,6 +70,11 @@ export class MainPage implements OnInit, OnDestroy {
   public startDate:Date = new Date;
   public endDate:Date = new Date;
   public types:string[] = [];
+  //TAGS
+  public showSuggestions: boolean = false;
+  public tags: string[] = [];
+  public filteredTags: string[] = [];
+  public currentTag: string = '';
 
   constructor(
     private translate:TranslateService,
@@ -90,7 +98,8 @@ export class MainPage implements OnInit, OnDestroy {
     private _crypto:CryptoService,
     private _platform:Platform,
     private _filter:FilterService,
-    private _calendar:CalendarService
+    private _calendar:CalendarService,
+    private _specialiOS:EspecialiOS
   ) {
     this.eventTypes = etypes.getEventTypes();
     this.downloadingSubscription = this._drive.downloading$.subscribe(data=>{
@@ -132,6 +141,7 @@ export class MainPage implements OnInit, OnDestroy {
     }
     this.calculateDates();
     this._calendar.init();
+    this.getTags();
   }
 
 
@@ -441,11 +451,59 @@ export class MainPage implements OnInit, OnDestroy {
   }
 
 
+  async getTags(){
+    this.tags = await this._session.getTags()
+}
+
   //FILTROS
   //FILTRO PALABRA
   changefilter(event:any){
     this.filter = event.detail.value;
+
+     // Buscar la última palabra que empieza con '#'
+  const tagMatch = this.filter.match(/#\w*$/);
+
+  if (tagMatch) {
+    this.currentTag = tagMatch[0];
+
+    // Filtrar las etiquetas existentes
+    this.filteredTags = this.tags.filter(tag => tag.startsWith(this.currentTag));
+    this.showSuggestions = true;
+  } else {
+    this.showSuggestions = false;
   }
+}
+
+selectTagForFilter(tag: string) {
+  // Reemplazar la búsqueda con la etiqueta seleccionada
+  this.filter = this.filter.replace(/#\w*$/, tag);
+  this.showSuggestions = false;
+
+}
+
+addHashtag() {
+  if (!this.filter.endsWith(' ')) {
+    this.filter += ' ';
+  }
+
+  this.filter += '#';
+  this.filteredTags = this.tags;
+  this.showSuggestions = true;
+
+  setTimeout(() => {
+    this.filterInput.setFocus();
+    this.setCursorAtEnd();
+  }, 0);
+}
+
+// Función para posicionar el cursor al final del textarea
+setCursorAtEnd() {
+  this.filterInput.getInputElement().then(input => {
+    const length = input.value.length;
+    input.setSelectionRange(length, length);
+  });
+}
+
 
   //FILTRO POR PALABRAS O FECHA ESCRITA
   matchesFilter(event: any, filter: string): boolean {
@@ -568,11 +626,8 @@ export class MainPage implements OnInit, OnDestroy {
     }
 
     preventFocus(event: MouseEvent) {
-      if(this._platform.is('ios')){
-        event.preventDefault();
-      }
+      this._specialiOS.preventFocus(event);
     }
-
 
 
 }

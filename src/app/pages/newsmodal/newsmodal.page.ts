@@ -2,7 +2,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonCol, IonLabel, IonRow, IonImg, IonButton, IonCheckbox, ModalController, IonIcon } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonCol, IonLabel, IonRow, IonImg, IonButton, IonCheckbox, ModalController, IonIcon, IonFooter } from '@ionic/angular/standalone';
 import { storageConstants } from 'src/app/const/storage';
 import { environment } from 'src/environments/environment.prod';
 
@@ -11,7 +11,7 @@ import { environment } from 'src/environments/environment.prod';
   templateUrl: './newsmodal.page.html',
   styleUrls: ['./newsmodal.page.scss'],
   standalone: true,
-  imports: [TranslateModule, IonIcon, IonCheckbox, IonButton, IonImg, IonRow, IonLabel, IonCol, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [IonFooter, TranslateModule, IonIcon, IonCheckbox, IonButton, IonImg, IonRow, IonLabel, IonCol, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
 })
 export class NewsmodalPage implements OnInit {
 

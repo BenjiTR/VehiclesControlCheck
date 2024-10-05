@@ -37,12 +37,10 @@ export class VersionService {
 
   async promptUpdate() {
     const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.new_version_avaliable'),this.translate.instant('alert.new_version_avaliable_text'),this.translate.instant('alert.accept'),this.translate.instant('alert.cancel'))
-        if(sure){
-          if (this.platform.is('ios')||this.platform.is('desktop')) {
-            window.open('https://play.google.com/store/apps/details?id=com.benjamintr.vehiclescontrol', '_system');
-            }
-
-        }
-
+      if(sure){
+        if (this.platform.is('android')||this.platform.is('desktop')) {
+          window.open('https://play.google.com/store/apps/details?id=com.benjamintr.vehiclescontrol', '_system');
+          }
+      }
   }
 }

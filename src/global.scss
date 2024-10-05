@@ -294,6 +294,9 @@ ion-popover::part(backdrop) {
 ion-input {
   text-transform: capitalize;
 }
+.no-capitalize{
+  text-transform: none;
+}
 .matricula{
   text-transform: uppercase;
 }
@@ -301,12 +304,13 @@ ion-textarea {
   text-transform: capitalize;
 }
 /* Clase personalizada del modal */
-.news-modal {
+.news-modal{
   --width: 80%;    /* Ajusta el ancho del modal */
   --height: 60%;   /* Ajusta la altura del modal */
-  --border-radius: 20px;  /* Ajusta las esquinas redondeadas */
-  --background-color: #ce1b1b;  /* Cambia el fondo del modal */
+  --border-radius: 5px;  /* Ajusta las esquinas redondeadas */
+  background: #0000006e;  /* Cambia el fondo del modal */
 }
+
 
 /* Estilos opcionales para centrar el contenido */
 .news-modal .modal-wrapper {

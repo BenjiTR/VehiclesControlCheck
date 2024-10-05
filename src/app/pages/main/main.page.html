@@ -36,8 +36,14 @@
 
             <ion-col size="12">
               <ion-item class="rounded-inputs ">
-                <ion-input [clearInput]="true" (ionInput)="changefilter($event)" [(ngModel)]="filter"  placeholder="{{'mainpage.filter_text'|translate}}"></ion-input>
+                <ion-input #filterInput [clearInput]="true" (ionInput)="changefilter($event)" [(ngModel)]="filter"  placeholder="{{'mainpage.filter_text'|translate}}">
+                  <ion-button fill="solid" color="secondary" slot="end" (click)="addHashtag()">#</ion-button></ion-input>
               </ion-item>
+              <ion-list *ngIf="showSuggestions">
+                <ion-item *ngFor="let tag of filteredTags" (click)="selectTagForFilter(tag)">
+                  {{tag}}
+                </ion-item>
+              </ion-list>
             </ion-col>
 
             <ion-col size="5.5">

@@ -355,7 +355,10 @@
     "news_2_text": "Depuis les paramètres, et avec un compte associé, vous pouvez vous connecter à Google Calendar pour suivre chaque jour les événements avec rappels en attente pour vos véhicules.",
     "news_3_title": "Autres améliorations :",
     "news_3_text": "Améliorations visuelles, dans certains processus et automatisations, pour rendre l'application plus conviviale et pratique.",
-    "dont_show_more": "ne plus afficher"
+    "dont_show_more": "ne plus afficher",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "close": "Fermer"
   }
 }
 

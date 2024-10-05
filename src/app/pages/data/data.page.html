@@ -12,7 +12,7 @@
     </ion-col>
   </ion-row>
 
-  <ion-accordion-group  *ngIf="eventsArray.length > 0">
+  <ion-accordion-group (mousedown)="preventFocus($event)"  *ngIf="eventsArray.length > 0">
     <ion-accordion color="green" value="filter">
       <ion-item slot="header"  color="darkblue">
         <ion-label class="ion-text-center">{{'data.filters'|translate}}</ion-label>
@@ -69,8 +69,15 @@
         <ion-row class="ion-align-items-center">
           <ion-col size="12">
             <ion-item class="rounded-inputs">
-              <ion-input [clearInput]="true" [(ngModel)]="filter" placeholder="{{'mainpage.filter_text'|translate}}"></ion-input>
+              <ion-input [clearInput]="true" [(ngModel)]="filter" (ionInput)="changefilter($event)" placeholder="{{'mainpage.filter_text'|translate}}">
+                <ion-button fill="solid" color="secondary" slot="end" (click)="addHashtag()">#</ion-button>
+              </ion-input>
             </ion-item>
+            <ion-list *ngIf="showSuggestions">
+              <ion-item *ngFor="let tag of filteredTags" (click)="selectTagForFilter(tag)">
+                {{tag}}
+              </ion-item>
+            </ion-list>
           </ion-col>
         </ion-row>
 

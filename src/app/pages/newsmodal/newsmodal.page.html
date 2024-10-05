@@ -1,6 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title class="ion-text-center green"><h1 translate="news.news"></h1></ion-title>
+    <ion-title class="ion-text-center brown-white"><h1 translate="news.news"></h1></ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -47,23 +47,26 @@
       </ion-col>
     </ion-row>
   </div>
-
-  <ion-row class="ion-margin-top">
-    <ion-col class="ion-text-center" size="12">
-      <ion-checkbox *ngIf="element >=max" (ionChange)="changeUnderstand($event)">{{'news.dont_show_more'|translate}}</ion-checkbox>
-    </ion-col>
-    <ion-col class="ion-text-center" size="6">
-      <ion-button [disabled]="element <= 1" (click)="previous()" fill="solid" shape="round">
-        Anterior
-      </ion-button>
-    </ion-col>
-    <ion-col class="ion-text-center" size="6">
-      <ion-button *ngIf="element <max" (click)="next()" fill="solid" shape="round">
-        siguiente
-      </ion-button>
-      <ion-button *ngIf="element >=max" (click)="close()" fill="solid" color="danger" shape="round">
-        Cerrar
-      </ion-button>
-    </ion-col>
-  </ion-row>
 </ion-content>
+<ion-footer>
+  <ion-toolbar class="brown-white">
+    <ion-row >
+      <ion-col *ngIf="element >=max" class="ion-text-center" size="12">
+        <ion-checkbox (ionChange)="changeUnderstand($event)">{{'news.dont_show_more'|translate}}</ion-checkbox>
+      </ion-col>
+      <ion-col class="ion-text-center" size="6">
+        <ion-button *ngIf="element <= 1" (click)="previous()" fill="solid" shape="round">
+         {{'news.previous'|translate}}
+        </ion-button>
+      </ion-col>
+      <ion-col class="ion-text-center" size="6">
+        <ion-button *ngIf="element <max" (click)="next()" fill="solid" shape="round">
+          {{'news.next'|translate}}
+        </ion-button>
+        <ion-button *ngIf="element >=max" (click)="close()" fill="solid" color="danger" shape="round">
+          {{'news.close'|translate}}
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>

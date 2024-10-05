@@ -5,12 +5,11 @@ import { DriveService } from './drive.service';
 import { StorageService } from './storage.service';
 import { Event } from '../models/event.model';
 import { SessionService } from './session.service';
-import { event } from 'firebase-functions/v1/analytics';
-import { error } from 'firebase-functions/logger';
 import { Network } from '@capacitor/network';
 import { AlertService } from './alert.service';
 import { TranslateService } from '@ngx-translate/core';
 import { HashService } from './hash.service';
+import { BehaviorSubject } from 'rxjs';
 
 
 @Injectable({
@@ -19,6 +18,8 @@ import { HashService } from './hash.service';
 export class CalendarService {
 
   public calendarId:string = "";
+  private calendar = new BehaviorSubject<boolean>(false)
+  public calendar$ = this.calendar.asObservable();
 
   constructor(
     private _drive:DriveService,
@@ -26,14 +27,14 @@ export class CalendarService {
     private _session:SessionService,
     private _alert:AlertService,
     private translate:TranslateService,
-    private _hash:HashService
+    private _hash:HashService,
   ){
     this.init();
   }
 
   async init(){
     this.calendarId = await this._storage.getStorageItem(storageConstants.USER_CALENDAR_ID+this._session.currentUser.id+this._session.currentUser.id);
-    console.log(this.calendarId)
+    //console.log(this.calendarId)
   }
 
   // ACCIÓN PRINCIPAL DE CONECTAR EL CALENDARIO Y METER TODOS LOS EVENTOS
@@ -61,6 +62,7 @@ async connectCalendar(): Promise<void> {
       } else if (calendar && calendar.id) {
         this._storage.setStorageItem(storageConstants.USER_CALENDAR_ID+this._session.currentUser.id, calendar.id);
         this.calendarId = calendar.id;
+        this.calendar.next(true);
       }
 
       // Creamos los eventos de calendar con los recordatorios
