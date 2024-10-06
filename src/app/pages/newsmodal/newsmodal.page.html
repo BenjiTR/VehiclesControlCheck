@@ -1,7 +1,9 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title class="ion-text-center brown-white"><h1 translate="news.news"></h1></ion-title>
-  </ion-toolbar>
+<ion-header>
+  <ion-row class="brown-white">
+    <ion-col class="ion-text-center" size="12">
+      <h1 translate="news.news"></h1>
+    </ion-col>
+  </ion-row>
 </ion-header>
 
 <ion-content class="brown" [fullscreen]="true">
@@ -48,6 +50,8 @@
     </ion-row>
   </div>
 </ion-content>
+
+
 <ion-footer>
   <ion-toolbar class="brown-white">
     <ion-row >
@@ -55,7 +59,7 @@
         <ion-checkbox (ionChange)="changeUnderstand($event)">{{'news.dont_show_more'|translate}}</ion-checkbox>
       </ion-col>
       <ion-col class="ion-text-center" size="6">
-        <ion-button *ngIf="element <= 1" (click)="previous()" fill="solid" shape="round">
+        <ion-button *ngIf="element > 1" (click)="previous()" fill="solid" shape="round">
          {{'news.previous'|translate}}
         </ion-button>
       </ion-col>

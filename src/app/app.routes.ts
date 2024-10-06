@@ -89,7 +89,7 @@ export const routes: Routes = [
   },
   {
     path: 'newsmodal',
-    loadComponent: () => import('./pages/newsmodal/newsmodal.page').then( m => m.NewsmodalPage)
+    loadComponent: () => import('./pages/newsmodal/newsmodal.page').then( m => m.NewsPage)
   },
   {
     path: '',

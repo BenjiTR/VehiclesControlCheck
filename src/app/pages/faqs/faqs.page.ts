@@ -39,6 +39,9 @@ export class FaqsPage implements OnInit {
     await Browser.open({ url: urlconstants.MAN+this.lang});
 }
 
+  async openWeb(){
+    await Browser.open({ url: urlconstants.INDX+this.lang});
+  }
 
   calculatePadding(){
     return this._paddingService.calculatePadding();

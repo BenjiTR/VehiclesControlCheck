@@ -104,7 +104,7 @@ export class NotificationsPage{
     const id = await this._calendar.findVehicleControlCalendar();
     if(id){
       this.calendar = true;
-      this._storage.setStorageItem(storageConstants.USER_CALENDAR_ID,id);
+      this._storage.setStorageItem(storageConstants.USER_CALENDAR_ID+this._session.currentUser.id,id);
     }else{
       this.calendar = false;
     }
@@ -169,7 +169,7 @@ export class NotificationsPage{
         .catch(async (err)=>{
           this._alert.createAlert(this.translate.instant("error.an_error_ocurred"),err);
           this._calendar.calendarId = "";
-          this._storage.setStorageItem(storageConstants.USER_CALENDAR_ID,"");
+          this._storage.setStorageItem(storageConstants.USER_CALENDAR_ID+this._session.currentUser.id,"");
           this.calendar = false;
           if(this._calendar.calendarId){
             await this.unconnectCalendar();
@@ -257,6 +257,7 @@ export class NotificationsPage{
     await this._drive.changeHaveFiles(false);
     await this.getData();
     await this._auth.signOutGoogle();
+    localStorage.setItem(storageConstants.SUGGESTIONS+this._session.currentUser.id,"");
   }
 
 

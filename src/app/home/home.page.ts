@@ -19,7 +19,7 @@ import { Network } from '@capacitor/network';
 import { LoaderService } from '../services/loader.service';
 import { Capacitor } from '@capacitor/core';
 import { VersionService } from '../services/version.service';
-import { NewsmodalPage } from '../pages/newsmodal/newsmodal.page';
+import { NewsPage } from '../pages/newsmodal/newsmodal.page';
 import { environment } from 'src/environments/environment.prod';
 
 
@@ -385,7 +385,7 @@ export class HomePage implements OnInit, OnDestroy{
 
   async openModal():Promise<void> {
     const modal = await this.modalController.create({
-      component: NewsmodalPage,
+      component: NewsPage,
       cssClass: 'news-modal'
     });
     await modal.present();

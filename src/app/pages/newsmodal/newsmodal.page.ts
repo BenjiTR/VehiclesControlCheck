@@ -13,7 +13,7 @@ import { environment } from 'src/environments/environment.prod';
   standalone: true,
   imports: [IonFooter, TranslateModule, IonIcon, IonCheckbox, IonButton, IonImg, IonRow, IonLabel, IonCol, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
 })
-export class NewsmodalPage implements OnInit {
+export class NewsPage implements OnInit {
 
   public element:number = 1;
   public max:number = 3;

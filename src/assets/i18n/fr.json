@@ -320,7 +320,8 @@
   "faqs": {
     "you_have_doubts?": "Vous avez des questions ?",
     "look_at_our_manual": "Consultez notre manuel",
-    "look_at_our_faqs": "Voir nos FAQ"
+    "look_at_our_faqs": "Voir nos FAQ",
+    "visit_our_web": "Visitez notre site web"
   },
   "problem": {
     "text1": "Si vous avez rencontré un problème, souhaitez proposer des améliorations ou faire des commentaires, n'hésitez pas à nous écrire. Envoyez un e-mail avec autant de détails que possible à :",

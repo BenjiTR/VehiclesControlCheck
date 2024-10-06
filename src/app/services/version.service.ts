@@ -6,29 +6,49 @@ import { Platform } from '@ionic/angular';
 import { LoaderService } from './loader.service';
 import { AlertService } from './alert.service';
 import { TranslateService } from '@ngx-translate/core';
+import { FirestoreService } from './firestore.service';
+import { doc, getDoc, getFirestore } from 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root',
 })
 export class VersionService {
   private currentVersion = environment.versioncode; // Versión actual de tu app
-  private versionUrl = 'https://vehicles-control-ck.web.app/version.json'; // URL del archivo en Firebase Hosting
+  private db = getFirestore(); // Asegúrate de inicializar la base de datos correctamente
+
 
   constructor(
-    private http: HttpClient,
     private platform: Platform,
     private _loader:LoaderService,
     private _alert:AlertService,
-    private translate:TranslateService
+    private translate:TranslateService,
+    private _firestore:FirestoreService
   ) {}
 
+
+  async getDocument(collection: string, documentId: string) {
+    try {
+      const docRef = doc(this.db, collection, documentId);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        return docSnap.data();
+      } else {
+        console.log("No such document!");
+        return null;
+      }
+    } catch (error) {
+      console.error("Error getting document:", error);
+      throw error;
+    }
+  }
   async checkVersion() {
     try {
-      const data = await firstValueFrom(this.http.get<{ version: string }>(this.versionUrl));
-      if (data && data.version !== this.currentVersion) {
-        await this._loader.dismissLoader();
-        await this.promptUpdate();
-        await this._loader.presentLoader();
+      const data = await this.getDocument("data","YpznogpkCYFRvhPN8rB7");
+       if (data && data['versioncode'] !== this.currentVersion) {
+         await this._loader.dismissLoader();
+         await this.promptUpdate();
+         await this._loader.presentLoader();
       }
     } catch (error) {
       console.error('Error al verificar la versión:', error);

@@ -14,6 +14,8 @@ import { environment } from './environments/environment';
 import { initializeApp } from "firebase/app";
 import { CapacitorConfig } from '@capacitor/cli';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
+import { getFirestore } from "firebase/firestore";
+
 
 //TRANSLATE
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
@@ -85,6 +87,8 @@ export default config;
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
 
 defineCustomElements(window);
 if (environment.production) {
