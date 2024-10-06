@@ -42,7 +42,7 @@
 
           <ion-col size="12">
             <ion-item class="rounded-inputs">
-              <ion-input [(ngModel)]="reminderTittle" label-placement="floating"  type="text">
+              <ion-input autocapitalize="sentences" [(ngModel)]="reminderTittle" label-placement="floating"  type="text">
                 <div slot="label">{{'reminder.title'|translate}} <ion-text color="danger"> *</ion-text></div>
               </ion-input>
             </ion-item>
@@ -57,7 +57,7 @@
 
         <ion-col class="ion-padding-start ion-padding-end" size="12">
           <ion-item class="rounded-inputs">
-            <ion-input [(ngModel)]="km" type="text" label="{{'event.km'|translate}}" label-placement="floating"></ion-input>
+            <ion-input [(ngModel)]="km" type="number" label="{{'event.km'|translate}}" label-placement="floating"></ion-input>
           </ion-item>
         </ion-col>
         <ion-col class="ion-padding-start ion-padding-end" size="12">
@@ -68,7 +68,7 @@
 
         <ion-col class="ion-padding-start ion-padding-end" size="12">
           <ion-item class="rounded-inputs">
-            <ion-textarea  #textareaElement auto-grow="true" label="{{'event.aditional_info' | translate}}" label-placement="floating" [(ngModel)]="info" (input)="onInputChange($event)" type="text" ></ion-textarea>
+            <ion-textarea autocapitalize="sentences"  #textareaElement auto-grow="true" label="{{'event.aditional_info' | translate}}" label-placement="floating" [(ngModel)]="info" (input)="onInputChange($event)" type="text" ></ion-textarea>
             <ion-button fill="solid" color="secondary" slot="end" (click)="addHashtag()">
               Añadir #
             </ion-button>

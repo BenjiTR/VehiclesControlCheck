@@ -1,0 +1,2 @@
+- regreso a la página principal haciendo click en el icono de control de vehículos.
+

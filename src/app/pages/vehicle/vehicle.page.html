@@ -26,61 +26,61 @@
 
         <ion-col class="ion-padding-start ion-padding-end ion-margin-top" size="12">
           <ion-item class="rounded-inputs">
-            <ion-input  type="text" [(ngModel)]="brandOrModel" label-placement="floating">
+            <ion-input autocapitalize="sentences" type="text" [(ngModel)]="brandOrModel" label-placement="floating">
               <div slot="label">{{'newvehicle.brand_or_model'|translate}} <ion-text color="danger"> *</ion-text></div>
             </ion-input>
           </ion-item>
         </ion-col>
         <ion-col class="ion-padding-start ion-padding-end" size="12">
           <ion-item class="rounded-inputs">
-            <ion-input class="matricula" type="text" [(ngModel)]="carRegistration" label="{{'newvehicle.car_registration'|translate}}" label-placement="floating"></ion-input>
+            <ion-input autocapitalize="characters" type="text" [(ngModel)]="carRegistration" label="{{'newvehicle.car_registration'|translate}}" label-placement="floating"></ion-input>
           </ion-item>
         </ion-col>
         <ion-col class="ion-padding-start ion-padding-end" size="12">
           <ion-item class="rounded-inputs">
-            <ion-input  type="date" [(ngModel)]="dateOfBuy" label="{{'newvehicle.date_of_buy'|translate}}" label-placement="floating"></ion-input>
+            <ion-input autocapitalize="sentences"  type="date" [(ngModel)]="dateOfBuy" label="{{'newvehicle.date_of_buy'|translate}}" label-placement="floating"></ion-input>
           </ion-item>
         </ion-col>
         <ion-col class="ion-padding-start ion-padding-end" size="12">
           <ion-item class="rounded-inputs">
-            <ion-input type="text" [(ngModel)]="kmOfBuy" label="{{ 'newvehicle.km_of_buy' | translate }}" label-placement="floating"></ion-input>
-          </ion-item>
-        </ion-col>
-
-        <ion-col class="ion-padding-start ion-padding-end" size="12">
-          <ion-item class="rounded-inputs">
-            <ion-input type="text" [(ngModel)]="typeOfFuel" label="{{ 'newvehicle.type_of_fuel' | translate }}" label-placement="floating"></ion-input>
+            <ion-input autocapitalize="sentences" type="text" [(ngModel)]="kmOfBuy" label="{{ 'newvehicle.km_of_buy' | translate }}" label-placement="floating"></ion-input>
           </ion-item>
         </ion-col>
 
         <ion-col class="ion-padding-start ion-padding-end" size="12">
           <ion-item class="rounded-inputs">
-            <ion-input type="text" [(ngModel)]="insuranceCompany" label="{{ 'newvehicle.insurance_company' | translate }}" label-placement="floating"></ion-input>
+            <ion-input autocapitalize="sentences" type="text" [(ngModel)]="typeOfFuel" label="{{ 'newvehicle.type_of_fuel' | translate }}" label-placement="floating"></ion-input>
           </ion-item>
         </ion-col>
 
         <ion-col class="ion-padding-start ion-padding-end" size="12">
           <ion-item class="rounded-inputs">
-            <ion-input type="text" [(ngModel)]="insurancePolicy" label="{{ 'newvehicle.insurance_policy' | translate }}" label-placement="floating"></ion-input>
+            <ion-input autocapitalize="sentences" type="text" [(ngModel)]="insuranceCompany" label="{{ 'newvehicle.insurance_company' | translate }}" label-placement="floating"></ion-input>
           </ion-item>
         </ion-col>
 
         <ion-col class="ion-padding-start ion-padding-end" size="12">
           <ion-item class="rounded-inputs">
-            <ion-input type="date" [(ngModel)]="insuranceRenewalDate" label="{{ 'newvehicle.insurance_renewal_date' | translate }}" label-placement="floating"></ion-input>
+            <ion-input autocapitalize="sentences" type="text" [(ngModel)]="insurancePolicy" label="{{ 'newvehicle.insurance_policy' | translate }}" label-placement="floating"></ion-input>
           </ion-item>
         </ion-col>
 
         <ion-col class="ion-padding-start ion-padding-end" size="12">
           <ion-item class="rounded-inputs">
-            <ion-input type="tel" [(ngModel)]="roadsideAssistanceNumber" label="{{ 'newvehicle.roadside_assistance_number' | translate }}" label-placement="floating"></ion-input>
+            <ion-input autocapitalize="sentences" type="date" [(ngModel)]="insuranceRenewalDate" label="{{ 'newvehicle.insurance_renewal_date' | translate }}" label-placement="floating"></ion-input>
+          </ion-item>
+        </ion-col>
+
+        <ion-col class="ion-padding-start ion-padding-end" size="12">
+          <ion-item class="rounded-inputs">
+            <ion-input autocapitalize="sentences" type="tel" [(ngModel)]="roadsideAssistanceNumber" label="{{ 'newvehicle.roadside_assistance_number' | translate }}" label-placement="floating"></ion-input>
           </ion-item>
         </ion-col>
 
 
         <ion-col class="ion-padding-start ion-padding-end ion-margin-bottom" size="12">
           <ion-item class="rounded-inputs">
-            <ion-textarea auto-grow="true" label="{{'newvehicle.notes' | translate}}" label-placement="floating" [(ngModel)]="notes" type="text"></ion-textarea>
+            <ion-textarea autocapitalize="sentences" auto-grow="true" label="{{'newvehicle.notes' | translate}}" label-placement="floating" [(ngModel)]="notes" type="text"></ion-textarea>
           </ion-item>
         </ion-col>
 

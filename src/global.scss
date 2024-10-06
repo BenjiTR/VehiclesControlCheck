@@ -291,15 +291,7 @@ ion-popover::part(backdrop) {
 .loader-modal{
   --background: #ffffff;
 }
-ion-input {
-  text-transform: capitalize;
-}
-.no-capitalize{
-  text-transform: none;
-}
-.matricula{
-  text-transform: uppercase;
-}
+
 ion-textarea {
   text-transform: capitalize;
 }
