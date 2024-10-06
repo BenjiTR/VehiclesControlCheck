@@ -32,6 +32,8 @@ import { CryptoService } from 'src/app/services/crypto.services';
 import { FilterService } from 'src/app/services/filter.service';
 import { CalendarService } from 'src/app/services/calendar.service';
 import { EspecialiOS } from 'src/app/services/especialiOS.service';
+import { environment } from 'src/environments/environment.prod';
+import { NewsPage } from '../newsmodal/newsmodal.page';
 
 
 @Component({
@@ -64,9 +66,7 @@ export class MainPage implements OnInit, OnDestroy {
   public token:string = "";
   public currency:string = "";
   public platform:string="";
-
   private downloadingSubscription: Subscription;
-
   public startDate:Date = new Date;
   public endDate:Date = new Date;
   public types:string[] = [];
@@ -75,6 +75,8 @@ export class MainPage implements OnInit, OnDestroy {
   public tags: string[] = [];
   public filteredTags: string[] = [];
   public currentTag: string = '';
+  //NEWS
+  public newsReaded:string|null;
 
   constructor(
     private translate:TranslateService,
@@ -113,6 +115,7 @@ export class MainPage implements OnInit, OnDestroy {
     }else{
       this.platform = 'ios'
     }
+    this.newsReaded = localStorage.getItem(storageConstants.NEWS_READED+this._session.currentUser.id);
   }
 
   async ngOnInit() {
@@ -125,6 +128,7 @@ export class MainPage implements OnInit, OnDestroy {
     if(this._loader.isLoading){
       await this._loader.dismissLoader();
     }
+    this.checkNews();
     await this._admob.resumeBanner();
     if(this._session.currentUser.token){
       await this._drive.init();
@@ -144,7 +148,6 @@ export class MainPage implements OnInit, OnDestroy {
     this.getTags();
   }
 
-
   async ionViewWillEnter() {
     this.reload = this.activatedroute.snapshot.queryParams['reload'] || false;
     if(this.reload){
@@ -155,14 +158,11 @@ export class MainPage implements OnInit, OnDestroy {
     this.currency = this._session.currency;
   }
 
-
-
   ngOnDestroy(){
     this.vehiclesArray=[]
     //console.log("main destruido")
     this.downloadingSubscription.unsubscribe();
   }
-
 
   async loadAllData():Promise<void>{
     if(this.user.method === 'email'){
@@ -243,7 +243,6 @@ export class MainPage implements OnInit, OnDestroy {
 
   //SABER SI EL EVENTO CORRESPONDE A ESE VEHÍCULO
   someForThatVehicle(id:string, isReminder?:boolean){
-
     if(isReminder){
       if(this.remindersArray.some((element:any)=>element.extra.vehicleId === id)){
         return true;
@@ -393,9 +392,7 @@ export class MainPage implements OnInit, OnDestroy {
   }
 
   async uploadFile(fileType:string, file:any):Promise<void>{
-
     //console.log(fileType, file);
-
     let fileName;
     let encripted;
 
@@ -406,9 +403,7 @@ export class MainPage implements OnInit, OnDestroy {
       fileName = 'tags';
       encripted = this._crypto.encryptMessage(JSON.stringify(file))
     }
-
     //console.log(fileName, encripted);
-
     this._storage.setStorageItem(storageConstants.USER_OPS + this._session.currentUser.id, true)
     if ((await Network.getStatus()).connected === true) {
       const exist = await this._drive.findFileByName(fileName)
@@ -436,8 +431,6 @@ export class MainPage implements OnInit, OnDestroy {
     return;
   }
 
-
-
   async deleteReminderProcess(reminder:LocalNotificationSchema):Promise<void>{
     await this._notification.deleteNotification(reminder);
     const array = await this._notification.getPending();
@@ -449,7 +442,6 @@ export class MainPage implements OnInit, OnDestroy {
   getDate(string: Date):string{
     return this._date.getIsoDate(string);
   }
-
 
   async getTags(){
     this.tags = await this._session.getTags()
@@ -628,6 +620,27 @@ setCursorAtEnd() {
     preventFocus(event: MouseEvent) {
       this._specialiOS.preventFocus(event);
     }
+
+
+    async checkNews():Promise<void>{
+      if(this.newsReaded !== environment.versioncode){
+        await this.openNewsModal();
+        this.newsReaded = environment.versioncode;
+        return;
+      }else{
+        return;
+      }
+    }
+
+    async openNewsModal():Promise<void> {
+      const modal = await this.modalController.create({
+        component: NewsPage,
+        cssClass: 'news-modal'
+      });
+      await modal.present();
+      await modal.onDidDismiss();
+    }
+
 
 
 }

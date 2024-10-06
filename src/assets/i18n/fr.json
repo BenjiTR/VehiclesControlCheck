@@ -135,8 +135,8 @@
     "notification_problem_text": "Un problème a été détecté avec ce rappel, veuillez essayer de le modifier et de l'enregistrer à nouveau.",
     "files_not_found": "Fichiers de sauvegarde non trouvés",
     "files_not_found_text": "Souhaitez-vous créer une sauvegarde sur Drive ?",
-    "do_you_want_connect_calendar": "Souhaitez-vous vous connecter à Calendar ?",
-    "do_you_want_connect_calendar_text": "Si vous connectez votre application à Calendar, vous pourrez voir tous les rappels dedans.",
+    "do_you_want_connect_calendar": "Souhaitez-vous vous connecter à Google Calendar ?",
+    "do_you_want_connect_calendar_text": "Si vous connectez votre application à Google Calendar, tous vos rappels seront automatiquement ajoutés.",
     "new_version_avaliable": "Mise à jour disponible",
     "new_version_avaliable_text": "Une nouvelle version est disponible, souhaitez-vous la télécharger ?"
   },

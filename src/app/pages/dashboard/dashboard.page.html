@@ -48,9 +48,9 @@
     <ion-toolbar class="pastel">
       <ion-row class="ion-justify-content-center">
         <ion-col size="10">
-          <ion-img *ngIf="language === 'es'" src="../../assets/img/Logo App Vehiculos.png"></ion-img>
-          <ion-img *ngIf="language === 'fr'" src="../../assets/img/Logo App Vehiculos fr.png"></ion-img>
-          <ion-img *ngIf="language === 'en'" src="../../assets/img/Logo App Vehiculos en.png"></ion-img>
+          <ion-img *ngIf="language === 'es'" src="../../assets/img/Logo App Vehiculos.png" [routerLink]="['/dashboard/main']"></ion-img>
+          <ion-img *ngIf="language === 'fr'" src="../../assets/img/Logo App Vehiculos fr.png" [routerLink]="['/dashboard/main']"></ion-img>
+          <ion-img *ngIf="language === 'en'" src="../../assets/img/Logo App Vehiculos en.png" [routerLink]="['/dashboard/main']"></ion-img>
         </ion-col>
       </ion-row>
       <ion-buttons slot="end">

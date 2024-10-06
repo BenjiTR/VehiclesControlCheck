@@ -17,12 +17,7 @@ import { FileSystemService } from '../services/filesystem.service';
 import { StorageService } from '../services/storage.service';
 import { Network } from '@capacitor/network';
 import { LoaderService } from '../services/loader.service';
-import { Capacitor } from '@capacitor/core';
 import { VersionService } from '../services/version.service';
-import { NewsPage } from '../pages/newsmodal/newsmodal.page';
-import { environment } from 'src/environments/environment.prod';
-
-
 
 @Component({
   selector: 'app-home',
@@ -83,12 +78,11 @@ export class HomePage implements OnInit, OnDestroy{
     await this._admobService.hideBanner();
     await this._file.checkPermission();
     await this.versionService.checkVersion();
-    await this.checkNews();
     await this.tryRememberSession();
   }
 
   ngOnDestroy(){
-    ("Home destruido");
+    console.log("Home destruido");
   }
 
   autoinitHandler(){
@@ -369,28 +363,5 @@ export class HomePage implements OnInit, OnDestroy{
       return;
     }
   }
-
-  async checkNews():Promise<void>{
-    const newsReaded = localStorage.getItem(storageConstants.NEWS_READED);
-    if(newsReaded !== environment.versioncode){
-      await this._loader.dismissLoader();
-      await this.openModal();
-      await this._loader.presentLoader();
-      return;
-    }else{
-      return;
-    }
-  }
-
-
-  async openModal():Promise<void> {
-    const modal = await this.modalController.create({
-      component: NewsPage,
-      cssClass: 'news-modal'
-    });
-    await modal.present();
-    await modal.onDidDismiss();
-  }
-
 
 }

@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonCol, IonLabel, IonRow, IonImg, IonButton, IonCheckbox, ModalController, IonIcon, IonFooter } from '@ionic/angular/standalone';
 import { storageConstants } from 'src/app/const/storage';
 import { environment } from 'src/environments/environment.prod';
+import { SessionService } from 'src/app/services/session.service';
 
 @Component({
   selector: 'app-newsmodal',
@@ -21,6 +22,7 @@ export class NewsPage implements OnInit {
 
   constructor(
     private modal:ModalController,
+    private _session:SessionService
   ) { }
 
   ngOnInit() {
@@ -42,7 +44,7 @@ export class NewsPage implements OnInit {
 
   close(){
     if(this.understand){
-      localStorage.setItem(storageConstants.NEWS_READED, environment.versioncode);
+      localStorage.setItem(storageConstants.NEWS_READED+this._session.currentUser.id, environment.versioncode);
     }
     this.modal.dismiss();
   }

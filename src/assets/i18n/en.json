@@ -135,8 +135,8 @@
     "notification_problem_text": "A problem has been detected with this reminder, please try editing and saving it again.",
     "files_not_found": "Backup files not found",
     "files_not_found_text": "Do you want to create a backup in Drive?",
-    "do_you_want_connect_calendar": "Do you want to connect with Calendar?",
-    "do_you_want_connect_calendar_text": "If you connect your app with Calendar, you will be able to see all the reminders in it.",
+    "do_you_want_connect_calendar": "Do you want to connect with Google Calendar?",
+    "do_you_want_connect_calendar_text": "If you connect your app with Google Calendar, all your reminders will be automatically added.",
     "new_version_avaliable": "Update available",
     "new_version_avaliable_text": "A new version is available, would you like to download it?"
   },

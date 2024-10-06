@@ -82,19 +82,19 @@ export class AlertService{
                 backdropDismiss: false, // Evitar que la alerta se cierre al hacer clic fuera de ella
                 buttons: [
                   {
-                    text: Opt1,
-                    role: "confirm",
-                    handler: () => {
-
-                      resolve(true);
-                    },
-                  },
-                  {
                     text: OptCancel,
                     role: "cancel",
                     handler: () => {
 
                       resolve(false);
+                    },
+                  },
+                  {
+                    text: Opt1,
+                    role: "confirm",
+                    handler: () => {
+
+                      resolve(true);
                     },
                   },
                 ],
