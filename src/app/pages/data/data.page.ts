@@ -195,6 +195,9 @@ export class DataPage implements OnInit {
                 display: true,
                 text: this.translate.instant('data.n_of_events'),
               },
+              ticks: {
+                stepSize: 1, // Controla el tamaño del paso, por lo que no mostrará decimales
+              }
             },
           },
         },
