@@ -182,5 +182,8 @@ export class DashboardPage implements OnInit, OnDestroy {
   getVersion(){
     return "V. "+environment.version;
   }
+  getCode(){
+    return "(" +environment.versioncode+ ")";
+  }
 
 }

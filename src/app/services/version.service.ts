@@ -43,15 +43,17 @@ export class VersionService {
     }
   }
   async checkVersion() {
-    try {
-      const data = await this.getDocument("data","YpznogpkCYFRvhPN8rB7");
-       if (data && data['versioncode'] !== this.currentVersion) {
-         await this._loader.dismissLoader();
-         await this.promptUpdate();
-         await this._loader.presentLoader();
+    if(this.platform.is("android")||this.platform.is("desktop")){
+      try {
+        const data = await this.getDocument("data","YpznogpkCYFRvhPN8rB7");
+         if (data && data['versioncode'] > this.currentVersion) {
+           await this._loader.dismissLoader();
+           await this.promptUpdate();
+           await this._loader.presentLoader();
+        }
+      } catch (error) {
+        console.error('Error al verificar la versión:', error);
       }
-    } catch (error) {
-      console.error('Error al verificar la versión:', error);
     }
   }
 
