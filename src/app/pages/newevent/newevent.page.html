@@ -2,7 +2,7 @@
 <ion-content class="brown">
   <!-- CREAR EVENTO / DATOS -->
 
-  <ion-row class="gray ion-margin rounded">
+  <ion-row (mousedown)="preventFocus($event)" class="gray ion-margin rounded">
         <ion-col class="ion-align-items-center ion-text-center" size="12">
           <h2 *ngIf="!eventToEditId" translate="event.create_event"></h2>
           <h2 *ngIf="eventToEditId" translate="event.edit_event"></h2>

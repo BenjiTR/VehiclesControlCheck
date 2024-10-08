@@ -27,6 +27,7 @@ import { SlideUpDownAnimation } from 'src/app/services/animation.service';
 import { LocalNotificationSchema } from '@capacitor/local-notifications';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { CalendarService } from 'src/app/services/calendar.service';
+import { EspecialiOS } from 'src/app/services/especialiOS.service';
 
 @Component({
   selector: 'app-newevent',
@@ -84,7 +85,8 @@ export class NeweventPage {
     private _crypto: CryptoService,
     private _date: DateService,
     private _notification: NotificationsService,
-    private _calendar:CalendarService
+    private _calendar:CalendarService,
+    private _specialiOS:EspecialiOS
   ) {
     this.eventTypes = etypes.getEventTypes();
     this.user = this._session.currentUser;
@@ -466,6 +468,10 @@ export class NeweventPage {
     }else{
       return false;
     }
+  }
+
+  preventFocus(event: MouseEvent) {
+    this._specialiOS.preventFocus(event);
   }
 
 
