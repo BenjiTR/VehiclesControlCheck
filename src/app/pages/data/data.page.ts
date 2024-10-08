@@ -30,8 +30,7 @@ import { EspecialiOS } from 'src/app/services/especialiOS.service';
 })
 export class DataPage implements OnInit {
 
-  @ViewChild('textareaElement', { static: false })
-  filterInput!: IonInput;
+  @ViewChild('filterInput', { static: false }) filterInput!: IonInput;
 
   public vehiclesArray:Vehicle[] = [];
   public eventsArray:Event[] = [];
@@ -502,7 +501,7 @@ export class DataPage implements OnInit {
     this.currentTag = tagMatch[0];
 
     // Filtrar las etiquetas existentes
-    this.filteredTags = this.tags.filter(tag => tag.startsWith(this.currentTag));
+      this.filteredTags = this.tags.filter(tag => tag.toLowerCase().startsWith(this.currentTag.toLowerCase()));
     this.showSuggestions = true;
   } else {
     this.showSuggestions = false;

@@ -38,8 +38,7 @@ import { CalendarService } from 'src/app/services/calendar.service';
 })
 export class NeweventPage {
 
-  @ViewChild('textareaElement', { static: false })
-  textareaElement!: IonTextarea; // Referencia al IonTextarea
+  @ViewChild('textareaElement', { static: false }) textareaElement!: IonTextarea; // Referencia al IonTextarea
 
 
   public vehicleId: string = "";
@@ -303,7 +302,7 @@ export class NeweventPage {
       this.currentTag = tagMatch[0];
 
       // Filtrar las etiquetas existentes
-      this.filteredTags = this.tags.filter(tag => tag.startsWith(this.currentTag));
+      this.filteredTags = this.tags.filter(tag => tag.toLowerCase().startsWith(this.currentTag.toLowerCase()));
       this.showSuggestions = true;
     } else {
       this.showSuggestions = false;
@@ -363,6 +362,8 @@ export class NeweventPage {
     const index = this.tags.indexOf(tag);
     if (index !=-1) {
       this.tags.splice(index, 1);
+      this.filteredTags = this.tags;
+      this.filteredTags = this.tags.filter(tag => tag.toLowerCase().startsWith(this.currentTag.toLowerCase()));
     }
     await this._storage.setStorageItem(storageConstants.USER_TAGS + this._session.currentUser.id, this._crypto.encryptMessage(JSON.stringify(this.tags)));
      //subir a DRIVE

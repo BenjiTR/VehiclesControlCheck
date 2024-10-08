@@ -69,8 +69,11 @@
         <ion-col class="ion-padding-start ion-padding-end" size="12">
           <ion-item class="rounded-inputs">
             <ion-textarea autocapitalize="sentences"  #textareaElement auto-grow="true" label="{{'event.aditional_info' | translate}}" label-placement="floating" [(ngModel)]="info" (input)="onInputChange($event)" type="text" ></ion-textarea>
-            <ion-button fill="solid" color="secondary" slot="end" (click)="addHashtag()">
-              Añadir #
+            <ion-button *ngIf="showSuggestions && filteredTags.length === 0" class="zoom-1-2" fill="solid" color="secondary" slot="end" (click)="addNewTag()">
+              {{'event.add'|translate}} #
+            </ion-button>
+            <ion-button *ngIf="!showSuggestions || showSuggestions && filteredTags.length > 0" class="zoom-1-2" fill="solid" color="secondary" slot="end" (click)="addHashtag()">
+              #
             </ion-button>
           </ion-item>
 

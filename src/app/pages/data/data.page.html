@@ -69,7 +69,7 @@
         <ion-row class="ion-align-items-center">
           <ion-col size="12">
             <ion-item class="rounded-inputs">
-              <ion-input [clearInput]="true" [(ngModel)]="filter" (ionInput)="changefilter($event)" placeholder="{{'mainpage.filter_text'|translate}}">
+              <ion-input  #filterInput [clearInput]="true" [(ngModel)]="filter" (ionInput)="changefilter($event)" placeholder="{{'mainpage.filter_text'|translate}}">
                 <ion-button fill="solid" color="secondary" slot="end" (click)="addHashtag()">#</ion-button>
               </ion-input>
             </ion-item>

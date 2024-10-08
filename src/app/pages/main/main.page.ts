@@ -48,8 +48,7 @@ import { NewsPage } from '../newsmodal/newsmodal.page';
 export class MainPage implements OnInit, OnDestroy {
 
   @ViewChild('accordionGroup', { static: false }) accordionGroup: IonAccordionGroup | undefined;
-  @ViewChild('textareaElement', { static: false })
-  filterInput!: IonInput;
+  @ViewChild('filterInput', { static: false }) filterInput!: IonInput;
 
   public creatingElement:Boolean=false;
   public vehiclesArray:Vehicle[]=[];
@@ -146,7 +145,6 @@ export class MainPage implements OnInit, OnDestroy {
     }
     this.calculateDates();
     this._calendar.init();
-    this.getTags();
   }
 
   async ionViewWillEnter() {
@@ -157,6 +155,7 @@ export class MainPage implements OnInit, OnDestroy {
       await this._loader.dismissLoader();
     }
     this.currency = this._session.currency;
+    this.getTags();
   }
 
   ngOnDestroy(){
@@ -460,12 +459,13 @@ export class MainPage implements OnInit, OnDestroy {
     this.currentTag = tagMatch[0];
 
     // Filtrar las etiquetas existentes
-    this.filteredTags = this.tags.filter(tag => tag.startsWith(this.currentTag));
+    this.filteredTags = this.tags.filter(tag => tag.toLowerCase().startsWith(this.currentTag.toLowerCase()));
     this.showSuggestions = true;
   } else {
     this.showSuggestions = false;
   }
 }
+
 
 selectTagForFilter(tag: string) {
   // Reemplazar la búsqueda con la etiqueta seleccionada
