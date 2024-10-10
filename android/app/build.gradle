@@ -1,3 +1,9 @@
+// Revisar que se han cambiado versiones en:
+//   - build.gradle.
+//   - enviroments.prod
+//   - finalmente cambiar en firestore
+
+
 apply plugin: 'com.android.application'
 
 android {
@@ -8,7 +14,7 @@ android {
     applicationId "com.benjamintr.vehiclescontrol"
     minSdkVersion rootProject.ext.minSdkVersion
     targetSdkVersion rootProject.ext.targetSdkVersion
-    versionCode 150040
+    versionCode 150041
     versionName "1.5.0"
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
