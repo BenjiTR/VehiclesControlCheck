@@ -85,7 +85,7 @@ export class MainPage implements OnInit, OnDestroy {
     private _alert:AlertService,
     private _storage:StorageService,
     private etypes:EventTypes,
-    private modalController: ModalController,
+    private mController: ModalController,
     private _admob:AdmobService,
     private router:Router,
     private _notification:NotificationsService,
@@ -260,7 +260,7 @@ export class MainPage implements OnInit, OnDestroy {
 
   //MODAL IMÁGENES
   async openModal(img:string){
-    const modal = await this.modalController.create({
+    const modal = await this.mController.create({
       component: ImgmodalPage,
       componentProps: {
         img: img
@@ -625,7 +625,7 @@ setCursorAtEnd() {
 
     async checkNews():Promise<void>{
       if(this.newsReaded !== environment.versioncode){
-        await this.openNewsModal();
+        await this.openNewsPage();
         this.newsReaded = environment.versioncode;
         return;
       }else{
@@ -633,13 +633,13 @@ setCursorAtEnd() {
       }
     }
 
-    async openNewsModal():Promise<void> {
-      const modal = await this.modalController.create({
+    async openNewsPage():Promise<void> {
+      const page = await this.mController.create({
         component: NewsPage,
-        cssClass: 'news-modal'
+        cssClass: 'news'
       });
-      await modal.present();
-      await modal.onDidDismiss();
+      await page.present();
+      await page.onDidDismiss();
     }
 
 

@@ -293,7 +293,7 @@ ion-popover::part(backdrop) {
 }
 
 /* Clase personalizada del modal */
-.news-modal{
+.news{
   --width: 80%;    /* Ajusta el ancho del modal */
   --height: 60%;   /* Ajusta la altura del modal */
   --border-radius: 5px;  /* Ajusta las esquinas redondeadas */
@@ -302,7 +302,7 @@ ion-popover::part(backdrop) {
 
 
 /* Estilos opcionales para centrar el contenido */
-.news-modal .modal-wrapper {
+.news .modal-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;

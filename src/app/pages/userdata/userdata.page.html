@@ -10,7 +10,7 @@
 
         <ion-col class="avatar" size="12">
           <ion-avatar (click)="changeUserImage()" class="avatar zoom-2">
-            <img src="{{user.photo ? user.photo : '../../../../../assets/img/user_avatar.png'}}" />
+            <img src="{{user.photo ? user.photo : '../../../../../assets/img/user_avatar.png'}}" referrerPolicy="no-referrer" />
           </ion-avatar>
         </ion-col>
         <ion-col *ngIf="user.method === 'email'" class="ion-no-padding ion-no-margin ion-text-center" size="12" (click)="changeUserImage()"><p translate="userpage.change"></p></ion-col>

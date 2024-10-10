@@ -21,7 +21,7 @@ export class NewsPage implements OnInit {
   public understand:boolean = false;
 
   constructor(
-    private modal:ModalController,
+    private mController:ModalController,
     private _session:SessionService
   ) { }
 
@@ -47,7 +47,7 @@ export class NewsPage implements OnInit {
       console.log(storageConstants.NEWS_READED+this._session.currentUser.id);
       localStorage.setItem(storageConstants.NEWS_READED+this._session.currentUser.id, environment.versioncode);
     }
-    this.modal.dismiss();
+    this.mController.dismiss();
   }
 
 }

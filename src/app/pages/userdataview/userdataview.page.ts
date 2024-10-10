@@ -74,8 +74,7 @@ export class UserdataviewPage implements OnInit {
 
   async ngOnInit() {
     this.translate.setDefaultLang(this._translation.getLanguage());
-    this.user = this._session.currentUser;
-    //console.log(this.user)
+    this.user = await this._session.getUser();
     this.autoBk = await this._session.getAutoBackup();
     if(this.autoBk === null){
       this.autoBk = true;

@@ -42,6 +42,10 @@ export class SessionService{
   }
 
 
+  async getUser():Promise<User>{
+      return this.currentUser;
+  }
+
   async searchphoto(method:string, id:string):Promise<string> {
     if(method === "email"){
       const photo = await this._storageService.getStorageItem(storageConstants.USER_PHOTO+id);
