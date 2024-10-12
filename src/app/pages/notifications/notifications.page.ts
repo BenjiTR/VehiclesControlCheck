@@ -37,7 +37,7 @@ export class NotificationsPage{
   public creatingFile:boolean = false;
   public downloading:string = "false";
   public backupAccount:string="";
-  public calendar:boolean = false;
+  public calendar:boolean|undefined = undefined;
   private calendarSubscription:Subscription;
 
   private creatingFileSubscription: Subscription;

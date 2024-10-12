@@ -18,7 +18,7 @@ import { BehaviorSubject } from 'rxjs';
 export class CalendarService {
 
   public calendarId:string = "";
-  private calendar = new BehaviorSubject<boolean>(false)
+  private calendar = new BehaviorSubject<boolean|undefined>(undefined)
   public calendar$ = this.calendar.asObservable();
 
   constructor(
