@@ -115,7 +115,7 @@ export class MainPage implements OnInit, OnDestroy {
       this.platform = 'ios'
     }
     this.newsReaded = localStorage.getItem(storageConstants.NEWS_READED+this._session.currentUser.id);
-    console.log(this.newsReaded)
+    //console.log(this.newsReaded)
   }
 
   async ngOnInit() {

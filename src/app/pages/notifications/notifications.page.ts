@@ -134,15 +134,15 @@ export class NotificationsPage{
     }
   }
 
-  async togglePermissions(){
-    console.log(this.isAllowed)
-    if(this.isAllowed){
+  async togglePermissions(event?:CustomEvent){
+    if(event && !event.detail.checked){
+      console.log(event.detail.checked);
       this.isAllowed = false;
       this._notifications.deleteChannel();
       this._session.setReminderNotifications(false)
     }else{
       const resp = await this._notifications.requestPermissions();
-      //console.log("Req: ",resp)
+      console.log("Req: ",resp)
       if(resp.display==="granted"){
         this.isAllowed = true;
         this._notifications.createChannel();

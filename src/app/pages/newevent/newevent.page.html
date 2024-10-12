@@ -48,7 +48,7 @@
             </ion-item>
           </ion-col>
           <ion-col size="12">
-              <ion-datetime [value]="getDate()" (ionChange)="setDate($event)">
+              <ion-datetime [value]="getDate()" [max]="maxDate" (ionChange)="setDate($event)">
                 <span slot="time-label" translate="reminder.time"></span>
               </ion-datetime>
           </ion-col>

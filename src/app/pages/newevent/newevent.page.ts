@@ -66,6 +66,9 @@ export class NeweventPage {
   public haveReminder:boolean = false;
   public reminderId:number|undefined;
 
+  public maxDate: string = "";
+
+
   constructor(
     private translate: TranslateService,
     private _translation: TranslationConfigService,
@@ -90,6 +93,7 @@ export class NeweventPage {
   ) {
     this.eventTypes = etypes.getEventTypes();
     this.user = this._session.currentUser;
+    this.maxDate = this.getMaxDate();
   }
 
   async ionViewWillEnter() {
@@ -472,6 +476,12 @@ export class NeweventPage {
 
   preventFocus(event: MouseEvent) {
     this._specialiOS.preventFocus(event);
+  }
+
+  getMaxDate(): string {
+    const date = new Date();
+    date.setFullYear(date.getFullYear() + 5); // Agrega 5 años al año actual
+    return date.toISOString().split('T')[0];  // Retorna solo la parte de la fecha (YYYY-MM-DD)
   }
 
 
