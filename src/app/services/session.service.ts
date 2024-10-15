@@ -98,7 +98,7 @@ export class SessionService{
       const temporalArray = await this._notification.getPending();
 
       this.remindersArray = temporalArray.notifications;
-      console.log("Array Filtrado: ",temporalArray.notifications,"Array Teléfono: ",temporalArray.notifications)
+      //console.log("Array Filtrado: ",temporalArray.notifications,"Array Teléfono: ",temporalArray.notifications)
       return this.remindersArray;
     }else{
       //this.remindersArray = await this._test.createTestreminders(this.remindersArray);

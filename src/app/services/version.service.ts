@@ -34,7 +34,7 @@ export class VersionService {
       if (docSnap.exists()) {
         return docSnap.data();
       } else {
-        console.log("No such document!");
+        //console.log("No such document!");
         return null;
       }
     } catch (error) {

@@ -372,8 +372,8 @@ export class MainPage implements OnInit, OnDestroy {
     const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.are_you_sure?'),this.translate.instant('alert.reminder_permanently_erased'),this.translate.instant('alert.erase'),this.translate.instant('alert.cancel'));
     if(sure){
       const reminder = this.remindersArray.find(reminder=>reminder.extra.eventId === event.id);
-      console.log(reminder)
-      console.log("Evento", event)
+      //console.log(reminder)
+      //console.log("Evento", event)
           if(reminder){
             this._notification.deleteNotification(reminder)
             const index = this.eventsArray.findIndex(e => e.id === event.id);
@@ -381,7 +381,7 @@ export class MainPage implements OnInit, OnDestroy {
               await this.uploadFile('event',this.eventsArray[index]);
             }
             const id = await this._storage.getStorageItem(storageConstants.USER_CALENDAR_ID+this._session.currentUser.id);
-            console.log("Preparar para eliminar ",id, event.calendarEventId)
+            //console.log("Preparar para eliminar ",id, event.calendarEventId)
             if(id && event.calendarEventId){
               this._calendar.deleteCalendarEvent(event.calendarEventId)
               .catch((err:any)=>{

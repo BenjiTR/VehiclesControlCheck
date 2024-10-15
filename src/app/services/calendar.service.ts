@@ -98,7 +98,7 @@ public async insertEvent(event: Event): Promise<void> {
 
       const newEvent = await this.generateCalendarEvent(event);
 
-      console.log(newEvent, this.calendarId)
+      //console.log(newEvent, this.calendarId)
       // Añadir los eventos al calendario
       const insert = await fetch(`${backupConstants.API_URL_CALENDAR}${this.calendarId}/events`, {
         method: 'POST',
@@ -130,7 +130,7 @@ public async insertEvent(event: Event): Promise<void> {
 async deleteCalendar(): Promise<void> {
   if ((await Network.getStatus()).connected === true) {
     const calendarId = await this.findVehicleControlCalendar(); // Encuentra el calendarId
-    console.log(calendarId)
+    //console.log(calendarId)
     if (calendarId) {
       try {
         await fetch(`${backupConstants.API_URL_CALENDAR}${calendarId}`, {
@@ -193,7 +193,7 @@ public async updateEventInCalendar(event: Event): Promise<void> {
     const updatedEvent = await this.generateCalendarEvent(event);
 
     // Realiza la petición para actualizar el evento
-    console.log(this.calendarId)
+    //console.log(this.calendarId)
     const response = await fetch(`${backupConstants.API_URL_CALENDAR}${this.calendarId}/events/${event.calendarEventId}`, {
       method: 'PUT', // Método PUT para actualizar
       headers: {

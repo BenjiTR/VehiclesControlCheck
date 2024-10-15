@@ -81,7 +81,7 @@ export class HashService {
       // Check if the generated hash exists in any vehicle's id
       hashExists = this.vehicles.some(vehicle => vehicle.id === resultado);
     }
-    console.log(resultado)
+    //console.log(resultado)
     return resultado;
   }
 

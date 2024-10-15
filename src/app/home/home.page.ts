@@ -26,7 +26,7 @@ import { VersionService } from '../services/version.service';
   standalone: true,
   imports: [IonDatetime, IonPopover, RouterModule, CommonModule, FormsModule, IonLabel, IonCheckbox, IonButton, IonFooter, IonIcon, IonInput, IonItem, IonImg, IonCol, IonRow, IonHeader, IonToolbar, IonTitle, IonContent, TranslateModule],
 })
-export class HomePage implements OnInit, OnDestroy{
+export class HomePage implements OnInit{
 
 
 
@@ -81,10 +81,6 @@ export class HomePage implements OnInit, OnDestroy{
     await this.tryRememberSession();
   }
 
-  ngOnDestroy(){
-    console.log("Home destruido");
-  }
-
   autoinitHandler(){
     const auto = localStorage.getItem('autoInitVcc');
     if(auto==='true'){
@@ -95,7 +91,7 @@ export class HomePage implements OnInit, OnDestroy{
   }
 
   toogleAutoInit(event:CustomEvent){
-    console.log(event.detail.checked);
+    //console.log(event.detail.checked);
     localStorage.setItem('autoInitVcc',event.detail.checked);
   }
 
@@ -167,7 +163,6 @@ export class HomePage implements OnInit, OnDestroy{
           }else if(error.message){
             this.handleErrors(error.message);
           }
-          console.log("lelga aqui")
           await this._loader.dismissLoader();
         });
       }

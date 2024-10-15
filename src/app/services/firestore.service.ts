@@ -17,15 +17,15 @@ export class FirestoreService {
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
-        console.log("Document data:", docSnap.data());
+        //console.log("Document data:", docSnap.data());
         return docSnap.data();
       } else {
-        console.log("No such document!");
+        //console.log("No such document!");
         return null;
       }
     } catch (error) {
       console.error("Error getting document:", error);
-      throw error; 
+      throw error;
     }
   }
 }

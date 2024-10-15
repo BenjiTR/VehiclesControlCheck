@@ -124,7 +124,7 @@ export class NotificationsPage{
 
   async isAllowedAndActivated(resp:string){
     const remindNotifications = await this._session.getReminderNotifications();
-    console.log(resp, remindNotifications)
+    //console.log(resp, remindNotifications)
     if (resp === "granted" && remindNotifications){
       this.isAllowed = true;
       this._notifications.createChannel();
@@ -136,13 +136,13 @@ export class NotificationsPage{
 
   async togglePermissions(event?:CustomEvent){
     if(event && !event.detail.checked){
-      console.log(event.detail.checked);
+      //console.log(event.detail.checked);
       this.isAllowed = false;
       this._notifications.deleteChannel();
       this._session.setReminderNotifications(false)
     }else{
       const resp = await this._notifications.requestPermissions();
-      console.log("Req: ",resp)
+      //console.log("Req: ",resp)
       if(resp.display==="granted"){
         this.isAllowed = true;
         this._notifications.createChannel();

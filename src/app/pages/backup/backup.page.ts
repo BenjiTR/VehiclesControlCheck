@@ -296,15 +296,11 @@ export class BackupPage implements OnInit {
       if(event.reminderDate && event.reminder && this._date.isFutureEvent(event.reminderDate)){
         const index = remindersArray.findIndex(reminder=>reminder.extra.eventId === event.id);
         const reminder = await this.constructReminder(event);
-        console.log("¿Indice? ", index);
         if (index !=-1){
-          console.log("¿Indice si? ", index);
           remindersArray[index] = reminder;
         }else{
-          console.log("¿Indice no? ", index);
           remindersArray.push(reminder);
         }
-        console.log("se crea la notificación: ");
         this._notifications.createNotification(remindersArray);
       }
     });
@@ -330,7 +326,7 @@ export class BackupPage implements OnInit {
       this._drive.changeProgress(value, value);
       const content = await this.readFileFromDrive(element.name);
       if (content) {
-        console.log(content)
+        //console.log(content)
         if (element.name === "photo") {
           temporalBackup.photo = content;
         } else if (element.name === "remindersOptions") {
@@ -441,7 +437,7 @@ export class BackupPage implements OnInit {
 
   async currentVehicle(vehicleId:string){
     this.vehiclesArray = await this._session.loadVehicles();
-    console.log("Array:", this.vehiclesArray)
+    //console.log("Array:", this.vehiclesArray)
     const current = this.vehiclesArray.find(vehicle=>vehicle.id === vehicleId);
     return current!.brandOrModel;
   }

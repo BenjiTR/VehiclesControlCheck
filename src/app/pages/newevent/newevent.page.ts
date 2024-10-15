@@ -185,16 +185,16 @@ export class NeweventPage {
         const newEvent = await this.generateEvent();
         this._session.eventsArray[index] = newEvent;
         const id = await this._storage.getStorageItem(storageConstants.USER_CALENDAR_ID+this._session.currentUser.id);
-        console.log("id",id)
+        //console.log("id",id)
         if(id && newEvent.reminder){
           //console.log(newEvent.calendarEventId)
           if(!oldCalendarEventId){
             newEvent.calendarEventId = await this._hash.generateCalendarPhrase();
+            this._calendar.insertEvent(newEvent);
           }else{
             newEvent.calendarEventId = oldCalendarEventId;
+            this._calendar.updateEventInCalendar(newEvent);
           }
-
-          this._calendar.updateEventInCalendar(newEvent);
         }
         this.saveAndExit(newEvent);
       }
@@ -231,7 +231,7 @@ export class NeweventPage {
       await this.generateAndSaveNotification(event);
     }else{
       const reminder = await this.reminderExists(event);
-      console.log("Recordatorio dentro de evento: ",reminder);
+      //console.log("Recordatorio dentro de evento: ",reminder);
       if(reminder){
         await this._notification.deleteNotification(reminder)
       }
@@ -248,7 +248,7 @@ export class NeweventPage {
   async reminderExists(event:Event):Promise<LocalNotificationSchema|undefined>{
     const remindersArray = await this._session.loadReminders();
     const reminder = remindersArray.find(reminder=>reminder.extra.eventId === event.id);
-    console.log("recordatorio: ",reminder);
+    //console.log("recordatorio: ",reminder);
     return reminder;
   }
 
@@ -264,7 +264,6 @@ export class NeweventPage {
         this._calendar.insertEvent(newEvent);
       }
       this.saveAndExit(newEvent);
-
   }
 
   async deleteImg(img: any) {
@@ -462,7 +461,7 @@ export class NeweventPage {
     }else{
       newId = await this._session.getFirstId();
     }
-    console.log(newId)
+    //console.log(newId)
     return newId
   }
 

@@ -14,7 +14,7 @@ import { SessionService } from 'src/app/services/session.service';
   standalone: true,
   imports: [IonFooter, TranslateModule, IonIcon, IonCheckbox, IonButton, IonImg, IonRow, IonLabel, IonCol, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
 })
-export class NewsPage implements OnInit {
+export class NewsPage {
 
   public element:number = 1;
   public max:number = 3;
@@ -25,9 +25,7 @@ export class NewsPage implements OnInit {
     private _session:SessionService
   ) { }
 
-  ngOnInit() {
-    console.log("nuevo modal")
-  }
+
 
   next(){
     if(this.element<this.max)
