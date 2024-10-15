@@ -324,8 +324,12 @@
     "visit_our_web": "Visit our website"
   },
   "problem": {
-    "text1": "If you have experienced any issues, want to suggest improvements, or have any comments, please feel free to write to us. Send an email with as many details as possible to:",
-    "email": "benjamintrenas@gmail.com"
+    "text1": "If you have experienced any issues, want to suggest improvements, or have any comments, feel free to reach out to us. Please send the form with as many details as possible.",
+    "thanks": "Thank you very much",
+    "name": "Name",
+    "contact_mail": "Contact Email",
+    "message": "Message",
+    "send": "Send"
   },
   "share": {
     "check_out_this_amazing_app": "Check out this amazing app!"

@@ -324,8 +324,12 @@
     "visit_our_web": "Visitez notre site web"
   },
   "problem": {
-    "text1": "Si vous avez rencontré un problème, souhaitez proposer des améliorations ou faire des commentaires, n'hésitez pas à nous écrire. Envoyez un e-mail avec autant de détails que possible à :",
-    "email": "benjamintrenas@gmail.com"
+    "text1": "Si vous avez rencontré des problèmes, souhaitez proposer des améliorations ou avez des commentaires, n'hésitez pas à nous contacter. Veuillez envoyer le formulaire avec le plus de détails possible.",
+    "thanks": "Merci beaucoup",
+    "name": "Nom",
+    "contact_mail": "Email de contact",
+    "message": "Message",
+    "send": "Envoyer"
   },
   "share": {
     "check_out_this_amazing_app": "Découvrez cette application incroyable !"
