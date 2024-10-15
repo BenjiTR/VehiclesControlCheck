@@ -38,8 +38,9 @@ export class NotificationsPage{
   public downloading:string = "false";
   public backupAccount:string="";
   public calendar:boolean|undefined = undefined;
+  
   private calendarSubscription:Subscription;
-
+  private connectedSubscription: Subscription;
   private creatingFileSubscription: Subscription;
   private hasFileSubscription:Subscription;
   private downloadingSubscription: Subscription;
@@ -70,6 +71,9 @@ export class NotificationsPage{
     this.calendarSubscription = this._calendar.calendar$.subscribe(value=>{
       this.calendar = value;
     })
+    this.connectedSubscription = this._drive.conected$.subscribe(async data=>{
+      this.connected = data;
+    })
 
     if(this._platform.is('android')){
       this.platform = 'android'
@@ -99,7 +103,6 @@ export class NotificationsPage{
 
 
   async getData(){
-    this.connected = await firstValueFrom(this._drive.conected$);
     this.backupAccount = this._session.backupMail;
     const id = await this._calendar.findVehicleControlCalendar();
     if(id){
