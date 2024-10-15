@@ -361,6 +361,9 @@ export class MainPage implements OnInit, OnDestroy {
             this._notification.deleteNotification(reminder)
           }
         }
+        if(event.calendarEventId){
+          this._calendar.deleteCalendarEvent(event.calendarEventId);
+        }
       }
     }
   }
@@ -372,7 +375,7 @@ export class MainPage implements OnInit, OnDestroy {
       console.log(reminder)
       console.log("Evento", event)
           if(reminder){
-            //this._notification.deleteNotification(reminder)
+            this._notification.deleteNotification(reminder)
             const index = this.eventsArray.findIndex(e => e.id === event.id);
             if (this._drive.folderId && this._session.autoBackup) {
               await this.uploadFile('event',this.eventsArray[index]);

@@ -187,7 +187,7 @@ export class NeweventPage {
         const id = await this._storage.getStorageItem(storageConstants.USER_CALENDAR_ID+this._session.currentUser.id);
         console.log("id",id)
         if(id && newEvent.reminder){
-          console.log(newEvent.calendarEventId)
+          //console.log(newEvent.calendarEventId)
           if(!oldCalendarEventId){
             newEvent.calendarEventId = await this._hash.generateCalendarPhrase();
           }else{

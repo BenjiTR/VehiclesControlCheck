@@ -44,7 +44,7 @@ export class NewsPage implements OnInit {
 
   close(){
     if(this.understand){
-      console.log(storageConstants.NEWS_READED+this._session.currentUser.id);
+      //console.log(storageConstants.NEWS_READED+this._session.currentUser.id);
       localStorage.setItem(storageConstants.NEWS_READED+this._session.currentUser.id, environment.versioncode);
     }
     this.mController.dismiss();
