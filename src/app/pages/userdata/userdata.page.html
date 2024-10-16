@@ -17,7 +17,7 @@
 
         <ion-col class="ion-padding-start ion-padding-end ion-margin-top" size="8">
           <ion-item class="rounded-inputs">
-            <ion-input [readonly]="!isEditing" [(ngModel)]="user.name" type="text" placeholder="{{'userpage.user_name'|translate}}"></ion-input>
+            <ion-input [disabled]="!isEditing" [(ngModel)]="user.name" type="text" placeholder="{{'userpage.user_name'|translate}}"></ion-input>
           </ion-item>
         </ion-col>
 
