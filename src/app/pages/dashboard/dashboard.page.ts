@@ -162,8 +162,17 @@ export class DashboardPage implements OnInit, OnDestroy {
     return this._paddingService.calculatePadding();
   }
 
-  goMain(){
-    this.router.navigate(['/dashboard/main'])
+  async goMain(){
+    console.log(this.router.url)
+    const url = this.router.url;
+    if(url==="/dashboard/newevent" || url==="/dashboard/vehicle"){
+      const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.are_you_sure?'),this.translate.instant('alert.changes_will_not_be_saved'),this.translate.instant('alert.accept'),this.translate.instant('alert.cancel'));
+      if(sure){
+        this.router.navigate(['/dashboard/main']);
+      }
+    }else{
+      this.router.navigate(['/dashboard/main']);
+    }
   }
 
   async share(){
