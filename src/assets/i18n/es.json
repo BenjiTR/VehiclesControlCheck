@@ -350,7 +350,9 @@
       "month_cost": "Gasto mensual",
       "n_of_events": "Nº de Eventos",
       "vehicles_control_data": "Datos de control de vehículos",
-      "export_to_csv": "Exportar a CSV"
+      "export_to_csv": "Exportar a CSV",
+      "send_vehicle": "Enviar Vehículo",
+      "send":"Enviar"
     },
     "news":{
       "news":"Novedades",

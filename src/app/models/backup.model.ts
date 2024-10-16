@@ -1,4 +1,3 @@
-import { LocalNotificationSchema } from "@capacitor/local-notifications";
 import { Event } from "./event.model";
 import { Vehicle } from "./vehicles.model";
 

@@ -137,10 +137,39 @@
     </ion-col>
   </ion-row>
 
+
+  <ion-card class="orange ion-margin-top">
+    <ion-card-header>
+      <ion-card-title class="ion-text-center" translate="data.send_vehicle"></ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-row>
+        <ion-col class="ion-padding-start ion-padding-end" size="12">
+          <ion-item class="rounded-inputs">
+              <ion-select class="blue-label" [(ngModel)]="vehicleId" label-placement="floating">
+                <div slot="label">{{'event.vehicle'|translate}} <ion-text color="danger"> *</ion-text></div>
+                <ion-select-option *ngFor="let vehicle of vehiclesArray" [value]="vehicle.id">{{vehicle.brandOrModel}}</ion-select-option>
+              </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="ion-text-center" size="12">
+          <ion-button (click)="sendVehicle()" color="darkblue" shape="round" translate="data.send"><ion-icon class="ion-margin-start" size="large" src="../../../assets/icons/share-social-outline.svg"></ion-icon></ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-card-content>
+
+  </ion-card>
+
+
   <ion-row class="ion-margin-top ion-padding-top">
     <ion-col class="ion-text-center ion-margin-top ion-padding-top" size="12">
       <ion-icon [routerLink]="['/dashboard']" class="orange-icon" src="../../../assets/icons/return-up-back-outline.svg"></ion-icon>
     </ion-col>
   </ion-row>
+
+
 
 </ion-content>

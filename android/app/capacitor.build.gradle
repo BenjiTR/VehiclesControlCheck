@@ -24,9 +24,6 @@ dependencies {
     implementation project(':capacitor-status-bar')
     implementation project(':capawesome-capacitor-file-picker')
     implementation project(':codetrix-studio-capacitor-google-auth')
-    implementation 'androidx.appcompat:appcompat:1.7.0'
-  implementation 'androidx.test.ext:junit:1.2.1'
-  implementation 'androidx.test.espresso:espresso-core:3.6.1'
 
 }
 

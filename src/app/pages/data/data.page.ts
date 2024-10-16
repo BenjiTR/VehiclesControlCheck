@@ -2,7 +2,7 @@ import { RouterModule } from '@angular/router';
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonRow, IonCol, IonLabel, IonButton, IonIcon, IonDatetimeButton, IonModal, IonDatetime, IonItem, IonSelect, IonSelectOption, IonItemDivider, IonInput, IonAccordion, IonAccordionGroup, IonList } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonRow, IonCol, IonLabel, IonButton, IonIcon, IonDatetimeButton, IonModal, IonDatetime, IonItem, IonSelect, IonSelectOption, IonItemDivider, IonInput, IonAccordion, IonAccordionGroup, IonList, IonText, IonCard, IonCardTitle, IonCardContent, IonCardHeader } from '@ionic/angular/standalone';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { PaddingService } from 'src/app/services/padding.service';
 import { TranslationConfigService } from 'src/app/services/translation.service';
@@ -19,6 +19,8 @@ import { DataService } from 'src/app/services/data.service';
 import { FileSystemService } from 'src/app/services/filesystem.service';
 import { FilterService } from 'src/app/services/filter.service';
 import { EspecialiOS } from 'src/app/services/especialiOS.service';
+import { SendVehicleData } from 'src/app/models/sendvehicle.model';
+import { SendVehicleService } from 'src/app/services/sendvehicle.service';
 
 @Component({
   selector: 'app-data',
@@ -26,13 +28,14 @@ import { EspecialiOS } from 'src/app/services/especialiOS.service';
   styleUrls: ['./data.page.scss'],
   standalone: true,
   providers:[EventTypes, DatePipe, FilterService],
-  imports: [IonList, IonAccordionGroup, IonAccordion, IonInput, RouterModule, IonItemDivider, IonSelect, IonSelectOption, IonItem, CommonModule, FormsModule, IonDatetime, IonModal, IonDatetimeButton, TranslateModule, IonIcon, IonButton, IonLabel, IonCol, IonRow, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [IonCardHeader, IonCardContent, IonCardTitle, IonCard, IonText, IonList, IonAccordionGroup, IonAccordion, IonInput, RouterModule, IonItemDivider, IonSelect, IonSelectOption, IonItem, CommonModule, FormsModule, IonDatetime, IonModal, IonDatetimeButton, TranslateModule, IonIcon, IonButton, IonLabel, IonCol, IonRow, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
 })
 export class DataPage implements OnInit {
 
   @ViewChild('filterInput', { static: false }) filterInput!: IonInput;
 
   public vehiclesArray:Vehicle[] = [];
+  public vehicleId:string = "";
   public eventsArray:Event[] = [];
   public filteredArray:Event[] = [];
   public startDate:Date = new Date;
@@ -62,7 +65,8 @@ export class DataPage implements OnInit {
     private _data:DataService,
     private _file:FileSystemService,
     private _filter:FilterService,
-    private _specialiOS:EspecialiOS
+    private _specialiOS:EspecialiOS,
+    private _sendVehicle:SendVehicleService
   ) {
     this.types = this.etypes.getTypes();
     this.eventTypes = etypes.getEventTypes();
@@ -536,6 +540,10 @@ setCursorAtEnd() {
     const length = input.value.length;
     input.setSelectionRange(length, length);
   });
+}
+
+sendVehicle(){
+  this._sendVehicle.SendVehicle(this.vehicleId)
 }
 
 

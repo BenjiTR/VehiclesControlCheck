@@ -19,6 +19,7 @@ import { StorageService } from 'src/app/services/storage.service';
 import { AlertService } from 'src/app/services/alert.service';
 import { ScreenOrientationService } from '../../services/orientation.service'
 import { environment } from 'src/environments/environment.prod';
+import { App } from '@capacitor/app';
 
 
 @Component({
@@ -54,6 +55,15 @@ export class DashboardPage implements OnInit, OnDestroy {
   ) {
     this.translate.setDefaultLang(this._translation.getLanguage());
     this.language = this._translation.getLanguage();
+
+    App.addListener('appUrlOpen', (event: any) => {
+      console.log(event)
+      if (event.url) {
+        const filePath = event.url;  // Obtén la URL o ruta del archivo .vcc
+        console.log(filePath);
+        //this.handleVccFile(filePath);  // Procesa el archivo .vcc
+      }
+    })
   }
 
   async ngOnInit() {
