@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { backupConstants } from '../const/backup';
 import { storageConstants } from '../const/storage';
 import { DriveService } from './drive.service';
@@ -12,6 +12,7 @@ import { HashService } from './hash.service';
 import { BehaviorSubject } from 'rxjs';
 
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -20,22 +21,30 @@ export class CalendarService {
   public calendarId:string = "";
   private calendar = new BehaviorSubject<boolean|undefined>(undefined)
   public calendar$ = this.calendar.asObservable();
+  private _session: SessionService | undefined;
 
   constructor(
     private _drive:DriveService,
     private _storage:StorageService,
-    private _session:SessionService,
     private _alert:AlertService,
     private translate:TranslateService,
     private _hash:HashService,
+    private injector: Injector
   ){
-    this.init();
+  }
+
+  private get SessionService(): SessionService {
+    if (!this._session) {
+      this._session = this.injector.get(SessionService);
+    }
+    return this._session;
   }
 
   async init(){
-    this.calendarId = await this._storage.getStorageItem(storageConstants.USER_CALENDAR_ID+this._session.currentUser.id+this._session.currentUser.id);
+    this.calendarId = await this._storage.getStorageItem(storageConstants.USER_CALENDAR_ID+this.SessionService.currentUser.id);
     //console.log(this.calendarId)
   }
+
 
   // ACCIÓN PRINCIPAL DE CONECTAR EL CALENDARIO Y METER TODOS LOS EVENTOS
 async connectCalendar(): Promise<void> {
@@ -60,7 +69,7 @@ async connectCalendar(): Promise<void> {
       if (!calendarResponse.ok) {
         throw this.translate.instant("error.error_in_the_calendar_creation_request");
       } else if (calendar && calendar.id) {
-        this._storage.setStorageItem(storageConstants.USER_CALENDAR_ID+this._session.currentUser.id, calendar.id);
+        this._storage.setStorageItem(storageConstants.USER_CALENDAR_ID+this.SessionService.currentUser.id, calendar.id);
         this.calendarId = calendar.id;
         this.calendar.next(true);
       }
@@ -79,7 +88,7 @@ async connectCalendar(): Promise<void> {
 }
 
 private async createAndInsertReminders(): Promise<void> {
-  const events: Event[] = await this._session.loadEvents();
+  const events: Event[] = await this.SessionService.loadEvents();
   if (events.length > 0) {
     for (const event of events) {
       if (event.reminder === true) {
@@ -171,7 +180,7 @@ public async findVehicleControlCalendar(): Promise<string | null> {
       const calendar = data.items.find((calendar: any) => calendar.summary === 'Control de vehículos');
 
       if (calendar) {
-        this._storage.setStorageItem(storageConstants.USER_CALENDAR_ID+this._session.currentUser.id, calendar.id);
+        this._storage.setStorageItem(storageConstants.USER_CALENDAR_ID+this.SessionService.currentUser.id, calendar.id);
         this.calendarId = calendar.id;
         return calendar.id;  // Retorna el calendarId
       } else {
@@ -256,5 +265,19 @@ async generateCalendarEvent(event:Event):Promise<any>{
   return generatedEvent;
 }
 
+
+  //UTILIDAD PARA LLAMAR DE OTROS COMPONENTES
+  async setEventInCalendar(event:Event):Promise<void>{
+    if(!event.calendarEventId){
+      event.calendarEventId = await this._hash.generateCalendarPhrase();
+      await this.insertEvent(event);
+    }else{
+      await this.updateEventInCalendar(event)
+      .catch((error:any)=>{
+        console.log(error);
+      })
+    }
+    return
+  }
 
 }

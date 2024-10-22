@@ -49,7 +49,7 @@ export class FileSystemService{
   }
 
 
-  async restoreBackup():Promise<void> {
+  async restoreBackup():Promise<Backup|void> {
 
     await FilePicker.pickFiles({
       types: ['application/octet-stream'],
@@ -74,7 +74,7 @@ export class FileSystemService{
             throw new Error('Usuario incorrecto');
           }else{
             await this._data.restoreDeviceData(data);
-            return;
+            return data;
           }
         } else {
           throw new Error('Archivo no válido');

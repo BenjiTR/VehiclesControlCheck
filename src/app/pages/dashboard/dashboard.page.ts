@@ -1,3 +1,4 @@
+import { Filesystem } from '@capacitor/filesystem';
 import { UserdataviewPage } from './../userdataview/userdataview.page';
 import { Component, OnInit, OnChanges, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -20,6 +21,7 @@ import { AlertService } from 'src/app/services/alert.service';
 import { ScreenOrientationService } from '../../services/orientation.service'
 import { environment } from 'src/environments/environment.prod';
 import { App } from '@capacitor/app';
+import { SendVehicleService } from 'src/app/services/sendvehicle.service';
 
 
 @Component({
@@ -51,7 +53,8 @@ export class DashboardPage implements OnInit, OnDestroy {
     private _storage:StorageService,
     private _alert:AlertService,
     private screenOrientationService: ScreenOrientationService,
-    private _platform:Platform
+    private _platform:Platform,
+    private _send:SendVehicleService
   ) {
     this.translate.setDefaultLang(this._translation.getLanguage());
     this.language = this._translation.getLanguage();
@@ -61,7 +64,7 @@ export class DashboardPage implements OnInit, OnDestroy {
       if (event.url) {
         const filePath = event.url;  // Obtén la URL o ruta del archivo .vcc
         console.log(filePath);
-        //this.handleVccFile(filePath);  // Procesa el archivo .vcc
+        this._send.addData(filePath)
       }
     })
   }

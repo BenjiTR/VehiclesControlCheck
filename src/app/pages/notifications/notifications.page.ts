@@ -38,7 +38,7 @@ export class NotificationsPage{
   public downloading:string = "false";
   public backupAccount:string="";
   public calendar:boolean|undefined = undefined;
-  
+
   private calendarSubscription:Subscription;
   private connectedSubscription: Subscription;
   private creatingFileSubscription: Subscription;
@@ -261,6 +261,7 @@ export class NotificationsPage{
     await this.getData();
     await this._auth.signOutGoogle();
     localStorage.setItem(storageConstants.SUGGESTIONS+this._session.currentUser.id,"");
+    this._storage.setStorageItem(storageConstants.USER_CALENDAR_ID+this._session.currentUser.id, "");
   }
 
 

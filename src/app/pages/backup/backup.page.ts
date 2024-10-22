@@ -26,6 +26,7 @@ import { DateService } from 'src/app/services/date.service';
 import { Event } from 'src/app/models/event.model';
 import { Vehicle } from 'src/app/models/vehicles.model';
 import { CalendarService } from 'src/app/services/calendar.service';
+import { HashService } from 'src/app/services/hash.service';
 
 @Component({
   selector: 'app-backup',
@@ -71,7 +72,8 @@ export class BackupPage implements OnInit {
     private notifications:NotificationsPage,
     private _crypto:CryptoService,
     private _date:DateService,
-    private _calendar:CalendarService
+    private _calendar:CalendarService,
+    private _hash:HashService
   ) {
     this.progressSubscription = this._drive.progress$.subscribe(data=>{
       this.progress = data;
@@ -167,16 +169,17 @@ export class BackupPage implements OnInit {
     const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.are_you_sure?'),this.translate.instant('alert.actual_data_will_be_rewrite'),this.translate.instant('alert.accept'),this.translate.instant('alert.cancel'))
     if(sure){
       this._drive.changeCreatingFile(true);
-      const data = await this._file.restoreBackup()
-      .then(async ()=>{
+      await this._file.restoreBackup()
+      .then(async (data)=>{
+        if(data && data.events){
+          this._notifications.setNotifications(data.events)
+        }
         this._drive.changeCreatingFile(false);
         await this._alert.createAlert(this.translate.instant('alert.file_restored'),this.translate.instant('alert.file_restored_text'))
         .then(async ()=>{
           if(this._drive.folderId && this._session.autoBackup){
             this.updateData(true);
           }
-          const events = await this._session.loadEvents();
-          this.setNotifications(events)
           this._drive.changeDownloading("refresh");
           this._drive.changeDownloading("false");
           this.navCtr.navigateRoot(['/dashboard'], { queryParams: { reload: true } });
@@ -283,28 +286,13 @@ export class BackupPage implements OnInit {
       const backupList = await this.readAll();
       const backupData = await this.setData(backupList);
       await this._data.restoreDeviceData(backupData);
-      this.setNotifications(backupData.events)
+      this._notifications.setNotifications(backupData.events)
       this._drive.changeDownloading("refresh");
       this._drive.changeDownloading("false");
       this.navCtr.navigateRoot(['/dashboard'], { queryParams: { reload: true } });
     }
   }
 
-  async setNotifications(events:Event[]){
-    let remindersArray:LocalNotificationSchema[]= await this._session.loadReminders();
-    events.forEach(async event => {
-      if(event.reminderDate && event.reminder && this._date.isFutureEvent(event.reminderDate)){
-        const index = remindersArray.findIndex(reminder=>reminder.extra.eventId === event.id);
-        const reminder = await this.constructReminder(event);
-        if (index !=-1){
-          remindersArray[index] = reminder;
-        }else{
-          remindersArray.push(reminder);
-        }
-        this._notifications.createNotification(remindersArray);
-      }
-    });
-  }
 
   async setData(backup:any):Promise<Backup>{
     let temporalBackup:Backup = {
@@ -416,31 +404,7 @@ export class BackupPage implements OnInit {
     return this._paddingService.calculatePadding();
   }
 
-  async constructReminder(event:Event){
 
-    const newReminder:LocalNotificationSchema = {
-      channelId:"VCC",
-      title:this.currentVehicle(event.vehicleId)+" - "+event.reminderTittle,
-      body:event.info,
-      largeBody:event.info,
-      summaryText:event.info,
-      id: event.reminderId!,
-      schedule: {at: new Date(event.reminderDate!)},
-      sound:'clockalarm.wav',
-      extra:{
-        eventId:event.id,
-        titleWithoutCar:event.reminderTittle,
-      }
-    }
-    return newReminder;
-  }
-
-  async currentVehicle(vehicleId:string){
-    this.vehiclesArray = await this._session.loadVehicles();
-    //console.log("Array:", this.vehiclesArray)
-    const current = this.vehiclesArray.find(vehicle=>vehicle.id === vehicleId);
-    return current!.brandOrModel;
-  }
 
 
 

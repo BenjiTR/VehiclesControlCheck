@@ -19,7 +19,7 @@ import { Event } from '../../models/event.model'
 import { EventTypes } from 'src/app/const/eventTypes';
 import { ImgmodalPage } from '../imgmodal/imgmodal.page';
 import { AdmobService } from 'src/app/services/admob.service';
-import { LocalNotificationSchema } from '@capacitor/local-notifications';
+import { LocalNotificationSchema, PendingResult } from '@capacitor/local-notifications';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { DateService } from 'src/app/services/date.service';
 import { DatePipe } from '@angular/common';
@@ -34,6 +34,7 @@ import { CalendarService } from 'src/app/services/calendar.service';
 import { EspecialiOS } from 'src/app/services/especialiOS.service';
 import { environment } from 'src/environments/environment.prod';
 import { NewsPage } from '../newsmodal/newsmodal.page';
+import { event } from 'firebase-functions/v1/analytics';
 
 
 @Component({
@@ -213,18 +214,27 @@ export class MainPage implements OnInit, OnDestroy {
 
   async GetElementsToClean(vehicle: Vehicle): Promise<any[]> {
     let array: any[] = [];
+    const pending:PendingResult = await this._notification.getPending();
 
     for (const element of this.eventsArray) {
       if (element.vehicleId === vehicle.id) {
         array.push(element.id);
       }
-    }
-
-    for (const element of this.remindersArray) {
-      if (element.extra.vehicleId === vehicle.id) {
-        array.push('R' + element.id);
+      if(element.reminder){
+        const found = pending.notifications.find(pending => pending.id === element.reminderId);
+        if(found){
+          this._notification.deleteNotification(found);
+          console.log("Pendiente",await this._notification.getPending())
+        }
+        const id = await this._storage.getStorageItem(storageConstants.USER_CALENDAR_ID+this._session.currentUser.id);
+        if(id && element.reminder && element.calendarEventId){
+          this._calendar.deleteCalendarEvent(element.calendarEventId);
+        }
       }
     }
+
+
+
     return array;
   }
 
@@ -348,7 +358,9 @@ export class MainPage implements OnInit, OnDestroy {
           this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,true)
           if((await Network.getStatus()).connected === true){
             const id = await this._drive.findFileByName(event.id)
-            await this._drive.deleteFile(id, true);
+            if(id){
+              await this._drive.deleteFile(id, true);
+            }
             this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,false)
           }else{
             this._alert.createAlert(this.translate.instant("error.no_network"), this.translate.instant("error.no_network_to_backup"));
@@ -361,7 +373,8 @@ export class MainPage implements OnInit, OnDestroy {
             this._notification.deleteNotification(reminder)
           }
         }
-        if(event.calendarEventId){
+        const id = await this._storage.getStorageItem(storageConstants.USER_CALENDAR_ID+this._session.currentUser.id);
+        if(id && event.calendarEventId){
           this._calendar.deleteCalendarEvent(event.calendarEventId);
         }
       }
@@ -628,8 +641,8 @@ setCursorAtEnd() {
 
     async checkNews():Promise<void>{
       if(this.newsReaded !== environment.versioncode){
-        await this.openNewsPage();
-        this.newsReaded = environment.versioncode;
+      //   await this.openNewsPage();
+      //   this.newsReaded = environment.versioncode;
         return;
       }else{
         return;

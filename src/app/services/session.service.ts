@@ -158,6 +158,18 @@ export class SessionService{
     }
   }
 
+  async insertVehicle(vehicle:Vehicle){
+    this.vehiclesArray.push(vehicle);
+    await this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.currentUser.id,this._crypto.encryptMessage(JSON.stringify(this.vehiclesArray)));
+  }
+
+  async insertEvents(events:Event[]){
+    for(const event of events){
+      this.eventsArray.push(event);
+    }
+    await this._storage.setStorageItem(storageConstants.USER_EVENTS+this.currentUser.id,this._crypto.encryptMessage(JSON.stringify(this.eventsArray)));
+  }
+
   //ETIQUETAS
   async getTags(){
     const tempTags = await this._storage.getStorageItem(storageConstants.USER_TAGS + this.currentUser.id);

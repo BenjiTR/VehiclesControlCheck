@@ -182,6 +182,7 @@ export class NeweventPage {
       const index = this.eventsArray.findIndex(event => event.id === this.eventToEditId);
       if (index !== -1) {
         const oldCalendarEventId = this._session.eventsArray[index].calendarEventId;
+        const oldCalendarReminder= this._session.eventsArray[index].reminder;
         const newEvent = await this.generateEvent();
         this._session.eventsArray[index] = newEvent;
         const id = await this._storage.getStorageItem(storageConstants.USER_CALENDAR_ID+this._session.currentUser.id);
@@ -195,6 +196,11 @@ export class NeweventPage {
             newEvent.calendarEventId = oldCalendarEventId;
             this._calendar.updateEventInCalendar(newEvent);
           }
+        }
+        console.log(newEvent, oldCalendarReminder)
+        if(id && !newEvent.reminder && oldCalendarReminder && oldCalendarEventId){
+          console.log(newEvent, oldCalendarReminder)
+          this._calendar.deleteCalendarEvent(oldCalendarEventId);
         }
         this.saveAndExit(newEvent);
       }
@@ -424,27 +430,11 @@ export class NeweventPage {
 
 
   async generateAndSaveNotification(event:Event):Promise<void>{
-    const reminder = await this.constructReminder(event);
+    const reminder = await this._notification.constructReminder(event);
     this._notification.createNotification([reminder])
   }
 
-  async constructReminder(event:Event){
-    const newReminder:LocalNotificationSchema = {
-      channelId:"VCC",
-      title:this.currentVehicle()+" - "+event.reminderTittle,
-      body:event.info,
-      largeBody:event.info,
-      summaryText:event.info,
-      id: event.reminderId||0,
-      schedule: {at: new Date(this.reminderDate)},
-      sound:'clockalarm.wav',
-      extra:{
-        eventId:event.id,
-        titleWithoutCar:event.reminderTittle,
-      }
-    }
-    return newReminder;
-  }
+
 
   currentVehicle(){
     const current = this.vehiclesArray.find(vehicle=>vehicle.id === this.vehicleId);

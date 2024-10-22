@@ -1,5 +1,5 @@
 import { StorageService } from './storage.service';
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { SessionService } from './session.service';
 import { Network } from '@capacitor/network';
 import { AlertService } from './alert.service';
@@ -24,6 +24,8 @@ export class DriveService {
   public token:string = "";
   public folderId: string = "";
   public noFinishedOperation:boolean=false;
+  private _session: SessionService | undefined;
+
 
   private connected = new BehaviorSubject<boolean>(false)
   public conected$ = this.connected.asObservable();
@@ -43,26 +45,34 @@ export class DriveService {
   public creatingFile$ = this.creatingFile.asObservable();
 
   constructor(
-    private _session:SessionService,
     private _alert:AlertService,
     private translate:TranslateService,
     private _translation:TranslationConfigService,
     private _auth:AuthService,
     private http: HttpClient,
     private _data:DataService,
-    private _storage:StorageService
+    private _storage:StorageService,
+    private injector: Injector
   ) {}
+
+  private get SessionService(): SessionService {
+    if (!this._session) {
+      this._session = this.injector.get(SessionService);
+    }
+    return this._session;
+  }
+
 
   //REFRESCAR TOKEN Y CONECTAR
   async init(){
-    this.token = await this._session.getToken();
+    this.token = await this.SessionService.getToken();
     if(this.token && (await Network.getStatus()).connected === true){
       await this.connectAccount();
     }else if(this.token && (await Network.getStatus()).connected === false){
       this._alert.createAlert(this.translate.instant("error.no_network"), this.translate.instant("error.no_network_to_backup"));
-      this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,true)
+      this._storage.setStorageItem(storageConstants.USER_OPS+this.SessionService.currentUser.id,true)
     }
-    this.noFinishedOperation = await this._storage.getStorageItem(storageConstants.USER_OPS+this._session.currentUser.id);
+    this.noFinishedOperation = await this._storage.getStorageItem(storageConstants.USER_OPS+this.SessionService.currentUser.id);
     //console.log(this.noFinishedOperation)
     if(this.noFinishedOperation){
       this.updateInDriveProcess();
@@ -77,11 +87,11 @@ export class DriveService {
       }else{
         const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.are_you_sure?'),this.translate.instant('alert.update_files_text'),this.translate.instant('alert.accept'),this.translate.instant('alert.cancel'));
         if(sure){
-          this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,true)
+          this._storage.setStorageItem(storageConstants.USER_OPS+this.SessionService.currentUser.id,true)
           await this.removeAllElements()
           .then(async()=>{
             await this.uploadFiles();
-            this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,false)
+            this._storage.setStorageItem(storageConstants.USER_OPS+this.SessionService.currentUser.id,false)
           })
           .catch((e)=>{
             console.log(e);
@@ -90,7 +100,7 @@ export class DriveService {
         }
       }
     }else{
-      this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,false)
+      this._storage.setStorageItem(storageConstants.USER_OPS+this.SessionService.currentUser.id,false)
     }
   }
   async uploadFiles():Promise<void> {
@@ -160,9 +170,9 @@ export class DriveService {
     await this._auth.refreshGoogle()
     .then(async(msg)=>{
       this.token = msg.accessToken;
-      await this._session.setGoogleToken(this.token);
+      await this.SessionService.setGoogleToken(this.token);
       const user:User = await this._auth.fetchUserInfo(msg.accessToken);
-      this._session.backupMail = user.email;
+      this.SessionService.backupMail = user.email;
       await this.setConnectedAndTryFiles();
     })
     .catch(async (err)=>{
@@ -170,8 +180,8 @@ export class DriveService {
       await this._auth.loginWithGoogle()
       .then(async(user)=>{
         this.token = user.authentication.accessToken;
-        this._session.backupMail = user.email;
-        await this._session.setGoogleToken(this.token);
+        this.SessionService.backupMail = user.email;
+        await this.SessionService.setGoogleToken(this.token);
         await this.setConnectedAndTryFiles();
       })
       .catch(async (err)=>{
@@ -253,7 +263,7 @@ export class DriveService {
       });
 
       const metadata:any = {
-        'name': this._session.currentUser.id,
+        'name': this.SessionService.currentUser.id,
         'mimeType': 'application/vnd.google-apps.folder',
         'parents': ['appDataFolder']
       };
@@ -271,7 +281,7 @@ export class DriveService {
 
   //OBTENER ID DE CARPETA
   async getFolderId(): Promise<any> {
-    //console.log("ID de usuario: ", this._session.currentUser.id);
+    //console.log("ID de usuario: ", this.SessionService.currentUser.id);
 
     try {
       const headers = new HttpHeaders({
@@ -279,7 +289,7 @@ export class DriveService {
       });
 
       const params = new HttpParams()
-        .set('q', `mimeType='application/vnd.google-apps.folder' and name='${this._session.currentUser.id}'`)
+        .set('q', `mimeType='application/vnd.google-apps.folder' and name='${this.SessionService.currentUser.id}'`)
         .set('spaces', 'appDataFolder')
         .set('fields', 'files(id, name)')
         .set('pageSize', '1');

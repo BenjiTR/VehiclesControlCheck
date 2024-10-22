@@ -5,11 +5,11 @@ import { DateService } from './date.service';
 import { TranslateService } from '@ngx-translate/core';
 import { SessionService } from './session.service';
 import { StorageService } from './storage.service';
-import { NotificationsService } from './notifications.service';
 import { imageConstants } from '../const/img';
 import { Platform } from '@ionic/angular';
 import { CryptoService } from './crypto.services';
 import { DriveService } from './drive.service';
+
 
 @Injectable({
   providedIn:'root'
@@ -17,36 +17,34 @@ import { DriveService } from './drive.service';
 
 export class DataService{
 
-  private _drive: DriveService | undefined;
-
+  private _session: SessionService | undefined;
 
   constructor(
-    private _session:SessionService,
     private _storage:StorageService,
-    private _notifications:NotificationsService,
     private translate:TranslateService,
     private _date:DateService,
     private _platform:Platform,
     private _crypto:CryptoService,
-    private injector: Injector // Injector en lugar de DriveService
+    private injector: Injector
   ){
   }
 
-  private get driveService(): DriveService {
-    if (!this._drive) {
-      this._drive = this.injector.get(DriveService);
+  private get SessionService(): SessionService {
+    if (!this._session) {
+      this._session = this.injector.get(SessionService);
     }
-    return this._drive;
+    return this._session;
   }
+
 
   async buildData(){
     const backup:Backup = {
-      vehicles: await this._session.loadVehicles(),
-      events: await this._session.loadEvents(),
-      remindersOptions: await this._session.getReminderNotifications(),
-      autoBackup: await this._session.getAutoBackup(),
-      photo: await this._storage.getStorageItem(storageConstants.USER_PHOTO+this._session.currentUser.id) || "",
-      tags: await this._session.getTags()
+      vehicles: await this.SessionService.loadVehicles(),
+      events: await this.SessionService.loadEvents(),
+      remindersOptions: await this.SessionService.getReminderNotifications(),
+      autoBackup: await this.SessionService.getAutoBackup(),
+      photo: await this._storage.getStorageItem(storageConstants.USER_PHOTO+this.SessionService.currentUser.id) || "",
+      tags: await this.SessionService.getTags()
     }
     return backup
   }
@@ -59,18 +57,18 @@ export class DataService{
   }
 
   async restoreDeviceData(backup:Backup):Promise<void>{
-    //console.log(this._session.currentUser.id, backup)
-    this._storage.setStorageItem(storageConstants.USER_VEHICLES+this._session.currentUser.id, this._crypto.encryptMessage(JSON.stringify(backup.vehicles)));
-    this._storage.setStorageItem(storageConstants.USER_EVENTS+this._session.currentUser.id, this._crypto.encryptMessage(JSON.stringify(backup.events)));
+    //console.log(this.SessionService.currentUser.id, backup)
+    this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.SessionService.currentUser.id, this._crypto.encryptMessage(JSON.stringify(backup.vehicles)));
+    this._storage.setStorageItem(storageConstants.USER_EVENTS+this.SessionService.currentUser.id, this._crypto.encryptMessage(JSON.stringify(backup.events)));
 
-    this._session.setReminderNotifications(backup.remindersOptions);
-    this._session.setAutoBackup(backup.autoBackup);
+    this.SessionService.setReminderNotifications(backup.remindersOptions);
+    this.SessionService.setAutoBackup(backup.autoBackup);
     if(backup.photo){
 
-      this._storage.setStorageItem(storageConstants.USER_PHOTO+this._session.currentUser.id,backup.photo);
-      this._session.currentUser.photo = imageConstants.base64Prefix + this._crypto.decryptMessage(backup.photo);
+      this._storage.setStorageItem(storageConstants.USER_PHOTO+this.SessionService.currentUser.id,backup.photo);
+      this.SessionService.currentUser.photo = imageConstants.base64Prefix + this._crypto.decryptMessage(backup.photo);
     }
-    this._storage.setStorageItem(storageConstants.USER_TAGS+this._session.currentUser.id,this._crypto.encryptMessage(JSON.stringify(backup.tags)));
+    this._storage.setStorageItem(storageConstants.USER_TAGS+this.SessionService.currentUser.id,this._crypto.encryptMessage(JSON.stringify(backup.tags)));
     return;
   }
 
@@ -119,7 +117,7 @@ export class DataService{
   }
 
   async buildCsvData(eventTypes: any): Promise<string> {
-    const eventsArray = this._session.eventsArray;
+    const eventsArray = this.SessionService.eventsArray;
 
     const headers = [
         'id',

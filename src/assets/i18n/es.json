@@ -366,5 +366,15 @@
       "previous":"Anterior",
       "next":"Siguiente",
       "close":"Cerrar"
+    },
+    "send":{
+      "do_you_want_to_save_vehicle":"¿Desea añadir el vehículo?",
+      "do_you_want_to_save_vehicle_text":"será añadido a sus vehículos junto con sus eventos y costes",
+      "invalid_file":"Archivo no válido",
+      "invalid_file_text":"La información del archivo no pudo leerse o no es válida",
+      "error_adding_vehicle":"Error añadiendo el vehículo",
+      "error_restoring_backup":"Error al restaurar backup",
+      "vehicle_already_exists":"El vehículo ya exite, ¿desea sustituirlo?",
+      "vehicle_already_exists_text":"El vehículo de su sistema será ELIMINADO y sustituido por el vehículo entrante"
     }
 }
