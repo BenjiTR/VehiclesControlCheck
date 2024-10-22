@@ -28,6 +28,9 @@ import { LocalNotificationSchema } from '@capacitor/local-notifications';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { CalendarService } from 'src/app/services/calendar.service';
 import { EspecialiOS } from 'src/app/services/especialiOS.service';
+import { close } from 'ionicons/icons';
+import { addIcons } from 'ionicons';
+import {NgxIonicImageViewerModule} from '@herdwatch-apps/ngx-ionic-image-viewer';
 
 @Component({
   selector: 'app-newevent',
@@ -35,7 +38,7 @@ import { EspecialiOS } from 'src/app/services/especialiOS.service';
   styleUrls: ['./newevent.page.scss'],
   standalone: true,
   animations: [SlideUpDownAnimation],
-  imports: [IonDatetime, IonCheckbox, IonList, IonText, IonTextarea, IonImg, IonInput, TranslateModule, IonSelect, IonSelectOption, IonButton, IonIcon, IonItem, IonAvatar, IonLabel, IonRow, IonCol, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [NgxIonicImageViewerModule, IonIcon, IonDatetime, IonCheckbox, IonList, IonText, IonTextarea, IonImg, IonInput, TranslateModule, IonSelect, IonSelectOption, IonButton, IonIcon, IonItem, IonAvatar, IonLabel, IonRow, IonCol, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
 })
 export class NeweventPage {
 
@@ -91,6 +94,9 @@ export class NeweventPage {
     private _calendar:CalendarService,
     private _specialiOS:EspecialiOS
   ) {
+    addIcons({
+      'close': close,
+    });
     this.eventTypes = etypes.getEventTypes();
     this.user = this._session.currentUser;
     this.maxDate = this.getMaxDate();

@@ -280,7 +280,7 @@
 
 
                               <ion-col class="img" size="12" *ngFor="let image of event.images">
-                                <ion-img (click)="openModal(image)" src="{{image}}"></ion-img>
+                                <ion-img ionImgViewer scheme="auto" src="{{image}}"></ion-img>
                               </ion-col>
                             </ion-row>
                             <ion-row>

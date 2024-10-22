@@ -34,7 +34,9 @@ import { CalendarService } from 'src/app/services/calendar.service';
 import { EspecialiOS } from 'src/app/services/especialiOS.service';
 import { environment } from 'src/environments/environment.prod';
 import { NewsPage } from '../newsmodal/newsmodal.page';
-import { event } from 'firebase-functions/v1/analytics';
+import { close } from 'ionicons/icons';
+import { addIcons } from 'ionicons';
+import {NgxIonicImageViewerModule} from '@herdwatch-apps/ngx-ionic-image-viewer';
 
 
 @Component({
@@ -42,9 +44,9 @@ import { event } from 'firebase-functions/v1/analytics';
   templateUrl: './main.page.html',
   styleUrls: ['./main.page.scss'],
   standalone: true,
-  imports: [IonList, IonPopover, IonModal, IonDatetimeButton, IonText, IonBadge, IonFabButton, IonFabList, IonFab, IonTextarea, IonDatetime, IonSelect, IonSelectOption, IonRouterOutlet, IonAccordionGroup, IonAccordion, UserdataviewPage, IonInput, IonItem, IonLabel, TranslateModule, RouterModule, IonMenu, IonIcon, IonButtons, IonMenuButton, IonButton, IonImg, IonGrid, IonCol ,IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonRow, IonGrid],
+  imports: [NgxIonicImageViewerModule, IonIcon, IonList, IonPopover, IonModal, IonDatetimeButton, IonText, IonBadge, IonFabButton, IonFabList, IonFab, IonTextarea, IonDatetime, IonSelect, IonSelectOption, IonRouterOutlet, IonAccordionGroup, IonAccordion, UserdataviewPage, IonInput, IonItem, IonLabel, TranslateModule, RouterModule, IonMenu, IonIcon, IonButtons, IonMenuButton, IonButton, IonImg, IonGrid, IonCol ,IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonRow, IonGrid],
   animations: [ MainAnimation, RoadAnimation, SecondaryAnimation, GrowShrinkAnimation, SlideUpDownAnimation,  ],
-  providers:[EventTypes, DatePipe, FilterService]
+  providers:[EventTypes, DatePipe, FilterService],
 })
 export class MainPage implements OnInit, OnDestroy {
 
@@ -103,6 +105,9 @@ export class MainPage implements OnInit, OnDestroy {
     private _calendar:CalendarService,
     private _specialiOS:EspecialiOS
   ) {
+    addIcons({
+      'close': close,
+    });
     this.eventTypes = etypes.getEventTypes();
     this.downloadingSubscription = this._drive.downloading$.subscribe(data=>{
       //console.log(data)
