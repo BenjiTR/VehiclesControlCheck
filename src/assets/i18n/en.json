@@ -62,7 +62,9 @@
     "error_while_searching_the_calendar": "An error occurred while searching for the calendar, please try again later",
     "error_while_modifying_the_event": "An error occurred while modifying the event, please try again later",
     "calendar_could_not_be_found": "The calendar could not be found, please try again later",
-    "error_while_deleting_the_event": "An error occurred while deleting the Calendar event"
+    "error_while_deleting_the_event": "An error occurred while deleting the Calendar event",
+    "error_sharing_img": "Error sharing image",
+    "error_downloading_img": "Error downloading image"
   },
   "alert": {
     "accept": "Accept",
@@ -138,8 +140,10 @@
     "do_you_want_connect_calendar": "Do you want to connect with Google Calendar?",
     "do_you_want_connect_calendar_text": "If you connect your app with Google Calendar, all your reminders will be automatically added.",
     "new_version_avaliable": "Update available",
-    "new_version_avaliable_text": "A new version is available, would you like to download it?"
-  },
+    "new_version_avaliable_text": "A new version is available, would you like to download it?",
+    "downloading_img_sucess": "Image successfully downloaded",
+    "downloading_img_sucess_text": "The image has been downloaded successfully. You can find it in the gallery and in the 'Documents/vehicles-control/img' directory."
+},
   "home": {
     "init_session": "Sign In",
     "email": "Email",
@@ -350,7 +354,9 @@
     "month_cost": "Monthly cost",
     "n_of_events": "Number of Events",
     "vehicles_control_data": "Vehicle control data",
-    "export_to_csv": "Export to CSV"
+    "export_to_csv": "Export to CSV",
+    "send_vehicle": "Send Vehicle",
+    "send": "Send"
   },
   "news": {
     "news": "What's New",

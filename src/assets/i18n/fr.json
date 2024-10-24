@@ -62,7 +62,9 @@
     "error_while_searching_the_calendar": "Une erreur est survenue lors de la recherche du calendrier, veuillez réessayer plus tard",
     "error_while_modifying_the_event": "Une erreur est survenue lors de la modification de l'événement, veuillez réessayer plus tard",
     "calendar_could_not_be_found": "Le calendrier n'a pas pu être trouvé, veuillez réessayer plus tard",
-    "error_while_deleting_the_event": "Une erreur est survenue lors de la suppression de l'événement du calendrier"
+    "error_while_deleting_the_event": "Une erreur est survenue lors de la suppression de l'événement du calendrier",
+    "error_sharing_img": "Erreur lors du partage de l'image",
+    "error_downloading_img": "Erreur lors du téléchargement de l'image"
   },
   "alert": {
     "accept": "Accepter",
@@ -138,7 +140,9 @@
     "do_you_want_connect_calendar": "Souhaitez-vous vous connecter à Google Calendar ?",
     "do_you_want_connect_calendar_text": "Si vous connectez votre application à Google Calendar, tous vos rappels seront automatiquement ajoutés.",
     "new_version_avaliable": "Mise à jour disponible",
-    "new_version_avaliable_text": "Une nouvelle version est disponible, souhaitez-vous la télécharger ?"
+    "new_version_avaliable_text": "Une nouvelle version est disponible, souhaitez-vous la télécharger ?",
+    "downloading_img_sucess": "Image téléchargée avec succès",
+    "downloading_img_sucess_text": "L'image a été téléchargée avec succès. Vous pouvez la trouver dans la galerie et dans le répertoire 'Documents/vehicles-control/img'."
   },
   "home": {
     "init_session": "Connexion",
@@ -350,7 +354,9 @@
     "month_cost": "Dépense mensuelle",
     "n_of_events": "Nombre d'événements",
     "vehicles_control_data": "Données de contrôle des véhicules",
-    "export_to_csv": "Exporter au CSV"
+    "export_to_csv": "Exporter au CSV",
+    "send_vehicle": "Envoyer Véhicule",
+    "send": "Envoyer"
   },
   "news": {
     "news": "Nouveautés",

@@ -1,5 +1,5 @@
 import {Injectable } from '@angular/core';
-import { Filesystem, Directory, Encoding, WriteFileResult, ReadFileResult } from '@capacitor/filesystem';
+import { Filesystem, Directory, Encoding, WriteFileResult, ReadFileResult, ReaddirResult } from '@capacitor/filesystem';
 import { Backup } from '../models/backup.model';
 import { SessionService } from './session.service';
 import { StorageService } from './storage.service';
@@ -9,6 +9,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { DateService } from './date.service';
 import { DataService } from './data.service';
 import { CryptoService } from './crypto.services';
+import { Share } from '@capacitor/share';
 
 @Injectable({
   providedIn:'root'
@@ -104,6 +105,73 @@ export class FileSystemService{
       });
     }
 
+
+    //IMAGENES
+    public async shareImg(data: string, fileName:string):Promise<void> {
+      const path = `vehicles-control/${fileName}`;
+
+      try {
+        const file = await Filesystem.writeFile({
+          path: path,
+          data: data,
+          directory: Directory.Documents,
+          recursive:true
+        });
+
+        const isPossible = await Share.canShare();
+        if (isPossible) {
+          await Share.share({
+            title: fileName,
+            url: file.uri,
+            dialogTitle: fileName,
+          });
+
+          // Eliminar el archivo después de compartir
+          await Filesystem.deleteFile({
+            path: path,
+            directory: Directory.Documents,
+          });
+        }
+        return;
+      } catch (error) {
+        console.error('Error sharing vehicle data:', error);
+        throw error
+      }
+    }
+
+    async downloadImg(data: string, fileName:string) {
+      let fileExists:ReaddirResult |undefined;
+      const directoryPath = 'vehicles-control/img/';
+      
+      await Filesystem.readdir({
+        path: directoryPath,
+        directory: Directory.Documents
+      })
+      .then((data)=>{
+        fileExists = data;
+      })
+      .catch((err:any)=>{
+        console.log( err)
+      })
+
+      try {
+
+        const path = `${directoryPath}${fileName}`;
+
+        // Escribir el archivo con el nombre generado
+        await Filesystem.writeFile({
+          path: path,
+          data: data,
+          directory: Directory.Documents,
+          recursive: true
+        });
+
+        return;
+      } catch (error) {
+        console.error('Error saving vehicle image:', error);
+        throw error;
+      }
+    }
 
 
 }

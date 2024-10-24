@@ -14,8 +14,8 @@ android {
     applicationId "com.benjamintr.vehiclescontrol"
     minSdkVersion rootProject.ext.minSdkVersion
     targetSdkVersion rootProject.ext.targetSdkVersion
-    versionCode 150050
-    versionName "1.5.0"
+    versionCode 151001
+    versionName "1.5.1"
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     aaptOptions {

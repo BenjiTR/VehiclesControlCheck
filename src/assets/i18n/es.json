@@ -62,7 +62,9 @@
       "error_while_searching_the_calendar":"Ocurrio un error al detectar el calendario, por favor intentelo de nuevo mas tarde",
       "error_while_modifying_the_event":"Ocurrio un error al modificar el evento, por favor intentelo de nuevo mas tarde",
       "calendar_could_not_be_found":"No fue posible encontrar el calendario, Por favor intentelo de nuevo mas tarde",
-      "error_while_deleting_the_event":"Ocurrio un error al eliminar el evento de Calendar"
+      "error_while_deleting_the_event":"Ocurrio un error al eliminar el evento de Calendar",
+      "error_sharing_img":"Error compartiendo imagen",
+      "error_downloading_img":"error descargando imagen"
   },
   "alert":{
       "accept":"Aceptar",
@@ -138,7 +140,9 @@
       "do_you_want_connect_calendar":"¿Deseas conectar con Google Calendar?",
       "do_you_want_connect_calendar_text":"Si conectas tu app con Google Calendar se añadirán automáticamente todos tus recordatoríos",
       "new_version_avaliable":"Actualización disponible",
-      "new_version_avaliable_text":"Existe una nueva Versión disponible, ¿Desea acceder a la descarga?"
+      "new_version_avaliable_text":"Existe una nueva Versión disponible, ¿Desea acceder a la descarga?",
+      "downloading_img_sucess":"Imagen descargada con éxito",
+      "downloading_img_sucess_text":"La imagen se ha descargado correctamente, puede encontrarla en la galería y en el directorio 'Documentos/vehicles-control/img'."
     },
   "home":{
       "init_session":"Inicio de sesión",

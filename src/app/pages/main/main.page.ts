@@ -37,6 +37,7 @@ import { NewsPage } from '../newsmodal/newsmodal.page';
 import { close } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 import {NgxIonicImageViewerModule} from '@herdwatch-apps/ngx-ionic-image-viewer';
+import { FileSystemService } from 'src/app/services/filesystem.service';
 
 
 @Component({
@@ -93,17 +94,15 @@ export class MainPage implements OnInit, OnDestroy {
     private router:Router,
     private _notification:NotificationsService,
     private _date:DateService,
-    private datePipe: DatePipe,
     private _loader:LoaderService,
     private activatedroute:ActivatedRoute,
     private _drive:DriveService,
-    private navCtr:NavController,
-    private _data:DataService,
     private _crypto:CryptoService,
     private _platform:Platform,
     private _filter:FilterService,
     private _calendar:CalendarService,
-    private _specialiOS:EspecialiOS
+    private _specialiOS:EspecialiOS,
+    private _file:FileSystemService
   ) {
     addIcons({
       'close': close,
@@ -663,6 +662,24 @@ setCursorAtEnd() {
       await page.onDidDismiss();
     }
 
+    //IMAGENES
+    async shareImg(image:string, imgNumber:number, event:Event){
+      const text = "Img " + imgNumber + " - "+ this.getTranslatedType(event.type) + " - " + event.date;
+      await this._file.shareImg(image, text)
+      .catch((err:any)=>{
+        this._alert.createAlert(this.translate.instant('error.error_sharing_img'),err)
+      })
+    }
 
+    async downloadImg(image:string, imgNumber:number, event:Event){
+      const text = "Img " + imgNumber + " - "+ this.getTranslatedType(event.type) + " - " + event.date;
+      await this._file.downloadImg(image, text)
+      .then(()=>{
+        this._alert.createAlert(this.translate.instant('alert.downloading_img_sucess'),this.translate.instant('alert.downloading_img_sucess_text'))
+      })
+      .catch((err:any)=>{
+        this._alert.createAlert(this.translate.instant('error.error_downloading_img'),err)
+      })
+    }
 
 }

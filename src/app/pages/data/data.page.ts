@@ -543,7 +543,7 @@ setCursorAtEnd() {
 }
 
 sendVehicle(){
-  this._sendVehicle.SendVehicle(this.vehicleId)
+  this._sendVehicle.SendVehicle(this.vehicleId);
 }
 
 

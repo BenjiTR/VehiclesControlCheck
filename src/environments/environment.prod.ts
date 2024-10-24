@@ -8,7 +8,7 @@ export const environment = {
     appId: "1:329432960985:web:9d24d527e86415364b93c8",
     measurementId: "G-GYSN7J9W02"
   },
-  version: "1.5.0",
-  versioncode: "150050",
+  version: "1.5.1",
+  versioncode: "151001",
   production: true
 };

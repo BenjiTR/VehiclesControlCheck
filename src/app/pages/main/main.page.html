@@ -217,7 +217,7 @@
                       </ion-row>
 
                      <ion-accordion-group #accordionGroup *ngIf="someForThatVehicle(vehicle.id)">
-                      <ng-container *ngFor="let event of filteredEventsArray">
+                      <ng-container *ngFor="let event of filteredEventsArray; let i = index">
                         <ion-accordion *ngIf="event.vehicleId === vehicle.id" class="zoom08" value="{{event.id}}">
                           <ion-item slot="header" class="orange">
                             <ion-label><b>{{getTranslatedType(event.type)}}</b> - {{event.date | date:'dd/MM/yyyy'}}</ion-label>
@@ -277,12 +277,17 @@
                                   <ion-textarea auto-grow="true" label="{{'event.aditional_info' | translate}}" label-placement="floating" [readonly]="true" [(ngModel)]="event.info" type="text"></ion-textarea>
                                 </ion-item>
                               </ion-col>
-
-
-                              <ion-col class="img" size="12" *ngFor="let image of event.images">
-                                <ion-img ionImgViewer scheme="auto" src="{{image}}"></ion-img>
+                            </ion-row>
+                            <ion-row *ngFor="let image of event.images">
+                              <ion-col class="img ion-padding-top ion-padding-start ion-padding-end ion-text-right" size="12">
+                                <ion-button color="secondary" (click)="downloadImg(image, i, event)" > <ion-icon src="../../../assets/icons/download-outline.svg"></ion-icon> </ion-button>
+                                <ion-button color="secondary" (click)="shareImg(image, i, event)"> <ion-icon src="../../../assets/icons/share-social-outline.svg"></ion-icon> </ion-button>
+                              </ion-col>
+                              <ion-col class="img ion-padding-start ion-padding-end" size="12" >
+                                <ion-img ionImgViewer title="Img {{i+1}} - {{event.date | date:'dd/MM/yyyy'}}" scheme="auto" src="{{image}}"></ion-img>
                               </ion-col>
                             </ion-row>
+
                             <ion-row>
                               <ion-col (click)="deleteEvent(event)" class="ion-margin-top ion-margin-bottom ion-text-center" size="6">
                                 <ion-button color="danger"><ion-icon size="large" src="../../../assets/icons/trash-outline.svg"></ion-icon></ion-button>
