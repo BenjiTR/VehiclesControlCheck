@@ -17,6 +17,8 @@ import { storageConstants } from 'src/app/const/storage';
 import { DriveService } from 'src/app/services/drive.service';
 import { CryptoService } from 'src/app/services/crypto.services';
 import { LoaderService } from 'src/app/services/loader.service';
+import { SyncService } from 'src/app/services/sync.service';
+import { HashService } from 'src/app/services/hash.service';
 
 
 @Component({
@@ -44,7 +46,9 @@ export class UserdataPage implements OnInit {
     private _storage:StorageService,
     private _drive:DriveService,
     private _crypto:CryptoService,
-    private _loader:LoaderService
+    private _loader:LoaderService,
+    private _sync:SyncService,
+    private _hash:HashService
   ) { }
 
   ngOnInit() {
@@ -121,13 +125,16 @@ export class UserdataPage implements OnInit {
   async saveInCloud(photo:string){
     //console.log(this._drive.folderId, this._session.autoBackup)
     if(this._drive.folderId && this._session.autoBackup){
+      const newSyncHash = await this._hash.generateSyncPhrase();
       const fileName = "photo";
+      const DriveFileName = fileName+"-"+newSyncHash;
       const exist = await this._drive.findFileByName(fileName)
           if(exist){
-            this._drive.updateFile(exist, photo, fileName);
+            this._drive.updateFile(exist, photo, DriveFileName);
           }else{
-            this._drive.uploadFile(photo, fileName);
+            this._drive.uploadFile(photo, DriveFileName);
           }
+      this._sync.updateSyncList(DriveFileName);
     }
   }
 

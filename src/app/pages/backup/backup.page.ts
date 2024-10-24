@@ -27,6 +27,7 @@ import { Event } from 'src/app/models/event.model';
 import { Vehicle } from 'src/app/models/vehicles.model';
 import { CalendarService } from 'src/app/services/calendar.service';
 import { HashService } from 'src/app/services/hash.service';
+import { SyncService } from 'src/app/services/sync.service';
 
 @Component({
   selector: 'app-backup',
@@ -73,7 +74,8 @@ export class BackupPage implements OnInit {
     private _crypto:CryptoService,
     private _date:DateService,
     private _calendar:CalendarService,
-    private _hash:HashService
+    private _hash:HashService,
+    private _sync:SyncService
   ) {
     this.progressSubscription = this._drive.progress$.subscribe(data=>{
       this.progress = data;
@@ -254,6 +256,8 @@ export class BackupPage implements OnInit {
       let value = 0;
       let buffer = 0;
 
+      let synFileList:string[] = [];
+
       for(const element of data){
         try {
           buffer += unit;
@@ -266,11 +270,13 @@ export class BackupPage implements OnInit {
           }
           value += unit;
           this._drive.changeProgress(value, buffer);
+          synFileList.push(element.fileName)
         } catch (err) {
           console.log("Ocurrió un error: ", err);
           break;
         }
       }
+      this._sync.setSyncFile(synFileList);
       this._drive.changeCreatingFile(false);
       this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,false)
       this._drive.changeHaveFiles(true);

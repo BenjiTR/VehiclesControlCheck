@@ -9,6 +9,7 @@ import { imageConstants } from '../const/img';
 import { Platform } from '@ionic/angular';
 import { CryptoService } from './crypto.services';
 import { DriveService } from './drive.service';
+import { HashService } from './hash.service';
 
 
 @Injectable({
@@ -25,7 +26,8 @@ export class DataService{
     private _date:DateService,
     private _platform:Platform,
     private _crypto:CryptoService,
-    private injector: Injector
+    private injector: Injector,
+    private _hash:HashService
   ){
   }
 
@@ -75,21 +77,22 @@ export class DataService{
   async buildDriveData(): Promise<any[]> {
     const arrayBackup: any[] = [];
     const backup:Backup = await this.buildData();
+    const newSyncHash = await this._hash.generateSyncPhrase();
 
     // Vehículos
-    backup.vehicles.forEach((vehicle) => {
-      const fileName = vehicle.id;
+    backup.vehicles.forEach(async (vehicle) => {
+      const fileName = vehicle.id + "-" + newSyncHash;
       arrayBackup.push({ fileName, content: this._crypto.encryptMessage(JSON.stringify(vehicle)) });
     });
 
     // Eventos
     backup.events.forEach((event) => {
-      const fileName = event.id;
+      const fileName = event.id + "-" + newSyncHash;
       arrayBackup.push({ fileName, content: this._crypto.encryptMessage(JSON.stringify(event)) });
     });
 
     // Opción de recordatorios
-    const remindersOptionsFileName = `remindersOptions`;
+    const remindersOptionsFileName = `remindersOptions` + "-" + newSyncHash;
     //console.log(backup.remindersOptions)
     let optionString:string;
     if(backup.remindersOptions){
@@ -101,19 +104,18 @@ export class DataService{
 
     //AutoBk
 
-    const autobackupFileName = `autoBackup`;
+    const autobackupFileName = `autoBackup` + "-" + newSyncHash;
     arrayBackup.push({ fileName: autobackupFileName, content: backup.autoBackup });
 
-    // Foto
-    const photoFileName = `photo`;
+    //Foto
+    const photoFileName = `photo` + "-" + newSyncHash;
     arrayBackup.push({ fileName: photoFileName, content: backup.photo });
 
     //Tags
-    const tagsFilename = `tags`
+    const tagsFilename = `tags` + "-" + newSyncHash;
     arrayBackup.push({ fileName: tagsFilename, content: this._crypto.encryptMessage(JSON.stringify(backup.tags)) });
 
     return arrayBackup;
-
   }
 
   async buildCsvData(eventTypes: any): Promise<string> {

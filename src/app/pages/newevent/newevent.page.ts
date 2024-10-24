@@ -31,6 +31,7 @@ import { EspecialiOS } from 'src/app/services/especialiOS.service';
 import { close } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 import {NgxIonicImageViewerModule} from '@herdwatch-apps/ngx-ionic-image-viewer';
+import { SyncService } from 'src/app/services/sync.service';
 
 @Component({
   selector: 'app-newevent',
@@ -92,7 +93,8 @@ export class NeweventPage {
     private _date: DateService,
     private _notification: NotificationsService,
     private _calendar:CalendarService,
-    private _specialiOS:EspecialiOS
+    private _specialiOS:EspecialiOS,
+    private _sync:SyncService
   ) {
     addIcons({
       'close': close,
@@ -238,6 +240,8 @@ export class NeweventPage {
   }
 
   async saveAndExit(event: Event) {
+
+
     await this._admobService.showinterstitial();
     if(this.haveReminder){
       await this.generateAndSaveNotification(event);
@@ -391,6 +395,8 @@ export class NeweventPage {
 
   async uploadFile(fileType:string, file:any):Promise<void>{
 
+    const newSyncHash = await this._hash.generateSyncPhrase();
+
     //console.log(fileType, file);
 
     let fileName;
@@ -403,6 +409,7 @@ export class NeweventPage {
       fileName = 'tags';
       encripted = this._crypto.encryptMessage(JSON.stringify(file))
     }
+    const DrivefileName = fileName+"-"+newSyncHash;
 
     //console.log(fileName, encripted);
 
@@ -411,10 +418,11 @@ export class NeweventPage {
       const exist = await this._drive.findFileByName(fileName)
       if (exist) {
         //console.log(exist);
-        this._drive.updateFile(exist, encripted, fileName, true);
+        this._drive.updateFile(exist, encripted, DrivefileName, true);
       } else {
-        this._drive.uploadFile(encripted, fileName, true);
+        this._drive.uploadFile(encripted, DrivefileName, true);
       }
+      this._sync.updateSyncList(DrivefileName);
       this._storage.setStorageItem(storageConstants.USER_OPS + this._session.currentUser.id, false)
     } else {
       this._alert.createAlert(this.translate.instant("error.no_network"), this.translate.instant("error.no_network_to_backup"));

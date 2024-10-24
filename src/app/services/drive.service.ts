@@ -412,7 +412,7 @@ export class DriveService {
       throw new Error("User is not authenticated. Please log in.");
     }
 
-    const query = `name='${fileName}' and trashed=false and '${this.folderId}' in parents`;
+    const query = `name contains '${fileName}' and trashed=false and '${this.folderId}' in parents`;
     const response = await fetch(`https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(query)}&spaces=appDataFolder&fields=files(id,name)`, {
       method: 'GET',
       headers: new Headers({
@@ -440,6 +440,7 @@ export class DriveService {
   //ACTUALIZAR UN ARCHIVO
   async updateFile(fileId:string, content:string, fileName:string, notComplete?:boolean) {
 
+    console.log(fileId)
     if(notComplete){
       this.changeUploading(true);
     }

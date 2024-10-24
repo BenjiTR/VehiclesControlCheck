@@ -93,6 +93,28 @@ export class HashService {
     return resultado;
   }
 
+  public async generateSyncPhrase(): Promise<string> {
+    this.vehicles = await this.SessionService.vehiclesArray;
+
+    const caracteres = 'abcdefghijklmnopqrstuv0123456789';
+    const caracteresLongitud = caracteres.length;
+
+    let resultado = '';
+    let hashExists = true;
+
+    while (hashExists) {
+      resultado = '';
+      for (let i = 0; i < 8; i++) {
+        resultado += caracteres.charAt(Math.floor(Math.random() * caracteresLongitud));
+      }
+
+      // Check if the generated hash exists in any vehicle's id
+      hashExists = this.vehicles.some(vehicle => vehicle.id === resultado);
+    }
+    //console.log(resultado)
+    return resultado;
+  }
+
 
 
 

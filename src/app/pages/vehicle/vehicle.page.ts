@@ -18,6 +18,7 @@ import { LoaderService } from 'src/app/services/loader.service';
 import { DriveService } from 'src/app/services/drive.service';
 import { CryptoService } from 'src/app/services/crypto.services';
 import { Network } from '@capacitor/network';
+import { SyncService } from 'src/app/services/sync.service';
 
 @Component({
   selector: 'app-vehicle',
@@ -60,7 +61,8 @@ export class VehiclePage implements OnInit {
     private navCtr:NavController,
     private _loader:LoaderService,
     private _drive:DriveService,
-    private _crypto:CryptoService
+    private _crypto:CryptoService,
+    private _sync:SyncService
   ) {
     this.user = this._session.currentUser;
   }
@@ -166,6 +168,8 @@ export class VehiclePage implements OnInit {
   }
 
   async saveAndExit(vehicle:Vehicle){
+    const newSyncHash = await this._hash.generateSyncPhrase();
+
     await this._admobService.showinterstitial();
     this._session.vehiclesArray = this.vehiclesArray;
     this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.user.id,this._crypto.encryptMessage(JSON.stringify(this.vehiclesArray)));
@@ -173,13 +177,15 @@ export class VehiclePage implements OnInit {
       this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,true)
       if((await Network.getStatus()).connected === true){
       const fileName = vehicle.id;
+      const DrivefileName = vehicle.id+"-"+newSyncHash;
       const exist = await this._drive.findFileByName(fileName)
         if(exist){
-          this._drive.updateFile(exist, this._crypto.encryptMessage(JSON.stringify(vehicle)), fileName, true);
+          this._drive.updateFile(exist, this._crypto.encryptMessage(JSON.stringify(vehicle)), DrivefileName, true);
         }else{
-          this._drive.uploadFile(this._crypto.encryptMessage(JSON.stringify(vehicle)), fileName, true);
+          this._drive.uploadFile(this._crypto.encryptMessage(JSON.stringify(vehicle)), DrivefileName, true);
         }
-        this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,false)
+        this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,false);
+        this._sync.updateSyncList(DrivefileName);
       }else{
         this._alert.createAlert(this.translate.instant("error.no_network"), this.translate.instant("error.no_network_to_backup"));
         this._drive.folderId = "";

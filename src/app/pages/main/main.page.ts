@@ -38,6 +38,7 @@ import { close } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 import {NgxIonicImageViewerModule} from '@herdwatch-apps/ngx-ionic-image-viewer';
 import { FileSystemService } from 'src/app/services/filesystem.service';
+import { SyncService } from 'src/app/services/sync.service';
 
 
 @Component({
@@ -102,7 +103,8 @@ export class MainPage implements OnInit, OnDestroy {
     private _filter:FilterService,
     private _calendar:CalendarService,
     private _specialiOS:EspecialiOS,
-    private _file:FileSystemService
+    private _file:FileSystemService,
+    private _sync:SyncService
   ) {
     addIcons({
       'close': close,
@@ -210,6 +212,7 @@ export class MainPage implements OnInit, OnDestroy {
       const id = await this._drive.findFileByName(element);
       if (id) {
         await this._drive.deleteFile(id);
+        this._sync.deleteFileInList(element);
       }
     }
     this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,false)
@@ -236,9 +239,6 @@ export class MainPage implements OnInit, OnDestroy {
         }
       }
     }
-
-
-
     return array;
   }
 
@@ -335,6 +335,7 @@ export class MainPage implements OnInit, OnDestroy {
         await this._storage.setStorageItem(storageConstants.USER_VEHICLES + this.user.id, this._crypto.encryptMessage(JSON.stringify(this.vehiclesArray)));
 
         const elements = await this.GetElementsToClean(vehicle);
+        console.log("elementos: ",elements)
         await this.deleteLocalElements(vehicle);
 
         if (this._drive.folderId && this._session.autoBackup) {
@@ -342,6 +343,7 @@ export class MainPage implements OnInit, OnDestroy {
           const id = await this._drive.findFileByName(vehicle.id);
           if (id) {
             await this._drive.deleteFile(id, true);
+            await this._sync.deleteFileInList(vehicle.id);
           }
           //Borra todos los eventos y recordatorios asociados
           this.deleteList(elements);
@@ -364,6 +366,7 @@ export class MainPage implements OnInit, OnDestroy {
             const id = await this._drive.findFileByName(event.id)
             if(id){
               await this._drive.deleteFile(id, true);
+              await this._sync.deleteFileInList(event.id);
             }
             this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,false)
           }else{

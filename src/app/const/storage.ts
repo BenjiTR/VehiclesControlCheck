@@ -10,5 +10,6 @@ export enum storageConstants {
   USER_TAGS = 'vcc-tags-',
   USER_CALENDAR_ID = 'vcc-cal-',
   NEWS_READED = 'vcc-news-',
-  SUGGESTIONS = 'vcc-sug-'
+  SUGGESTIONS = 'vcc-sug-',
+  SYNC_REFERENCE = 'vcc-sync-'
 }

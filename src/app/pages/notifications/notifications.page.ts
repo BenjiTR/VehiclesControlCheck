@@ -17,6 +17,8 @@ import { storageConstants } from 'src/app/const/storage';
 import { LoaderService } from 'src/app/services/loader.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { CalendarService } from 'src/app/services/calendar.service';
+import { SyncService } from 'src/app/services/sync.service';
+import { HashService } from 'src/app/services/hash.service';
 
 @Component({
   selector: 'app-notifications',
@@ -57,7 +59,9 @@ export class NotificationsPage{
     private _platform:Platform,
     private _loader:LoaderService,
     private _auth:AuthService,
-    private _calendar:CalendarService
+    private _calendar:CalendarService,
+    private _sync:SyncService,
+    private _hash:HashService
   ) {
     this.hasFileSubscription = this._drive.haveFiles$.subscribe((data)=>{
       this.hasFile = data;
@@ -198,13 +202,30 @@ export class NotificationsPage{
   }
 
 
-  onAutoBkChange(value: any) {
+  async onAutoBkChange(value: any) {
     //console.log(value.detail.value)
     if(value.detail.value === "true"){
       this.autoBk = true;
     }else{
       this.autoBk = false;
     }
+
+    const fileName = "autoBackup";
+    const newSyncHash = await this._hash.generateSyncPhrase();
+    const DriveFileName = fileName+"-"+newSyncHash;
+    const exist = await this._drive.findFileByName(fileName)
+    let optionString:string;
+      if(this.autoBk){
+        optionString = "true";
+      }else{
+        optionString = "false";
+      }
+    if(exist){
+      this._drive.updateFile(exist, optionString, fileName, true);
+    }else{
+      this._drive.uploadFile(optionString, fileName);
+    }
+    this._sync.updateSyncList(DriveFileName);
     this._drive.changeautoBk(this.autoBk)
     this._session.setAutoBackup(this.autoBk);
   }
@@ -230,7 +251,10 @@ export class NotificationsPage{
 
   async saveInCloud(option:boolean){
     if(this._drive.folderId && this._session.autoBackup){
+      const newSyncHash = await this._hash.generateSyncPhrase();
       const fileName = "remindersOptions";
+      const DriveFileName = fileName+"-"+newSyncHash;
+
       let optionString:string;
       if(option){
         optionString = "true";
@@ -239,10 +263,11 @@ export class NotificationsPage{
       }
       const exist = await this._drive.findFileByName(fileName)
           if(exist){
-            this._drive.updateFile(exist, optionString, fileName);
+            this._drive.updateFile(exist, optionString, fileName, true);
           }else{
             this._drive.uploadFile(optionString, fileName);
           }
+      this._sync.updateSyncList(DriveFileName);
     }
   }
 
