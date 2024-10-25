@@ -1,3 +1,4 @@
+import { SyncService } from 'src/app/services/sync.service';
 import { StorageService } from './storage.service';
 import { Injectable, Injector } from '@angular/core';
 import { SessionService } from './session.service';
@@ -14,6 +15,7 @@ import { ToastService } from './toast.service';
 import { DataService } from './data.service';
 import { storageConstants } from '../const/storage';
 import { User } from '@codetrix-studio/capacitor-google-auth';
+import { HashService } from './hash.service';
 
 
 @Injectable({
@@ -43,6 +45,7 @@ export class DriveService {
   public autoBk$ = this.autoBk.asObservable();
   private creatingFile = new BehaviorSubject<boolean>(false)
   public creatingFile$ = this.creatingFile.asObservable();
+  public _sync:SyncService|undefined;
 
   constructor(
     private _alert:AlertService,
@@ -52,7 +55,8 @@ export class DriveService {
     private http: HttpClient,
     private _data:DataService,
     private _storage:StorageService,
-    private injector: Injector
+    private injector: Injector,
+    private _hash:HashService,
   ) {}
 
   private get SessionService(): SessionService {
@@ -61,6 +65,13 @@ export class DriveService {
     }
     return this._session;
   }
+
+    private get SyncService(): SyncService {
+      if (!this._sync) {
+        this._sync = this.injector.get(SyncService);
+      }
+      return this._sync;
+    }
 
 
   //REFRESCAR TOKEN Y CONECTAR
@@ -239,9 +250,8 @@ export class DriveService {
         await this.listFilesInFolder()
         .then((resp)=>{
           if(resp.length >0){
-            //console.log("archivos: ",resp)
             this.changeHaveFiles(true);
-            //console.log("se cambia")
+              this.SyncService.syncData(resp);
           }else{
 
           }

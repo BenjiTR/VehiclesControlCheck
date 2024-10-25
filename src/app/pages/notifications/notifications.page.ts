@@ -221,9 +221,9 @@ export class NotificationsPage{
         optionString = "false";
       }
     if(exist){
-      this._drive.updateFile(exist, optionString, fileName, true);
+      this._drive.updateFile(exist, optionString, DriveFileName, true);
     }else{
-      this._drive.uploadFile(optionString, fileName);
+      this._drive.uploadFile(optionString, DriveFileName);
     }
     this._sync.updateSyncList(DriveFileName);
     this._drive.changeautoBk(this.autoBk)

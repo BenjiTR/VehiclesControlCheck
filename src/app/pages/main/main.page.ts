@@ -188,7 +188,8 @@ export class MainPage implements OnInit, OnDestroy {
       return new Date(b.date).getTime() - new Date(a.date).getTime(); // Ordena por fecha, más recientes primero
     });
     await this._session.getReminderNotifications();
-    await this._session.getAutoBackup();
+    const autobk = await this._session.getAutoBackup();
+    this._drive.changeautoBk(autobk);
     return
   }
 
