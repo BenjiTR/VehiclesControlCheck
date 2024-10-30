@@ -62,8 +62,10 @@ export class UserdataviewPage implements OnInit {
       this.cleaning = value;
     })
     this.autoBkSubscription = this._drive.autoBk$.subscribe(value=>{
-      //console.log(value)
-      this.autoBk = value;
+      if(value !== null){
+        //console.log(value)
+        this.autoBk = value;
+      }
     })
     if(this._platform.is('android')){
       this.platform = 'android'

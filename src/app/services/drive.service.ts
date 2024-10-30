@@ -244,6 +244,8 @@ export class DriveService {
   async existsFolder():Promise<void>{
     await this.getFolderId()
     .then(async (folderId)=>{
+              console.log("carpeta: ",folderId)
+
       if(folderId !== null){
         this.folderId = folderId;
         //console.log("carpeta: ",folderId)

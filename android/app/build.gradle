@@ -3,6 +3,7 @@
 //   - enviroments.prod
 //   - finalmente cambiar en firestore
 
+//IMPORTANTE- CAMBIAR EL ID DE GOOGLE AUTH
 
 apply plugin: 'com.android.application'
 
@@ -14,7 +15,7 @@ android {
     applicationId "com.benjamintr.vehiclescontrol"
     minSdkVersion rootProject.ext.minSdkVersion
     targetSdkVersion rootProject.ext.targetSdkVersion
-    versionCode 151002
+    versionCode 151005
     versionName "1.5.1"
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 

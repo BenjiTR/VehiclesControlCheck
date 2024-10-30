@@ -1,6 +1,10 @@
 
 <app-userdataview></app-userdataview>
 
+<ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+  <ion-refresher-content></ion-refresher-content>
+</ion-refresher>
+
  <!-- CONTENT 1 - NO VEHICLES -->
   <ion-content *ngIf="!creatingElement && vehiclesArray.length < 1" [@main] class="pastel-to-green" [ngStyle]="{'--padding-bottom.px':calculatePadding()}">
     <ion-row class="green round-corner-up ion-padding-top height-22">

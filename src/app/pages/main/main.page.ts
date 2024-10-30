@@ -1,7 +1,7 @@
 import { Component, OnInit, DoCheck, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Platform, IonTextarea, IonAccordion, IonAccordionGroup, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonMenu, IonMenuButton, IonRouterOutlet, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar, MenuController, ModalController, NavController, IonDatetime, IonFab, IonFabList, IonFabButton, IonBadge, IonText, IonDatetimeButton, IonModal, IonPopover, IonList } from '@ionic/angular/standalone';
+import { Platform, IonTextarea, IonAccordion, IonAccordionGroup, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonInput, IonItem, IonLabel, IonMenu, IonMenuButton, IonRouterOutlet, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar, MenuController, ModalController, NavController, IonDatetime, IonFab, IonFabList, IonFabButton, IonBadge, IonText, IonDatetimeButton, IonModal, IonPopover, IonList, IonRefresher, IonRefresherContent } from '@ionic/angular/standalone';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { UserdataviewPage } from '../userdataview/userdataview.page';
@@ -46,7 +46,7 @@ import { SyncService } from 'src/app/services/sync.service';
   templateUrl: './main.page.html',
   styleUrls: ['./main.page.scss'],
   standalone: true,
-  imports: [NgxIonicImageViewerModule, IonIcon, IonList, IonPopover, IonModal, IonDatetimeButton, IonText, IonBadge, IonFabButton, IonFabList, IonFab, IonTextarea, IonDatetime, IonSelect, IonSelectOption, IonRouterOutlet, IonAccordionGroup, IonAccordion, UserdataviewPage, IonInput, IonItem, IonLabel, TranslateModule, RouterModule, IonMenu, IonIcon, IonButtons, IonMenuButton, IonButton, IonImg, IonGrid, IonCol ,IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonRow, IonGrid],
+  imports: [IonRefresherContent, IonRefresher, NgxIonicImageViewerModule, IonIcon, IonList, IonPopover, IonModal, IonDatetimeButton, IonText, IonBadge, IonFabButton, IonFabList, IonFab, IonTextarea, IonDatetime, IonSelect, IonSelectOption, IonRouterOutlet, IonAccordionGroup, IonAccordion, UserdataviewPage, IonInput, IonItem, IonLabel, TranslateModule, RouterModule, IonMenu, IonIcon, IonButtons, IonMenuButton, IonButton, IonImg, IonGrid, IonCol ,IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonRow, IonGrid],
   animations: [ MainAnimation, RoadAnimation, SecondaryAnimation, GrowShrinkAnimation, SlideUpDownAnimation,  ],
   providers:[EventTypes, DatePipe, FilterService],
 })
@@ -685,5 +685,12 @@ setCursorAtEnd() {
         this._alert.createAlert(this.translate.instant('error.error_downloading_img'),err)
       })
     }
+
+    async handleRefresh(event:any){
+      await this._drive.existsFolder();
+      if(event.target){
+        event.target.complete();
+    }
+  }
 
 }
