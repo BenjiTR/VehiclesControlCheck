@@ -82,6 +82,11 @@ export class MainPage implements OnInit, OnDestroy {
   //NEWS
   public newsReaded:string|null;
 
+  public connected:boolean = false;
+  public hasFiles:boolean = false;
+  private connectedSubscription:Subscription;
+  private haveFilesSubscription:Subscription;
+
   constructor(
     private translate:TranslateService,
     private _translation:TranslationConfigService,
@@ -123,6 +128,14 @@ export class MainPage implements OnInit, OnDestroy {
     }
     this.newsReaded = localStorage.getItem(storageConstants.NEWS_READED+this._session.currentUser.id);
     //console.log(this.newsReaded)
+    this.connectedSubscription = this._drive.conected$.subscribe(async value=>{
+      this.token = await this._session.getToken();
+      //console.log(this.token)
+      this.connected = value;
+    })
+    this.haveFilesSubscription = this._drive.haveFiles$.subscribe(value=>{
+      this.hasFiles = value;
+    })
   }
 
   async ngOnInit() {
@@ -141,7 +154,6 @@ export class MainPage implements OnInit, OnDestroy {
       await this._drive.init();
     }
     this.token = await this._session.getToken();
-    //console.log(this._loader.isLoading)
     const currency = await this._storage.getStorageItem(storageConstants.USER_CURRENCY+this.user.id);
     if(currency){
       this._session.currency = currency;
@@ -177,6 +189,11 @@ export class MainPage implements OnInit, OnDestroy {
       this.user.photo = await this._session.searchphoto( this._session.currentUser.method, this._session.currentUser.id);
     }
     this.vehiclesArray = await this._session.loadVehicles();
+    this.vehiclesArray.sort((a, b) => {
+      if (a.brandOrModel < b.brandOrModel) return -1;
+      if (a.brandOrModel > b.brandOrModel) return 1;
+      return 0;
+    });
     this.eventsArray = await this._session.loadEvents();
     this.remindersArray = await this._session.loadReminders();
     if(this.filtering){
@@ -189,7 +206,9 @@ export class MainPage implements OnInit, OnDestroy {
     });
     await this._session.getReminderNotifications();
     const autobk = await this._session.getAutoBackup();
-    this._drive.changeautoBk(autobk);
+    if(autobk !== null && autobk !== undefined){
+      this._drive.changeautoBk(autobk);
+    }
     return
   }
 
@@ -393,11 +412,10 @@ export class MainPage implements OnInit, OnDestroy {
     const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.are_you_sure?'),this.translate.instant('alert.reminder_permanently_erased'),this.translate.instant('alert.erase'),this.translate.instant('alert.cancel'));
     if(sure){
       const reminder = this.remindersArray.find(reminder=>reminder.extra.eventId === event.id);
-      //console.log(reminder)
-      //console.log("Evento", event)
           if(reminder){
-            this._notification.deleteNotification(reminder)
+            await this._notification.deleteNotification(reminder)
             const index = this.eventsArray.findIndex(e => e.id === event.id);
+            this.eventsArray[index].reminder = false;
             if (this._drive.folderId && this._session.autoBackup) {
               await this.uploadFile('event',this.eventsArray[index]);
             }
@@ -409,7 +427,6 @@ export class MainPage implements OnInit, OnDestroy {
                 this._alert.createAlert(this.translate.instant("error.an_error_ocurred"),err);
               })
             }
-            this.eventsArray[index].reminder = false;
             this._storage.setStorageItem(storageConstants.USER_EVENTS + this.user.id, this._crypto.encryptMessage(JSON.stringify(this.eventsArray)));
           }
     }
@@ -649,8 +666,8 @@ setCursorAtEnd() {
 
     async checkNews():Promise<void>{
       if(this.newsReaded !== environment.versioncode){
-      //   await this.openNewsPage();
-      //   this.newsReaded = environment.versioncode;
+        await this.openNewsPage();
+        this.newsReaded = environment.versioncode;
         return;
       }else{
         return;
@@ -687,10 +704,12 @@ setCursorAtEnd() {
     }
 
     async handleRefresh(event:any){
-      await this._drive.existsFolder();
+      if(this.connected && this.hasFiles){
+        await this._drive.existsFolder();
+      }
       if(event.target){
         event.target.complete();
-    }
+      }
   }
 
 }

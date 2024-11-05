@@ -10,6 +10,7 @@ import { Event } from '../models/event.model';
 import { imageConstants } from '../const/img';
 import { Subscription } from 'rxjs';
 import { NotificationsService } from './notifications.service';
+import { eventService } from './event/event.service';
 
 @Injectable({
   providedIn:'root'
@@ -20,8 +21,6 @@ export class SyncService{
   private syncFiles:string[] | undefined;
   private _session: SessionService | undefined;
   private _drive: DriveService | undefined;
-  private eventsArray:Event[]|undefined;
-  private vehiclesArray:Vehicle[]|undefined;
   public autoBk:boolean = true;
   private autoBkSubscription:Subscription;
 
@@ -29,7 +28,8 @@ export class SyncService{
     private _storage:StorageService,
     private _crypto:CryptoService,
     private injector: Injector,
-    private _notifications:NotificationsService
+    private _notifications:NotificationsService,
+    private _eventService:eventService
   ){
     this.autoBkSubscription = this.DriveService.autoBk$.subscribe(value=>{
       this.autoBk = value;
@@ -55,7 +55,7 @@ export class SyncService{
     const user:User = await this.SessionService.getUser();
     const data = await this._storage.getStorageItem(storageConstants.SYNC_REFERENCE+user.id);
     if(data){
-      console.log('syncFile Obtenido: ',JSON.parse(this._crypto.decryptMessage(data)));
+      //console.log('syncFile Obtenido: ',JSON.parse(this._crypto.decryptMessage(data)));
       return JSON.parse(this._crypto.decryptMessage(data));
     }else{
       return [];
@@ -73,7 +73,7 @@ export class SyncService{
   //PROCESO DE SINCRONIZACIÓN
   async syncData(Arraydata:any[]){
     if(this.autoBk){
-      console.log("datos entrantes: ",Arraydata);
+      //console.log("datos entrantes: ",Arraydata);
       for (const data of Arraydata) {
         const isOK = await this.isFileInSyncFiles(data.name);
           if(!isOK){
@@ -127,9 +127,6 @@ export class SyncService{
         this.updateSyncList(data.name);
       }
 
-      if(this.eventsArray){
-        await this._notifications.setNotifications(this.eventsArray!);
-      }
 
       return;
 
@@ -139,18 +136,14 @@ export class SyncService{
     private async secctionDataForDelete(data:any):Promise<void>{
 
       const headName = data.split("-")[0];
-      console.log(headName);
+      //console.log(headName);
 
       if (headName.startsWith("V")) {
-        await this.deleteVehicle(data);
+        await this.deleteVehicle(headName);
         this.updateSyncList(data, true);
       } else if (headName.startsWith("E")) {
-        await this.deleteEvent(data);
+        await this.deleteEvent(headName);
         this.updateSyncList(data, true);
-      }
-
-      if(this.eventsArray){
-        await this._notifications.setNotifications(this.eventsArray!);
       }
 
       return;
@@ -164,67 +157,62 @@ export class SyncService{
     }
 
     //BORRAR EVENTO
-    private async deleteEvent(event:string){
-      if(!this.eventsArray){
-        this.eventsArray = this._session?.eventsArray;
-      }
-      const headEvent = event.split("-")[0];
+    private async deleteEvent(eventID:string){
 
-      const i = this.eventsArray?.findIndex(v=>v.id===headEvent);
-      if(i){
-        this.eventsArray?.splice(i,1)
-      }
-      //console.log(i)
-      console.log(this.eventsArray)
+      const eventsArray = this.SessionService.eventsArray;
 
-      await this._storage.setStorageItem(storageConstants.USER_EVENTS+this.SessionService.currentUser.id,this._crypto.encryptMessage(JSON.stringify(this.eventsArray)));
+      const i = eventsArray.findIndex(v=>v.id===eventID);
+      // console.log("indice de eventos",i);
+      // console.log("array de eventos",eventsArray)
+      this._eventService.deleteEvent(eventsArray[i]);
+
       return;
     }
 
     //SINCRONIZAR EVENTO
     private async syncEvent(downloadedData:string){
       const decryptedData:Event = JSON.parse(this._crypto.decryptMessage(downloadedData));
-      if(!this.eventsArray){
-        this.eventsArray = this._session?.eventsArray;
-      }
-      const i = this.eventsArray?.findIndex(v=>v.id===decryptedData.id);
+
+      const eventsArray = this.SessionService.eventsArray;
+
+      const i = eventsArray.findIndex(v=>v.id===decryptedData.id);
       if(i !== -1 && i !== undefined){
-        this.eventsArray![i] = decryptedData;
+        await this._eventService.editEvent(decryptedData);
       }else{
-        this.eventsArray!.push(decryptedData);
+        await this._eventService.createEvent(decryptedData);
       }
-      await this._storage.setStorageItem(storageConstants.USER_EVENTS+this.SessionService.currentUser.id,this._crypto.encryptMessage(JSON.stringify(this.eventsArray)));
+      await this._storage.setStorageItem(storageConstants.USER_EVENTS+this.SessionService.currentUser.id,this._crypto.encryptMessage(JSON.stringify(eventsArray)));
       return;
     }
 
+
     //BORRAR VEHÍCULO
-    private async deleteVehicle(vehicle:Vehicle){
-      if(!this.vehiclesArray){
-        this.vehiclesArray = this._session?.vehiclesArray;
-      }
+    private async deleteVehicle(vehicleiD:String){
 
-      const i = this.vehiclesArray?.findIndex(v=>v.id===vehicle.id);
-      if(i){
-        this.vehiclesArray?.splice(i,1)
-      }
+      const vehiclesArray = this.SessionService.vehiclesArray;
 
-      await this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.SessionService.currentUser.id,this._crypto.encryptMessage(JSON.stringify(this.vehiclesArray)));
+      const i = vehiclesArray.findIndex(v=>v.id===vehicleiD);
+      // console.log("indice de vehículo",i);
+      // console.log("array de vehículo",vehiclesArray)
+      vehiclesArray?.splice(i,1)
+
+      await this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.SessionService.currentUser.id,this._crypto.encryptMessage(JSON.stringify(vehiclesArray)));
       return;
     }
 
     //SINCRONIZAR VEHÍCULO
     private async syncVehicle(downloadedData:string):Promise<void>{
       const decryptedData:Vehicle = JSON.parse(this._crypto.decryptMessage(downloadedData));
-      if(!this.vehiclesArray){
-        this.vehiclesArray = this._session?.vehiclesArray;
-      }
-      const i = this.vehiclesArray?.findIndex(v=>v.id===decryptedData.id);
+
+      const vehiclesArray = this.SessionService.vehiclesArray;
+
+      const i = vehiclesArray?.findIndex(v=>v.id===decryptedData.id);
       if(i !== -1 && i !== undefined){
-        this.vehiclesArray![i] = decryptedData;
+        vehiclesArray![i] = decryptedData;
       }else{
-        this.vehiclesArray?.push(decryptedData);
+        vehiclesArray?.push(decryptedData);
       }
-      await this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.SessionService.currentUser.id,this._crypto.encryptMessage(JSON.stringify(this.vehiclesArray)));
+      await this._storage.setStorageItem(storageConstants.USER_VEHICLES+this.SessionService.currentUser.id,this._crypto.encryptMessage(JSON.stringify(vehiclesArray)));
       return;
     }
 
@@ -258,8 +246,6 @@ export class SyncService{
       //console.log(downloadedData)
       if(downloadedData){
         this.SessionService.currentUser.photo = imageConstants.base64Prefix + this._crypto.decryptMessage(downloadedData);
-      }else{
-        this.SessionService.currentUser.photo = '../../../../../assets/img/user_avatar.png';
       }
       return;
     }

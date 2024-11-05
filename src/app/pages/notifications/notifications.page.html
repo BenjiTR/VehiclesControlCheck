@@ -78,7 +78,7 @@
     <ion-card-content class="ion-no-padding">
       <ion-row class="ion-margin-top">
         <ion-col class="ion-text-center ion-margin-bottom" size="12">
-          <ion-toggle *ngIf="platform ==='android'" class="zoom-1-3" [enableOnOffLabels]="true" [(ngModel)]="isAllowed" (ionChange)="togglePermissions($event)">{{'notifications.notificate'|translate}}</ion-toggle>
+          <ion-toggle *ngIf="platform ==='android'" class="zoom-1-3" [enableOnOffLabels]="true" [checked]="isAllowed" (ionChange)="togglePermissions($event)">{{'notifications.notificate'|translate}}</ion-toggle>
           <ion-button *ngIf="platform ==='ios' && !this.isAllowed" class="black" (click)="togglePermissions()" expand="block" color="green" shape="round" translate="notifications.allow_notifications"></ion-button>
         </ion-col>
       </ion-row>

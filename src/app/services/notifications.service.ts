@@ -112,7 +112,7 @@ export class NotificationsService {
 
     const newReminder:LocalNotificationSchema = {
       channelId:"VCC",
-      title:this.currentVehicle(event.vehicleId)+" - "+event.reminderTittle,
+      title:await this.currentVehicle(event.vehicleId)+" - "+event.reminderTittle,
       body:event.info,
       largeBody:event.info,
       summaryText:event.info,

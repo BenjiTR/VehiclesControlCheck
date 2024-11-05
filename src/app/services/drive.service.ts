@@ -244,16 +244,17 @@ export class DriveService {
   async existsFolder():Promise<void>{
     await this.getFolderId()
     .then(async (folderId)=>{
-              console.log("carpeta: ",folderId)
+      //console.log("carpeta: ",folderId)
 
       if(folderId !== null){
         this.folderId = folderId;
         //console.log("carpeta: ",folderId)
         await this.listFilesInFolder()
-        .then((resp)=>{
+        .then(async (resp)=>{
+          //console.log(resp)
           if(resp.length >0){
             this.changeHaveFiles(true);
-              this.SyncService.syncData(resp);
+              await this.SyncService.syncData(resp);
           }else{
 
           }

@@ -42,6 +42,73 @@
         <ion-label><h1 translate="news.news_3_title"></h1>
         <h2 class="ion-padding-top ion-text-justify" translate="news.news_3_text"></h2></ion-label>
       </ion-col>
+      <ion-col class="ion-padding ion-text-center" size="4">
+        <ion-icon color="secondary" class="zoom-2" src="../../../assets/icons/phone-portrait-outline.svg"></ion-icon>
+      </ion-col>
+      <ion-col class="ion-padding ion-text-center" size="4">
+        <ion-icon color="secondary" class="zoom-2" src="../../../assets/icons/sync-outline.svg"></ion-icon>
+      </ion-col>
+      <ion-col class="ion-padding ion-text-center" size="4">
+        <ion-icon color="secondary" class="zoom-2" src="../../../assets/icons/phone-portrait-outline.svg"></ion-icon>
+      </ion-col>
+      <ion-col class="ion-padding " size="12">
+      <ion-label><h2 class="ion-padding-top ion-text-justify" translate="news.news_3_text_2"></h2></ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <ion-img src="../../../assets/img/news3.png"></ion-img>
+      </ion-col>
+      <ion-col size="12">
+        <ion-img src="../../../assets/img/news3_2.png"></ion-img>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <div *ngIf="element === 4">
+    <ion-row>
+      <ion-col class="ion-padding " size="12">
+        <ion-label><h1 translate="news.news_4_title"></h1>
+        <h2 class="ion-padding-top ion-text-justify" translate="news.news_4_text"></h2></ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <ion-img src="../../../assets/img/news4.png"></ion-img>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <div *ngIf="element === 5">
+    <ion-row *ngIf="connected && haveFiles">
+      <ion-col class="ion-padding " size="12">
+        <ion-label><h1 translate="news.news_6_title"></h1>
+        <h2 class="ion-padding-top ion-text-justify" translate="news.news_6_text"></h2></ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="connected && haveFiles" class="ion-margin-bottom ion-padding-bottom">
+      <ion-col class="ion-margin-top ion-text-center" *ngIf="connected && haveFiles" size="12">
+        <ion-button [disabled]="creatingFile || downloading" (click)="updateData()" color="green" shape="round" translate="backup.upload_backup"></ion-button>
+      </ion-col>
+      <ion-col class="ion-padding " size="12">
+        <ion-label>
+        <h2 class="ion-padding-top ion-text-justify" translate="news.news_6_text_2"></h2></ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="!connected || !haveFiles">
+      <ion-col size="12">
+        <ion-label>
+          <h2 class="ion-padding ion-text-justify" translate="news.news_6_alt"></h2></ion-label>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <div *ngIf="element === 6">
+    <ion-row>
+      <ion-col class="ion-padding " size="12">
+        <ion-label><h1 translate="news.news_5_title"></h1>
+        <h2 class="ion-padding-top ion-text-justify" translate="news.news_5_text"></h2></ion-label>
+      </ion-col>
     </ion-row>
     <ion-row class="ion-margin-bottom ion-padding-bottom">
       <ion-col class="ion-text-center" size="12">

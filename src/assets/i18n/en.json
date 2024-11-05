@@ -293,7 +293,7 @@
     "upload_files": "Uploading Files",
     "download_files": "Downloading Files",
     "cleaning_files": "Cleaning Files",
-    "mode_of_use": "Mode of Use (Drive Only)",
+    "mode_of_use": "Sync Mode",
     "only_referencial_currency_text": "No currency conversions are applied; this is for reference purposes only.",
     "currency":"Currency",
     "associated_account": "Associated Account",
@@ -359,16 +359,35 @@
     "send": "Send"
   },
   "news": {
-    "news": "What's New",
-    "news_1_title": "Reminders are now part of events.",
-    "news_1_text": "You can create future events and add reminders with notifications from the event creation/edit menu.",
-    "news_2_title": "You can now connect with Calendar",
-    "news_2_text": "From the settings, with an associated account, you can connect to Google Calendar to keep track of events with pending reminders for your vehicles every day.",
-    "news_3_title": "Other improvements:",
-    "news_3_text": "Visual improvements, process enhancements, and automations to make the app more user-friendly and practical.",
-    "dont_show_more": "don't show again",
-    "previous": "Previous",
-    "next": "Next",
-    "close": "Close"
-  }
+      "news": "What's New",
+      "news_1_title": "Reminders are now part of events.",
+      "news_1_text": "You can create future events and add reminders with notifications from the event creation/edit menu.",
+      "news_2_title": "You can now connect with Google Calendar",
+      "news_2_text": "From the settings, with an associated Gmail account, you can connect to Google Calendar to keep track of events with pending reminders for your vehicles every day.",
+      "news_3_title": "All your devices synced:",
+      "news_3_text": "By connecting with Drive, you can keep your data updated across different devices.",
+      "news_3_text_2": "To do so, go to settings, connect your app with Drive, and select the automatic sync mode.",
+      "news_4_title": "Have you sold your car or motorcycle?",
+      "news_4_text": "You can send all the history and data; just go to the menu, access view and export data, select the vehicle you want to share, and send it to the new owner.",
+      "news_5_title": "Other improvements:",
+      "news_5_text": "Visual improvements, process enhancements, and automations to make the app more user-friendly and practical.",
+      "news_6_title": "Mandatory backup update",
+      "news_6_text": "Please update your Drive data to be compatible with the new sync features. To do this, just press the following button:",
+      "news_6_text_2": "Once pressed, you can continue; you don't need to wait for the upload to finish. :-)",
+      "news_6_alt": "Currently, it seems you are not connected to Drive, so you can skip this step.",
+      "dont_show_more": "don't show again",
+      "previous": "Previous",
+      "next": "Next",
+      "close": "Close"
+    },
+    "send": {
+      "do_you_want_to_save_vehicle": "Do you want to add the vehicle?",
+      "do_you_want_to_save_vehicle_text": "It will be added to your vehicles along with its events and costs",
+      "invalid_file": "Invalid file",
+      "invalid_file_text": "The file information could not be read or is invalid",
+      "error_adding_vehicle": "Error adding the vehicle",
+      "error_restoring_backup": "Error restoring backup",
+      "vehicle_already_exists": "The vehicle already exists, do you want to replace it?",
+      "vehicle_already_exists_text": "The vehicle in your system will be DELETED and replaced by the incoming vehicle"
+    }
 }

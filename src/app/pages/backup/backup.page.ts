@@ -292,7 +292,8 @@ export class BackupPage implements OnInit {
       const backupList = await this.readAll();
       const backupData = await this.setData(backupList);
       await this._data.restoreDeviceData(backupData);
-      this._notifications.setNotifications(backupData.events)
+      this._sync.setSyncFile(backupList);
+      this._notifications.setNotifications(backupData.events);
       this._drive.changeDownloading("refresh");
       this._drive.changeDownloading("false");
       this.navCtr.navigateRoot(['/dashboard'], { queryParams: { reload: true } });
