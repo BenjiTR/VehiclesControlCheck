@@ -63,28 +63,28 @@ export class NewsPage {
     this.connectedSubscription = this._drive.conected$.subscribe(async data=>{
       this.connected = data;
       const suggestions = localStorage.getItem(storageConstants.SUGGESTIONS+this._session.currentUser.id);
-      const id = await this._calendar.findVehicleControlCalendar();
-      if(this.connected && !id && suggestions !== 'false'){
-        const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.do_you_want_connect_calendar'),this.translate.instant('alert.do_you_want_connect_calendar_text'),this.translate.instant('alert.accept'),this.translate.instant('alert.cancel'))
-        if(sure){
-          await this._loader.presentLoader();
-          try{
-            await this._calendar.connectCalendar();
-          }catch(err:any){
-            throw err;
-          }
-          await this._loader.dismissLoader();
-        }
-      }
+      // const id = await this._calendar.findVehicleControlCalendar();
+      // if(this.connected && !id && suggestions !== 'false'){
+      //   const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.do_you_want_connect_calendar'),this.translate.instant('alert.do_you_want_connect_calendar_text'),this.translate.instant('alert.accept'),this.translate.instant('alert.cancel'))
+      //   if(sure){
+      //     await this._loader.presentLoader();
+      //     try{
+      //       await this._calendar.connectCalendar();
+      //     }catch(err:any){
+      //       throw err;
+      //     }
+      //     await this._loader.dismissLoader();
+      //   }
+      // }
       if(this.connected && !this.haveFiles && suggestions !== 'false'){
         const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.files_not_found'),this.translate.instant('alert.files_not_found_text'),this.translate.instant('alert.accept'),this.translate.instant('alert.cancel'))
         if(sure){
           this.uploadFiles();
         }
       }
-      if(this.connected){
-        localStorage.setItem(storageConstants.SUGGESTIONS+this._session.currentUser.id,'false');
-      }
+      // if(this.connected){
+      //   localStorage.setItem(storageConstants.SUGGESTIONS+this._session.currentUser.id,'false');
+      // }
     })
   }
 
