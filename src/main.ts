@@ -42,7 +42,7 @@ bootstrapApplication(AppComponent, {
     provideIonicAngular(),
     provideRouter(routes),
     importProvidersFrom(IonicModule.forRoot({ innerHTMLTemplatesEnabled: true })),
-    provideHttpClient(withInterceptorsFromDi()), // Actualiza HttpClientModule aquí
+    provideHttpClient(withInterceptorsFromDi()),
     importProvidersFrom(
       TranslateModule.forRoot({
         loader: {
