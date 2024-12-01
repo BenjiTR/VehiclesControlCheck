@@ -223,6 +223,7 @@
     "email": "E-mail",
     "change_password": "Changer le mot de passe",
     "delete_user": "Supprimer le compte",
+    "delete_user_text": "L'utilisateur et tout son contenu seront définitivement supprimés.",
     "is_not_posibble_to_change_text": "L'accès a été effectué via un fournisseur externe (Google). Les identifiants obtenus sont utilisés pour accéder à l'application, mais aucun utilisateur ou enregistrement n'est créé dans nos systèmes, il n'est donc pas possible de modifier ou de supprimer les données du compte."
   },
   "event": {

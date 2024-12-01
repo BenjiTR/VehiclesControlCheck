@@ -360,7 +360,7 @@ export class DriveService {
           const nextFiles = await fetchFiles(nextPageToken);
           return files.concat(nextFiles);
         }
-        //console.log(files);
+        console.log(files);
         return files;
       } catch (error:any) {
         //console.error('Error al listar archivos en la carpeta:', error);

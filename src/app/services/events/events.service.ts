@@ -12,14 +12,15 @@ import { Network } from '@capacitor/network';
 import { SyncService } from '../sync.service';
 import { AlertService } from '../alert.service';
 import { TranslateService } from '@ngx-translate/core';
-import { LocalNotificationSchema } from '@capacitor/local-notifications';
+import { LocalNotificationSchema, PendingResult } from '@capacitor/local-notifications';
+import { Vehicle } from 'src/app/models/vehicles.model';
 
 @Injectable
 ({
   providedIn:'root'
 })
 
-export class eventService {
+export class EventsService {
 
   private _session: SessionService | undefined;
   private _sync:SyncService | undefined;
@@ -99,6 +100,7 @@ export class eventService {
   }
 
 
+  //PROCESO FINAL DE GUARDAR Y SALIR
   async saveAndExit(event: Event, eventsArray:Event[]) {
 
     if(event.reminder){
@@ -117,6 +119,7 @@ export class eventService {
     this._drive.changeDownloading("false");
   }
 
+  //SUBIR ARCHIVO A DRIVE
   async uploadFile(fileType:string, file:any):Promise<void>{
 
     const newSyncHash = await this._hash.generateSyncPhrase();
@@ -156,12 +159,14 @@ export class eventService {
   }
 
 
+  //GENERAR Y GUARDAR NOTIFICACIÓN
   async generateAndSaveNotification(event:Event):Promise<void>{
     const reminder = await this._notification.constructReminder(event);
     this._notification.createNotification([reminder])
   }
 
 
+  //COMPRIEBA SI EXISTE EL RECORDATORIO
   async reminderExists(event:Event):Promise<LocalNotificationSchema|undefined>{
     const remindersArray = await this.SessionService.loadReminders();
     const reminder = remindersArray.find(reminder=>reminder.extra.eventId === event.id);
@@ -170,43 +175,90 @@ export class eventService {
   }
 
 
-  async deleteEvent(event:Event){
+//ELIMINAR UN EVENTO
+async deleteEvent(event:Event, autoClean?:boolean){
+  if(autoClean){
     await this.deleteEventProcess(event);
-    if(this._drive.folderId && this.SessionService.autoBackup){
-      this._storage.setStorageItem(storageConstants.USER_OPS+this.SessionService.currentUser.id,true)
-      if((await Network.getStatus()).connected === true){
-        const id = await this._drive.findFileByName(event.id)
-        if(id){
-          await this._drive.deleteFile(id, true);
-          await this.SyncService.deleteFileInList(event.id);
+  }else{
+    const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.are_you_sure?'),this.translate.instant('alert.event_permanently_erased'),this.translate.instant('alert.erase'),this.translate.instant('alert.cancel'))
+    if(sure){
+      await this.deleteEventProcess(event);
+      if(this._drive.folderId && this.SessionService.autoBackup){
+        this._storage.setStorageItem(storageConstants.USER_OPS+this.SessionService.currentUser.id,true)
+        if((await Network.getStatus()).connected === true){
+          const id = await this._drive.findFileByName(event.id)
+          if(id){
+            await this._drive.deleteFile(id, true);
+            await this.SyncService.deleteFileInList(event.id);
+          }
+          this._storage.setStorageItem(storageConstants.USER_OPS+this.SessionService.currentUser.id,false)
+        }else{
+          this._alert.createAlert(this.translate.instant("error.no_network"), this.translate.instant("error.no_network_to_backup"));
+          this._drive.folderId = "";
         }
-        this._storage.setStorageItem(storageConstants.USER_OPS+this.SessionService.currentUser.id,false)
-      }else{
-        this._alert.createAlert(this.translate.instant("error.no_network"), this.translate.instant("error.no_network_to_backup"));
-        this._drive.folderId = "";
       }
-    }
-    if(event.reminder){
-      const array = await this._notification.getPending();
-      const remindersArray = array.notifications;
-      const reminder = remindersArray.find(reminder=>reminder.extra.eventId === event.id);
-      if(reminder){
-        this._notification.deleteNotification(reminder)
+      if(event.reminder){
+        const remindersArray = await this.SessionService.loadReminders();
+        const reminder = remindersArray.find(reminder=>reminder.extra.eventId === event.id);
+        if(reminder){
+          this._notification.deleteNotification(reminder)
+        }
       }
-    }
-    const id = await this._storage.getStorageItem(storageConstants.USER_CALENDAR_ID+this.SessionService.currentUser.id);
-    if(id && event.calendarEventId){
-      this._calendar.deleteCalendarEvent(event.calendarEventId);
+      const id = await this._storage.getStorageItem(storageConstants.USER_CALENDAR_ID+this.SessionService.currentUser.id);
+      if(id && event.calendarEventId){
+        this._calendar.deleteCalendarEvent(event.calendarEventId);
+      }
     }
   }
+}
 
-
+  //PARTE PRINCIPAL DEL PROCESO DE BORRAR UN EVENTO, ES LA PARTE CONRETA EN QUE SE BORRA
   async deleteEventProcess(event:Event):Promise<void>{
     const eventsArray =  this.SessionService.eventsArray;
     const index = eventsArray.findIndex(e => e.id === event.id);
     eventsArray.splice(index,1)
     this.SessionService.eventsArray = eventsArray;
     await this._storage.setStorageItem(storageConstants.USER_EVENTS+this.SessionService.currentUser.id,this._crypto.encryptMessage(JSON.stringify(eventsArray)));
+    return;
+  }
+
+  //OBTIENE LOS ELEMENTOS A LIMPIAR DE DRIVE EN EL PROCESO COMPUESTO DE BORRAR UN VEHÍCULO
+  async GetElementsToClean(vehicle: Vehicle): Promise<any[]> {
+    let array: any[] = [];
+    const pending:PendingResult = await this._notification.getPending();
+    const eventsArray = this.SessionService.eventsArray;
+
+    for (const element of eventsArray) {
+      if (element.vehicleId === vehicle.id) {
+        array.push(element.id);
+      }
+      if(element.reminder){
+        const found = pending.notifications.find(pending => pending.id === element.reminderId);
+        if(found){
+          this._notification.deleteNotification(found);
+          console.log("Pendiente",await this._notification.getPending())
+        }
+        const id = await this._storage.getStorageItem(storageConstants.USER_CALENDAR_ID+this.SessionService.currentUser.id);
+        if(id && element.reminder && element.calendarEventId){
+          this._calendar.deleteCalendarEvent(element.calendarEventId);
+        }
+      }
+    }
+    return array;
+  }
+
+  //BORRA LOS EVENTOS DE UN VEHÍCULO, USADO CUANDO SE BORRA UN VEHÍCULO
+  async deleteLocalElements(vehicle: Vehicle): Promise<void> {
+
+    const eventsArray = this.SessionService.eventsArray;
+    const temporalEventArray = eventsArray.map(event => ({ ...event }));
+
+    for (const element of temporalEventArray) {
+      if (element.vehicleId === vehicle.id) {
+        await this.deleteEvent(element, true);
+      }
+    }
+
     return;
   }
 

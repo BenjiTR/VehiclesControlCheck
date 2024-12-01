@@ -44,7 +44,7 @@
 
 <ion-row>
   <ion-col class="ion-text-center">
-    <ion-button  *ngIf="user.method === 'email'" (click)="deleteAccount()" color="warning" fill="solid" class="change-button" translate="userpage.delete_user"></ion-button>
+    <ion-button *ngIf="user.method === 'email'" (click)="deleteAccount()" color="danger" fill="solid" class="change-button" translate="userpage.delete_user"></ion-button>
   </ion-col>
 </ion-row>
 <ion-row class="ion-margin-top">

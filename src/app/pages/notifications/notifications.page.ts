@@ -273,23 +273,7 @@ export class NotificationsPage{
     }
   }
 
-  //CONECTAR CUENTA ASOCIADA
-  async connectAccount(){
-    await this._loader.presentLoader();
-    await this._drive.connectAccount();
-    this.getData();
-    await this._loader.dismissLoader();
-  }
 
-  async unconnectAccount(){
-    await this._session.setGoogleToken("");
-    await this._drive.changeConnected(false);
-    await this._drive.changeHaveFiles(false);
-    await this.getData();
-    await this._auth.signOutGoogle();
-    localStorage.setItem(storageConstants.SUGGESTIONS+this._session.currentUser.id,"");
-    this._storage.setStorageItem(storageConstants.USER_CALENDAR_ID+this._session.currentUser.id, "");
-  }
 
 
   //GOOGLE CALENDAR

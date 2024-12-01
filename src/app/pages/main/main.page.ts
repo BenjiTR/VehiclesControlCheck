@@ -39,6 +39,9 @@ import { addIcons } from 'ionicons';
 import {NgxIonicImageViewerModule} from '@herdwatch-apps/ngx-ionic-image-viewer';
 import { FileSystemService } from 'src/app/services/filesystem.service';
 import { SyncService } from 'src/app/services/sync.service';
+import { SendVehicleService } from 'src/app/services/sendvehicle.service';
+import { VehiclesService } from 'src/app/services/vehicles/vehicles.service';
+import { EventsService } from 'src/app/services/events/events.service';
 
 
 @Component({
@@ -109,7 +112,9 @@ export class MainPage implements OnInit, OnDestroy {
     private _calendar:CalendarService,
     private _specialiOS:EspecialiOS,
     private _file:FileSystemService,
-    private _sync:SyncService
+    private _sync:SyncService,
+    private _vehicles:VehiclesService,
+    private _events:EventsService
   ) {
     addIcons({
       'close': close,
@@ -225,55 +230,10 @@ export class MainPage implements OnInit, OnDestroy {
   }
 
 
-  async deleteList(elements: any[]) {
-    this._drive.changecleaning(true);
-
-    for (const element of elements) {
-      const id = await this._drive.findFileByName(element);
-      if (id) {
-        await this._drive.deleteFile(id);
-        this._sync.deleteFileInList(element);
-      }
-    }
-    this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,false)
-    this._drive.changecleaning(false);
+  async deleteList(elements: any[]):Promise<void> {
+    await this._vehicles.deleteList(elements)
   }
 
-  async GetElementsToClean(vehicle: Vehicle): Promise<any[]> {
-    let array: any[] = [];
-    const pending:PendingResult = await this._notification.getPending();
-
-    for (const element of this.eventsArray) {
-      if (element.vehicleId === vehicle.id) {
-        array.push(element.id);
-      }
-      if(element.reminder){
-        const found = pending.notifications.find(pending => pending.id === element.reminderId);
-        if(found){
-          this._notification.deleteNotification(found);
-          console.log("Pendiente",await this._notification.getPending())
-        }
-        const id = await this._storage.getStorageItem(storageConstants.USER_CALENDAR_ID+this._session.currentUser.id);
-        if(id && element.reminder && element.calendarEventId){
-          this._calendar.deleteCalendarEvent(element.calendarEventId);
-        }
-      }
-    }
-    return array;
-  }
-
-  async deleteLocalElements(vehicle: Vehicle): Promise<void> {
-
-    const temporalEventArray = this.eventsArray.map(event => ({ ...event }));
-
-    for (const element of temporalEventArray) {
-      if (element.vehicleId === vehicle.id) {
-        await this.deleteEvent(element, true);
-      }
-    }
-
-    return;
-  }
 
   //SABER SI EL EVENTO CORRESPONDE A ESE VEHÍCULO
   someForThatVehicle(id:string, isReminder?:boolean){
@@ -339,37 +299,8 @@ export class MainPage implements OnInit, OnDestroy {
   }
 
   //ELIMINAR UN VEHÍCULO
-  async deleteVehicle(vehicle: Vehicle) {
-    const sure = await this._alert.twoOptionsAlert(
-      this.translate.instant('alert.are_you_sure?'),
-      this.translate.instant('alert.vehicle_permanently_erased'),
-      this.translate.instant('alert.erase'),
-      this.translate.instant('alert.cancel')
-    );
-
-    if (sure) {
-      const index = this.vehiclesArray.indexOf(vehicle);
-      if (index > -1) {
-        this.vehiclesArray.splice(index, 1);
-        this._session.vehiclesArray = this.vehiclesArray;
-        await this._storage.setStorageItem(storageConstants.USER_VEHICLES + this.user.id, this._crypto.encryptMessage(JSON.stringify(this.vehiclesArray)));
-
-        const elements = await this.GetElementsToClean(vehicle);
-        console.log("elementos: ",elements)
-        await this.deleteLocalElements(vehicle);
-
-        if (this._drive.folderId && this._session.autoBackup) {
-          this._storage.setStorageItem(storageConstants.USER_OPS+this._session.currentUser.id,true)
-          const id = await this._drive.findFileByName(vehicle.id);
-          if (id) {
-            await this._drive.deleteFile(id, true);
-            await this._sync.deleteFileInList(vehicle.id);
-          }
-          //Borra todos los eventos y recordatorios asociados
-          this.deleteList(elements);
-        }
-      }
-    }
+  async deleteVehicle(vehicle: Vehicle):Promise<void> {
+   await this._vehicles.deleteVehicle(vehicle,this.vehiclesArray)
   }
 
   //ELIMINAR UN EVENTO
@@ -433,33 +364,7 @@ export class MainPage implements OnInit, OnDestroy {
   }
 
   async uploadFile(fileType:string, file:any):Promise<void>{
-    //console.log(fileType, file);
-    let fileName;
-    let encripted;
-
-    if(fileType === "event"){
-      fileName = file.id;
-      encripted = this._crypto.encryptMessage(JSON.stringify(file))
-    }else{
-      fileName = 'tags';
-      encripted = this._crypto.encryptMessage(JSON.stringify(file))
-    }
-    //console.log(fileName, encripted);
-    this._storage.setStorageItem(storageConstants.USER_OPS + this._session.currentUser.id, true)
-    if ((await Network.getStatus()).connected === true) {
-      const exist = await this._drive.findFileByName(fileName)
-      if (exist) {
-        //console.log(exist);
-        this._drive.updateFile(exist, encripted, fileName, true);
-      } else {
-        this._drive.uploadFile(encripted, fileName, true);
-      }
-      this._storage.setStorageItem(storageConstants.USER_OPS + this._session.currentUser.id, false)
-    } else {
-      this._alert.createAlert(this.translate.instant("error.no_network"), this.translate.instant("error.no_network_to_backup"));
-      this._drive.folderId = "";
-    }
-    return;
+    await this._events.uploadFile(fileType, file)
   }
 
 

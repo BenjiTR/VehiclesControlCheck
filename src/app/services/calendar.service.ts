@@ -10,6 +10,7 @@ import { AlertService } from './alert.service';
 import { TranslateService } from '@ngx-translate/core';
 import { HashService } from './hash.service';
 import { BehaviorSubject } from 'rxjs';
+import { Vehicle } from '../models/vehicles.model';
 
 
 
@@ -249,7 +250,7 @@ async generateCalendarEvent(event:Event):Promise<any>{
 
   const generatedEvent = {
     id:event.calendarEventId,
-    summary: event.reminderTittle,
+    summary: event.reminderTittle + " - " + this.getBrandOrModel(event.vehicleId),
     description: event.info,
     start: {
       dateTime: startDateTime.toISOString(),
@@ -278,6 +279,18 @@ async generateCalendarEvent(event:Event):Promise<any>{
       })
     }
     return
+  }
+
+  getBrandOrModel(id:string){
+    const vehiclesArray = this._session!.vehiclesArray;
+    const vehicle = vehiclesArray.find(v=>v.id === id);
+    if(vehicle){
+      console.log(vehicle.brandOrModel);
+      return vehicle.brandOrModel;
+    }else{
+      return "";
+    }
+
   }
 
 }

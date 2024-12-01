@@ -19,6 +19,8 @@ import { CryptoService } from 'src/app/services/crypto.services';
 import { LoaderService } from 'src/app/services/loader.service';
 import { SyncService } from 'src/app/services/sync.service';
 import { HashService } from 'src/app/services/hash.service';
+import { VehiclesService } from 'src/app/services/vehicles/vehicles.service';
+import { Vehicle } from 'src/app/models/vehicles.model';
 
 
 @Component({
@@ -48,7 +50,8 @@ export class UserdataPage implements OnInit {
     private _crypto:CryptoService,
     private _loader:LoaderService,
     private _sync:SyncService,
-    private _hash:HashService
+    private _hash:HashService,
+    private _vehicles:VehiclesService
   ) { }
 
   ngOnInit() {
@@ -139,10 +142,21 @@ export class UserdataPage implements OnInit {
   }
 
   async deleteAccountWithEmail(){
+
+    try{
+      await this.deleteData();
+      await this._authService.deleteAccountWithEmail()
+      await this._alert.createAlert(this.translate.instant('alert.user_delete'), this.translate.instant('alert.user_delete_with_exit'));
+      this.navCtr.navigateRoot(['/home']);
+    }catch(err:any){
+      console.log(err);
+      this._alert.createAlert(this.translate.instant('error.an_error_ocurred'), err+" "+err.message);
+    }
+
     await this._authService.deleteAccountWithEmail()
-    .then(()=>{
-      this._alert.createAlert(this.translate.instant('alert.user_delete'), this.translate.instant('alert.user_delete_with_exit'));
-      this.navCtr.navigateRoot('/home');
+    .then(async ()=>{
+      await this._alert.createAlert(this.translate.instant('alert.user_delete'), this.translate.instant('alert.user_delete_with_exit'));
+      this.navCtr.navigateRoot(['/home']);
     })
     .catch((err)=>{
       console.log(err);
@@ -151,26 +165,20 @@ export class UserdataPage implements OnInit {
   }
 
   async deleteAccount(){
-    const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.are_you_sure?'),this.translate.instant('alert.actual_data_will_be_rewrite'),this.translate.instant('alert.accept'),this.translate.instant('alert.cancel'))
+    const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.are_you_sure?'),this.translate.instant('userpage.delete_user_text'),this.translate.instant('alert.accept'),this.translate.instant('alert.cancel'))
     if(sure){
       if(this._session.currentUser.method === 'email'){
         this.deleteAccountWithEmail()
-      }else{
-        this.deleteAccountWithGoogle();
       }
     }
   }
 
-  async deleteAccountWithGoogle(){
-    await this._authService.deleteAccountWithGoogle()
-    .then(()=>{
-      this._alert.createAlert(this.translate.instant('alert.user_delete'), this.translate.instant('alert.user_delete_with_exit'));
-      this.navCtr.navigateRoot('/home');
-    })
-    .catch((err)=>{
-      console.log(err);
-      this._alert.createAlert(this.translate.instant('error.an_error_ocurred'), err+" "+err.message);
-    })
+  async deleteData():Promise<void>{
+    const vehiclesArray = this._session.vehiclesArray;
+    vehiclesArray.forEach(async vehicle => {
+      await this._vehicles.deleteVehicle(vehicle, vehiclesArray, true)
+    });
+    return;
   }
 
 

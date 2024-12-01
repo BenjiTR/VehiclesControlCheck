@@ -47,6 +47,8 @@ export class BackupPage implements OnInit {
   public downloading:string = "false";
   public cleaning:boolean = false;
   public vehiclesArray:Vehicle[]=[];
+  public backupAccount:string="";
+  public calendar:boolean|undefined = undefined;
 
   private progressSubscription: Subscription;
   private uploadingSubscription: Subscription;
@@ -55,6 +57,7 @@ export class BackupPage implements OnInit {
   private haveFileSubscription:Subscription;
   private creatingFileSubscription: Subscription;
   private connectedSubscription: Subscription;
+  private calendarSubscription:Subscription;
 
   constructor(
     private _file:FileSystemService,
@@ -75,7 +78,8 @@ export class BackupPage implements OnInit {
     private _date:DateService,
     private _calendar:CalendarService,
     private _hash:HashService,
-    private _sync:SyncService
+    private _sync:SyncService,
+    private _auth:AuthService,
   ) {
     this.progressSubscription = this._drive.progress$.subscribe(data=>{
       this.progress = data;
@@ -94,6 +98,9 @@ export class BackupPage implements OnInit {
     });
     this.creatingFileSubscription = this._drive.creatingFile$.subscribe(data=>{
       this.creatingFile=data;
+    });
+    this.calendarSubscription = this._calendar.calendar$.subscribe(value=>{
+      this.calendar = value;
     });
     this.connectedSubscription = this._drive.conected$.subscribe(async data=>{
       console.log("¿conectado?", data);
@@ -132,6 +139,7 @@ export class BackupPage implements OnInit {
 
   async ngOnInit() {
     this.translate.setDefaultLang(this._translation.getLanguage());
+    this.getData();
   }
 
   ionViewWillLeave() {
@@ -205,6 +213,24 @@ export class BackupPage implements OnInit {
         }
       })
     }
+  }
+
+   //CONECTAR CUENTA ASOCIADA
+   async connectAccount(){
+    await this._loader.presentLoader();
+    await this._drive.connectAccount();
+    this.getData();
+    await this._loader.dismissLoader();
+  }
+
+  async unconnectAccount(){
+    await this._session.setGoogleToken("");
+    await this._drive.changeConnected(false);
+    await this._drive.changeHaveFiles(false);
+    await this.getData();
+    await this._auth.signOutGoogle();
+    localStorage.setItem(storageConstants.SUGGESTIONS+this._session.currentUser.id,"");
+    this._storage.setStorageItem(storageConstants.USER_CALENDAR_ID+this._session.currentUser.id, "");
   }
 
   //DRIVE
@@ -417,7 +443,18 @@ export class BackupPage implements OnInit {
     return this._paddingService.calculatePadding();
   }
 
-
+  async getData(){
+    this.backupAccount = this._session.backupMail;
+    if(this.connected){
+      const id = await this._calendar.findVehicleControlCalendar();
+      if(id){
+        this.calendar = true;
+        this._storage.setStorageItem(storageConstants.USER_CALENDAR_ID+this._session.currentUser.id,id);
+      }else{
+        this.calendar = false;
+      }
+    }
+  }
 
 
 

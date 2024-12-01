@@ -10,7 +10,7 @@ import { Event } from '../models/event.model';
 import { imageConstants } from '../const/img';
 import { Subscription } from 'rxjs';
 import { NotificationsService } from './notifications.service';
-import { eventService } from './event/event.service';
+import { EventsService } from './events/events.service';
 
 @Injectable({
   providedIn:'root'
@@ -29,7 +29,7 @@ export class SyncService{
     private _crypto:CryptoService,
     private injector: Injector,
     private _notifications:NotificationsService,
-    private _eventService:eventService
+    private _eventService:EventsService
   ){
     this.autoBkSubscription = this.DriveService.autoBk$.subscribe(value=>{
       this.autoBk = value;
@@ -55,7 +55,7 @@ export class SyncService{
     const user:User = await this.SessionService.getUser();
     const data = await this._storage.getStorageItem(storageConstants.SYNC_REFERENCE+user.id);
     if(data){
-      //console.log('syncFile Obtenido: ',JSON.parse(this._crypto.decryptMessage(data)));
+      console.log('syncFile Obtenido: ',JSON.parse(this._crypto.decryptMessage(data)));
       return JSON.parse(this._crypto.decryptMessage(data));
     }else{
       return [];

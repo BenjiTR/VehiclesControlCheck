@@ -223,6 +223,7 @@
     "email": "Email",
     "change_password": "Change Password",
     "delete_user": "Delete Account",
+    "delete_user_text": "The user and all their content will be permanently deleted.",
     "is_not_posibble_to_change_text": "Access was made through an external provider (Google). Credentials obtained are used to access the application, but no user or record is created in our systems, so it is not possible to change or delete account data."
   },
   "event": {

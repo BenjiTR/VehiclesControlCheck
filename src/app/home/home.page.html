@@ -46,7 +46,9 @@
         </ion-item>
       </ion-col>
 
-
+      <ion-col class="ion-padding-start ion-padding-end" size="12">
+        <ion-img (click)="signInWithGoogle()" src="../../assets/img/btn_google_signin_light_normal_web@2x.png"></ion-img>
+      </ion-col>
 
       <ion-col class="ion-margin-start">
         <ion-checkbox class="ion-padding-top ion-padding-bottom" [(ngModel)]="rememberSession" (ionChange)="toogleAutoInit($event)" labelPlacement="end" translate="home.remember_session"></ion-checkbox>
@@ -65,9 +67,6 @@
       </ion-col>
 
 
-      <ion-col size="12">
-        <ion-img (click)="signInWithGoogle()" src="../../assets/img/btn_google_signin_light_normal_web@2x.png"></ion-img>
-      </ion-col>
       <ion-col size="12" class="ion-text-center">
         <p translate="home.dont_have_user?"><a class="ion-padding color-purpure no-text-decoration ion-margin-start" [routerLink]="'/newuser'" translate="home.sign_up"></a></p>
       </ion-col>
