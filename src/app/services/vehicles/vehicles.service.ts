@@ -65,7 +65,7 @@ export class VehiclesService{
               await this._sync.deleteFileInList(vehicle.id);
             }
             //Borra todos los eventos y recordatorios asociados
-            this.deleteList(elements);
+            await this.deleteList(elements);
           }
         }
       }

@@ -144,24 +144,19 @@ export class UserdataPage implements OnInit {
   async deleteAccountWithEmail(){
 
     try{
+      await this._loader.presentLoader();
       await this.deleteData();
-      await this._authService.deleteAccountWithEmail()
+      //await this._authService.deleteAccountWithEmail()
+      await this.removeAllElements();
+      localStorage.setItem('autoInitVcc',"false");
+      await this._loader.dismissLoader();
       await this._alert.createAlert(this.translate.instant('alert.user_delete'), this.translate.instant('alert.user_delete_with_exit'));
       this.navCtr.navigateRoot(['/home']);
     }catch(err:any){
+      await this._loader.dismissLoader();
       console.log(err);
-      this._alert.createAlert(this.translate.instant('error.an_error_ocurred'), err+" "+err.message);
+      this._alert.createAlert(this.translate.instant('error.an_error_ocurred'), err.message);
     }
-
-    await this._authService.deleteAccountWithEmail()
-    .then(async ()=>{
-      await this._alert.createAlert(this.translate.instant('alert.user_delete'), this.translate.instant('alert.user_delete_with_exit'));
-      this.navCtr.navigateRoot(['/home']);
-    })
-    .catch((err)=>{
-      console.log(err);
-      this._alert.createAlert(this.translate.instant('error.an_error_ocurred'), err+" "+err.message);
-    })
   }
 
   async deleteAccount(){
@@ -174,13 +169,46 @@ export class UserdataPage implements OnInit {
   }
 
   async deleteData():Promise<void>{
+
     const vehiclesArray = this._session.vehiclesArray;
-    vehiclesArray.forEach(async vehicle => {
+
+    for(let vehicle of vehiclesArray){
       await this._vehicles.deleteVehicle(vehicle, vehiclesArray, true)
-    });
+    }
+
     return;
   }
 
+  async removeAllElements():Promise<void>{
+
+    this._drive.changecleaning(true);
+    const oldFiles = await this._drive.listFilesInFolder();
+    console.log(oldFiles)
+    const total = oldFiles.length;
+    const unit = 1/total;
+    let value = 0;
+    let buffer = 0;
+
+    for(const element of oldFiles){
+
+      buffer += unit;
+      this._drive.changeProgress(value, buffer);
+      try{
+        await this.deleteFile(element.id);
+        value += unit;
+        this._drive.changeProgress(value, buffer);
+      }catch (err){
+        console.log(err);
+        throw new Error('Error al eliminar de Drive '+ element.id);
+      }
+    }
+    this._drive.changecleaning(false);
+    return;
+  }
+
+  async deleteFile(id:string){
+    await this._drive.deleteFile(id);
+  }
 
 
 }
