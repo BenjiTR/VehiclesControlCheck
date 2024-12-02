@@ -1,7 +1,9 @@
-import { Injectable } from "@angular/core";
 import { AdMob, AdMobBannerSize, AdmobConsentStatus, BannerAdOptions, BannerAdPluginEvents, BannerAdPosition, BannerAdSize } from "@capacitor-community/admob";
 import { AdOptions, AdLoadInfo, InterstitialAdPluginEvents } from '@capacitor-community/admob';
 import { Capacitor } from "@capacitor/core";
+import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment.prod';
+import { doc, getDoc, getFirestore } from 'firebase/firestore';
 
 @Injectable
 ({
@@ -9,8 +11,9 @@ import { Capacitor } from "@capacitor/core";
 })
 
 export class AdmobService {
+  private db = getFirestore();
 
-  public showing:number = 0;
+
 
   async initialize(): Promise<void> {
     await AdMob.initialize();
@@ -77,7 +80,14 @@ export class AdmobService {
   }
 //INTERSTICIAL
 async showinterstitial(): Promise<void> {
-  if(this.showing == 0){
+
+  // Genera un número aleatorio entre 0 y 1
+  const randomChance = Math.random();
+  //Recupera del servidor el porcentaje de probabilidad
+  const data = await this.getDocument("data","YpznogpkCYFRvhPN8rB7");
+
+  if (data && data['probability'] > randomChance) {
+
     AdMob.addListener(InterstitialAdPluginEvents.Loaded, (info: AdLoadInfo) => {
       // Subscribe prepared interstitial
     });
@@ -89,7 +99,7 @@ async showinterstitial(): Promise<void> {
     };
     await AdMob.prepareInterstitial(options);
     await AdMob.showInterstitial();
-    this.showing = 1;
+
   }
 }
 
@@ -117,5 +127,21 @@ gettesting(){
   }
 }
 
+async getDocument(collection: string, documentId: string) {
+  try {
+    const docRef = doc(this.db, collection, documentId);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      return docSnap.data();
+    } else {
+      //console.log("No such document!");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error getting document:", error);
+    throw error;
+  }
+}
 
 }
