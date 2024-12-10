@@ -50,16 +50,15 @@ export class FileSystemService{
   }
 
 
-  async restoreBackup():Promise<Backup|void> {
+  async restoreBackup(): Promise<Backup | void> {
+    try {
+      const result = await FilePicker.pickFiles({
+        types: ['application/octet-stream'],
+        limit: 1
+      });
 
-    await FilePicker.pickFiles({
-      types: ['application/octet-stream'],
-      limit: 1
-    })
-    .then(async (result)=>{
       if (result.files) {
         const file = result.files[0];
-        //console.log(result, result.files);
 
         // Verifica la extensión del archivo
         if (file.name.endsWith('.vcc') && file.path) {
@@ -69,24 +68,26 @@ export class FileSystemService{
             encoding: Encoding.UTF8
           });
 
-          const data = (JSON.parse(this._crypto.decryptMessage(readFile.data.toString())))
-          const correctUser = await this.itsForThisUser(data)
-          if(!correctUser){
+          const data = JSON.parse(this._crypto.decryptMessage(readFile.data.toString()));
+          const correctUser = await this.itsForThisUser(data);
+
+          if (!correctUser) {
             throw new Error('Usuario incorrecto');
-          }else{
-            await this._data.restoreDeviceData(data);
-            return data;
           }
+
+          await this._data.restoreDeviceData(data);
+          //console.log("datos", data);
+          return data; // Este return ahora se propagará correctamente.
         } else {
           throw new Error('Archivo no válido');
         }
       }
-    })
-    .catch((e)=>{
+    } catch (e) {
       console.error('Error al leer el archivo:', e);
       throw e;
-    })
+    }
   }
+
 
 
   async itsForThisUser(data:Backup):Promise<boolean>{
@@ -142,7 +143,7 @@ export class FileSystemService{
     async downloadImg(data: string, fileName:string) {
       let fileExists:ReaddirResult |undefined;
       const directoryPath = 'vehicles-control/img/';
-      
+
       await Filesystem.readdir({
         path: directoryPath,
         directory: Directory.Documents

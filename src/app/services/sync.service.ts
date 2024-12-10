@@ -55,7 +55,7 @@ export class SyncService{
     const user:User = await this.SessionService.getUser();
     const data = await this._storage.getStorageItem(storageConstants.SYNC_REFERENCE+user.id);
     if(data){
-      console.log('syncFile Obtenido: ',JSON.parse(this._crypto.decryptMessage(data)));
+      //console.log('syncFile Obtenido: ',JSON.parse(this._crypto.decryptMessage(data)));
       return JSON.parse(this._crypto.decryptMessage(data));
     }else{
       return [];
@@ -73,6 +73,7 @@ export class SyncService{
   //PROCESO DE SINCRONIZACIÓN
   async syncData(Arraydata:any[]){
     if(this.autoBk){
+      Arraydata.sort((a, b) => b.name.localeCompare(a.name));
       //console.log("datos entrantes: ",Arraydata);
       for (const data of Arraydata) {
         const isOK = await this.isFileInSyncFiles(data.name);
@@ -106,6 +107,7 @@ export class SyncService{
       const headName = data.name.split("-")[0];
       const downloadedData = await this.DriveService.downloadFile(data.id);
 
+      //console.log("datos",headName, downloadedData )
 
       if (headName === "photo") {
         await this.syncPhoto(downloadedData);

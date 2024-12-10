@@ -54,7 +54,7 @@ export class VehiclesService{
           await this._storage.setStorageItem(storageConstants.USER_VEHICLES + this._session.currentUser.id, this._crypto.encryptMessage(JSON.stringify(vehiclesArray)));
 
           const elements = await this._events.GetElementsToClean(vehicle);
-          console.log("elementos: ",elements)
+          //console.log("elementos: ",elements)
           await this._events.deleteLocalElements(vehicle);
 
           if (this._drive.folderId && this._session.autoBackup) {

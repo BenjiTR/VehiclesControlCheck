@@ -89,6 +89,8 @@ export class NotificationsService {
 
   async setNotifications(events:Event[]):Promise<void>{
     let remindersArray:LocalNotificationSchema[]= await this.SessionService.loadReminders();
+    //console.log("eventos", events);
+    //console.log("array", remindersArray);
     events.forEach(async event => {
       if(event.reminderDate && event.reminder && this._date.isFutureEvent(event.reminderDate)){
         const index = remindersArray.findIndex(reminder=>reminder.extra.eventId === event.id);

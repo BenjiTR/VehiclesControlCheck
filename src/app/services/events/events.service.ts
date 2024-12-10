@@ -90,9 +90,9 @@ export class EventsService {
           this._calendar.updateEventInCalendar(newEvent);
         }
       }
-      console.log(newEvent, oldCalendarReminder)
+      //console.log(newEvent, oldCalendarReminder)
       if(id && !newEvent.reminder && oldCalendarReminder && oldCalendarEventId){
-        console.log(newEvent, oldCalendarReminder)
+        //console.log(newEvent, oldCalendarReminder)
         this._calendar.deleteCalendarEvent(oldCalendarEventId);
       }
       this.saveAndExit(newEvent, eventsArray);
@@ -236,7 +236,7 @@ async deleteEvent(event:Event, autoClean?:boolean){
         const found = pending.notifications.find(pending => pending.id === element.reminderId);
         if(found){
           this._notification.deleteNotification(found);
-          console.log("Pendiente",await this._notification.getPending())
+          //console.log("Pendiente",await this._notification.getPending())
         }
         const id = await this._storage.getStorageItem(storageConstants.USER_CALENDAR_ID+this.SessionService.currentUser.id);
         if(id && element.reminder && element.calendarEventId){

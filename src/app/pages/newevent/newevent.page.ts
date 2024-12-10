@@ -205,9 +205,9 @@ export class NeweventPage {
             this._calendar.updateEventInCalendar(newEvent);
           }
         }
-        console.log(newEvent, oldCalendarReminder)
+        //console.log(newEvent, oldCalendarReminder)
         if(id && !newEvent.reminder && oldCalendarReminder && oldCalendarEventId){
-          console.log(newEvent, oldCalendarReminder)
+          //console.log(newEvent, oldCalendarReminder)
           this._calendar.deleteCalendarEvent(oldCalendarEventId);
         }
         this.saveAndExit(newEvent);

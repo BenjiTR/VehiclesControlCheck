@@ -285,7 +285,7 @@ async generateCalendarEvent(event:Event):Promise<any>{
     const vehiclesArray = this._session!.vehiclesArray;
     const vehicle = vehiclesArray.find(v=>v.id === id);
     if(vehicle){
-      console.log(vehicle.brandOrModel);
+      //console.log(vehicle.brandOrModel);
       return vehicle.brandOrModel;
     }else{
       return "";

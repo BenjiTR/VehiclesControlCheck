@@ -60,10 +60,10 @@ export class DashboardPage implements OnInit, OnDestroy {
     this.language = this._translation.getLanguage();
 
     App.addListener('appUrlOpen', (event: any) => {
-      console.log(event)
+      //console.log(event)
       if (event.url) {
         const filePath = event.url;  // Obtén la URL o ruta del archivo .vcc
-        console.log(filePath);
+        //console.log(filePath);
         this._send.addData(filePath)
       }
     })
@@ -176,7 +176,7 @@ export class DashboardPage implements OnInit, OnDestroy {
   }
 
   async goMain(){
-    console.log(this.router.url)
+    //console.log(this.router.url)
     const url = this.router.url;
     if(url==="/dashboard/newevent" || url==="/dashboard/vehicle"){
       const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.are_you_sure?'),this.translate.instant('alert.changes_will_not_be_saved'),this.translate.instant('alert.accept'),this.translate.instant('alert.cancel'));

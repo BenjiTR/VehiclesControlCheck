@@ -183,7 +183,7 @@ export class UserdataPage implements OnInit {
 
     this._drive.changecleaning(true);
     const oldFiles = await this._drive.listFilesInFolder();
-    console.log(oldFiles)
+    //console.log(oldFiles)
     const total = oldFiles.length;
     const unit = 1/total;
     let value = 0;

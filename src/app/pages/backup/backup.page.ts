@@ -103,13 +103,13 @@ export class BackupPage implements OnInit {
       this.calendar = value;
     });
     this.connectedSubscription = this._drive.conected$.subscribe(async data=>{
-      console.log("¿conectado?", data);
+      //console.log("¿conectado?", data);
       this.connected = data;
       const suggestions = localStorage.getItem(storageConstants.SUGGESTIONS+this._session.currentUser.id);
       if(this.connected){
         const id = await this._calendar.findVehicleControlCalendar();
-        console.log("id?", id)
-        console.log("suggestions?", suggestions)
+        //console.log("id?", id)
+        //console.log("suggestions?", suggestions)
 
         if(!id && suggestions !== 'false'){
           const sure = await this._alert.twoOptionsAlert(this.translate.instant('alert.do_you_want_connect_calendar'),this.translate.instant('alert.do_you_want_connect_calendar_text'),this.translate.instant('alert.accept'),this.translate.instant('alert.cancel'))
@@ -187,6 +187,7 @@ export class BackupPage implements OnInit {
       this._drive.changeCreatingFile(true);
       await this._file.restoreBackup()
       .then(async (data)=>{
+        console.log("data", data)
         if(data && data.events){
           this._notifications.setNotifications(data.events)
         }

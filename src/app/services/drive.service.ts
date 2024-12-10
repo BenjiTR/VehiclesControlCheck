@@ -187,7 +187,7 @@ export class DriveService {
       await this.setConnectedAndTryFiles();
     })
     .catch(async (err)=>{
-      //console.log("error",err);
+      console.log("error",err);
       await this._auth.loginWithGoogle()
       .then(async(user)=>{
         this.token = user.authentication.accessToken;
@@ -251,7 +251,7 @@ export class DriveService {
         //console.log("carpeta: ",folderId)
         await this.listFilesInFolder()
         .then(async (resp)=>{
-          //console.log(resp)
+          //console.log("respuesta",resp)
           if(resp.length >0){
             this.changeHaveFiles(true);
               await this.SyncService.syncData(resp);
@@ -360,7 +360,7 @@ export class DriveService {
           const nextFiles = await fetchFiles(nextPageToken);
           return files.concat(nextFiles);
         }
-        console.log(files);
+        //console.log(files);
         return files;
       } catch (error:any) {
         //console.error('Error al listar archivos en la carpeta:', error);
@@ -453,7 +453,7 @@ export class DriveService {
   //ACTUALIZAR UN ARCHIVO
   async updateFile(fileId:string, content:string, fileName:string, notComplete?:boolean) {
 
-    console.log(fileId)
+    //console.log(fileId)
     if(notComplete){
       this.changeUploading(true);
     }
